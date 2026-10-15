@@ -22,7 +22,8 @@ import { Select } from '../ui/select';
 import { Checkbox } from '../ui/toggles';
 
 const HLBG = 'oklch(0.975 0.018 293)', HLSH = 'inset 3px 0 0 oklch(0.55 0.19 293)';
-export const rangeChip = (pre: string, f?: string | null, t?: string | null) => `${pre} ${f ? short(f) : '…'} – ${t ? short(addD(t, -1)) : 'now'}`;
+export const rangeChip = (pre: string, f?: string | null, t?: string | null) =>
+  !f ? `${pre} until ${short(addD(t || '', -1))}` : `${pre} ${short(f)} - ${t ? short(addD(t, -1)) : 'now'}`;
 
 export const sevOptions = (): Option[] => [...SEVORD].reverse().map(k => ({ value: k, label: SEV[k].l, icon: SEV[k].icon, color: SEV[k].c }));
 export const dStatusOptions = (): Option[] => DST_KEYS.map(k => ({ value: k, label: DST[k].l, icon: DST[k].icon, color: DST[k].fg }));
@@ -161,7 +162,7 @@ export function DefectsList() {
             {rows.map((d, i) => {
               const ck = sel.includes(d.id);
               const c = d.activity.filter(a => a.t === 'c').length, n = (d.attachments || []).length;
-              const meta = [affLabel(d), d.comp, c ? `${c} comment${c > 1 ? 's' : ''}` : '', n ? `${n} attachment${n > 1 ? 's' : ''}` : ''].filter(Boolean).join(' · ');
+              const meta = [affLabel(d), d.comp, c ? `${c} comment${c > 1 ? 's' : ''}` : '', n ? `${n} attachment${n > 1 ? 's' : ''}` : ''].filter(Boolean).join(', ');
               return (
                 <Clickable
                   key={d.id}

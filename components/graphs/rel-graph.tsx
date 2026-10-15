@@ -3,20 +3,20 @@
 import { Background, Controls, Handle, Position, ReactFlow, type Edge, type Node, type NodeProps } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
 import { useRouter } from 'next/navigation';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { Fragment, useEffect, useMemo, useRef, useState } from 'react';
 import type { GraphEdge, GraphNode } from '@/lib/relations';
 import { Icon } from '../ui/icon';
 
 const hidden = { opacity: 0, width: 1, height: 1, minWidth: 0, minHeight: 0, border: 0, background: 'transparent' };
 const SIDES = ['Left', 'Right', 'Top', 'Bottom'] as const;
-/** Invisible handles on every side, so edges can attach wherever the layout needs. */
+/** Invisible handles on every side, so edges can attach wherever the layout needs. Unwrapped, so they stay out of the card's flex gap. */
 const Handles = () => (
   <>
     {SIDES.map(p => (
-      <span key={p}>
+      <Fragment key={p}>
         <Handle id={'s' + p} type="source" position={Position[p]} style={hidden} isConnectable={false} />
         <Handle id={'t' + p} type="target" position={Position[p]} style={hidden} isConnectable={false} />
-      </span>
+      </Fragment>
     ))}
   </>
 );
@@ -171,7 +171,7 @@ export function RelGraph({ nodes, edges, height = 540 }: { nodes: GraphNode[]; e
           <Controls showInteractive={false} position="bottom-right" />
         </ReactFlow>
       ) : (
-        <div className="flex h-full items-center justify-center text-sm text-muted">Loading map…</div>
+        <div className="flex h-full items-center justify-center text-sm text-muted">Loading map...</div>
       )}
     </div>
   );

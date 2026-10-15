@@ -22,8 +22,10 @@ export interface Thumb {
   photo: string;
   hint: string;
 }
-/** Product photos are placeholders in this demo. */
-export const thumbOf = (id: string): Thumb => ({ id, photo: '', hint: id ? 'Product image placeholder · ' + id : 'Product image placeholder' });
+/** Generated stand-in photo for a model, at public/products/<model id>.webp. Empty for unknown models. */
+export const productPhoto = (id: string) => (MM[id] ? '/products/' + id.toLowerCase() + '.webp' : '');
+/** Product photos are generated stand-ins in this demo. */
+export const thumbOf = (id: string): Thumb => ({ id, photo: productPhoto(id), hint: id ? 'Product image, ' + id : 'Product image' });
 
 /** The model a review is about: its linked defect's model, or one named in its title or branch. */
 export const rModelId = (r: Review, D: Defect[]) => {
@@ -56,16 +58,16 @@ export function modelInfo(id: string, fw?: string): ModelInfo {
   const ppm = a3
     ? Math.max(20, Math.round(num / 100) * (color ? 5 : 6) + (num % 100 === 0 ? 0 : 5))
     : Math.max(18, Math.min(45, Math.round(num / 100) + (color ? 0 : 10)));
-  const fn = mfp ? (/F/.test(id.slice(-3)) || a3 ? 'Print · Copy · Scan · Fax' : 'Print · Copy · Scan') : 'Print';
-  const conn = /W$/.test(id) ? 'USB · Ethernet · Wi-Fi' : 'USB · Ethernet';
+  const fn = mfp ? (/F/.test(id.slice(-3)) || a3 ? 'Print, Copy, Scan, Fax' : 'Print, Copy, Scan') : 'Print';
+  const conn = /W$/.test(id) ? 'USB, Ethernet, Wi-Fi' : 'USB, Ethernet';
   const h = hash(id);
   const regions =
-    m.series === 'Xpress' ? ['Global', 'Korea · China · SEA', 'Americas · Europe']
-      : m.series === 'ProXpress' ? ['Global', 'Americas · Europe · Korea', 'Europe · CIS · MEA']
-        : ['Korea · Europe · Americas', 'Global (A3 channel)', 'Korea · Japan · Europe'];
+    m.series === 'Xpress' ? ['Global', 'Korea, China, SEA', 'Americas, Europe']
+      : m.series === 'ProXpress' ? ['Global', 'Americas, Europe, Korea', 'Europe, CIS, MEA']
+        : ['Korea, Europe, Americas', 'Global (A3 channel)', 'Korea, Japan, Europe'];
   const soc = m.series === 'MultiXpress' ? 'Samsung Exynos-based, 1.5 GHz quad' : m.series === 'ProXpress' ? 'ARM Cortex-A9, 1 GHz dual' : 'ARM9, 600 MHz';
-  const mem = m.series === 'MultiXpress' ? '4 GB · 320 GB HDD' : m.series === 'ProXpress' ? (mfp ? '512 MB · 4 GB eMMC' : '512 MB') : '128 MB';
-  const pdl = m.series === 'Xpress' ? 'SPL · PCL6' : 'PCL5e/6 · PostScript 3 · PDF';
+  const mem = m.series === 'MultiXpress' ? '4 GB, 320 GB HDD' : m.series === 'ProXpress' ? (mfp ? '512 MB, 4 GB eMMC' : '512 MB') : '128 MB';
+  const pdl = m.series === 'Xpress' ? 'SPL, PCL6' : 'PCL5e/6, PostScript 3, PDF';
   const year = +m.launch.slice(0, 4);
   const fleet = (m.series === 'Xpress' ? 120 : m.series === 'ProXpress' ? 45 : 12) * (1 + (h % 5)) * (year >= 2017 ? 0.2 : year === 2016 ? 0.6 : 1);
   const support = year >= 2016 ? 'Active development' : year === 2015 ? 'Active (fixes and features)' : 'Maintenance (fixes only)';
@@ -90,7 +92,7 @@ export function modelInfo(id: string, fw?: string): ModelInfo {
       { k: 'Controller', v: soc },
       { k: 'Memory', v: mem },
       { k: 'Emulations', v: pdl },
-      { k: 'Engine', v: (color ? 'Tandem color laser' : 'Mono laser') + ' · ' + (a3 ? 'Duty 150K' : 'Duty ' + (m.series === 'Xpress' ? '10K' : '80K')) },
+      { k: 'Engine', v: (color ? 'Tandem color laser' : 'Mono laser') + ', ' + (a3 ? 'Duty 150K' : 'Duty ' + (m.series === 'Xpress' ? '10K' : '80K')) },
       { k: 'Firmware branch', v: branch, mono: true },
       { k: 'Units in field', v: year >= 2017 && fleet < 5 ? 'Pre-launch / ramp-up' : '~' + Math.round(fleet) + 'K' },
       { k: 'Support status', v: support }
@@ -145,8 +147,8 @@ export const affFromVals = (vs: string[] | null | undefined, model: string | nul
   models: (vs || []).filter(v => !String(v).startsWith('line:') && v !== model)
 });
 
-export const modelOptions = (): Option[] => MODELS.map(m => ({ value: m.id, label: m.id, sub: `${m.series} · ${m.kind}`, icon: 'printer', color: MUTED }));
+export const modelOptions = (): Option[] => MODELS.map(m => ({ value: m.id, label: m.id, sub: `${m.series}, ${m.kind}`, icon: 'printer', color: MUTED }));
 export const lineOptions = (): Option[] =>
-  LINES.map(l => ({ value: 'line:' + l, label: l + ' line', sub: `${LINFO[l].models.length} models · ${LINFO[l].plat}`, icon: 'layers', color: 'oklch(0.5 0.12 293)' }));
+  LINES.map(l => ({ value: 'line:' + l, label: l + ' line', sub: `${LINFO[l].models.length} models, ${LINFO[l].plat}`, icon: 'layers', color: 'oklch(0.5 0.12 293)' }));
 
 export const modelOfReview = (r: Review, data: Data) => rModelId(r, data.defects);

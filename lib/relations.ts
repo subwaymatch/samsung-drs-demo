@@ -31,7 +31,7 @@ export function relatedView(x: Defect | Review, all: (Defect | Review)[], isD: b
     const sc = s + nf * 0.4 + (sd ? 1 : 0) + (sb ? 0.5 : 0);
     return { sc, ok: sc >= 0.5, r: [sd && 'Same defect ' + a.linked, nf && nf + ' shared file' + (nf > 1 ? 's' : ''), sb && 'Same branch', s >= 0.34 && 'Similar title'] };
   };
-  const reason = (o: Defect | Review) => why(o).r.filter(Boolean).join(' · ');
+  const reason = (o: Defect | Review) => why(o).r.filter(Boolean).join(', ');
   const row = (o: Defect | Review, meta: string): RelRow => {
     const s = st(o);
     return { id: o.id, title: o.title, meta, stL: s.l, stFg: s.fg, stIcon: s.icon, href: base + o.id };
@@ -39,9 +39,9 @@ export function relatedView(x: Defect | Review, all: (Defect | Review)[], isD: b
   const byId = new Map(all.map(o => [o.id, o]));
   const linked = rel.map(id => byId.get(id)).filter((o): o is Defect | Review => !!o).map(o => row(o, reason(o)));
   const rest = all.filter(o => o.id !== x.id && !rel.includes(o.id));
-  const sugg = rest.map(o => ({ o, w: why(o) })).filter(z => z.w.ok).sort((a, b) => b.w.sc - a.w.sc).slice(0, 4).map(z => row(z.o, z.w.r.filter(Boolean).join(' · ')));
+  const sugg = rest.map(o => ({ o, w: why(o) })).filter(z => z.w.ok).sort((a, b) => b.w.sc - a.w.sc).slice(0, 4).map(z => row(z.o, z.w.r.filter(Boolean).join(', ')));
   const pick: Option[] = rest.map(o => ({
-    value: o.id, label: o.id + ' · ' + o.title,
+    value: o.id, label: o.id + ', ' + o.title,
     icon: isD ? SEV[(o as Defect).sev].icon : TYPE_ICON[(o as Review).type], color: isD ? SEV[(o as Defect).sev].c : 'oklch(0.5 0.12 293)'
   }));
   return { linked, sugg, pick };
@@ -55,18 +55,18 @@ export function affectedView(model: string | null, a: Affects, inheritedFrom: st
   const lineMs = new Set(a.lines.flatMap(l => (LINFO[l] ? LINFO[l].models : [])));
   const all = [...new Set([model, ...a.models, ...lineMs])];
   const chips: AffChip[] = [
-    { key: 'm:' + model, label: model, sub: 'Reported on', icon: 'printer', primary: true, tip: MM[model] ? MM[model].series + ' · ' + MM[model].kind : '' },
-    ...a.lines.map(l => ({ key: 'l:' + l, label: l + ' line', sub: (LINFO[l] ? LINFO[l].models.length : 0) + ' models', icon: 'layers', primary: false, tip: LINFO[l] ? 'Shared base: ' + LINFO[l].plat + ' · ' + LINFO[l].models.join(', ') : '', remove: { kind: 'line' as const, v: l } })),
+    { key: 'm:' + model, label: model, sub: 'Reported on', icon: 'printer', primary: true, tip: MM[model] ? MM[model].series + ', ' + MM[model].kind : '' },
+    ...a.lines.map(l => ({ key: 'l:' + l, label: l + ' line', sub: (LINFO[l] ? LINFO[l].models.length : 0) + ' models', icon: 'layers', primary: false, tip: LINFO[l] ? 'Shared base: ' + LINFO[l].plat + ', ' + LINFO[l].models.join(', ') : '', remove: { kind: 'line' as const, v: l } })),
     ...a.models.filter(m => m !== model && !lineMs.has(m)).map(m => ({ key: 'm:' + m, label: m, sub: MM[m] ? MM[m].kind : '', icon: 'printer', primary: false, tip: '', remove: { kind: 'model' as const, v: m } }))
   ];
   const addItems: Option[] = [
-    ...LINES.filter(l => !a.lines.includes(l)).map(l => ({ value: 'line:' + l, label: l + ' line', sub: `${LINFO[l].models.length} models · ${LINFO[l].plat}`, icon: 'layers', color: 'oklch(0.5 0.12 293)' })),
-    ...MODELS.filter(m => !all.includes(m.id)).map(m => ({ value: m.id, label: m.id, sub: `${m.series} · ${m.kind}`, icon: 'printer', color: MUTED }))
+    ...LINES.filter(l => !a.lines.includes(l)).map(l => ({ value: 'line:' + l, label: l + ' line', sub: `${LINFO[l].models.length} models, ${LINFO[l].plat}`, icon: 'layers', color: 'oklch(0.5 0.12 293)' })),
+    ...MODELS.filter(m => !all.includes(m.id)).map(m => ({ value: m.id, label: m.id, sub: `${m.series}, ${m.kind}`, icon: 'printer', color: MUTED }))
   ];
   const nl = new Set(all.map(LINE_OF)).size;
   return {
     chips, addItems,
-    sub: `${all.length} model${all.length === 1 ? '' : 's'} across ${nl} product line${nl === 1 ? '' : 's'}` + (inheritedFrom ? ` · inherited from ${inheritedFrom} until edited here` : '')
+    sub: `${all.length} model${all.length === 1 ? '' : 's'} across ${nl} product line${nl === 1 ? '' : 's'}` + (inheritedFrom ? `, inherited from ${inheritedFrom} until edited here` : '')
   };
 }
 
@@ -109,12 +109,12 @@ export function systemGraph(data: Data) {
     'Rational ClearQuest': { meta: `${lg + mr} defects lead here`, href: '/defects?mig=legacy' },
     'Rational ClearCase': { meta: 'Frozen for waves 1 and 2' },
     'Review Board': { meta: 'Wave 3 teams still review here' },
-    Jira: { meta: `${jr} lead · ${mr} mirrored`, href: '/defects?mig=jira' },
+    Jira: { meta: `${jr} lead, ${mr} mirrored`, href: '/defects?mig=jira' },
     'Perforce P4': { meta: `${D.reduce((a, d) => a + (d.p4 || []).length, 0) + R.filter(r => r.status === 'approved').length} changelists linked` },
     'Helix Swarm': { meta: `${R.length} code reviews`, href: '/reviews' },
     Confluence: { meta: 'Root-cause and test pages' }
   };
-  const LBL: Record<string, string> = { 'Rational ClearQuest': 'Defects', 'Rational ClearCase': 'UCM history', 'Review Board': 'Reviews', Jira: 'Issues', 'Perforce P4': 'Jobs · CLs', 'Helix Swarm': 'Reviews', Confluence: 'Pages' };
+  const LBL: Record<string, string> = { 'Rational ClearQuest': 'Defects', 'Rational ClearCase': 'UCM history', 'Review Board': 'Reviews', Jira: 'Issues', 'Perforce P4': 'Jobs, CLs', 'Helix Swarm': 'Reviews', Confluence: 'Pages' };
   const W = 230, N: GraphNode[] = [], E: GraphEdge[] = [];
   const colY = (n: number, i: number) => (i - (n - 1) / 2) * 160;
   SYSG.forEach((g, gi) => {
@@ -170,8 +170,8 @@ export function defectGraph(d: Defect, D: Defect[], rel: { linked: RelRow[]; sug
     N.push({
       id, type: 'card', position: { x: 15 + (i - (ms.length - 1) / 2) * 204, y: my },
       data: {
-        w: 190, kind: 'Product line', kc: grey.c, kb: grey.b, id: m, title: own ? `${g.ms.size} of ${tot} models affected · ${n} open` : `${n} open defect${n === 1 ? '' : 's'} in this line`,
-        tip: own ? 'Affected: ' + [...g.ms].join(', ') : 'Linked through ' + via.join(', ') + (LINFO[m] ? ' · base: ' + LINFO[m].plat : ''), status: '',
+        w: 190, kind: 'Product line', kc: grey.c, kb: grey.b, id: m, title: own ? `${g.ms.size} of ${tot} models affected, ${n} open` : `${n} open defect${n === 1 ? '' : 's'} in this line`,
+        tip: own ? 'Affected: ' + [...g.ms].join(', ') : 'Linked through ' + via.join(', ') + (LINFO[m] ? ', base: ' + LINFO[m].plat : ''), status: '',
         href: '/defects?line=' + encodeURIComponent(m) + '&open=1'
       }
     });

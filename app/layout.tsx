@@ -4,9 +4,9 @@ import { AppShell } from '@/components/shell/app-shell';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: { default: 'DRS · Defects and Reviews System', template: '%s · DRS' },
+  title: { default: 'Defects and Reviews System (DRS)', template: '%s - DRS' },
   description:
-    'A recreation of the Defects and Reviews System built at Samsung Electronics’ printing division in 2016–2017: defect tracking, code review and a bridge across IBM Rational, Review Board, Perforce, Helix Swarm, Jira and Confluence.',
+    "A recreation of the Defects and Reviews System built at Samsung Electronics' printing division in 2016-2017: defect tracking, code review and a bridge across IBM Rational, Review Board, Perforce, Helix Swarm, Jira and Confluence.",
   icons: { icon: '/drs-logo.svg' }
 };
 

@@ -74,7 +74,7 @@ export function DiffFile({ f, fi, mode, comments, people, onComment }: {
         <span title={'//depot/printing/main/' + f.path} className="bui-trunc min-w-0 flex-1">{'//depot/printing/main/' + f.path}</span>
         {mine.length ? <span className="flex items-center gap-1 text-muted"><Icon name="message-square" size={14} />{mine.length}</span> : null}
         <span className="text-[oklch(0.48_0.12_155)]">+{f.add}</span>
-        <span className="text-[oklch(0.52_0.16_25)]">−{f.del}</span>
+        <span className="text-[oklch(0.52_0.16_25)]">-{f.del}</span>
       </div>
       <div className="overflow-x-auto rounded border border-line font-mono text-sm leading-[1.75]">
         {mode === 'sbs' ? (

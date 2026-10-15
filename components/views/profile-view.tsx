@@ -46,14 +46,14 @@ export function ProfileView({ id }: { id: string }) {
         <NextLink href="/teams" className="bui-btn bui-link"><Icon name="arrow-left" size={16} />Teams</NextLink><span>/</span><span>{u.name}</span>
       </div>
       <div className="flex flex-wrap items-start gap-8">
-        <PhotoPlaceholder w={160} h={200} iconSize={48} title="Photo placeholder" />
+        <PhotoPlaceholder w={160} h={200} iconSize={48} src={u.photo} title={u.photo ? u.name : 'Photo placeholder'} />
         <div className="flex max-w-[680px] min-w-0 flex-[1_1_360px] flex-col gap-2.5">
           <div className="flex flex-col gap-1">
             <h1 className="text-2xl font-bold tracking-[-0.02em]">{u.name}</h1>
             {u.en !== u.name ? <span className="text-muted">{u.en}</span> : null}
           </div>
           <span className="font-[550]">{u.title}</span>
-          <span className="text-muted">{TM[u.team].name} · {ROLE[u.role]} · {u.site}</span>
+          <span className="text-muted">{TM[u.team].name}, {ROLE[u.role]}, {u.site}</span>
           <a href={'mailto:' + u.email} className="flex w-max max-w-full items-center gap-2"><Icon name="mail" size={15} />{u.email}</a>
           <p className="mt-2 leading-[1.7] text-pretty text-ink-3">{u.intro}</p>
           {stats.length ? (
@@ -70,24 +70,24 @@ export function ProfileView({ id }: { id: string }) {
       </div>
       <div className="grid gap-x-14 gap-y-10 [grid-template-columns:repeat(auto-fit,minmax(min(100%,440px),1fr))]">
         <section className="flex flex-col border-t border-line pt-6">
-          <h3 className="mb-2 text-base font-[650]">Open defects assigned · {v.openD.length}</h3>
+          <h3 className="mb-2 text-base font-[650]">Open defects assigned ({v.openD.length})</h3>
           {v.openD.slice(0, 8).map(x => (
             <Clickable key={x.id} href={'/defects/' + x.id} className="row-link grid grid-cols-[16px_92px_minmax(0,1fr)_auto] items-center gap-3 border-b border-line-soft py-3 last:border-b-0">
               <Icon name={SEV[x.sev].icon} size={16} color={SEV[x.sev].c} />
               <span className="font-mono text-sm text-muted">{x.id}</span>
-              <div className="flex min-w-0 flex-col gap-[3px]"><span className="bui-trunc font-[550]">{x.title}</span><span className="bui-trunc text-sm text-muted">{x.model} · {x.comp}</span></div>
+              <div className="flex min-w-0 flex-col gap-[3px]"><span className="bui-trunc font-[550]">{x.title}</span><span className="bui-trunc text-sm text-muted">{x.model}, {x.comp}</span></div>
               <StatusLabel {...DST[x.status]} size={14} className="gap-1.5" />
             </Clickable>
           ))}
           {!v.openD.length ? <span className="pt-2 text-muted">No open defects assigned.</span> : null}
         </section>
         <section className="flex flex-col border-t border-line pt-6">
-          <h3 className="mb-2 text-base font-[650]">Active code reviews · {v.revs.length}</h3>
+          <h3 className="mb-2 text-base font-[650]">Active code reviews ({v.revs.length})</h3>
           {v.revs.slice(0, 8).map(x => (
             <Clickable key={x.id} href={'/reviews/' + x.id} className="row-link grid grid-cols-[16px_92px_minmax(0,1fr)_auto] items-center gap-3 border-b border-line-soft py-3 last:border-b-0">
               <Icon name={TYPE_ICON[x.type]} size={16} color={MUTED} />
               <span className="font-mono text-sm text-muted">{x.id}</span>
-              <div className="flex min-w-0 flex-col gap-[3px]"><span className="bui-trunc font-[550]">{x.title}</span><span className="bui-trunc text-sm text-muted">{(x.author === id ? 'Author' : 'Reviewer') + ' · ' + x.type}</span></div>
+              <div className="flex min-w-0 flex-col gap-[3px]"><span className="bui-trunc font-[550]">{x.title}</span><span className="bui-trunc text-sm text-muted">{(x.author === id ? 'Author' : 'Reviewer') + ', ' + x.type}</span></div>
               <StatusLabel {...RST[x.status]} size={14} className="gap-1.5" />
             </Clickable>
           ))}

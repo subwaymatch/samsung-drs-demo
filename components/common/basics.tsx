@@ -86,8 +86,11 @@ export function StatusLabel({ l, fg, icon, size = 16, weight = 550, className = 
 /** Product photo placeholder. */
 export function Thumb({ th, w = 56, h = 42, iconSize = 20, label }: { th: ThumbT; w?: number; h?: number; iconSize?: number; label?: boolean }) {
   return (
-    <div title={th.hint} className="grid flex-none place-items-center overflow-hidden rounded bg-[oklch(0.975_0.01_293)]" style={{ width: w, height: h }}>
-      {label ? (
+    <div title={th.hint} className={'grid flex-none place-items-center overflow-hidden rounded ' + (th.photo ? '' : 'bg-[oklch(0.975_0.01_293)]')} style={{ width: w, height: h }}>
+      {th.photo ? (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img src={th.photo} alt="" loading="lazy" decoding="async" className="block h-full w-full object-contain p-[6%]" />
+      ) : label ? (
         <div className="flex flex-col items-center gap-2 text-[oklch(0.62_0.06_293)]">
           <Icon name="printer" size={iconSize} color="oklch(0.68 0.07 293)" />
           <span className="text-sm">Product image</span>
@@ -99,10 +102,16 @@ export function Thumb({ th, w = 56, h = 42, iconSize = 20, label }: { th: ThumbT
   );
 }
 
-export function PhotoPlaceholder({ w, h, iconSize = 24, title }: { w: number; h: number; iconSize?: number; title?: string }) {
+/** A person's portrait, or a placeholder while they have none. */
+export function PhotoPlaceholder({ w, h, iconSize = 24, title, src }: { w: number; h: number; iconSize?: number; title?: string; src?: string }) {
   return (
-    <div title={title} className="grid flex-none place-items-center overflow-hidden rounded bg-[oklch(0.965_0.015_293)]" style={{ width: w, height: h }}>
-      <Icon name="user" size={iconSize} color="oklch(0.68 0.07 293)" />
+    <div title={title} className={'grid flex-none place-items-center overflow-hidden rounded ' + (src ? '' : 'bg-[oklch(0.965_0.015_293)]')} style={{ width: w, height: h }}>
+      {src ? (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img src={src} alt="" loading="lazy" decoding="async" className="block h-full w-full object-cover object-top" />
+      ) : (
+        <Icon name="user" size={iconSize} color="oklch(0.68 0.07 293)" />
+      )}
     </div>
   );
 }
@@ -115,7 +124,7 @@ export interface Pager {
 }
 export function pagerOf(total: number, page: number, size: number): Pager {
   const pages = Math.max(1, Math.ceil(total / size)), p = Math.min(Math.max(1, page), pages);
-  return { p, pages, show: pages > 1, rangeText: total ? `${(p - 1) * size + 1}–${Math.min(total, p * size)} of ${total}` : '' };
+  return { p, pages, show: pages > 1, rangeText: total ? `${(p - 1) * size + 1}-${Math.min(total, p * size)} of ${total}` : '' };
 }
 export function Pagination({ pg, onPage }: { pg: Pager; onPage: (p: number) => void }) {
   if (!pg.show) return null;
@@ -124,9 +133,9 @@ export function Pagination({ pg, onPage }: { pg: Pager; onPage: (p: number) => v
   if (p <= 4) [2, 3, 4, 5].forEach(i => keep.add(i));
   if (p >= pages - 3) [pages - 4, pages - 3, pages - 2, pages - 1].forEach(i => keep.add(i));
   const nums = pages <= 7 ? Array.from({ length: pages }, (_, i) => i + 1) : [...keep].filter(i => i >= 1 && i <= pages).sort((a, b) => a - b);
-  const list: (number | '…')[] = [];
+  const list: (number | '...')[] = [];
   nums.forEach((i, k) => {
-    if (k && i - nums[k - 1] > 1) list.push('…');
+    if (k && i - nums[k - 1] > 1) list.push('...');
     list.push(i);
   });
   return (
@@ -135,8 +144,8 @@ export function Pagination({ pg, onPage }: { pg: Pager; onPage: (p: number) => v
       <nav className="flex flex-wrap items-center gap-1" aria-label="Pages">
         <Button variant="ghost" size="sm" icon="chevron-left" title="Previous page" onClick={() => onPage(Math.max(1, p - 1))} disabled={p <= 1}><span className="max-[560px]:hidden">Previous</span></Button>
         {list.map((x, i) =>
-          x === '…' ? (
-            <Button key={'e' + i} variant="page" size="sm" disabled>…</Button>
+          x === '...' ? (
+            <Button key={'e' + i} variant="page" size="sm" disabled>...</Button>
           ) : (
             <Button key={x} variant={x === p ? 'pageActive' : 'page'} size="sm" onClick={() => onPage(x)}>{String(x)}</Button>
           )

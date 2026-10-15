@@ -1,8 +1,8 @@
 import type { CSSProperties } from 'react';
 import {
-  AlignJustify, Archive, ArrowDown, ArrowLeft, ArrowLeftRight, ArrowRight, ArrowUp, AtSign, Ban, ChartColumn, Bell, BellRing, BookOpen, Bug,
+  AlignJustify, AppWindow, Archive, ArrowDown, ArrowLeft, ArrowLeftRight, ArrowRight, ArrowUp, AtSign, Ban, ChartColumn, Bell, BellRing, BookOpen, Bug,
   Calendar, CalendarClock, CalendarDays, CalendarRange, Check, CheckCheck, ChevronDown, ChevronLeft, ChevronRight, ChevronUp, ChevronsUp,
-  ChevronsUpDown, Circle, CircleCheck, CircleDot, CircleX, Clock, Columns2, Copy, CopyPlus, Cpu, Ellipsis, ExternalLink, Eye, FileCode,
+  ChevronsUpDown, Circle, CircleCheck, CircleDot, CircleX, Clock, Columns2, Copy, CopyPlus, Cpu, Database, Ellipsis, ExternalLink, Eye, FileCode,
   FileText, Film, Filter, FilterX, Flag, FlaskConical, Gauge, GitBranch, GitCommitHorizontal, GitPullRequest, Hammer, Image, Inbox, Info,
   Keyboard, Languages, Layers, Link, Link2, ListChecks, Lock, LockOpen, LogOut, Mail, Menu, MessageSquare, Minus, PanelLeftClose,
   PanelLeftOpen, Paperclip, Pencil, Play, Plus, Printer, RefreshCw, RotateCcw, Search, Send, Settings, ShieldCheck, Sparkles, Trash2,
@@ -10,12 +10,12 @@ import {
 } from 'lucide-react';
 
 const ICONS: Record<string, LucideIcon> = {
-  'align-justify': AlignJustify, archive: Archive, 'arrow-down': ArrowDown, 'arrow-left': ArrowLeft, 'arrow-left-right': ArrowLeftRight,
+  'align-justify': AlignJustify, 'app-window': AppWindow, archive: Archive, 'arrow-down': ArrowDown, 'arrow-left': ArrowLeft, 'arrow-left-right': ArrowLeftRight,
   'arrow-right': ArrowRight, 'arrow-up': ArrowUp, 'at-sign': AtSign, ban: Ban, 'bar-chart-3': ChartColumn, bell: Bell, 'bell-ring': BellRing,
   'book-open': BookOpen, bug: Bug, calendar: Calendar, 'calendar-clock': CalendarClock, 'calendar-days': CalendarDays, 'calendar-range': CalendarRange,
   check: Check, 'check-check': CheckCheck, 'chevron-down': ChevronDown, 'chevron-left': ChevronLeft, 'chevron-right': ChevronRight,
   'chevron-up': ChevronUp, 'chevrons-up': ChevronsUp, 'chevrons-up-down': ChevronsUpDown, circle: Circle, 'circle-check': CircleCheck,
-  'circle-dot': CircleDot, 'circle-x': CircleX, clock: Clock, 'columns-2': Columns2, copy: Copy, 'copy-plus': CopyPlus, cpu: Cpu,
+  'circle-dot': CircleDot, 'circle-x': CircleX, clock: Clock, 'columns-2': Columns2, copy: Copy, 'copy-plus': CopyPlus, cpu: Cpu, database: Database,
   ellipsis: Ellipsis, 'external-link': ExternalLink, eye: Eye, 'file-code': FileCode, 'file-text': FileText, film: Film, filter: Filter,
   'filter-x': FilterX, flag: Flag, 'flask-conical': FlaskConical, gauge: Gauge, 'git-branch': GitBranch, 'git-commit': GitCommitHorizontal,
   'git-pull-request': GitPullRequest, hammer: Hammer, image: Image, inbox: Inbox, info: Info, keyboard: Keyboard, languages: Languages,

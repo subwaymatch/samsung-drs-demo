@@ -237,7 +237,7 @@ export const HW_DEFECTS: HwDefect[] = [
   {
     id: 'D:xss', title: 'SyncThru: stored XSS in the device location field', model: 'SL-M4580FX', comp: 'Security', sev: 'critical', status: 'closed', fw: 'V4.00.02.21',
     reporter: 'u14', assignees: ['u26'], created: '2016-12-06 13:20',
-    desc: 'The device location field in SyncThru accepts HTML and renders it unescaped on the Information page, so a script entered by an admin runs in every visitor’s browser.\nFound in the static analysis review and confirmed manually. Affects every ProXpress model on the XOA platform.',
+    desc: 'The device location field in SyncThru accepts HTML and renders it unescaped on the Information page, so a script entered by an admin runs for every visitor.\nFound in the static analysis review and confirmed manually. Affects every ProXpress model on the XOA platform.',
     affects: { lines: ['ProXpress Mono', 'ProXpress Color'], models: [] },
     activity: [
       A('e', 'u14', '2016-12-06 13:20', 'reported this defect'), A('e', 'u14', '2016-12-06 13:21', 'assigned 황보라'),
@@ -256,7 +256,7 @@ export const HW_REVIEWS: Review[] = [
   {
     id: 'CR:duplex', title: 'Restore duplex reverse motor timing for SL-C3060FR (Jam 0x21)', type: 'Bug fix', branch: 'fw/c3060/fix-duplex-jam-0x21', author: 'u2',
     reviewers: RV('u7', 'u11:approved'), status: 'in_review', linked: 'D:duplex', submitted: '2017-09-14 11:15',
-    desc: 'V4.00.03.20에서 변경된 듀플렉스 반전 모터 구동 타이밍(−18ms)을 원복합니다. 최영호 책임 측정 결과 센서 응답은 정상 범위로, 타이밍 변경이 원인으로 확인되었습니다.\n\n테스트: A4 / Letter 80g, 양면 200매 × 3회, Jam 0건',
+    desc: 'V4.00.03.20에서 변경된 듀플렉스 반전 모터 구동 타이밍(-18ms)을 원복합니다. 최영호 책임 측정 결과 센서 응답은 정상 범위로, 타이밍 변경이 원인으로 확인되었습니다.\n\n테스트: A4 / Letter 80g, 양면 200매 × 3회, Jam 0건',
     attachments: [F_('duplex_200x3_test_report.pdf', 420000, 'application/pdf')],
     files: [
       FD('engine/duplex/duplex_motor.c', ['@@ -212,7 +212,7 @@ static void duplex_reverse_start(void)', ' {', '     motor_set_dir(DUPLEX_MOTOR, DIR_REVERSE);', '-    timer_start(DUPLEX_TMR, DUPLEX_REV_DELAY_MS - 18);', '+    timer_start(DUPLEX_TMR, DUPLEX_REV_DELAY_MS);', '     sensor_arm(DUPLEX_EXIT_SNS);', ' }']),
@@ -349,7 +349,7 @@ export const HW_REVIEWS: Review[] = [
   {
     id: 'CR:udp', title: 'UPD: query Secure Print status off the spooler thread', type: 'Bug fix', branch: 'drv/upd/secure-print-async-status', author: 'u27',
     reviewers: RV('u29:approved', 'u11'), status: 'in_review', linked: 'D:udp', submitted: '2017-09-11 18:50',
-    desc: 'Moves the device status query in the Secure Print dialog to a worker thread and caches the result for 30 seconds. The dialog shows "Checking device…" until the result arrives instead of blocking spoolsv.exe.\n\nTested on Windows 10 1607 and 1703 (x64 and x86) and on a Windows Server 2012 R2 print server with 20 clients.',
+    desc: 'Moves the device status query in the Secure Print dialog to a worker thread and caches the result for 30 seconds. The dialog shows "Checking device..." until the result arrives instead of blocking spoolsv.exe.\n\nTested on Windows 10 1607 and 1703 (x64 and x86) and on a Windows Server 2012 R2 print server with 20 clients.',
     attachments: [F_('upd_secure_print_test_matrix.xlsx', 64000, 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')],
     files: [FD('driver/upd/ui/secure_print_dlg.cpp', ['@@ -146,8 +146,12 @@ BOOL SecurePrintDlg::OnInitDialog()', '     SetDlgItemText(IDC_STATUS, L"");', '-    DeviceStatus st = QueryDeviceStatus(m_port);', '-    UpdateStatus(st);', '+    SetDlgItemText(IDC_STATUS, LoadStr(IDS_CHECKING_DEVICE));', '+    m_worker = StartWorker([hwnd = m_hWnd, port = m_port] {', '+        DeviceStatus st = StatusCache::Get(port, 30 /* s */);', '+        if (IsWindow(hwnd))', '+            PostMessage(hwnd, WM_DEVICE_STATUS, 0, st.Pack());', '+    });', '     return TRUE;', ' }'])],
     activity: [
@@ -405,7 +405,7 @@ export const HW_REVIEWS: Review[] = [
   {
     id: 'CR:eco', title: 'Power: put the Ethernet PHY in low-power mode during deep sleep', type: 'Bug fix', branch: 'fw/m3065/fix-sleep-phy-power', author: 'u17',
     reviewers: RV('u6:approved', 'u11:approved'), status: 'approved', linked: 'D:eco', submitted: '2016-10-20 18:30',
-    desc: '슬립 진입 시 이더넷 PHY를 Energy Efficient Ethernet 저전력 모드로 전환하고, WoL 매직 패킷 감지만 유지합니다.\n\n측정: 슬립 소비전력 2.1W → 1.3W (에너지스타 기준 1.6W)',
+    desc: '슬립 진입 시 이더넷 PHY를 Energy Efficient Ethernet 저전력 모드로 전환하고, WoL 매직 패킷 감지만 유지합니다.\n\n측정: 슬립 소비전력 2.1W에서 1.3W로 감소 (에너지스타 기준 1.6W)',
     attachments: [F_('power_after_fix.csv', 17000, 'text/csv')],
     files: [FD('power/sleep/eth_phy_pm.c', ['@@ -40,6 +40,9 @@ void eth_phy_enter_sleep(const pm_cfg_t *cfg)', ' \tphy_write(PHY_REG_CTRL, PHY_CTRL_AUTONEG);', '+\tphy_write(PHY_REG_EEE, PHY_EEE_LPI_ENABLE);', '+\tif (cfg->wol)', '+\t\tphy_write(PHY_REG_WOL, PHY_WOL_MAGIC_ONLY);', ' \tphy_set_speed(PHY_SPEED_10M);'])],
     activity: [

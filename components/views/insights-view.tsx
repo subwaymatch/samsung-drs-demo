@@ -2,7 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 import { useMemo } from 'react';
-import { DIVISION, ORG } from '@/lib/constants';
+import { MODELS, TEAMS } from '@/lib/constants';
 import { fFull, TODAY } from '@/lib/dates';
 import { computeInsights, RANGES } from '@/lib/insights';
 import { systemGraph } from '@/lib/relations';
@@ -40,28 +40,33 @@ export function InsightsView() {
 
   return (
     <div className="mx-auto flex max-w-[1200px] flex-col gap-10">
-      <PageHeader title="Insights" sub={`Defect flow and code review performance through ${fFull(TODAY + ' 00:00')}. Select any bar or row to open the matching items.`} />
+      <PageHeader
+        title="Insights"
+        sub={`${app.data.defects.length} defects and ${app.data.reviews.length} code reviews from ${TEAMS.length} teams across ${MODELS.length} printer and copier models.`}
+        action={
+          <div className="flex flex-wrap items-center gap-x-6 gap-y-2 pb-1 text-sm text-ink-5">
+            <span className="flex items-center gap-2">
+              <Icon name="calendar-clock" size={16} color="var(--color-accent-ink)" />
+              Data through {fFull(TODAY + ' 00:00')}
+            </span>
+            <span className="flex items-center gap-2">
+              <span className="h-1.5 w-1.5 rounded-full bg-[oklch(0.62_0.14_155)]" />
+              All systems in sync
+            </span>
+          </div>
+        }
+      />
 
-      <section className="flex flex-col gap-6">
-        <div className="flex max-w-[760px] flex-col gap-2">
-          <h3 className="text-base font-[650]">Migration bridge</h3>
-          <p className="leading-[1.7] text-pretty text-ink-3">
-            {ORG}’ {DIVISION} is moving from IBM Rational ClearQuest, IBM Rational ClearCase and Review Board to Perforce P4, Helix Swarm, Jira and Confluence.
-            The move runs team by team in three waves, from November 2016 to the end of 2017, so DRS links each defect and code review across the old and new tools
-            and tracks it against severity targets. Work keeps moving while records change hands.
-          </p>
+      <section className="flex flex-col gap-3">
+        <div
+          className="overflow-hidden border-y border-[oklch(0.92_0.01_290)] bg-surface"
+          style={mainW ? { width: mainW, marginLeft: `calc(50% - ${mainW / 2}px)` } : undefined}
+        >
+          <RelGraph nodes={graph.nodes} edges={graph.edges} height={680} />
         </div>
-        <div className="flex flex-col gap-3">
-          <div
-            className="overflow-hidden border-y border-[oklch(0.92_0.01_290)] bg-surface"
-            style={mainW ? { width: mainW, marginLeft: `calc(50% - ${mainW / 2}px)` } : undefined}
-          >
-            <RelGraph nodes={graph.nodes} edges={graph.edges} height={680} />
-          </div>
-          <div className="flex flex-wrap gap-5 text-sm text-ink-5">
-            <span className="flex items-center gap-2"><span className="h-1.5 w-1.5 rounded-full bg-[oklch(0.62_0.14_155)]" />Connected and in sync</span>
-            <span className="flex items-center gap-2"><span className="w-6 border-t-[1.5px] border-dashed border-[oklch(0.55_0.17_293)]" />Records synced through DRS</span>
-          </div>
+        <div className="flex flex-wrap gap-5 text-sm text-ink-5">
+          <span className="flex items-center gap-2"><span className="h-1.5 w-1.5 rounded-full bg-[oklch(0.62_0.14_155)]" />Connected and in sync</span>
+          <span className="flex items-center gap-2"><span className="w-6 border-t-[1.5px] border-dashed border-[oklch(0.55_0.17_293)]" />Records synced through DRS</span>
         </div>
       </section>
 
@@ -148,7 +153,7 @@ export function InsightsView() {
           <span>Showing</span>
           <span className="font-[650] text-ink tabular-nums">{st.periodL}</span>
         </div>
-        <div role="tablist" aria-label="Reporting period" className="flex items-stretch gap-6 self-stretch overflow-x-auto">
+        <div role="tablist" aria-label="Reporting period" className="-mb-px flex items-stretch gap-6 self-stretch overflow-x-auto overflow-y-hidden">
           {RANGES.map(r => {
             const on = r.n === range;
             return (
@@ -158,7 +163,7 @@ export function InsightsView() {
                 role="tab"
                 aria-selected={on}
                 onClick={() => setUi({ range: r.n })}
-                className="-mb-px flex min-h-12 cursor-pointer items-center gap-[7px] border-0 border-b-2 border-solid bg-transparent px-0.5 text-sm whitespace-nowrap hover:text-accent-ink"
+                className="flex min-h-12 cursor-pointer items-center gap-[7px] border-0 border-b-2 border-solid bg-transparent px-0.5 text-sm whitespace-nowrap hover:text-accent-ink"
                 style={{ borderBottomColor: on ? 'var(--color-accent)' : 'transparent', color: on ? 'var(--color-accent-ink)' : 'var(--color-ink-5)', fontWeight: on ? 650 : 500 }}
               >
                 <Icon name={r.icon} size={15} />
@@ -172,10 +177,16 @@ export function InsightsView() {
       <div className="grid gap-x-6 gap-y-7" style={KPI_GRID}>
         {st.kpis.map(k => (
           <Clickable key={k.label} href={k.href} className="flex flex-col gap-2 border-l-2 border-accent-rule py-0.5 pl-5 hover:border-accent-bar">
-            <span className="text-sm font-semibold text-ink-5">{k.label}</span>
-            <div className="flex items-baseline gap-1">
-              <span className="text-[32px] leading-[1.1] font-bold tracking-[-0.02em] tabular-nums">{k.value}</span>
-              <span className="font-[550] text-muted">{k.unit}</span>
+            <div className="flex items-start justify-between gap-3">
+              <div className="flex min-w-0 flex-col gap-2">
+                <span className="text-sm font-semibold text-ink-5">{k.label}</span>
+                <div className="flex items-baseline gap-1">
+                  <span className="text-[32px] leading-[1.1] font-bold tracking-[-0.02em] tabular-nums">{k.value}</span>
+                  <span className="font-[550] text-muted">{k.unit}</span>
+                </div>
+              </div>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={k.art} alt="" width={64} height={64} decoding="async" className="block flex-none" />
             </div>
             <span className="text-sm font-semibold" style={{ color: k.dc }}>{k.delta}</span>
             <span className="text-sm text-muted">{k.sub}</span>
@@ -323,7 +334,7 @@ export function InsightsView() {
           </div>
         </Section>
 
-        <Section title="Turnaround by change type" sub="Five most common change types · median hours to first decision · dashed line is the 48h target">
+        <Section title="Turnaround by change type" sub="Five most common change types, median hours to first decision, dashed line is the 48h target">
           <div className="flex flex-col gap-[18px]">
             {st.byType.map(t => (
               <Clickable key={t.type} href={t.href} className="row-link grid grid-cols-[140px_minmax(0,1fr)_56px] items-center gap-4 py-1">

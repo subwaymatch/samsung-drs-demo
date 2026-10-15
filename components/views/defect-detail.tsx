@@ -88,7 +88,7 @@ export function DefectDetail({ id }: { id: string }) {
             variant={sub ? 'subOn' : 'secondary'}
             icon={sub ? 'bell-ring' : 'bell'}
             title={sub ? 'Click to stop notifications for this defect' : 'Get notified about comments, status changes and decisions'}
-            onClick={() => { setSubscribed(d.id, meId, !sub); flash(sub ? 'Unsubscribed from ' + d.id : `Subscribed to ${d.id} · updates go to Notifications and your summary email`); }}
+            onClick={() => { setSubscribed(d.id, meId, !sub); flash(sub ? 'Unsubscribed from ' + d.id : `Subscribed to ${d.id}, updates go to Notifications and your summary email`); }}
           >
             {sub ? 'Subscribed' : 'Subscribe'}
           </Button>
@@ -97,7 +97,7 @@ export function DefectDetail({ id }: { id: string }) {
             items={[
               d.status === 'closed'
                 ? { icon: 'lock-open', label: 'Reopen', sub: 'Set status back to Open', onClick: () => { setStatus('open'); flash(d.id + ' reopened'); } }
-                : { icon: 'lock', label: 'Close', sub: 'Mark as verified and closed', onClick: () => { setStatus('closed'); flash(d.id + ' closed · ClearQuest record closed'); } },
+                : { icon: 'lock', label: 'Close', sub: 'Mark as verified and closed', onClick: () => { setStatus('closed'); flash(d.id + ' closed, ClearQuest record closed'); } },
               { icon: 'copy-plus', label: 'Clone with changes', sub: 'Open a new report prefilled from this one', onClick: () => { setDraft({ kind: 'defect', cloneOf: d.id, title: d.title, aff: affToVals(affOf(d)), model: d.model, comp: d.comp, sev: d.sev, status: 'open', fw: d.fw, desc: d.desc, steps: d.steps, assignees: [...d.assignees] }); router.push('/defects/new'); } },
               { icon: 'git-pull-request', label: 'Request code review', sub: 'Start a review linked to this defect', onClick: () => router.push('/reviews/new?defect=' + d.id) },
               { icon: 'link-2', label: 'Copy link', onClick: () => { navigator.clipboard?.writeText(location.origin + '/defects/' + d.id).catch(() => {}); flash('Link copied'); } },
@@ -135,14 +135,14 @@ export function DefectDetail({ id }: { id: string }) {
           ) : null}
           {d.attachments.length ? (
             <section className="flex flex-col gap-3.5">
-              <h3 className="text-sm font-semibold text-muted">Attachments · {d.attachments.length}</h3>
+              <h3 className="text-sm font-semibold text-muted">Attachments ({d.attachments.length})</h3>
               <Attachments items={d.attachments} />
             </section>
           ) : null}
 
           <RecordsAcrossSystems
             sub={rec.sub}
-            legacyTitle="Legacy · IBM Rational"
+            legacyTitle="Legacy, IBM Rational"
             legacy={rec.legacy}
             next={rec.next}
             synced={rec.synced}
@@ -213,7 +213,7 @@ export function DefectDetail({ id }: { id: string }) {
                     icon="check"
                     onClick={() => {
                       const cl = clInput.trim();
-                      if (!/^\d{6,8}$/.test(cl)) return setClErr('Enter a 6–8 digit changelist number.');
+                      if (!/^\d{6,8}$/.test(cl)) return setClErr('Enter a changelist number with 6 to 8 digits.');
                       upd(x => ({ ...log(x, `linked changelist ${cl} to ${jobOf(x.id)} (p4 fix)`), p4: [...(x.p4 || []), { cl, u: meId, at: nowStr(), desc: 'Changelist ' + cl }] }));
                       setLinkCl(false);
                       setClInput('');

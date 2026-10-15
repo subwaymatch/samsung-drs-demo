@@ -22,10 +22,10 @@ export function defectChangelists(d: Defect, linked: Review[]): Changelist[] {
     ...linked.map(r => {
       const p = p4Of(r);
       return p.submitted
-        ? { cl: p.submitted, status: 'Submitted', icon: 'git-commit', fg: GOOD, desc: r.title, meta: `${UM[r.author].name} · //depot/printing/${r.branch}`, at: fDate(r.activity.length ? r.activity[r.activity.length - 1].at : r.submitted) }
-        : { cl: p.shelved, status: 'Shelved', icon: 'archive', fg: MUTED, desc: r.title, meta: `${UM[r.author].name} · Swarm review ${p.swId} · ${r.id}`, at: fDate(r.submitted) };
+        ? { cl: p.submitted, status: 'Submitted', icon: 'git-commit', fg: GOOD, desc: r.title, meta: `${UM[r.author].name}, //depot/printing/${r.branch}`, at: fDate(r.activity.length ? r.activity[r.activity.length - 1].at : r.submitted) }
+        : { cl: p.shelved, status: 'Shelved', icon: 'archive', fg: MUTED, desc: r.title, meta: `${UM[r.author].name}, Swarm review ${p.swId}, ${r.id}`, at: fDate(r.submitted) };
     }),
-    ...(d.p4 || []).map(c => ({ cl: c.cl, status: 'Submitted', icon: 'git-commit', fg: GOOD, desc: c.desc, meta: `${UM[c.u].name} · linked with p4 fix`, at: fDate(c.at) }))
+    ...(d.p4 || []).map(c => ({ cl: c.cl, status: 'Submitted', icon: 'git-commit', fg: GOOD, desc: c.desc, meta: `${UM[c.u].name}, linked with p4 fix`, at: fDate(c.at) }))
   ];
 }
 
@@ -45,13 +45,13 @@ export function defectRecords(d: Defect, cls: Changelist[], ago: string) {
     sub,
     synced: 'Last synced across all systems ' + ago,
     legacy: [
-      { sys: 'Rational ClearQuest', id: cq, master: mg !== 'jira', state: mg === 'jira' ? 'Read-only · moved to Jira' : CQ_STATE[d.status], fg: mg === 'jira' ? MUTED : 'inherit', meta: `Defect · ${CQ_PRI[d.sev]} · owner ${owner}` },
+      { sys: 'Rational ClearQuest', id: cq, master: mg !== 'jira', state: mg === 'jira' ? 'Read-only, moved to Jira' : CQ_STATE[d.status], fg: mg === 'jira' ? MUTED : 'inherit', meta: `Defect, ${CQ_PRI[d.sev]}, owner ${owner}` },
       { sys: 'Rational ClearCase', id: cq, master: false, state: cc.state, fg: 'inherit', meta: cc.meta }
     ].map(withLogo),
     next: [
       mg === 'legacy'
         ? { sys: 'Jira', id: '', master: false, state: 'Not created yet', fg: MUTED, meta: `Created when ${d.comp} moves to Jira in wave ${w}` }
-        : { sys: 'Jira', id: jiraOf(d.id), master: mg === 'jira', state: JIRA_ST[d.status], fg: 'inherit', meta: (mg === 'jira' ? 'Project PRT · migrated from ' : 'Project PRT · mirrored from ') + cq },
+        : { sys: 'Jira', id: jiraOf(d.id), master: mg === 'jira', state: JIRA_ST[d.status], fg: 'inherit', meta: (mg === 'jira' ? 'Project PRT, migrated from ' : 'Project PRT, mirrored from ') + cq },
       { sys: 'Perforce P4', id: jobOf(d.id), master: false, state: cls.length ? cls.length + ' changelist' + (cls.length > 1 ? 's' : '') + ' linked' : 'No changelists yet', fg: cls.length ? 'inherit' : MUTED, meta: 'Fixes recorded on the job with p4 fix' },
       conf
         ? { sys: 'Confluence', id: conf.id, master: false, state: conf.title, fg: 'inherit', meta: 'Space: Printing FW Quality' }
@@ -67,19 +67,19 @@ const crNumOfDefect = (d: Defect) => {
 export function defectTargets(d: Defect) {
   const ev = tgtEval(d, nowStr()), RED = 'oklch(0.52 0.18 25)', PUR = 'oklch(0.45 0.17 293)';
   const r = ev.r.done
-    ? ev.r.met ? { text: 'Responded in ' + fDur(ev.r.h), icon: 'circle-check', fg: GOOD } : { text: `Responded in ${fDur(ev.r.h)} · ${fDur(ev.r.h - ev.t.r)} late`, icon: 'circle-x', fg: RED }
-    : ev.r.late ? { text: `No response · ${fDur(ev.r.h - ev.t.r)} overdue`, icon: 'triangle-alert', fg: RED } : { text: `${fDur(ev.t.r - ev.r.h)} left to respond`, icon: 'clock', fg: ev.t.r - ev.r.h < ev.t.r * 0.25 ? AMBER : PUR };
+    ? ev.r.met ? { text: 'Responded in ' + fDur(ev.r.h), icon: 'circle-check', fg: GOOD } : { text: `Responded in ${fDur(ev.r.h)}, ${fDur(ev.r.h - ev.t.r)} late`, icon: 'circle-x', fg: RED }
+    : ev.r.late ? { text: `No response, ${fDur(ev.r.h - ev.t.r)} overdue`, icon: 'triangle-alert', fg: RED } : { text: `${fDur(ev.t.r - ev.r.h)} left to respond`, icon: 'clock', fg: ev.t.r - ev.r.h < ev.t.r * 0.25 ? AMBER : PUR };
   const fh = ev.f.d * 24, th = ev.t.f * 24;
   const f: { text: string; icon: string; fg: string; sub?: string } = ev.f.done
-    ? ev.f.met ? { text: 'Resolved in ' + fDur(fh), icon: 'circle-check', fg: GOOD } : { text: `Resolved in ${fDur(fh)} · ${fDur(fh - th)} late`, icon: 'circle-x', fg: RED }
+    ? ev.f.met ? { text: 'Resolved in ' + fDur(fh), icon: 'circle-check', fg: GOOD } : { text: `Resolved in ${fDur(fh)}, ${fDur(fh - th)} late`, icon: 'circle-x', fg: RED }
     : ev.f.late ? { text: `Overdue by ${fDur(fh - th)}`, sub: 'Was due ' + ev.f.due, icon: 'triangle-alert', fg: RED } : { text: `${fDur(th - fh)} left`, sub: 'Due ' + ev.f.due, icon: 'clock', fg: th - fh < th * 0.25 ? AMBER : PUR };
   return { title: SEV[d.sev].l + ' severity targets', rl: ev.t.rl, fl: ev.t.fl, r, f };
 }
 
 const SWARM: Record<string, [string, string, string]> = {
   pending: ['Needs review', 'eye', 'oklch(0.48 0.18 293)'], in_review: ['Needs review', 'eye', 'oklch(0.48 0.18 293)'],
-  changes: ['Needs revision', 'rotate-ccw', 'oklch(0.52 0.12 60)'], approved: ['Approved · committed', 'git-commit', GOOD],
-  denied: ['Rejected', 'ban', 'oklch(0.52 0.18 25)'], withdrawn: ['Archived · not submitted', 'archive', 'oklch(0.48 0.01 290)']
+  changes: ['Needs revision', 'rotate-ccw', 'oklch(0.52 0.12 60)'], approved: ['Approved, committed', 'git-commit', GOOD],
+  denied: ['Rejected', 'ban', 'oklch(0.52 0.18 25)'], withdrawn: ['Archived, not submitted', 'archive', 'oklch(0.48 0.01 290)']
 };
 
 export function reviewModel(r: Review, D: Defect[]) {
@@ -95,7 +95,7 @@ export function reviewRecords(r: Review, D: Defect[], swAgo: string, ago: string
   const swarm = {
     id: p.swId, state: sw[0], icon: sw[1], fg: sw[2], shelved: p.shelved, submitted: p.submitted,
     up: r.reviewers.filter(v => v.dec === 'approved').length, down: r.reviewers.filter(v => v.dec === 'changes' || v.dec === 'denied').length,
-    tests: failed ? `Failed · build #${3000 + n * 3}` : `Passed · build #${3000 + n * 3}`, synced: 'Synced with Swarm ' + swAgo
+    tests: failed ? `Failed, build #${3000 + n * 3}` : `Passed, build #${3000 + n * 3}`, synced: 'Synced with Swarm ' + swAgo
   };
   const cqId = ld ? cqOf(ld.id) : cqOfReview(r);
   const cqType = ld ? 'Defect' : ({ Feature: 'Enhancement Request', 'Firmware update': 'Release Task', 'Bug fix': 'Defect', 'Security fix': 'Defect', Performance: 'Enhancement Request', Localization: 'Enhancement Request' } as Record<string, string>)[r.type] || 'Task';
@@ -112,16 +112,16 @@ export function reviewRecords(r: Review, D: Defect[], swAgo: string, ago: string
   return {
     mig: { l: M.l, fg: M.fg, icon: M.icon, d: sub }, sub, swarm, synced: 'Last synced across all systems ' + ago,
     legacy: [
-      { sys: 'Rational ClearQuest', id: cqId, master: mg !== 'jira', state: mg === 'jira' ? 'Read-only · moved to Jira' : cqState, fg: mg === 'jira' ? MUTED : 'inherit', meta: `${cqType} · on approval: ${onApprove}` },
+      { sys: 'Rational ClearQuest', id: cqId, master: mg !== 'jira', state: mg === 'jira' ? 'Read-only, moved to Jira' : cqState, fg: mg === 'jira' ? MUTED : 'inherit', meta: `${cqType}, on approval: ${onApprove}` },
       { sys: 'Rational ClearCase', id: cqId, master: false, state: cc.state, fg: 'inherit', meta: cc.meta },
-      { sys: 'Review Board', id: rbOf(r), master: false, state: mg === 'legacy' ? 'Active · mirrored to Helix Swarm' : 'Read-only · history imported to Swarm', fg: mg === 'legacy' ? 'inherit' : MUTED, meta: mg === 'legacy' ? `Team moves to Helix Swarm in wave ${rw}` : 'Review comments and Ship It votes imported' }
+      { sys: 'Review Board', id: rbOf(r), master: false, state: mg === 'legacy' ? 'Active, mirrored to Helix Swarm' : 'Read-only, history imported to Swarm', fg: mg === 'legacy' ? 'inherit' : MUTED, meta: mg === 'legacy' ? `Team moves to Helix Swarm in wave ${rw}` : 'Review comments and Ship It votes imported' }
     ].map(withLogo),
     next: [
-      { sys: 'Helix Swarm', id: 'Review ' + p.swId, master: false, state: sw[0], fg: sw[2], meta: `${swarm.up} up · ${swarm.down} down · tests ${swarm.tests.toLowerCase()}` },
+      { sys: 'Helix Swarm', id: 'Review ' + p.swId, master: false, state: sw[0], fg: sw[2], meta: `${swarm.up} up, ${swarm.down} down, tests ${swarm.tests.toLowerCase()}` },
       { sys: 'Perforce P4', id: 'CL ' + (p.submitted || p.shelved), master: false, state: p.submitted ? 'Submitted' : 'Shelved', fg: 'inherit', meta: stream },
       mg === 'legacy'
         ? { sys: 'Jira', id: '', master: false, state: 'Not created yet', fg: MUTED, meta: `Created when this team moves to Jira in wave ${rw}` }
-        : { sys: 'Jira', id: jk, master: mg === 'jira', state: ld ? JIRA_ST[ld.status] : cqState === 'Resolved' ? 'Done' : 'In Progress', fg: 'inherit', meta: (mg === 'jira' ? 'Project PRT · migrated from ' : 'Project PRT · mirrored from ') + cqId },
+        : { sys: 'Jira', id: jk, master: mg === 'jira', state: ld ? JIRA_ST[ld.status] : cqState === 'Resolved' ? 'Done' : 'In Progress', fg: 'inherit', meta: (mg === 'jira' ? 'Project PRT, migrated from ' : 'Project PRT, mirrored from ') + cqId },
       conf
         ? { sys: 'Confluence', id: 'Page ' + (52000 + (n - 1500) * 3), master: false, state: conf, fg: 'inherit', meta: 'Space: Printing FW Engineering' }
         : { sys: 'Confluence', id: '', master: false, state: 'No page yet', fg: MUTED, meta: 'A test report page is added when the change is approved' }
@@ -154,7 +154,7 @@ export function reviewTurnaround(r: Review) {
   return {
     text: h < 1 ? Math.max(1, Math.round(h * 60)) + 'm' : h.toFixed(1) + 'h',
     color: h > 48 ? 'oklch(0.55 0.13 65)' : 'oklch(0.45 0.17 293)',
-    note: decs.length ? 'Submission to first decision · target 48h' : `Elapsed since submission, waiting on ${r.reviewers.length ? 'review' : 'assignment'} · target 48h`
+    note: decs.length ? 'Submission to first decision, target 48h' : `Elapsed since submission, waiting on ${r.reviewers.length ? 'review' : 'assignment'}, target 48h`
   };
 }
 

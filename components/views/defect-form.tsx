@@ -106,10 +106,10 @@ function DefectFormInner({ d }: { d?: Defect }) {
       ];
       addDefect({
         id: newId, title: f.title.trim(), affects: affFromVals(f.aff, f.model), model: f.model, comp: f.comp, sev: f.sev, status: f.status,
-        fw: f.fw.trim() || '—', reporter: meId, assignees: f.assignees, created: at, desc: f.desc.trim(), steps: f.steps.trim(), attachments: f.attachments, activity: act
+        fw: f.fw.trim() || '-', reporter: meId, assignees: f.assignees, created: at, desc: f.desc.trim(), steps: f.steps.trim(), attachments: f.attachments, activity: act
       });
       router.push('/defects/' + newId);
-      flash(newId + ' reported · P4 job ' + jobOf(newId) + ' created');
+      flash(newId + ' reported, P4 job ' + jobOf(newId) + ' created');
     } else if (d) {
       updDefect(d.id, x => ({
         ...x, title: f.title.trim(), affects: affFromVals(f.aff, f.model), model: f.model!, comp: f.comp!, sev: f.sev, status: f.status, fw: f.fw,
@@ -143,7 +143,7 @@ function DefectFormInner({ d }: { d?: Defect }) {
               {dupes.map(x => (
                 <a key={x.id} href={'/defects/' + x.id} target="_blank" rel="noreferrer" className="grid grid-cols-[96px_minmax(0,1fr)_auto] items-center gap-3.5 border-b border-line-soft py-2.5 text-inherit no-underline last:border-b-0 hover:text-accent-text hover:no-underline">
                   <span className="font-mono text-sm text-muted">{x.id}</span>
-                  <span className="flex min-w-0 flex-col gap-[3px]"><span className="bui-trunc">{x.title}</span><span className="text-sm text-muted">{x.comp} · reported {fFull(x.created)}</span></span>
+                  <span className="flex min-w-0 flex-col gap-[3px]"><span className="bui-trunc">{x.title}</span><span className="text-sm text-muted">{x.comp}, reported {fFull(x.created)}</span></span>
                   <span className="flex items-center gap-1.5 font-[550] whitespace-nowrap" style={{ color: DST[x.status].fg }}><Icon name={DST[x.status].icon} size={14} />{DST[x.status].l}</span>
                 </a>
               ))}
@@ -157,7 +157,7 @@ function DefectFormInner({ d }: { d?: Defect }) {
           <Field label="Firmware / driver version"><Input mono value={f.fw} onChange={v => set('fw', v)} placeholder={f.model && MM[f.model] ? (MM[f.model].series === 'MultiXpress' ? 'V5.10.03.24' : MM[f.model].series === 'ProXpress' ? 'V4.00.03.24' : 'V3.00.03.24') : 'V4.00.03.24'} ariaLabel="Firmware version" /></Field>
         </div>
         <Field label="Description"><Textarea value={f.desc} onChange={v => set('desc', v)} rows={5} placeholder="What happens, and what was expected?" ariaLabel="Description" /></Field>
-        <Field label="Steps to reproduce"><Textarea value={f.steps} onChange={v => set('steps', v)} rows={4} placeholder="1. …" ariaLabel="Steps to reproduce" /></Field>
+        <Field label="Steps to reproduce"><Textarea value={f.steps} onChange={v => set('steps', v)} rows={4} placeholder="1. ..." ariaLabel="Steps to reproduce" /></Field>
         <Field label="Assignees"><MultiCombobox items={engItems} value={f.assignees} onValueChange={v => set('assignees', v)} placeholder="Type a name" ariaLabel="Assignees" /></Field>
         <div className="flex flex-col gap-3">
           <span className="text-sm font-semibold text-ink-4">Attachments</span>

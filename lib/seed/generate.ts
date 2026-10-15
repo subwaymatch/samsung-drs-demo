@@ -8,11 +8,11 @@ import { A, computeStatus, diffCount, diffRows, DBG, F_ } from '../records';
 import type { Activity, Attachment, Data, Decision, Defect, FileDiff, Review, Reviewer, Severity } from '../types';
 import { HW_DEFECTS, HW_REVIEWS } from './handwritten';
 import {
-  APPROVE_N, ASK, ATT, BCI, CHANGES_N, CLEANUP, DCOMM, DENY_N, DT, FEAT, FIX, FT, FT_TYPE, LOC, PERF, REF, REPLY_N, RQ_N, SEC, TST, VERIFY
+  APPROVE_N, ASK, ATT, BCI, CHANGES_N, CLEANUP, DCOMM, DENY_N, DT, EN, FEAT, FIX, FT, FT_TYPE, LOC, PERF, REF, REPLY_N, RQ_N, SEC, TST, VERIFY
 } from './templates';
 
 /** Bump when the generator changes, so stored edits are not applied to different data. */
-export const SEED_VERSION = 3;
+export const SEED_VERSION = 4;
 
 function mulberry(seed: number) {
   let s = seed;
@@ -38,6 +38,8 @@ const REP_BY_COMP: Record<string, string[]> = {
 };
 const QA = ['u1', 'u8', 'u15', 'u16', 'u23', 'u24'];
 const ENGLISH = new Set(['u4', 'u8', 'u9', 'u13', 'u16', 'u20', 'u24', 'u27', 'u29', 'u31', 'u34']);
+/** People with non-Korean names write in English: swap a Korean template line for its English version. */
+const say = (u: string, x: string) => (ENGLISH.has(u) ? EN[x] ?? x : x);
 const BASE_W: Record<string, number> = { 'SL-C3060FR': 6, 'SL-M4080FX': 6, 'SL-X7600LX': 5, 'SL-M2020W': 4, 'SL-C480FW': 4, 'SL-M4070FR': 4, 'SL-K7600LX': 3, 'SL-M4580FX': 3 };
 const TYPE_W: [string, number][] = [['Bug fix', 0.44], ['Feature', 0.18], ['Firmware update', 0.16], ['Refactor', 0.07], ['Security fix', 0.04], ['Localization', 0.04], ['Build / CI', 0.03], ['Performance', 0.02], ['Test', 0.02]];
 const TAT_MULT: Record<string, number> = { 'Bug fix': 0.85, Feature: 1.4, 'Firmware update': 1.15, Refactor: 0.95, 'Security fix': 1.3, Localization: 0.6, 'Build / CI': 0.7, Performance: 1.1, Test: 0.75 };
@@ -163,7 +165,7 @@ export function seed(): Data {
       const cands = ASSIGN_BY_COMP[comp];
       const a1 = pick(cands), as = rnd() < 0.25 ? [a1, pick(cands.filter(x => x !== a1))] : [a1];
       const rep = MM[m].series === 'MultiXpress' && rnd() < 0.5 ? 'u23' : pick(REP_BY_COMP[comp] || QA);
-      const ko = /[가-힣]/.test(tp[1]);
+      const ko = /[가-힣]/.test(say(rep, tp[1]));
       const act: Activity[] = [], c = at(cd), bc = toBiz(cd);
       act.push(A('e', rep, c, 'reported this defect'));
       as.forEach(u => act.push(A('e', rep, c, 'assigned ' + UM[u].name)));
@@ -175,7 +177,7 @@ export function seed(): Data {
       const resD = toCal(resB), ipD = toCal(ipB), closeD = toCal(closeB);
       const fw = fwOf(m, comp, cd);
       let status: Defect['status'] = 'open';
-      if (rnd() < 0.08) act.push(A('c', a1, at(toCal(bc + 0.1)), ko ? ASK.ko : ASK.en));
+      if (rnd() < 0.08) act.push(A('c', a1, at(toCal(bc + 0.1)), say(a1, ko ? ASK.ko : ASK.en)));
       if (rnd() < 0.08) {
         const by = rnd() < 0.5 ? a1 : rep;
         act.push(A('e', by, at(toCal(bc + 0.15)), 'changed severity to ' + { critical: 'Critical', major: 'Major', minor: 'Minor', trivial: 'Trivial' }[sev]));
@@ -183,7 +185,7 @@ export function seed(): Data {
       if (!never && ipD < CAPD) { act.push(A('e', a1, at(ipD), 'changed status to In progress')); status = 'in_progress'; }
       if (!never && rnd() < 0.45) {
         const cmD = toCal(ipB + (resB - ipB) * 0.5);
-        if (cmD < CAPD) act.push(A('c', a1, at(cmD), pick(ko ? DCOMM.ko : DCOMM.en)));
+        if (cmD < CAPD) act.push(A('c', a1, at(cmD), say(a1, pick(ko ? DCOMM.ko : DCOMM.en))));
       }
       if (!never && resD < CAPD) { act.push(A('e', a1, at(resD), 'changed status to Resolved')); status = 'resolved'; }
       if (!never && closeD < CAPD) {
@@ -205,8 +207,8 @@ export function seed(): Data {
         pool.slice(0, k).forEach(([name, size, type]) => att.push(F_(name.replace(/(\.\w+)$/, '_' + keyOf(cd).slice(5).replace('-', '') + '$1'), Math.round(size * (0.6 + rnd() * 0.8)), type)));
       }
       defects.push({
-        id: '', title: tp[1].replace('{m}', m), model: m, comp, sev, status, fw, reporter: rep, assignees: as, created: c,
-        desc: tp[2], steps: tp[3] && rnd() < 0.6 ? tp[3] : '', attachments: att, activity: act
+        id: '', title: say(rep, tp[1]).replace('{m}', m), model: m, comp, sev, status, fw, reporter: rep, assignees: as, created: c,
+        desc: say(rep, tp[2]), steps: tp[3] && rnd() < 0.6 ? say(rep, tp[3]) : '', attachments: att, activity: act
       });
     }
   }
@@ -235,23 +237,23 @@ export function seed(): Data {
         const d = pick(cand);
         used.add(d);
         linked = d;
-        title = pick(FIX[d.comp]) + ' (' + d.id + ')';
         author = d.assignees[0];
+        title = say(author, pick(FIX[d.comp])) + ' (' + d.id + ')';
         branch = 'fw/' + d.model.replace('SL-', '').toLowerCase() + '/fix-' + d.id.slice(2).toLowerCase();
         desc = 'Fixes ' + d.id + ' on ' + d.model + '. Verified with the reproduction steps from the defect; the regression suite passes on the build server.';
       } else type = 'Feature';
     }
     if (type === 'Firmware update') {
-      const v = fwOf(m, 'Print Engine', day);
-      title = rnd() < 0.5 ? 'Firmware ' + v + ' release candidate (' + m + ')' : '펌웨어 ' + v + ' 배포 후보 (' + m + ')';
+      const v = fwOf(m, 'Print Engine', day), en = rnd() < 0.5;
       branch = 'release/' + ms + '/' + v.toLowerCase();
       author = pick(AUTHORS[type]);
+      title = en || ENGLISH.has(author) ? 'Firmware ' + v + ' release candidate (' + m + ')' : '펌웨어 ' + v + ' 배포 후보 (' + m + ')';
       desc = 'Release candidate build with all approved changes since the previous release for ' + m + '.';
     } else if (type !== 'Bug fix') {
       const f = pick(TITLES[type]);
-      title = f[0].replace('{m}', m);
       branch = (BRANCH_ROOT[type] || 'misc/').replace('{m}', ms) + f[1];
       author = pick(AUTHORS[type]);
+      title = say(author, f[0]).replace('{m}', m);
       desc = (DESC[type] || '').replace('{m}', m);
     }
     const act: Activity[] = [A('e', author, sub, 'requested a code review')];
@@ -277,23 +279,23 @@ export function seed(): Data {
       if (rnd() < 0.3) {
         const qB = asB + (d1B - asB) * 0.4, qd = toCal(qB);
         if (qd < CAPD) {
-          act.push(A('c', rv[0].u, at(qd), pick(RQ_N)));
+          act.push(A('c', rv[0].u, at(qd), say(rv[0].u, pick(RQ_N))));
           const ad = toCal(qB + (d1B - qB) * 0.5);
-          if (ad < CAPD && rnd() < 0.7) act.push(A('c', author, at(ad), pick(['Ran the full nightly suite; report attached to the Swarm review.', '네, 같은 플랫폼 모델 전체 빌드 확인했습니다.', 'Yes, covered by the regression suite as of last night.'])));
+          if (ad < CAPD && rnd() < 0.7) act.push(A('c', author, at(ad), say(author, pick(['Ran the full nightly suite; report attached to the Swarm review.', '네, 같은 플랫폼 모델 전체 빌드 확인했습니다.', 'Yes, covered by the regression suite as of last night.']))));
         }
       }
       if (d1 < CAPD) {
-        act.push(A('d', rv[0].u, at(d1), pick(outcome === 'approved' ? APPROVE_N : outcome === 'changes' ? CHANGES_N : DENY_N), outcome));
+        act.push(A('d', rv[0].u, at(d1), say(rv[0].u, pick(outcome === 'approved' ? APPROVE_N : outcome === 'changes' ? CHANGES_N : DENY_N)), outcome));
         rv[0].dec = outcome;
         if (outcome === 'changes') {
           const rsB = d1B + 0.4 + rnd() * 1.2, rs = toCal(rsB);
           if (rs < CAPD) {
-            if (rnd() < 0.5) act.push(A('c', author, at(toCal(rsB - 0.01)), pick(REPLY_N)));
+            if (rnd() < 0.5) act.push(A('c', author, at(toCal(rsB - 0.01)), say(author, pick(REPLY_N))));
             act.push(A('e', author, at(rs), 'resubmitted for review'));
             rv[0].dec = null;
             const d2 = toCal(rsB + 0.2 + rnd() * 0.9);
             if (d2 < CAPD) {
-              act.push(A('d', rv[0].u, at(d2), pick(APPROVE_N), 'approved'));
+              act.push(A('d', rv[0].u, at(d2), say(rv[0].u, pick(APPROVE_N)), 'approved'));
               rv[0].dec = 'approved';
             }
           }
@@ -302,7 +304,7 @@ export function seed(): Data {
       if (rv[1] && outcome !== 'denied') {
         const d3 = toCal(b + (hours / 24) * (0.8 + rnd() * 0.5));
         if (d3 < CAPD) {
-          act.push(A('d', rv[1].u, at(d3), pick(APPROVE_N), 'approved'));
+          act.push(A('d', rv[1].u, at(d3), say(rv[1].u, pick(APPROVE_N)), 'approved'));
           rv[1].dec = 'approved';
         }
       }
@@ -369,7 +371,9 @@ export function seed(): Data {
   });
   defects.filter(d => !d._hw && (d.status === 'open' || d.status === 'in_progress') && d.reporter !== 'u1').slice(-10).forEach((d, i) => {
     if (i % 2) return;
-    d.activity.push(A('c', d.reporter, d.activity[d.activity.length - 1].at, '@김지현 같은 증상이 SQA 회귀 테스트 장비에서도 재현되는지 확인 부탁드립니다.'));
+    d.activity.push(A('c', d.reporter, d.activity[d.activity.length - 1].at, ENGLISH.has(d.reporter)
+      ? '@김지현 Could you check whether this also reproduces on the SQA regression rigs?'
+      : '@김지현 같은 증상이 SQA 회귀 테스트 장비에서도 재현되는지 확인 부탁드립니다.'));
   });
 
   // A line comment from the first decision on each review with files.
@@ -378,7 +382,7 @@ export function seed(): Data {
     if (!dec) return;
     const row = diffRows(r.files[0]).sbs.find(x => !x.isHunk && x.rt && x.rbg === DBG.add);
     if (!row || row.isHunk) return;
-    const x = dec.dec === 'approved' ? pick(['경계 조건 처리 확인했습니다. OK.', 'Checked this path on the bench. OK.', '로그 메시지 레벨 적절합니다.']) : pick(['이 값은 매직 넘버 대신 설정 매크로로 빼 주세요.', 'Please add a comment explaining why this is safe here.', '이 부분 에러 처리 누락되어 있습니다.']);
+    const x = say(dec.u, dec.dec === 'approved' ? pick(['경계 조건 처리 확인했습니다. OK.', 'Checked this path on the bench. OK.', '로그 메시지 레벨 적절합니다.']) : pick(['이 값은 매직 넘버 대신 설정 매크로로 빼 주세요.', 'Please add a comment explaining why this is safe here.', '이 부분 에러 처리 누락되어 있습니다.']));
     r.lineComments = [{ f: 0, key: row.key, no: row.no, u: dec.u, at: dec.at, x }];
     r.activity.push(A('c', dec.u, dec.at, x, null, [], r.files[0].path + ':' + row.no));
     r.activity.sort(byAt);

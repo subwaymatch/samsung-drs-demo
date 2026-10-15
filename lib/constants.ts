@@ -56,7 +56,7 @@ const USER_SEED: UserSeed[] = [
 export const USERS: User[] = USER_SEED.map(u => ({
   ...u,
   email: u.en.toLowerCase().replace(/\s+/g, '.') + '@samsung.com',
-  photo: '',
+  photo: '/photos/' + u.id + '.webp',
   site: /SRI-Bangalore/.test(u.title) ? 'Bangalore, India' : 'Suwon, Korea'
 }));
 export const UM: Record<string, User> = Object.fromEntries(USERS.map(u => [u.id, u]));
@@ -154,7 +154,7 @@ export const WAVE_CUTOVER: Record<number, string> = { 1: 'Nov 2016', 2: 'Apr 201
 export const MIG: Record<MigState, { l: string; d: string; c: string; fg: string; icon: string }> = {
   jira: { l: 'Migrated to Jira', d: 'Jira leads; the ClearQuest record is read-only', c: 'oklch(0.5 0.19 293)', fg: 'oklch(0.42 0.19 293)', icon: 'check-check' },
   mirrored: { l: 'Mirrored', d: 'ClearQuest leads; DRS keeps a Jira copy in sync', c: 'oklch(0.74 0.11 293)', fg: 'oklch(0.48 0.16 293)', icon: 'arrow-left-right' },
-  legacy: { l: 'Legacy only', d: 'ClearQuest only; moves with its team’s wave', c: 'oklch(0.87 0.02 290)', fg: 'oklch(0.45 0.02 290)', icon: 'archive' }
+  legacy: { l: 'Legacy only', d: "ClearQuest only; moves with its team's wave", c: 'oklch(0.87 0.02 290)', fg: 'oklch(0.45 0.02 290)', icon: 'archive' }
 };
 export const MIGORD: MigState[] = ['jira', 'mirrored', 'legacy'];
 

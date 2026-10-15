@@ -5,7 +5,7 @@ import { useState, type ReactNode } from 'react';
 import { DEC, RST } from '@/lib/constants';
 import { fAt } from '@/lib/dates';
 import { av } from '@/lib/people';
-import type { ModelInfo } from '@/lib/products';
+import { thumbOf, type ModelInfo } from '@/lib/products';
 import { parts } from '@/lib/records';
 import type { AffChip, RelRow } from '@/lib/relations';
 import type { Activity, Attachment, Option, PersonView } from '@/lib/types';
@@ -45,13 +45,13 @@ export function PersonCard({ label, person, when }: { label: string; person: Per
     <section className="flex min-w-0 flex-col gap-3.5">
       <span className="text-sm font-semibold text-ink-4">{label}</span>
       <div className="flex items-center gap-4">
-        <PhotoPlaceholder w={56} h={70} title="Photo placeholder" />
+        <PhotoPlaceholder w={56} h={70} src={person.photo} title={person.photo ? person.name : 'Photo placeholder'} />
         <div className="flex min-w-0 flex-col gap-1">
           <div className="flex flex-wrap items-baseline gap-2">
             <NextLink href={person.href} className="text-[15px] font-[650] text-inherit">{person.name}</NextLink>
             {person.en !== person.name ? <span className="text-sm text-muted">{person.en}</span> : null}
           </div>
-          <span>{person.title} · {person.teamName}</span>
+          <span>{person.title}, {person.teamName}</span>
           <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5 text-sm text-muted">
             <a href={'mailto:' + person.email} className="flex items-center gap-1.5"><Icon name="mail" size={14} />{person.email}</a>
             <span>{when}</span>
@@ -101,7 +101,7 @@ export function ProductPanel({ pm }: { pm: ModelInfo }) {
   if (!pm.has) return null;
   return (
     <div className="flex flex-wrap items-center gap-6 border-y border-line py-5">
-      <Thumb th={{ id: pm.id, photo: '', hint: 'Product image placeholder · products/' + pm.id.toLowerCase() + '.png' }} w={168} h={120} iconSize={32} label />
+      <Thumb th={thumbOf(pm.id)} w={168} h={120} iconSize={32} label />
       <div className="flex min-w-0 flex-[1_1_320px] flex-col gap-3">
         <div className="flex flex-col gap-0.5">
           <span className="text-base font-[650]">Samsung {pm.series} {pm.id}</span>
@@ -133,7 +133,7 @@ export function ProductPanel({ pm }: { pm: ModelInfo }) {
 export function ConfirmDelete({ id, noun, onCancel, onConfirm }: { id: string; noun: string; onCancel: () => void; onConfirm: () => void }) {
   return (
     <div className="flex flex-wrap items-center gap-4 border-l-[3px] border-danger-rule py-3 pl-[18px]" role="alert">
-      <span className="flex-[1_1_280px]">Delete <strong>{id}</strong> and its comments and attachments? This can’t be undone.</span>
+      <span className="flex-[1_1_280px]">Delete <strong>{id}</strong> and its comments and attachments? This can't be undone.</span>
       <div className="flex gap-2.5">
         <Button variant="secondary" onClick={onCancel}>Cancel</Button>
         <Button variant="dangerSolid" icon="trash-2" onClick={onConfirm}>Delete {noun}</Button>
@@ -181,7 +181,7 @@ export function RecordsAcrossSystems({ sub, legacyTitle, legacy, next, synced, o
       </div>
       <div className="grid gap-x-8 gap-y-2 [grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr))]">
         <RecordColumn title={legacyTitle} items={legacy} onOpen={onOpen} />
-        <RecordColumn title="New · Perforce and Atlassian" items={next} onOpen={onOpen} />
+        <RecordColumn title="New, Perforce and Atlassian" items={next} onOpen={onOpen} />
       </div>
       <span className="text-sm text-muted">{synced}</span>
     </section>

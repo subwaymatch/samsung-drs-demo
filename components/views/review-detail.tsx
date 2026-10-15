@@ -84,7 +84,7 @@ export function ReviewDetail({ id }: { id: string }) {
     });
     setNote('');
     setNoteErr('');
-    flash(dec === 'approved' ? (ns === 'approved' ? 'Approved by all reviewers · vote synced to Swarm' : 'Approval recorded · waiting on other reviewers') : dec === 'changes' ? 'Modification requested · vote synced to Swarm' : 'Change denied · Swarm review rejected');
+    flash(dec === 'approved' ? (ns === 'approved' ? 'Approved by all reviewers, vote synced to Swarm' : 'Approval recorded, waiting on other reviewers') : dec === 'changes' ? 'Modification requested, vote synced to Swarm' : 'Change denied, Swarm review rejected');
   };
   const ld = r.linked ? data.defects.find(x => x.id === r.linked) : undefined;
   const fetchSwarm = () => {
@@ -112,7 +112,7 @@ export function ReviewDetail({ id }: { id: string }) {
             variant={sub ? 'subOn' : 'secondary'}
             icon={sub ? 'bell-ring' : 'bell'}
             title={sub ? 'Click to stop notifications for this review' : 'Get notified about comments, status changes and decisions'}
-            onClick={() => { setSubscribed(r.id, meId, !sub); flash(sub ? 'Unsubscribed from ' + r.id : `Subscribed to ${r.id} · updates go to Notifications and your summary email`); }}
+            onClick={() => { setSubscribed(r.id, meId, !sub); flash(sub ? 'Unsubscribed from ' + r.id : `Subscribed to ${r.id}, updates go to Notifications and your summary email`); }}
           >
             {sub ? 'Subscribed' : 'Subscribe'}
           </Button>
@@ -182,7 +182,7 @@ export function ReviewDetail({ id }: { id: string }) {
         <div className="flex flex-col gap-3 rounded-md border border-[oklch(0.9_0.012_290)] bg-[oklch(0.985_0.004_290)] px-5 py-[18px]">
           <div className="flex flex-col gap-1">
             <span className="font-[650]">Withdraw this request</span>
-            <span className="text-sm leading-normal text-pretty text-muted">Use this when plans change and the code won’t be submitted, whatever the review result. It’s counted as Withdrawn in Review outcomes.</span>
+            <span className="text-sm leading-normal text-pretty text-muted">Use this when plans change and the code won't be submitted, whatever the review result. It's counted as Withdrawn in Review outcomes.</span>
           </div>
           <Input value={wd.reason} onChange={v => setWd(w => ({ ...w, reason: v, err: '' }))} placeholder="Reason, e.g. feature dropped from the 2018 release" ariaLabel="Reason" />
           {wd.err ? <span className="text-danger" role="alert">{wd.err}</span> : null}
@@ -217,7 +217,7 @@ export function ReviewDetail({ id }: { id: string }) {
               icon="refresh-cw"
               onClick={() => {
                 upd(x => { const rv = x.reviewers.map(v => (v.dec === 'changes' ? { ...v, dec: null } : v)); return { ...log(x, 'resubmitted for review'), reviewers: rv, status: computeStatus(rv) }; });
-                flash('Resubmitted · shelved files updated in Swarm');
+                flash('Resubmitted, shelved files updated in Swarm');
               }}
             >
               Resubmit for review
@@ -234,13 +234,13 @@ export function ReviewDetail({ id }: { id: string }) {
           </section>
           {r.attachments.length ? (
             <section className="flex flex-col gap-3.5">
-              <h3 className="text-sm font-semibold text-muted">Attachments · {r.attachments.length}</h3>
+              <h3 className="text-sm font-semibold text-muted">Attachments ({r.attachments.length})</h3>
               <Attachments items={r.attachments} />
             </section>
           ) : null}
           <RecordsAcrossSystems
             sub={rec.sub}
-            legacyTitle="Legacy · IBM Rational and Review Board"
+            legacyTitle="Legacy, IBM Rational and Review Board"
             legacy={rec.legacy}
             next={rec.next}
             synced={rec.synced}
@@ -261,7 +261,7 @@ export function ReviewDetail({ id }: { id: string }) {
             <div className="flex flex-wrap items-center justify-between gap-3">
               <div className="flex flex-col gap-1">
                 <h3 className="text-base font-[650]">Changed files</h3>
-                <span className="text-sm text-muted">{r.files.length ? `${r.files.length} file${r.files.length > 1 ? 's' : ''} · +${add} −${del} · Click a line to comment` : 'Not synced from Helix Swarm yet'}</span>
+                <span className="text-sm text-muted">{r.files.length ? `${r.files.length} file${r.files.length > 1 ? 's' : ''}, +${add} -${del}, Click a line to comment` : 'Not synced from Helix Swarm yet'}</span>
               </div>
               {r.files.length ? <div className="max-w-full overflow-x-auto"><Segmented ariaLabel="Diff layout" items={DIFF_MODES} value={mode} onValueChange={v => setPrefs({ diff: v as 'sbs' | 'uni' })} /></div> : null}
             </div>
@@ -276,7 +276,7 @@ export function ReviewDetail({ id }: { id: string }) {
                 onComment={(fIdx, key, no, text) => {
                   const at = nowStr(), path = r.files[fIdx].path;
                   upd(x => ({ ...x, lineComments: [...(x.lineComments || []), { f: fIdx, key, no, u: meId, at, x: text }], activity: [...x.activity, A('c', meId, at, text, null, [], path + ':' + no)] }));
-                  flash('Line comment added · synced to Swarm');
+                  flash('Line comment added, synced to Swarm');
                 }}
               />
             ))}
@@ -285,7 +285,7 @@ export function ReviewDetail({ id }: { id: string }) {
                 <span className="flex h-10 w-10 flex-none items-center justify-center rounded-full bg-accent-soft"><Icon name="archive" size={20} color="oklch(0.5 0.17 293)" /></span>
                 <div className="flex min-w-0 flex-1 flex-col gap-3">
                   <div className="flex flex-col gap-1.5">
-                    <span className="font-[650]">Files haven’t been fetched from Helix Swarm yet</span>
+                    <span className="font-[650]">Files haven't been fetched from Helix Swarm yet</span>
                     <span className="max-w-[560px] leading-[1.6] text-muted">New requests only store the shelved changelist number. The changed files are loaded from Swarm review {sw.id} (shelved CL {sw.shelved}) on the next sync.</span>
                   </div>
                   <div className="flex flex-wrap gap-2.5">

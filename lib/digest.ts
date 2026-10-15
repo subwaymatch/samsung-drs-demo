@@ -46,7 +46,7 @@ export function buildEmail(data: Data, kind: Kind, key: string, ss: SummarySetti
   const inR = (t: string) => t >= s && t < e;
   const dOK = (d: Defect) => SEVORD.indexOf(d.sev) >= SEVORD.indexOf(ss.minSev) && (!ss.models.length || ss.models.includes(d.model));
   const hasEv = (d: Defect, test: (x: string) => boolean) => d.activity.some(a => a.t === 'e' && inR(a.at) && test(a.x));
-  const dItem = (d: Defect): DigestItem => ({ id: d.id, icon: SEV[d.sev].icon, color: SEV[d.sev].c, title: d.title, meta: `${d.model} · ${d.comp} · now ${DST[d.status].l.toLowerCase()}`, href: '/defects/' + d.id });
+  const dItem = (d: Defect): DigestItem => ({ id: d.id, icon: SEV[d.sev].icon, color: SEV[d.sev].c, title: d.title, meta: `${d.model}, ${d.comp}, now ${DST[d.status].l.toLowerCase()}`, href: '/defects/' + d.id });
   const D = data.defects, R = data.reviews;
   const newD = D.filter(d => inR(d.created) && dOK(d));
   const assigned = D.filter(d => dOK(d) && hasEv(d, x => x === 'assigned ' + meU.name));
@@ -62,22 +62,22 @@ export function buildEmail(data: Data, kind: Kind, key: string, ss: SummarySetti
   add('assigned', 'Assigned to you', 'user-check', assigned.map(dItem), '/defects?scope=mine');
   add('resolved', 'Resolved and closed', 'circle-check', resolved.map(dItem), '/defects?' + qs({ by: 'resolved', from: sKey, to: key }));
   add('newReviews', 'New code review requests', 'git-pull-request',
-    newR.map(r => ({ id: r.id, icon: TYPE_ICON[r.type], color: MUTED, title: r.title, meta: `${r.type} · ${UM[r.author].name}`, href: '/reviews/' + r.id })),
+    newR.map(r => ({ id: r.id, icon: TYPE_ICON[r.type], color: MUTED, title: r.title, meta: `${r.type}, ${UM[r.author].name}`, href: '/reviews/' + r.id })),
     '/reviews?' + qs({ from: sKey, to: key }));
   add('decisions', 'Code review decisions', 'eye',
     decs.map(({ r, a }) => ({ id: r.id, icon: RST[a.dec!].icon, color: RST[a.dec!].fg, title: r.title, meta: `${DEC[a.dec!]} by ${UM[a.u].name}`, href: '/reviews/' + r.id })),
     '/reviews?' + qs({ from: sKey, to: key }));
   const lastK = addD(key, -1);
-  const coverage = sKey === lastK ? lbl(sKey) : `${lbl(sKey)} – ${lbl(lastK)}`;
+  const coverage = sKey === lastK ? lbl(sKey) : `${lbl(sKey)} - ${lbl(lastK)}`;
   const on = kind === 'daily' ? ss.daily : ss.weekly;
   return {
-    subject: kind === 'daily' ? `[DRS] Daily summary · ${lbl(key)}` : `[DRS] Weekly summary · ${short(sKey)} – ${short(lastK)}`,
+    subject: kind === 'daily' ? `[DRS] Daily summary, ${lbl(key)}` : `[DRS] Weekly summary, ${short(sKey)} - ${short(lastK)}`,
     sentAt: `${lbl(key)}, ${key.slice(0, 4)} at ${kind === 'daily' ? ss.dailyTime : ss.weeklyTime}`,
     greeting: `${meU.name}, here is the DRS activity for ${coverage}.`,
     stats: [{ label: 'New defects', n: newD.length }, { label: 'Resolved', n: resolved.length }, { label: 'Review requests', n: newR.length }, { label: 'Review decisions', n: decs.length }],
     sections,
     footer: (on ? `You receive this ${kind} summary because it is turned on in your DRS email settings.` : `The ${kind} summary is turned off. Earlier emails stay in this archive.`) +
-      ` Models: ${ss.models.length ? ss.models.join(', ') : 'all'} · Minimum severity: ${SEV[ss.minSev].l}.`
+      ` Models: ${ss.models.length ? ss.models.join(', ') : 'all'}, Minimum severity: ${SEV[ss.minSev].l}.`
   };
 }
 

@@ -164,9 +164,9 @@ export function AppShell({ children }: { children: ReactNode }) {
   const gItems = useMemo<Option[]>(() => {
     if (!data) return [];
     return [
-      ...USERS.map(u => ({ value: '/teams/' + u.id, label: u.name + (u.en !== u.name ? ' · ' + u.en : ''), sub: u.title + ' · ' + TM[u.team].name, avatar: av(u.id) })),
-      ...data.defects.map(d => ({ value: '/defects/' + d.id, label: d.id + '  ' + d.title, sub: d.model + ' · ' + DST[d.status].l, icon: SEV[d.sev].icon, color: SEV[d.sev].c })),
-      ...data.reviews.map(r => ({ value: '/reviews/' + r.id, label: r.id + '  ' + r.title, sub: r.type + ' · ' + RST[r.status].l, icon: 'git-pull-request', color: RST[r.status].fg }))
+      ...USERS.map(u => ({ value: '/teams/' + u.id, label: u.name + (u.en !== u.name ? ' (' + u.en + ')' : ''), sub: u.title + ', ' + TM[u.team].name, avatar: av(u.id) })),
+      ...data.defects.map(d => ({ value: '/defects/' + d.id, label: d.id + '  ' + d.title, sub: d.model + ', ' + DST[d.status].l, icon: SEV[d.sev].icon, color: SEV[d.sev].c })),
+      ...data.reviews.map(r => ({ value: '/reviews/' + r.id, label: r.id + '  ' + r.title, sub: r.type + ', ' + RST[r.status].l, icon: 'git-pull-request', color: RST[r.status].fg }))
     ];
   }, [data]);
   const unread = useMemo(() => {
