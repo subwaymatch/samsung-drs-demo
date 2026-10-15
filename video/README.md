@@ -62,13 +62,27 @@ node scripts/stills.mjs Scene-insights:60,120 DrsShowcase:900 --scale=1
 
 ## Music
 
-The render is silent until a track is added. Put an audio file in `public/music/` and pass its path:
+The soundtrack, `public/music/drs-theme.mp3`, was made with the [ElevenLabs Music API](https://elevenlabs.io/docs/api-reference/music/compose) (`music_v2_5`). `music/compose.json` is the request: an instrumental composition plan at 120 BPM in F major, with one chunk per section of the video, so the music changes where the scenes do.
+
+| Chunk | Time | Scenes |
+| --- | --- | --- |
+| Intro | 0:00 to 0:04 | Intro |
+| Build | 0:04 to 0:14 | Devices, seven systems |
+| Main groove | 0:14 to 0:30 | Insights, triage |
+| Second groove | 0:30 to 0:50 | Report, defects, code review |
+| Breakdown | 0:50 to 0:54 | Email digests |
+| Lift | 0:54 to 1:00 | People |
+| Outro | 1:00 to 1:06 | Outro |
+
+To make a new take (this spends ElevenLabs credits, and each run sounds different):
 
 ```sh
-pnpm exec remotion render DrsShowcase out/drs-showcase.mp4 --props='{"musicSrc":"music/drs-theme.mp3"}'
+ELEVENLABS_API_KEY=... pnpm music
 ```
 
-The track should be 120 BPM in 4/4 and at least 66 seconds (33 bars) long; the video fades it in over the first 12 frames and out over the last 2.5 seconds. `musicVolume` (default 0.8) sets the level.
+Behind a proxy, add `NODE_USE_ENV_PROXY=1` so Node's `fetch` uses it.
+
+The composition plays the track by default. `musicVolume` (default 0.8) sets the level, and `musicOffset` (default 1) skips that many frames at the start of the track so its beats land on the cuts; the current take's kicks come about one frame late without it. For a silent render, pass `--props='{"musicSrc":""}'`.
 
 ## Closing card
 
@@ -80,6 +94,7 @@ The track should be 120 BPM in 4/4 and at least 66 seconds (33 bars) long; the v
 - `src/scenes/`: one file per scene
 - `src/components/camera.ts`: the virtual camera over captured pages (scroll, then zoom), and helpers that frame a page rect
 - `src/components/Screen.tsx`: the browser window and captured screen; the sidebar stays fixed while the page scrolls
-- `src/components/Overlays.tsx`: spotlights, keycaps, word-by-word text and counters
+- `src/components/Overlays.tsx`: spotlights, keycaps, section labels and word-by-word text
 - `src/components/Logo.tsx`: the animated DRS mark
 - `scripts/capture.mjs`: the Playwright capture script
+- `scripts/music.mjs` and `music/compose.json`: the ElevenLabs soundtrack request

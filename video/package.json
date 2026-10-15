@@ -7,6 +7,7 @@
   "scripts": {
     "assets": "node scripts/assets.mjs",
     "capture": "node scripts/capture.mjs",
+    "music": "node scripts/music.mjs",
     "studio": "node scripts/assets.mjs && remotion studio",
     "render": "node scripts/assets.mjs && remotion render DrsShowcase out/drs-showcase.mp4",
     "still": "remotion still",

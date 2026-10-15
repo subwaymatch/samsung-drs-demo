@@ -21,6 +21,8 @@ export type ShowcaseProps = {
   /** Path of a music file in public/, e.g. "music/drs-theme.mp3". Leave empty for a silent render. */
   musicSrc: string;
   musicVolume: number;
+  /** Frames to skip at the start of the track, to line its beats up with the cuts. */
+  musicOffset: number;
   /** Optional credit and link on the closing card. */
   credit: string;
   url: string;
@@ -55,7 +57,7 @@ export const SCENES: Scene[] = [
 export const TOTAL_FRAMES = SCENES.reduce((n, s) => n + beats(s.beats) - (s.enter ? beats(s.enter[1]) : 0), 0);
 
 export const Showcase: React.FC<ShowcaseProps> = props => {
-  const { musicSrc, musicVolume } = props;
+  const { musicSrc, musicVolume, musicOffset } = props;
   return (
     <AbsoluteFill style={{ fontFamily: SANS, color: C.ink, fontVariantLigatures: 'none', background: C.canvas }}>
       <CanvasBg />
@@ -72,7 +74,8 @@ export const Showcase: React.FC<ShowcaseProps> = props => {
       {musicSrc ? (
         <Audio
           src={staticFile(musicSrc)}
-          volume={f => interpolate(f, [0, 12, TOTAL_FRAMES - 75, TOTAL_FRAMES - 4], [0, musicVolume, musicVolume, 0], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' })}
+          trimBefore={musicOffset}
+          volume={f => interpolate(f, [0, 6, TOTAL_FRAMES - 30, TOTAL_FRAMES - 2], [0, musicVolume, musicVolume, 0], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' })}
         />
       ) : null}
     </AbsoluteFill>
@@ -85,7 +88,7 @@ export const SceneStage: React.FC<{ id: string }> = ({ id }) => {
   return (
     <AbsoluteFill style={{ fontFamily: SANS, color: C.ink, fontVariantLigatures: 'none', background: C.canvas }}>
       <CanvasBg />
-      {s.render({ musicSrc: '', musicVolume: 0, credit: '', url: '' })}
+      {s.render({ musicSrc: '', musicVolume: 0, musicOffset: 0, credit: '', url: '' })}
     </AbsoluteFill>
   );
 };
