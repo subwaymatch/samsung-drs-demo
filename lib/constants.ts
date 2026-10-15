@@ -53,10 +53,21 @@ const USER_SEED: UserSeed[] = [
   { id: 'u34', name: 'Sanjay Pillai', en: 'Sanjay Pillai', title: 'Build and Release Engineer, SRI-Bangalore', role: 'eng', team: 'sel', h: 90, intro: 'Runs firmware release builds and moved the build farm to the new Perforce stream layout in 2017.' }
 ];
 
+/**
+ * Generated stand-in portraits in public/photos, one person each, chosen to fit name, site and seniority.
+ * Everyone else shows a placeholder until they have their own.
+ */
+const PHOTO: Record<string, string> = {
+  u1: 'korean-woman-30s-ponytail', u2: 'korean-man-40s-vest', u3: 'korean-woman-20s', u4: 'indian-man-30s-beard',
+  u5: 'korean-man-50s', u6: 'korean-woman-30s-blazer', u7: 'korean-man-40s-suit', u10: 'korean-man-20s-polo',
+  u13: 'indian-man-40s-glasses', u16: 'indian-woman-20s', u17: 'korean-man-30s-checked', u20: 'indian-man-20s',
+  u22: 'korean-man-30s-glasses', u30: 'korean-woman-40s-bob', u31: 'indian-woman-30s'
+};
+
 export const USERS: User[] = USER_SEED.map(u => ({
   ...u,
   email: u.en.toLowerCase().replace(/\s+/g, '.') + '@samsung.com',
-  photo: '',
+  photo: PHOTO[u.id] ? '/photos/' + PHOTO[u.id] + '.webp' : '',
   site: /SRI-Bangalore/.test(u.title) ? 'Bangalore, India' : 'Suwon, Korea'
 }));
 export const UM: Record<string, User> = Object.fromEntries(USERS.map(u => [u.id, u]));

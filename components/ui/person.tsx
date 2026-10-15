@@ -8,9 +8,9 @@ import { Icon } from './icon';
 
 export function Avatar({ person, size = 28 }: { person: Pick<PersonView, 'ini' | 'bg' | 'fg' | 'name'> & { photo?: string }; size?: number }) {
   return (
-    <BaseAvatar.Root className="bui-av" title={person.name} style={{ width: size, height: size, background: person.bg, color: person.fg, fontSize: Math.round(size * 0.36) }}>
+    <BaseAvatar.Root className="bui-av" title={person.name} style={{ width: size, height: size, color: person.fg, fontSize: Math.round(size * 0.36) }}>
       {person.photo ? <BaseAvatar.Image src={person.photo} alt="" className="h-full w-full object-cover object-[50%_15%]" /> : null}
-      <BaseAvatar.Fallback>{person.ini}</BaseAvatar.Fallback>
+      <BaseAvatar.Fallback className="grid h-full w-full place-items-center" style={{ background: person.bg }}>{person.ini}</BaseAvatar.Fallback>
     </BaseAvatar.Root>
   );
 }
