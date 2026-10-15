@@ -51,7 +51,7 @@ export const Review: React.FC = () => {
         shots={[{ src: cap('review-full'), on: true }]}
         overlay={
           <>
-            <Spotlight r={rectToScreen(cam, pad(R.turnaround, 14))} p={window01(f, 44, 68)} label="7.4 hours to first decision, target 48" below dim={0.2} />
+            <Spotlight r={rectToScreen(cam, pad(R.turnaround, 14))} p={window01(f, 44, 68)} label="Time to first decision, against a 48-hour target" below dim={0.2} />
             <Spotlight r={rectToScreen(cam, COMMENT)} p={window01(f, 100, 126)} label="Comments on the exact line" below dim={0.2} radius={6} />
             <Spotlight
               r={rectToScreen(cam, APPROVAL)}

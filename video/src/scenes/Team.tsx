@@ -1,6 +1,6 @@
 import React from 'react';
 import { AbsoluteFill, Img, interpolate, spring, staticFile, useCurrentFrame, useVideoConfig } from 'remotion';
-import { FadeUp, Words } from '../components/Overlays';
+import { Eyebrow, FadeUp, Words } from '../components/Overlays';
 import { C, EASE, MONO, SANS } from '../theme';
 
 // The people on D-17-0363 and CR-2225: reported, fixed and approved.
@@ -101,13 +101,13 @@ export const Team: React.FC = () => {
     <AbsoluteFill style={{ fontFamily: SANS, color: C.ink }}>
       <div style={{ position: 'absolute', left: 0, right: 0, top: 70, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 16, textAlign: 'center' }}>
         <FadeUp start={0} dur={14}>
-          <div style={{ fontFamily: MONO, fontSize: 18, fontWeight: 500, letterSpacing: '0.16em', color: C.accent }}>07 — THE PEOPLE</div>
+          <Eyebrow index="07" label="The people" />
         </FadeUp>
         <div style={{ fontSize: 66, fontWeight: 740, letterSpacing: '-0.04em', lineHeight: 1 }}>
-          <Words text="34 engineers. 8 teams. Two sites." start={4} stagger={4} />
+          <Words text="Used by teams in Suwon and Bangalore" start={4} stagger={4} />
         </div>
         <FadeUp start={22}>
-          <div style={{ fontSize: 28, color: C.muted }}>Firmware, QA, hardware and code review, in Suwon and Bangalore</div>
+          <div style={{ fontSize: 28, color: C.muted }}>Firmware, QA, hardware and code review, all working from the same records</div>
         </FadeUp>
       </div>
       {tiles}

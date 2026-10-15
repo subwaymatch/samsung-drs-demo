@@ -1,9 +1,9 @@
 import { useTransitionProgress } from '@remotion/transitions';
 import React from 'react';
 import { AbsoluteFill, interpolate, spring, useCurrentFrame, useVideoConfig } from 'remotion';
-import { C, EASE, EASE_OUT, MONO, SANS } from '../theme';
+import { C, EASE, EASE_OUT, SANS } from '../theme';
 import { BrowserWindow } from './Screen';
-import { Words } from './Overlays';
+import { Eyebrow, Words } from './Overlays';
 
 export const WIN = { x: 230, y: 206, w: 1460 };
 
@@ -76,11 +76,7 @@ export const FeatureFrame: React.FC<{
   return (
     <AbsoluteFill style={{ fontFamily: SANS, color: C.ink }}>
       <div style={{ position: 'absolute', left: WIN.x, top: 66, display: 'flex', flexDirection: 'column', gap: 14, opacity: out }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 14, fontFamily: MONO, fontSize: 18, fontWeight: 500, letterSpacing: '0.16em', color: C.accent, opacity: eyebrow }}>
-          <span>{index}</span>
-          <span style={{ width: 36 * eyebrow, height: 2, background: C.accent, borderRadius: 1 }} />
-          <span>{label.toUpperCase()}</span>
-        </div>
+        <Eyebrow index={index} label={label} style={{ opacity: eyebrow, transform: `translateX(${(1 - eyebrow) * -12}px)` }} />
         <div style={{ fontSize: 54, fontWeight: 720, letterSpacing: '-0.035em', lineHeight: 1.05 }}>
           <Words text={title} start={3} />
         </div>

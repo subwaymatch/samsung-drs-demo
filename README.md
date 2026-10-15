@@ -62,7 +62,7 @@ To deploy from Git with Workers Builds instead, connect the repository in the Cl
 
 ## Showcase video
 
-`video/` is a [Remotion](https://www.remotion.dev) project that captures the running app and renders a 70-second showcase video. See [video/README.md](video/README.md).
+`video/` is a [Remotion](https://www.remotion.dev) project that captures the running app and renders a 66-second showcase video. See [video/README.md](video/README.md).
 
 ## Credits
 

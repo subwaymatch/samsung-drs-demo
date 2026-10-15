@@ -2,20 +2,20 @@ import { evolvePath, getLength, getPointAtLength } from '@remotion/paths';
 import React from 'react';
 import { AbsoluteFill, Img, interpolate, spring, staticFile, useCurrentFrame, useVideoConfig } from 'remotion';
 import { DrsMark } from '../components/Logo';
-import { Counter, FadeUp, Words } from '../components/Overlays';
+import { FadeUp, Words } from '../components/Overlays';
 import { C, EASE, EASE_OUT, MONO, SANS } from '../theme';
 
 type Sys = { name: string; logo: string; logoH: number; stat: string; sync: string; edge: string };
 
 const LEGACY: Sys[] = [
-  { name: 'Rational ClearQuest', logo: 'logos/ibm.svg', logoH: 18, stat: '589 defects lead here', sync: 'Synced 5 min ago', edge: 'Defects' },
+  { name: 'Rational ClearQuest', logo: 'logos/ibm.svg', logoH: 18, stat: 'Defects still lead here', sync: 'Synced 5 min ago', edge: 'Defects' },
   { name: 'Rational ClearCase', logo: 'logos/ibm.svg', logoH: 18, stat: 'Frozen for waves 1 and 2', sync: 'Synced 1 hr ago', edge: 'UCM history' },
   { name: 'Review Board', logo: 'logos/reviewboard.png', logoH: 24, stat: 'Wave 3 teams still review here', sync: 'Synced 4 min ago', edge: 'Reviews' }
 ];
 const NEW: Sys[] = [
-  { name: 'Jira', logo: 'logos/jira.svg', logoH: 22, stat: '223 lead, 289 mirrored', sync: 'Synced 3 min ago', edge: 'Issues' },
-  { name: 'Perforce P4', logo: 'logos/perforce.svg', logoH: 22, stat: '533 changelists linked', sync: 'Synced 1 min ago', edge: 'Jobs, CLs' },
-  { name: 'Helix Swarm', logo: 'logos/perforce.svg', logoH: 22, stat: '631 code reviews', sync: 'Synced 2 min ago', edge: 'Reviews' },
+  { name: 'Jira', logo: 'logos/jira.svg', logoH: 22, stat: 'Issues for teams that have moved', sync: 'Synced 3 min ago', edge: 'Issues' },
+  { name: 'Perforce P4', logo: 'logos/perforce.svg', logoH: 22, stat: 'Changelists linked to fixes', sync: 'Synced 1 min ago', edge: 'Jobs, CLs' },
+  { name: 'Helix Swarm', logo: 'logos/perforce.svg', logoH: 22, stat: 'Code reviews for moved teams', sync: 'Synced 2 min ago', edge: 'Reviews' },
   { name: 'Confluence', logo: 'logos/confluence.svg', logoH: 22, stat: 'Root-cause and test pages', sync: 'Synced 12 min ago', edge: 'Pages' }
 ];
 
@@ -84,6 +84,8 @@ export const Systems: React.FC = () => {
   const flow = frame * 0.9;
   const groupLabel = (start: number): React.CSSProperties => ({
     position: 'absolute',
+    display: 'flex',
+    gap: 14,
     fontFamily: MONO,
     fontSize: 16,
     letterSpacing: '0.16em',
@@ -103,8 +105,14 @@ export const Systems: React.FC = () => {
       </div>
 
       <div style={{ position: 'absolute', inset: 0, transform: `scale(${push})`, transformOrigin: `960px ${CY}px` }}>
-        <div style={{ ...groupLabel(26), left: LEFT_X, top: leftY(0) - 40 }}>LEGACY · IBM RATIONAL, REVIEW BOARD</div>
-        <div style={{ ...groupLabel(30), left: RIGHT_X, top: rightY(0) - 40 }}>NEW · PERFORCE, ATLASSIAN</div>
+        <div style={{ ...groupLabel(26), left: LEFT_X, top: leftY(0) - 40 }}>
+          <span style={{ color: C.accent }}>LEGACY</span>
+          <span>IBM RATIONAL AND REVIEW BOARD</span>
+        </div>
+        <div style={{ ...groupLabel(30), left: RIGHT_X, top: rightY(0) - 40 }}>
+          <span style={{ color: C.accent }}>NEW</span>
+          <span>PERFORCE AND ATLASSIAN</span>
+        </div>
 
         <svg width={1920} height={1080} style={{ position: 'absolute', inset: 0, overflow: 'visible' }}>
           <defs>
@@ -201,13 +209,12 @@ export const Systems: React.FC = () => {
             <span style={{ fontSize: 40, fontWeight: 780, letterSpacing: '-0.03em' }}>DRS</span>
           </div>
           <div style={{ fontSize: 19, lineHeight: 1.4, color: C.muted }}>Links each defect and code review across all seven systems</div>
-          <div style={{ display: 'flex', gap: 22, fontSize: 23, fontWeight: 680, color: C.accentText, fontVariantNumeric: 'tabular-nums' }}>
-            <span>
-              <Counter to={812} start={40} dur={44} /> defects
-            </span>
-            <span>
-              <Counter to={631} start={46} dur={44} /> code reviews
-            </span>
+          <div style={{ display: 'flex', gap: 10 }}>
+            {['Defects', 'Code reviews', 'Changelists'].map((t, i) => (
+              <FadeUp key={t} start={38 + i * 5} dist={10}>
+                <span style={{ display: 'block', padding: '6px 14px', borderRadius: 999, background: C.accentSoft, color: C.accentText, fontSize: 19, fontWeight: 650 }}>{t}</span>
+              </FadeUp>
+            ))}
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 9, fontSize: 17, color: C.ink3 }}>
             <span style={{ width: 9, height: 9, borderRadius: 5, background: C.goodBar }} />

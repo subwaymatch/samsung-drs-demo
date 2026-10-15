@@ -1,7 +1,7 @@
 import React from 'react';
 import { AbsoluteFill, Img, interpolate, staticFile, useCurrentFrame } from 'remotion';
 import { DrsMark } from '../components/Logo';
-import { FadeUp, Words } from '../components/Overlays';
+import { Eyebrow, FadeUp, Words } from '../components/Overlays';
 import { cap } from '../layout';
 import { C, EASE_OUT, MONO, SANS } from '../theme';
 
@@ -33,11 +33,7 @@ export const Digests: React.FC = () => {
     <AbsoluteFill style={{ fontFamily: SANS, color: C.ink }}>
       <div style={{ position: 'absolute', left: 170, top: 300, width: 760, display: 'flex', flexDirection: 'column', gap: 26 }}>
         <FadeUp start={0} dur={14}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 14, fontFamily: MONO, fontSize: 18, fontWeight: 500, letterSpacing: '0.16em', color: C.accent }}>
-            <span>06</span>
-            <span style={{ width: 36, height: 2, background: C.accent }} />
-            <span>EMAIL DIGESTS</span>
-          </div>
+          <Eyebrow index="06" label="Email digests" />
         </FadeUp>
         <div style={{ fontSize: 76, fontWeight: 740, letterSpacing: '-0.04em', lineHeight: 1.04 }}>
           <Words text="Yesterday in DRS," start={4} />
@@ -49,8 +45,8 @@ export const Digests: React.FC = () => {
         </FadeUp>
         <FadeUp start={36}>
           <div style={{ display: 'flex', gap: 12, marginTop: 6 }}>
-            <Pill>Daily · every weekday</Pill>
-            <Pill>Weekly · Mondays</Pill>
+            <Pill>Daily, every weekday</Pill>
+            <Pill>Weekly, on Mondays</Pill>
           </div>
         </FadeUp>
       </div>
@@ -89,7 +85,10 @@ export const Digests: React.FC = () => {
         <div style={{ position: 'absolute', left: (PRINTER.w - PAPER_W) / 2 - 16, width: PAPER_W + 32, top: 4, height: 6, borderRadius: 3, background: 'oklch(0.08 0.01 290)' }} />
         <div style={{ position: 'absolute', left: 34, top: 34, display: 'flex', alignItems: 'center', gap: 12 }}>
           <DrsMark size={30} still />
-          <span style={{ fontFamily: MONO, fontSize: 15, letterSpacing: '0.18em', color: 'oklch(0.75 0.03 290)' }}>DAILY SUMMARY · 08:30</span>
+          <span style={{ display: 'flex', gap: 14, fontFamily: MONO, fontSize: 15, letterSpacing: '0.18em', color: 'oklch(0.75 0.03 290)' }}>
+            <span>DAILY SUMMARY</span>
+            <span style={{ color: C.logo1 }}>08:30</span>
+          </span>
         </div>
         <div style={{ position: 'absolute', right: 36, top: 40, width: 12, height: 12, borderRadius: 6, background: led ? C.goodBar : 'oklch(0.35 0.04 155)', boxShadow: led ? '0 0 14px oklch(0.7 0.16 155)' : 'none' }} />
       </div>

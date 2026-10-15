@@ -5,7 +5,7 @@ import { type Rect, SCREEN_H } from './camera';
 
 const clampX = { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' } as const;
 
-/** 0→1 over [from, from+dur], then back to 0 over [to, to+dur]. */
+/** 0 to 1 over [from, from+dur], then back to 0 over [to, to+dur]. */
 export function window01(frame: number, from: number, to: number, dur = 10) {
   return Math.min(interpolate(frame, [from, from + dur], [0, 1], { ...clampX, easing: EASE }), interpolate(frame, [to, to + dur], [1, 0], { ...clampX, easing: EASE }));
 }
@@ -150,7 +150,14 @@ export const Keys: React.FC<{ keys: string[]; pressAt: number; caption?: string;
 };
 
 /** Text that rises in word by word, un-blurring as it lands. */
-export const Words: React.FC<{ text: string; start: number; stagger?: number; dur?: number; style?: React.CSSProperties }> = ({ text, start, stagger = 3, dur = 18, style }) => {
+export const Words: React.FC<{ text: string; start: number; stagger?: number; dur?: number; style?: React.CSSProperties; wordStyle?: React.CSSProperties }> = ({
+  text,
+  start,
+  stagger = 3,
+  dur = 18,
+  style,
+  wordStyle
+}) => {
   const frame = useCurrentFrame();
   const words = text.split(' ');
   return (
@@ -159,7 +166,7 @@ export const Words: React.FC<{ text: string; start: number; stagger?: number; du
         const p = interpolate(frame, [start + i * stagger, start + i * stagger + dur], [0, 1], { ...clampX, easing: EASE_OUT });
         return (
           <React.Fragment key={i}>
-            <span style={{ display: 'inline-block', opacity: p, transform: `translateY(${(1 - p) * 0.5}em)`, filter: p < 0.99 ? `blur(${(1 - p) * 10}px)` : undefined }}>{w}</span>
+            <span style={{ ...wordStyle, display: 'inline-block', opacity: p, transform: `translateY(${(1 - p) * 0.5}em)`, filter: p < 0.99 ? `blur(${(1 - p) * 10}px)` : undefined }}>{w}</span>
             {i < words.length - 1 ? ' ' : null}
           </React.Fragment>
         );
@@ -175,9 +182,25 @@ export const FadeUp: React.FC<{ start: number; dur?: number; dist?: number; chil
   return <div style={{ opacity: p, transform: `translateY(${(1 - p) * dist}px)`, ...style }}>{children}</div>;
 };
 
-/** Counts up to `to` between `start` and `start + dur`. */
-export const Counter: React.FC<{ to: number; start: number; dur?: number; decimals?: number }> = ({ to, start, dur = 30, decimals = 0 }) => {
-  const frame = useCurrentFrame();
-  const v = interpolate(frame, [start, start + dur], [0, to], { ...clampX, easing: EASE_OUT });
-  return <>{v.toLocaleString('en-US', { minimumFractionDigits: decimals, maximumFractionDigits: decimals })}</>;
-};
+/** Section label: the scene number in a small badge, then the name in capitals. */
+export const Eyebrow: React.FC<{ index: string; label: string; style?: React.CSSProperties }> = ({ index, label, style }) => (
+  <div style={{ display: 'flex', alignItems: 'center', gap: 14, fontFamily: MONO, fontSize: 18, fontWeight: 500, letterSpacing: '0.16em', color: C.accent, ...style }}>
+    <span
+      style={{
+        display: 'inline-flex',
+        alignItems: 'center',
+        height: 30,
+        padding: '0 9px',
+        borderRadius: 8,
+        background: C.accentSoft,
+        boxShadow: `0 0 0 1px ${C.accentRule}`,
+        color: C.accentInk,
+        fontWeight: 600,
+        letterSpacing: '0.04em'
+      }}
+    >
+      {index}
+    </span>
+    <span>{label.toUpperCase()}</span>
+  </div>
+);

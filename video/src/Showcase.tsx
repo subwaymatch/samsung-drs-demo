@@ -12,7 +12,6 @@ import { Insights } from './scenes/Insights';
 import { Intro } from './scenes/Intro';
 import { Outro } from './scenes/Outro';
 import { Review } from './scenes/Review';
-import { Stack } from './scenes/Stack';
 import { Systems } from './scenes/Systems';
 import { Team } from './scenes/Team';
 import { Triage } from './scenes/Triage';
@@ -36,7 +35,7 @@ type Scene = {
 };
 
 // Lengths are in beats at 120 BPM (one beat = 15 frames, one 4/4 bar = 2 s).
-// Each transition starts on a bar line, so a 35-bar, 70-second track at 120 BPM
+// Each transition starts on a bar line, so a 33-bar, 66-second track at 120 BPM
 // lines up with every section change. See README.md for the cue sheet.
 export const SCENES: Scene[] = [
   { id: 'intro', beats: 10, render: () => <Intro /> },
@@ -48,8 +47,7 @@ export const SCENES: Scene[] = [
   { id: 'defect', beats: 17, render: () => <DefectDetail />, enter: [navigate(), 1] },
   { id: 'review', beats: 13, render: () => <Review />, enter: [navigate(), 1] },
   { id: 'digests', beats: 9, render: () => <Digests />, enter: [rise(), 1] },
-  { id: 'team', beats: 13, render: () => <Team />, enter: [softPush(), 1] },
-  { id: 'stack', beats: 10, render: () => <Stack />, enter: [rise(), 1] },
+  { id: 'team', beats: 14, render: () => <Team />, enter: [softPush(), 1] },
   { id: 'outro', beats: 12, render: p => <Outro credit={p.credit} url={p.url} />, enter: [irisIn(), 2] }
 ];
 

@@ -3,7 +3,7 @@ import { AbsoluteFill, interpolate, useCurrentFrame } from 'remotion';
 import { NightBg } from '../components/Backgrounds';
 import { DrsMark } from '../components/Logo';
 import { FadeUp, Words } from '../components/Overlays';
-import { C, EASE, MONO, SANS } from '../theme';
+import { EASE, MONO, SANS } from '../theme';
 
 const clampX = { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' } as const;
 
@@ -45,12 +45,8 @@ export const Intro: React.FC = () => {
           </div>
         </FadeUp>
         <FadeUp start={64} style={{ marginTop: 26 }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 18, fontFamily: MONO, fontSize: 19, letterSpacing: '0.2em', color: 'oklch(0.78 0.1 293)' }}>
-            <span>SAMSUNG ELECTRONICS</span>
-            <span style={{ width: 6, height: 6, borderRadius: 3, background: C.logo2 }} />
-            <span>PRINTING SOLUTIONS</span>
-            <span style={{ width: 6, height: 6, borderRadius: 3, background: C.logo2 }} />
-            <span>2016–2017</span>
+          <div style={{ fontFamily: MONO, fontSize: 19, letterSpacing: '0.2em', color: 'oklch(0.78 0.1 293)' }}>
+            SAMSUNG ELECTRONICS, PRINTING SOLUTIONS, 2016-2017
           </div>
         </FadeUp>
       </div>

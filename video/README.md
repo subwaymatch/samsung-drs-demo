@@ -1,8 +1,8 @@
 # DRS showcase video
 
-A 70-second motion-graphics showcase of the Defects and Reviews System, made with [Remotion](https://www.remotion.dev). It mixes animated recreations (the DRS mark, the seven-system diagram, device and team scenes) with real captures of the app, which a virtual camera pans and zooms through.
+A 66-second motion-graphics showcase of the Defects and Reviews System, made with [Remotion](https://www.remotion.dev). It mixes animated recreations (the DRS mark, the seven-system diagram, device and team scenes) with real captures of the app, which a virtual camera pans and zooms through.
 
-1920×1080, 30 fps, H.264.
+1920x1080, 30 fps, H.264.
 
 ## Scenes
 
@@ -11,7 +11,7 @@ Times are when each scene's transition in starts. Scenes are cut on a 120 BPM gr
 | Start | Bar | Scene | What happens |
 | --- | --- | --- | --- |
 | 0:00 | 1 | Intro | The DRS mark's three sheets feed into place, then the title |
-| 0:04 | 3 | Devices | 44 printer and copier models drift past a counter |
+| 0:04 | 3 | Devices | Printer and copier models drift past, from desktop printers to A3 copiers |
 | 0:08 | 5 | Seven systems | ClearQuest, ClearCase and Review Board feed DRS, which mirrors to Jira, Perforce, Helix Swarm and Confluence |
 | 0:14 | 8 | 01 Insights | KPI ranges switch, severity targets, review turnaround chart |
 | 0:22 | 12 | 02 Triage | J/K/X keyboard triage with bulk edit, then Ctrl+K search |
@@ -19,9 +19,8 @@ Times are when each scene's transition in starts. Scenes are cut on a 120 BPM gr
 | 0:36 | 19 | 04 Defects | Severity targets, records across systems, relationship map |
 | 0:44 | 23 | 05 Code review | Turnaround, an inline line comment, the approval |
 | 0:50 | 26 | 06 Email digests | The daily summary prints out of a printer |
-| 0:54 | 28 | 07 People | 34 engineers; the reporter, fixer and approver of D-17-0363 |
-| 1:00 | 31 | 08 Build | Original stack beside this demo's stack |
-| 1:04 | 33 | Outro | Mark, title and totals; ends at 1:10 (bar 36) |
+| 0:54 | 28 | 07 People | The team photos, then the reporter, fixer and approver of D-17-0363 |
+| 1:00 | 31 | Outro | Mark, title and a feature recap; ends at 1:06 (bar 34) |
 
 ## Make it
 
@@ -42,13 +41,13 @@ pnpm studio         # opens Remotion Studio
 pnpm render         # writes out/drs-showcase.mp4
 ```
 
-`pnpm capture` drives the app with Playwright at 1600×900 and 2× scale. If Playwright has no browser yet, run `pnpm exec playwright install chromium` first. Set `DRS_URL` to capture a deployed copy instead of `http://localhost:5173`.
+`pnpm capture` drives the app with Playwright at 1600x900 and 2x scale. If Playwright has no browser yet, run `pnpm exec playwright install chromium` first. Set `DRS_URL` to capture a deployed copy instead of `http://localhost:5173`.
 
 Remotion downloads Chrome Headless Shell on its first render. To use one that is already installed, set `REMOTION_BROWSER_EXECUTABLE` to its path.
 
 The captures, fonts and the app's images (copied from `../public` by `pnpm assets`, which `studio` and `render` run first) are gitignored. `src/layout.json` is committed, since the scenes' zoom targets depend on it.
 
-The render is a high-quality master (CRF 16, about 36 MB). For a smaller copy to put on a website, and a poster frame from the title card:
+The render is a high-quality master (CRF 16, about 34 MB). For a smaller copy to put on a website, and a poster frame from the title card:
 
 ```sh
 ffmpeg -i out/drs-showcase.mp4 -c:v libx264 -preset slow -crf 20 -movflags +faststart out/drs-showcase-web.mp4
@@ -69,7 +68,7 @@ The render is silent until a track is added. Put an audio file in `public/music/
 pnpm exec remotion render DrsShowcase out/drs-showcase.mp4 --props='{"musicSrc":"music/drs-theme.mp3"}'
 ```
 
-The track should be 120 BPM in 4/4 and at least 70 seconds (35 bars) long; the video fades it in over the first 12 frames and out over the last 2.5 seconds. `musicVolume` (default 0.8) sets the level.
+The track should be 120 BPM in 4/4 and at least 66 seconds (33 bars) long; the video fades it in over the first 12 frames and out over the last 2.5 seconds. `musicVolume` (default 0.8) sets the level.
 
 ## Closing card
 
