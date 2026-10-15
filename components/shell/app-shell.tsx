@@ -233,7 +233,8 @@ export function AppShell({ children }: { children: ReactNode }) {
                 <Icon name={n.icon} size={16} />
                 <span className="flex-1 text-left">{n.label}</span>
                 {n.href === '/notifications' && counts[n.href] ? (
-                  <span className="grid h-5 min-w-5 place-items-center rounded-[10px] bg-accent-soft px-1.5 text-xs font-semibold text-accent-ink tabular-nums">{counts[n.href]}</span>
+                  // Center on the digits' cap height, not the font's line box. Proportional figures keep "1" from pushing "13" off-center.
+                  <span className={'h-5 min-w-5 content-center rounded-[10px] px-1.5 text-center text-xs font-semibold [text-box:trim-both_cap_alphabetic] ' + (active(n.href) ? 'bg-accent text-white' : 'bg-accent-soft text-accent-ink')}>{counts[n.href]}</span>
                 ) : null}
               </NextLink>
             ))}
