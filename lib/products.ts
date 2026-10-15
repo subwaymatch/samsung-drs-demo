@@ -22,17 +22,8 @@ export interface Thumb {
   photo: string;
   hint: string;
 }
-/** Generated stand-in photo for a model, picked by series, colour and form factor. Empty for unknown models. */
-export function productPhoto(id: string) {
-  const m = MM[id];
-  if (!m) return '';
-  const num = +(id.match(/\d+/) || [0])[0], color = /Color/.test(m.kind), mfp = /MFP/.test(m.kind);
-  let f: string;
-  if (m.series === 'MultiXpress') f = color ? (num >= 7000 ? 'multixpress-color-a3-booklet' : num >= 4000 ? 'multixpress-color-a3-inner-finisher' : 'multixpress-color-a3') : num >= 7000 ? 'multixpress-mono-a3-finisher' : 'multixpress-mono-a3';
-  else if (m.series === 'ProXpress' && !color) f = mfp ? (/F[RX]$/.test(id) ? 'proxpress-mono-mfp-keypad' : 'proxpress-mono-mfp') : num >= 4000 ? 'proxpress-mono-printer-tray' : 'proxpress-mono-printer';
-  else f = (m.series === 'ProXpress' ? 'proxpress' : 'xpress') + (color ? '-color' : '-mono') + (mfp ? '-mfp' : '-printer');
-  return '/products/' + f + '.webp';
-}
+/** Generated stand-in photo for a model, at public/products/<model id>.webp. Empty for unknown models. */
+export const productPhoto = (id: string) => (MM[id] ? '/products/' + id.toLowerCase() + '.webp' : '');
 /** Product photos are generated stand-ins in this demo. */
 export const thumbOf = (id: string): Thumb => ({ id, photo: productPhoto(id), hint: id ? 'Product image · ' + id : 'Product image' });
 

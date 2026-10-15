@@ -68,10 +68,10 @@ export function buildEmail(data: Data, kind: Kind, key: string, ss: SummarySetti
     decs.map(({ r, a }) => ({ id: r.id, icon: RST[a.dec!].icon, color: RST[a.dec!].fg, title: r.title, meta: `${DEC[a.dec!]} by ${UM[a.u].name}`, href: '/reviews/' + r.id })),
     '/reviews?' + qs({ from: sKey, to: key }));
   const lastK = addD(key, -1);
-  const coverage = sKey === lastK ? lbl(sKey) : `${lbl(sKey)} – ${lbl(lastK)}`;
+  const coverage = sKey === lastK ? lbl(sKey) : `${lbl(sKey)} - ${lbl(lastK)}`;
   const on = kind === 'daily' ? ss.daily : ss.weekly;
   return {
-    subject: kind === 'daily' ? `[DRS] Daily summary · ${lbl(key)}` : `[DRS] Weekly summary · ${short(sKey)} – ${short(lastK)}`,
+    subject: kind === 'daily' ? `[DRS] Daily summary · ${lbl(key)}` : `[DRS] Weekly summary · ${short(sKey)} - ${short(lastK)}`,
     sentAt: `${lbl(key)}, ${key.slice(0, 4)} at ${kind === 'daily' ? ss.dailyTime : ss.weeklyTime}`,
     greeting: `${meU.name}, here is the DRS activity for ${coverage}.`,
     stats: [{ label: 'New defects', n: newD.length }, { label: 'Resolved', n: resolved.length }, { label: 'Review requests', n: newR.length }, { label: 'Review decisions', n: decs.length }],

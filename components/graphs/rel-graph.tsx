@@ -171,7 +171,7 @@ export function RelGraph({ nodes, edges, height = 540 }: { nodes: GraphNode[]; e
           <Controls showInteractive={false} position="bottom-right" />
         </ReactFlow>
       ) : (
-        <div className="flex h-full items-center justify-center text-sm text-muted">Loading map…</div>
+        <div className="flex h-full items-center justify-center text-sm text-muted">Loading map...</div>
       )}
     </div>
   );

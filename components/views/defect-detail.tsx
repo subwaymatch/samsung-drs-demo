@@ -213,7 +213,7 @@ export function DefectDetail({ id }: { id: string }) {
                     icon="check"
                     onClick={() => {
                       const cl = clInput.trim();
-                      if (!/^\d{6,8}$/.test(cl)) return setClErr('Enter a 6–8 digit changelist number.');
+                      if (!/^\d{6,8}$/.test(cl)) return setClErr('Enter a changelist number with 6 to 8 digits.');
                       upd(x => ({ ...log(x, `linked changelist ${cl} to ${jobOf(x.id)} (p4 fix)`), p4: [...(x.p4 || []), { cl, u: meId, at: nowStr(), desc: 'Changelist ' + cl }] }));
                       setLinkCl(false);
                       setClInput('');

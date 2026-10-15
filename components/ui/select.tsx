@@ -5,7 +5,7 @@ import type { Option } from '@/lib/types';
 import { Icon } from './icon';
 import { Lead } from './lead';
 
-export function Select({ value, onValueChange, items, placeholder = 'Select…', ariaLabel }: {
+export function Select({ value, onValueChange, items, placeholder = 'Select...', ariaLabel }: {
   value: string | null;
   onValueChange: (v: string) => void;
   items: Option[];

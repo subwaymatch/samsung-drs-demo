@@ -182,7 +182,7 @@ export function ReviewDetail({ id }: { id: string }) {
         <div className="flex flex-col gap-3 rounded-md border border-[oklch(0.9_0.012_290)] bg-[oklch(0.985_0.004_290)] px-5 py-[18px]">
           <div className="flex flex-col gap-1">
             <span className="font-[650]">Withdraw this request</span>
-            <span className="text-sm leading-normal text-pretty text-muted">Use this when plans change and the code won’t be submitted, whatever the review result. It’s counted as Withdrawn in Review outcomes.</span>
+            <span className="text-sm leading-normal text-pretty text-muted">Use this when plans change and the code won't be submitted, whatever the review result. It's counted as Withdrawn in Review outcomes.</span>
           </div>
           <Input value={wd.reason} onChange={v => setWd(w => ({ ...w, reason: v, err: '' }))} placeholder="Reason, e.g. feature dropped from the 2018 release" ariaLabel="Reason" />
           {wd.err ? <span className="text-danger" role="alert">{wd.err}</span> : null}
@@ -261,7 +261,7 @@ export function ReviewDetail({ id }: { id: string }) {
             <div className="flex flex-wrap items-center justify-between gap-3">
               <div className="flex flex-col gap-1">
                 <h3 className="text-base font-[650]">Changed files</h3>
-                <span className="text-sm text-muted">{r.files.length ? `${r.files.length} file${r.files.length > 1 ? 's' : ''} · +${add} −${del} · Click a line to comment` : 'Not synced from Helix Swarm yet'}</span>
+                <span className="text-sm text-muted">{r.files.length ? `${r.files.length} file${r.files.length > 1 ? 's' : ''} · +${add} -${del} · Click a line to comment` : 'Not synced from Helix Swarm yet'}</span>
               </div>
               {r.files.length ? <div className="max-w-full overflow-x-auto"><Segmented ariaLabel="Diff layout" items={DIFF_MODES} value={mode} onValueChange={v => setPrefs({ diff: v as 'sbs' | 'uni' })} /></div> : null}
             </div>
@@ -285,7 +285,7 @@ export function ReviewDetail({ id }: { id: string }) {
                 <span className="flex h-10 w-10 flex-none items-center justify-center rounded-full bg-accent-soft"><Icon name="archive" size={20} color="oklch(0.5 0.17 293)" /></span>
                 <div className="flex min-w-0 flex-1 flex-col gap-3">
                   <div className="flex flex-col gap-1.5">
-                    <span className="font-[650]">Files haven’t been fetched from Helix Swarm yet</span>
+                    <span className="font-[650]">Files haven't been fetched from Helix Swarm yet</span>
                     <span className="max-w-[560px] leading-[1.6] text-muted">New requests only store the shelved changelist number. The changed files are loaded from Swarm review {sw.id} (shelved CL {sw.shelved}) on the next sync.</span>
                   </div>
                   <div className="flex flex-wrap gap-2.5">

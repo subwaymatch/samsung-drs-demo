@@ -133,7 +133,7 @@ export function ProductPanel({ pm }: { pm: ModelInfo }) {
 export function ConfirmDelete({ id, noun, onCancel, onConfirm }: { id: string; noun: string; onCancel: () => void; onConfirm: () => void }) {
   return (
     <div className="flex flex-wrap items-center gap-4 border-l-[3px] border-danger-rule py-3 pl-[18px]" role="alert">
-      <span className="flex-[1_1_280px]">Delete <strong>{id}</strong> and its comments and attachments? This can’t be undone.</span>
+      <span className="flex-[1_1_280px]">Delete <strong>{id}</strong> and its comments and attachments? This can't be undone.</span>
       <div className="flex gap-2.5">
         <Button variant="secondary" onClick={onCancel}>Cancel</Button>
         <Button variant="dangerSolid" icon="trash-2" onClick={onConfirm}>Delete {noun}</Button>

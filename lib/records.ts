@@ -120,7 +120,7 @@ export function diffRows(f: FileDiff) {
       return;
     }
     if (c === '-') {
-      uni.push({ isHunk: false, ln, rn: '', sign: '−', text, bg: DBG.del, fg: DBG.delFg, key: 'L' + ln, no: ln });
+      uni.push({ isHunk: false, ln, rn: '', sign: '-', text, bg: DBG.del, fg: DBG.delFg, key: 'L' + ln, no: ln });
       dels.push({ no: ln++, text });
       return;
     }

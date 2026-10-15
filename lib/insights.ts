@@ -41,7 +41,7 @@ export function computeInsights(data: Data, range: number) {
   const bK = (b: Bucket) => addD(D0, b.s);
   const wq = (b: Bucket) => ({ from: bK(b), to: addD(D0, b.e) });
   const inB = (x: number, b: Bucket) => x >= b.s && x < b.e;
-  const spanL = (b: Bucket) => (b.e - b.s === 1 ? lbl(bK(b)) : b.e - b.s === 7 ? `Week of ${short(bK(b))}` : `${short(bK(b))} – ${short(addD(D0, b.e - 1))}`);
+  const spanL = (b: Bucket) => (b.e - b.s === 1 ? lbl(bK(b)) : b.e - b.s === 7 ? `Week of ${short(bK(b))}` : `${short(bK(b))} - ${short(addD(D0, b.e - 1))}`);
 
   // Review turnaround: hours from submission to the first decision.
   const rv = R.filter(r => r.status !== 'withdrawn').map(r => {
@@ -61,7 +61,7 @@ export function computeInsights(data: Data, range: number) {
   const openThen = dv.filter(x => x.d.created < T && (!x.res || x.res >= T)).length;
   const per = `vs previous ${rangeL}`;
   const delta = (d: number, unit: string, lowerBetter: boolean, dec: number, p?: string) => ({
-    delta: `${d > 0 ? '+' : d < 0 ? '−' : '±'}${Math.abs(d).toFixed(dec)}${unit} ${p || per}`,
+    delta: `${d > 0 ? '+' : d < 0 ? '-' : ''}${Math.abs(d).toFixed(dec)}${unit} ${p || per}`,
     dc: (lowerBetter ? d <= 0 : d >= 0) ? GOOD_TXT : BAD_TXT
   });
   const kpis = [
@@ -131,7 +131,7 @@ export function computeInsights(data: Data, range: number) {
     cells: hk.map(k => {
       const n = hN(m.model, k), t = n / hMax;
       return {
-        n: n ? String(n) : '–',
+        n: n ? String(n) : '-',
         bg: n ? `oklch(${(0.95 - t * 0.45).toFixed(3)} ${(0.04 + t * 0.15).toFixed(3)} 293)` : 'oklch(0.985 0.004 290)',
         fg: t > 0.5 ? '#fff' : n ? 'oklch(0.32 0.1 293)' : 'oklch(0.7 0.01 290)',
         tip: `${m.model} · ${SEV[k].l}: ${n} open`, href: '/defects?' + qs({ line: m.model, sev: k, open: 1 })
@@ -157,7 +157,7 @@ export function computeInsights(data: Data, range: number) {
     const a = rd.filter(x => x.u === u.id);
     const p = a.length ? (a.filter(x => x.hours <= 48).length / a.length) * 100 : 0;
     return {
-      id: u.id, u: av(u.id), n: a.length, med: a.length ? median(a.map(x => x.hours)).toFixed(1) + 'h' : '—', pct: a.length ? Math.round(p) + '%' : '—', pctW: p + '%', pc: tone(a.length ? p : null),
+      id: u.id, u: av(u.id), n: a.length, med: a.length ? median(a.map(x => x.hours)).toFixed(1) + 'h' : '-', pct: a.length ? Math.round(p) + '%' : '-', pctW: p + '%', pc: tone(a.length ? p : null),
       queue: R.filter(x => (x.status === 'in_review' || x.status === 'changes') && x.reviewers.some(v => v.u === u.id && !v.dec)).length,
       href: '/reviews?' + qs({ reviewer: u.id, from: fromK, to: END })
     };
@@ -216,8 +216,8 @@ export function computeInsights(data: Data, range: number) {
     const late = D.filter(d => d.sev === k && isOpen(d) && tgtEval(d, TNOW).f.late).length;
     return {
       k, l: SEV[k].l, icon: SEV[k].icon, c: SEV[k].c, rl: t.rl, fl: t.fl,
-      rp: rp == null ? '—' : Math.round(rp) + '%', rw: (rp || 0) + '%', rc: tone(rp),
-      fp: fpp == null ? '—' : Math.round(fpp) + '%', fw: (fpp || 0) + '%', fc: tone(fpp),
+      rp: rp == null ? '-' : Math.round(rp) + '%', rw: (rp || 0) + '%', rc: tone(rp),
+      fp: fpp == null ? '-' : Math.round(fpp) + '%', fw: (fpp || 0) + '%', fc: tone(fpp),
       late: String(late), lateFg: late ? BAD : MUTED, href: '/defects?' + qs(late ? { sev: k, late: 1 } : { sev: k, open: 1 })
     };
   });
@@ -225,7 +225,7 @@ export function computeInsights(data: Data, range: number) {
   return {
     kpis, tat, ticks, targetPos: (48 / max) * 100 + '%', gap: weeks.length <= 7 ? '20px' : weeks.length <= 13 ? '10px' : weeks.length <= 20 ? '6px' : '4px',
     bucketL: range <= 30 ? 'by day' : 'by week',
-    periodL: `${shortY(fromK, addD(END, -1))} – ${short(addD(END, -1))}, ${addD(END, -1).slice(0, 4)}`,
+    periodL: `${shortY(fromK, addD(END, -1))} - ${short(addD(END, -1))}, ${addD(END, -1).slice(0, 4)}`,
     flow, flowTicks, flowGap: fwk.length <= 7 ? '20px' : fwk.length <= 13 ? '10px' : '4px',
     flowSub: range <= 7 ? 'Daily count' : 'Weekly count', flowNote: `${sr} reported and ${ssum} resolved in the last ${rangeL}.`,
     outcomes, waffle, outcomeSub: `${nOut} reviews submitted in the last ${rangeL}, by first decision or withdrawal`,

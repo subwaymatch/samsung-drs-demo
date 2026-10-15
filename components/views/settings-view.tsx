@@ -51,7 +51,7 @@ export function SettingsView() {
       </section>
       <section className="flex flex-col">
         <h3 className="mb-2 text-base font-[650]">Demo</h3>
-        <Row title="Signed in as" sub="Switch users to see each role’s permissions. Code Review Team members can assign reviewers and approve changes.">
+        <Row title="Signed in as" sub="Switch users to see each role's permissions. Code Review Team members can assign reviewers and approve changes.">
           <div className="flex w-full max-w-[420px] flex-col gap-2.5">
             <Combobox items={users} value={app.prefs.meId} onValueChange={v => { if (v) { setPrefs({ meId: v }); flash('Signed in as ' + UM[v].name); } }} placeholder="Switch user" ariaLabel="Signed in as" />
             <span className="text-sm text-ink-5">{me.title} · {TM[me.team].name}</span>

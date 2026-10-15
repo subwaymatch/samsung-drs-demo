@@ -64,7 +64,7 @@ function ReviewFormInner({ r, linkedDefect }: { r?: Review; linkedDefect: string
     if (!f.title.trim()) return setErr('Title is required.');
     if (!f.branch.trim()) return setErr('Perforce stream is required.');
     const cl = f.cl.trim();
-    if (cl && !/^\d{6,8}$/.test(cl)) return setErr('Changelist must be a 6–8 digit number.');
+    if (cl && !/^\d{6,8}$/.test(cl)) return setErr('Changelist must be 6 to 8 digits.');
     const at = nowStr();
     if (mode === 'new') {
       const n = Math.max(0, ...app.data.reviews.map(x => crNum(x.id))) + 1;

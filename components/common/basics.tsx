@@ -124,7 +124,7 @@ export interface Pager {
 }
 export function pagerOf(total: number, page: number, size: number): Pager {
   const pages = Math.max(1, Math.ceil(total / size)), p = Math.min(Math.max(1, page), pages);
-  return { p, pages, show: pages > 1, rangeText: total ? `${(p - 1) * size + 1}–${Math.min(total, p * size)} of ${total}` : '' };
+  return { p, pages, show: pages > 1, rangeText: total ? `${(p - 1) * size + 1}-${Math.min(total, p * size)} of ${total}` : '' };
 }
 export function Pagination({ pg, onPage }: { pg: Pager; onPage: (p: number) => void }) {
   if (!pg.show) return null;
@@ -133,9 +133,9 @@ export function Pagination({ pg, onPage }: { pg: Pager; onPage: (p: number) => v
   if (p <= 4) [2, 3, 4, 5].forEach(i => keep.add(i));
   if (p >= pages - 3) [pages - 4, pages - 3, pages - 2, pages - 1].forEach(i => keep.add(i));
   const nums = pages <= 7 ? Array.from({ length: pages }, (_, i) => i + 1) : [...keep].filter(i => i >= 1 && i <= pages).sort((a, b) => a - b);
-  const list: (number | '…')[] = [];
+  const list: (number | '...')[] = [];
   nums.forEach((i, k) => {
-    if (k && i - nums[k - 1] > 1) list.push('…');
+    if (k && i - nums[k - 1] > 1) list.push('...');
     list.push(i);
   });
   return (
@@ -144,8 +144,8 @@ export function Pagination({ pg, onPage }: { pg: Pager; onPage: (p: number) => v
       <nav className="flex flex-wrap items-center gap-1" aria-label="Pages">
         <Button variant="ghost" size="sm" icon="chevron-left" title="Previous page" onClick={() => onPage(Math.max(1, p - 1))} disabled={p <= 1}><span className="max-[560px]:hidden">Previous</span></Button>
         {list.map((x, i) =>
-          x === '…' ? (
-            <Button key={'e' + i} variant="page" size="sm" disabled>…</Button>
+          x === '...' ? (
+            <Button key={'e' + i} variant="page" size="sm" disabled>...</Button>
           ) : (
             <Button key={x} variant={x === p ? 'pageActive' : 'page'} size="sm" onClick={() => onPage(x)}>{String(x)}</Button>
           )

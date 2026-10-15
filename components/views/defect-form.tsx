@@ -106,7 +106,7 @@ function DefectFormInner({ d }: { d?: Defect }) {
       ];
       addDefect({
         id: newId, title: f.title.trim(), affects: affFromVals(f.aff, f.model), model: f.model, comp: f.comp, sev: f.sev, status: f.status,
-        fw: f.fw.trim() || '—', reporter: meId, assignees: f.assignees, created: at, desc: f.desc.trim(), steps: f.steps.trim(), attachments: f.attachments, activity: act
+        fw: f.fw.trim() || '-', reporter: meId, assignees: f.assignees, created: at, desc: f.desc.trim(), steps: f.steps.trim(), attachments: f.attachments, activity: act
       });
       router.push('/defects/' + newId);
       flash(newId + ' reported · P4 job ' + jobOf(newId) + ' created');
@@ -157,7 +157,7 @@ function DefectFormInner({ d }: { d?: Defect }) {
           <Field label="Firmware / driver version"><Input mono value={f.fw} onChange={v => set('fw', v)} placeholder={f.model && MM[f.model] ? (MM[f.model].series === 'MultiXpress' ? 'V5.10.03.24' : MM[f.model].series === 'ProXpress' ? 'V4.00.03.24' : 'V3.00.03.24') : 'V4.00.03.24'} ariaLabel="Firmware version" /></Field>
         </div>
         <Field label="Description"><Textarea value={f.desc} onChange={v => set('desc', v)} rows={5} placeholder="What happens, and what was expected?" ariaLabel="Description" /></Field>
-        <Field label="Steps to reproduce"><Textarea value={f.steps} onChange={v => set('steps', v)} rows={4} placeholder="1. …" ariaLabel="Steps to reproduce" /></Field>
+        <Field label="Steps to reproduce"><Textarea value={f.steps} onChange={v => set('steps', v)} rows={4} placeholder="1. ..." ariaLabel="Steps to reproduce" /></Field>
         <Field label="Assignees"><MultiCombobox items={engItems} value={f.assignees} onValueChange={v => set('assignees', v)} placeholder="Type a name" ariaLabel="Assignees" /></Field>
         <div className="flex flex-col gap-3">
           <span className="text-sm font-semibold text-ink-4">Attachments</span>
