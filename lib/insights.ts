@@ -5,6 +5,9 @@ import { affLines, LINES, LINFO, rModelId, thumbOf } from './products';
 import { firstDec, firstRes, isOpen, migOf, tgtEval } from './records';
 import type { Data, Defect, Review, Severity } from './types';
 
+/** Generated spot illustrations for the KPI tiles. */
+const ART = '/illustrations/stats/';
+
 export const RANGES: { n: number; label: string; icon: string }[] = [
   { n: 7, label: '7 days', icon: 'calendar-days' },
   { n: 30, label: '30 days', icon: 'calendar-range' },
@@ -62,10 +65,10 @@ export function computeInsights(data: Data, range: number) {
     dc: (lowerBetter ? d <= 0 : d >= 0) ? GOOD_TXT : BAD_TXT
   });
   const kpis = [
-    { label: 'Median review turnaround', value: medC.toFixed(1), unit: 'h', ...delta(medC - medP, 'h', true, 1), sub: `${Math.round(within)}% decided within the 48h target`, href: '/reviews?' + qs({ from: fromK, to: END }) },
-    { label: 'First-pass approval', value: fpC.toFixed(0), unit: '%', ...delta(fpC - fpP, ' pts', false, 1), sub: `${cur.length} review decisions`, href: '/reviews?' + qs({ outcome: 'approved', from: fromK, to: END }) },
-    { label: 'Median time to resolve', value: median(rC).toFixed(1), unit: 'days', ...delta(median(rC) - median(rP), ' days', true, 1), sub: `${rC.length} defects resolved`, href: '/defects?' + qs({ by: 'resolved', from: fromK, to: END }) },
-    { label: 'Open defects', value: String(openNow.length), unit: '', ...delta(openNow.length - openThen, '', true, 0, `since ${shortY(fromK)}`), sub: `${openNow.filter(d => d.sev === 'critical').length} critical`, href: '/defects?open=1' }
+    { label: 'Median review turnaround', art: ART + 'median-review-turnaround.webp', value: medC.toFixed(1), unit: 'h', ...delta(medC - medP, 'h', true, 1), sub: `${Math.round(within)}% decided within the 48h target`, href: '/reviews?' + qs({ from: fromK, to: END }) },
+    { label: 'First-pass approval', art: ART + 'first-pass-approval.webp', value: fpC.toFixed(0), unit: '%', ...delta(fpC - fpP, ' pts', false, 1), sub: `${cur.length} review decisions`, href: '/reviews?' + qs({ outcome: 'approved', from: fromK, to: END }) },
+    { label: 'Median time to resolve', art: ART + 'median-time-to-resolve.webp', value: median(rC).toFixed(1), unit: 'days', ...delta(median(rC) - median(rP), ' days', true, 1), sub: `${rC.length} defects resolved`, href: '/defects?' + qs({ by: 'resolved', from: fromK, to: END }) },
+    { label: 'Open defects', art: ART + 'open-defects.webp', value: String(openNow.length), unit: '', ...delta(openNow.length - openThen, '', true, 0, `since ${shortY(fromK)}`), sub: `${openNow.filter(d => d.sev === 'critical').length} critical`, href: '/defects?open=1' }
   ];
 
   // Turnaround chart

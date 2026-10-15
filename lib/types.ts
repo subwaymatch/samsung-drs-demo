@@ -22,6 +22,7 @@ export interface User {
   h: number;
   intro: string;
   email: string;
+  /** Portrait URL, or empty while the person has none. */
   photo: string;
   site: string;
 }
@@ -150,6 +151,8 @@ export interface PersonView {
   ini: string;
   bg: string;
   fg: string;
+  /** Portrait URL, or empty to show initials. */
+  photo: string;
 }
 
 /** An option for Select, Combobox and Segmented controls. */

@@ -161,10 +161,16 @@ export function InsightsView() {
       <div className="grid gap-x-6 gap-y-7" style={KPI_GRID}>
         {st.kpis.map(k => (
           <Clickable key={k.label} href={k.href} className="flex flex-col gap-2 border-l-2 border-accent-rule py-0.5 pl-5 hover:border-accent-bar">
-            <span className="text-sm font-semibold text-ink-5">{k.label}</span>
-            <div className="flex items-baseline gap-1">
-              <span className="text-[32px] leading-[1.1] font-bold tracking-[-0.02em] tabular-nums">{k.value}</span>
-              <span className="font-[550] text-muted">{k.unit}</span>
+            <div className="flex items-start justify-between gap-3">
+              <div className="flex min-w-0 flex-col gap-2">
+                <span className="text-sm font-semibold text-ink-5">{k.label}</span>
+                <div className="flex items-baseline gap-1">
+                  <span className="text-[32px] leading-[1.1] font-bold tracking-[-0.02em] tabular-nums">{k.value}</span>
+                  <span className="font-[550] text-muted">{k.unit}</span>
+                </div>
+              </div>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={k.art} alt="" width={64} height={64} decoding="async" className="block flex-none" />
             </div>
             <span className="text-sm font-semibold" style={{ color: k.dc }}>{k.delta}</span>
             <span className="text-sm text-muted">{k.sub}</span>

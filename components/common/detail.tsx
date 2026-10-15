@@ -5,7 +5,7 @@ import { useState, type ReactNode } from 'react';
 import { DEC, RST } from '@/lib/constants';
 import { fAt } from '@/lib/dates';
 import { av } from '@/lib/people';
-import type { ModelInfo } from '@/lib/products';
+import { thumbOf, type ModelInfo } from '@/lib/products';
 import { parts } from '@/lib/records';
 import type { AffChip, RelRow } from '@/lib/relations';
 import type { Activity, Attachment, Option, PersonView } from '@/lib/types';
@@ -45,7 +45,7 @@ export function PersonCard({ label, person, when }: { label: string; person: Per
     <section className="flex min-w-0 flex-col gap-3.5">
       <span className="text-sm font-semibold text-ink-4">{label}</span>
       <div className="flex items-center gap-4">
-        <PhotoPlaceholder w={56} h={70} title="Photo placeholder" />
+        <PhotoPlaceholder w={56} h={70} src={person.photo} title={person.photo ? person.name : 'Photo placeholder'} />
         <div className="flex min-w-0 flex-col gap-1">
           <div className="flex flex-wrap items-baseline gap-2">
             <NextLink href={person.href} className="text-[15px] font-[650] text-inherit">{person.name}</NextLink>
@@ -101,7 +101,7 @@ export function ProductPanel({ pm }: { pm: ModelInfo }) {
   if (!pm.has) return null;
   return (
     <div className="flex flex-wrap items-center gap-6 border-y border-line py-5">
-      <Thumb th={{ id: pm.id, photo: '', hint: 'Product image placeholder · products/' + pm.id.toLowerCase() + '.png' }} w={168} h={120} iconSize={32} label />
+      <Thumb th={thumbOf(pm.id)} w={168} h={120} iconSize={32} label />
       <div className="flex min-w-0 flex-[1_1_320px] flex-col gap-3">
         <div className="flex flex-col gap-0.5">
           <span className="text-base font-[650]">Samsung {pm.series} {pm.id}</span>

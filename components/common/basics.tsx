@@ -87,7 +87,10 @@ export function StatusLabel({ l, fg, icon, size = 16, weight = 550, className = 
 export function Thumb({ th, w = 56, h = 42, iconSize = 20, label }: { th: ThumbT; w?: number; h?: number; iconSize?: number; label?: boolean }) {
   return (
     <div title={th.hint} className="grid flex-none place-items-center overflow-hidden rounded bg-[oklch(0.975_0.01_293)]" style={{ width: w, height: h }}>
-      {label ? (
+      {th.photo ? (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img src={th.photo} alt="" loading="lazy" decoding="async" className="block h-full w-full object-contain p-[6%]" />
+      ) : label ? (
         <div className="flex flex-col items-center gap-2 text-[oklch(0.62_0.06_293)]">
           <Icon name="printer" size={iconSize} color="oklch(0.68 0.07 293)" />
           <span className="text-sm">Product image</span>
@@ -99,10 +102,16 @@ export function Thumb({ th, w = 56, h = 42, iconSize = 20, label }: { th: ThumbT
   );
 }
 
-export function PhotoPlaceholder({ w, h, iconSize = 24, title }: { w: number; h: number; iconSize?: number; title?: string }) {
+/** A person's portrait, or a placeholder while they have none. */
+export function PhotoPlaceholder({ w, h, iconSize = 24, title, src }: { w: number; h: number; iconSize?: number; title?: string; src?: string }) {
   return (
     <div title={title} className="grid flex-none place-items-center overflow-hidden rounded bg-[oklch(0.965_0.015_293)]" style={{ width: w, height: h }}>
-      <Icon name="user" size={iconSize} color="oklch(0.68 0.07 293)" />
+      {src ? (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img src={src} alt="" loading="lazy" decoding="async" className="block h-full w-full object-cover object-top" />
+      ) : (
+        <Icon name="user" size={iconSize} color="oklch(0.68 0.07 293)" />
+      )}
     </div>
   );
 }

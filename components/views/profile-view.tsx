@@ -46,7 +46,7 @@ export function ProfileView({ id }: { id: string }) {
         <NextLink href="/teams" className="bui-btn bui-link"><Icon name="arrow-left" size={16} />Teams</NextLink><span>/</span><span>{u.name}</span>
       </div>
       <div className="flex flex-wrap items-start gap-8">
-        <PhotoPlaceholder w={160} h={200} iconSize={48} title="Photo placeholder" />
+        <PhotoPlaceholder w={160} h={200} iconSize={48} src={u.photo} title={u.photo ? u.name : 'Photo placeholder'} />
         <div className="flex max-w-[680px] min-w-0 flex-[1_1_360px] flex-col gap-2.5">
           <div className="flex flex-col gap-1">
             <h1 className="text-2xl font-bold tracking-[-0.02em]">{u.name}</h1>

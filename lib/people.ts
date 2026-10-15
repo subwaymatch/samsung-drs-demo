@@ -10,7 +10,7 @@ const views = new Map<string, PersonView>();
 export function av(id: string): PersonView {
   const hit = views.get(id);
   if (hit) return hit;
-  const u = UM[id] || { name: 'Unknown', en: 'Unknown', title: '', h: 290, email: '', team: '' };
+  const u = UM[id] || { name: 'Unknown', en: 'Unknown', title: '', h: 290, email: '', team: '', photo: '' };
   const v: PersonView = {
     id,
     name: u.name,
@@ -21,7 +21,8 @@ export function av(id: string): PersonView {
     teamName: (TM[u.team] || {}).name || '',
     ini: ini(u.name),
     bg: `oklch(0.94 0.04 ${u.h})`,
-    fg: `oklch(0.4 0.12 ${u.h})`
+    fg: `oklch(0.4 0.12 ${u.h})`,
+    photo: u.photo
   };
   views.set(id, v);
   return v;
