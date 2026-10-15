@@ -137,7 +137,7 @@ export function InsightsView() {
           <span>Showing</span>
           <span className="font-[650] text-ink tabular-nums">{st.periodL}</span>
         </div>
-        <div role="tablist" aria-label="Reporting period" className="flex items-stretch gap-6 self-stretch overflow-x-auto">
+        <div role="tablist" aria-label="Reporting period" className="-mb-px flex items-stretch gap-6 self-stretch overflow-x-auto overflow-y-hidden">
           {RANGES.map(r => {
             const on = r.n === range;
             return (
@@ -147,7 +147,7 @@ export function InsightsView() {
                 role="tab"
                 aria-selected={on}
                 onClick={() => setUi({ range: r.n })}
-                className="-mb-px flex min-h-12 cursor-pointer items-center gap-[7px] border-0 border-b-2 border-solid bg-transparent px-0.5 text-sm whitespace-nowrap hover:text-accent-ink"
+                className="flex min-h-12 cursor-pointer items-center gap-[7px] border-0 border-b-2 border-solid bg-transparent px-0.5 text-sm whitespace-nowrap hover:text-accent-ink"
                 style={{ borderBottomColor: on ? 'var(--color-accent)' : 'transparent', color: on ? 'var(--color-accent-ink)' : 'var(--color-ink-5)', fontWeight: on ? 650 : 500 }}
               >
                 <Icon name={r.icon} size={15} />
