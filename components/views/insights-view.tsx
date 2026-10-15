@@ -2,7 +2,6 @@
 
 import { useRouter } from 'next/navigation';
 import { useMemo } from 'react';
-import { DIVISION, ORG } from '@/lib/constants';
 import { fFull, TODAY } from '@/lib/dates';
 import { computeInsights, RANGES } from '@/lib/insights';
 import { systemGraph } from '@/lib/relations';
@@ -42,26 +41,16 @@ export function InsightsView() {
     <div className="mx-auto flex max-w-[1200px] flex-col gap-10">
       <PageHeader title="Insights" sub={`Defect flow and code review performance through ${fFull(TODAY + ' 00:00')}. Select any bar or row to open the matching items.`} />
 
-      <section className="flex flex-col gap-6">
-        <div className="flex max-w-[760px] flex-col gap-2">
-          <h3 className="text-base font-[650]">Migration bridge</h3>
-          <p className="leading-[1.7] text-pretty text-ink-3">
-            {ORG}’ {DIVISION} is moving from IBM Rational ClearQuest, IBM Rational ClearCase and Review Board to Perforce P4, Helix Swarm, Jira and Confluence.
-            The move runs team by team in three waves, from November 2016 to the end of 2017, so DRS links each defect and code review across the old and new tools
-            and tracks it against severity targets. Work keeps moving while records change hands.
-          </p>
+      <section className="flex flex-col gap-3">
+        <div
+          className="overflow-hidden border-y border-[oklch(0.92_0.01_290)] bg-surface"
+          style={mainW ? { width: mainW, marginLeft: `calc(50% - ${mainW / 2}px)` } : undefined}
+        >
+          <RelGraph nodes={graph.nodes} edges={graph.edges} height={680} />
         </div>
-        <div className="flex flex-col gap-3">
-          <div
-            className="overflow-hidden border-y border-[oklch(0.92_0.01_290)] bg-surface"
-            style={mainW ? { width: mainW, marginLeft: `calc(50% - ${mainW / 2}px)` } : undefined}
-          >
-            <RelGraph nodes={graph.nodes} edges={graph.edges} height={680} />
-          </div>
-          <div className="flex flex-wrap gap-5 text-sm text-ink-5">
-            <span className="flex items-center gap-2"><span className="h-1.5 w-1.5 rounded-full bg-[oklch(0.62_0.14_155)]" />Connected and in sync</span>
-            <span className="flex items-center gap-2"><span className="w-6 border-t-[1.5px] border-dashed border-[oklch(0.55_0.17_293)]" />Records synced through DRS</span>
-          </div>
+        <div className="flex flex-wrap gap-5 text-sm text-ink-5">
+          <span className="flex items-center gap-2"><span className="h-1.5 w-1.5 rounded-full bg-[oklch(0.62_0.14_155)]" />Connected and in sync</span>
+          <span className="flex items-center gap-2"><span className="w-6 border-t-[1.5px] border-dashed border-[oklch(0.55_0.17_293)]" />Records synced through DRS</span>
         </div>
       </section>
 
