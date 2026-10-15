@@ -2,6 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 import { useMemo } from 'react';
+import { MODELS, TEAMS } from '@/lib/constants';
 import { fFull, TODAY } from '@/lib/dates';
 import { computeInsights, RANGES } from '@/lib/insights';
 import { systemGraph } from '@/lib/relations';
@@ -39,7 +40,22 @@ export function InsightsView() {
 
   return (
     <div className="mx-auto flex max-w-[1200px] flex-col gap-10">
-      <PageHeader title="Insights" sub={`Defect flow and code review performance through ${fFull(TODAY + ' 00:00')}. Select any bar or row to open the matching items.`} />
+      <PageHeader
+        title="Insights"
+        sub={`${app.data.defects.length} defects and ${app.data.reviews.length} code reviews from ${TEAMS.length} teams across ${MODELS.length} printer and copier models.`}
+        action={
+          <div className="flex flex-wrap items-center gap-x-6 gap-y-2 pb-1 text-sm text-ink-5">
+            <span className="flex items-center gap-2">
+              <Icon name="calendar-clock" size={16} color="var(--color-accent-ink)" />
+              Data through {fFull(TODAY + ' 00:00')}
+            </span>
+            <span className="flex items-center gap-2">
+              <span className="h-1.5 w-1.5 rounded-full bg-[oklch(0.62_0.14_155)]" />
+              All systems in sync
+            </span>
+          </div>
+        }
+      />
 
       <section className="flex flex-col gap-3">
         <div
