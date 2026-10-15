@@ -60,6 +60,10 @@ To deploy from Git with Workers Builds instead, connect the repository in the Cl
 
 `wrangler.jsonc` has no `run_worker_first` rule. With one, the dev server also routes Vite's own modules to the Worker and `pnpm dev` serves 404s.
 
+## Showcase video
+
+`video/` is a [Remotion](https://www.remotion.dev) project that captures the running app and renders a 70-second showcase video. See [video/README.md](video/README.md).
+
 ## Credits
 
 Product logos in `public/logos` belong to their owners and are used only to label the systems DRS synced with. The Perforce mark is from [Simple Icons](https://simpleicons.org). Fonts: [Pretendard](https://github.com/orioncactus/pretendard) and [JetBrains Mono](https://www.jetbrains.com/lp/mono/).
