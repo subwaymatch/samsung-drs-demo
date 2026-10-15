@@ -334,7 +334,7 @@ export function InsightsView() {
           </div>
         </Section>
 
-        <Section title="Turnaround by change type" sub="Five most common change types · median hours to first decision · dashed line is the 48h target">
+        <Section title="Turnaround by change type" sub="Five most common change types, median hours to first decision, dashed line is the 48h target">
           <div className="flex flex-col gap-[18px]">
             {st.byType.map(t => (
               <Clickable key={t.type} href={t.href} className="row-link grid grid-cols-[140px_minmax(0,1fr)_56px] items-center gap-4 py-1">

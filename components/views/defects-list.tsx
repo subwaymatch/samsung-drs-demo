@@ -162,7 +162,7 @@ export function DefectsList() {
             {rows.map((d, i) => {
               const ck = sel.includes(d.id);
               const c = d.activity.filter(a => a.t === 'c').length, n = (d.attachments || []).length;
-              const meta = [affLabel(d), d.comp, c ? `${c} comment${c > 1 ? 's' : ''}` : '', n ? `${n} attachment${n > 1 ? 's' : ''}` : ''].filter(Boolean).join(' · ');
+              const meta = [affLabel(d), d.comp, c ? `${c} comment${c > 1 ? 's' : ''}` : '', n ? `${n} attachment${n > 1 ? 's' : ''}` : ''].filter(Boolean).join(', ');
               return (
                 <Clickable
                   key={d.id}

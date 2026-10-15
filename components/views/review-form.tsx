@@ -55,7 +55,7 @@ function ReviewFormInner({ r, linkedDefect }: { r?: Review; linkedDefect: string
   const [err, setErr] = useState('');
   const set = <K extends keyof Form>(k: K, v: Form[K]) => { setF(x => ({ ...x, [k]: v })); setErr(''); };
   const typeItems = useMemo(() => TYPES.map(t => ({ value: t, label: t, icon: TYPE_ICON[t], color: 'oklch(0.5 0.12 293)' })), []);
-  const defectItems = useMemo(() => app.data.defects.map(x => ({ value: x.id, label: x.id + ' · ' + x.title, icon: SEV[x.sev].icon, color: SEV[x.sev].c })), [app.data.defects]);
+  const defectItems = useMemo(() => app.data.defects.map(x => ({ value: x.id, label: x.id + ', ' + x.title, icon: SEV[x.sev].icon, color: SEV[x.sev].c })), [app.data.defects]);
   const mode = r ? 'edit' : 'new';
   const heading = clone ? 'Clone ' + clone.cloneOf : r ? 'Edit ' + r.id : 'Request a code review';
   const back = r ? '/reviews/' + r.id : '/reviews';
@@ -74,7 +74,7 @@ function ReviewFormInner({ r, linkedDefect }: { r?: Review; linkedDefect: string
       rv.activity = [A('e', meId, at, 'requested a code review'), A('e', meId, at, `shelved changelist ${p.shelved} and opened Helix Swarm review ${p.swId}`)];
       addReview(rv);
       router.push('/reviews/' + newId);
-      flash(newId + ' sent to the code review team · Swarm review ' + p.swId);
+      flash(newId + ' sent to the code review team, Swarm review ' + p.swId);
     } else if (r) {
       updReview(r.id, x => ({ ...x, title: f.title.trim(), type: f.type, branch: f.branch.trim(), cl, linked: f.linked || '', desc: f.desc, attachments: f.attachments, activity: [...x.activity, A('e', meId, at, 'edited the request')] }));
       router.push('/reviews/' + r.id);

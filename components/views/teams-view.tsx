@@ -38,7 +38,7 @@ export function TeamsView() {
           <div className="grid gap-x-12 gap-y-9 [grid-template-columns:repeat(auto-fill,minmax(min(100%,360px),1fr))]">
             {t.members.map(u => (
               <div key={u.id} className="flex items-start gap-5">
-                <PhotoPlaceholder w={96} h={120} iconSize={32} src={u.photo} title={u.photo ? u.name : 'Photo placeholder · photos/' + u.id + '.png'} />
+                <PhotoPlaceholder w={96} h={120} iconSize={32} src={u.photo} title={u.photo ? u.name : 'Photo placeholder, photos/' + u.id + '.png'} />
                 <div className="flex min-w-0 flex-1 flex-col gap-1.5">
                   <div className="flex flex-col gap-0.5">
                     <NextLink href={'/teams/' + u.id} className="w-max text-base font-[650] text-inherit">{u.name}</NextLink>

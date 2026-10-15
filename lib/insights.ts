@@ -127,14 +127,14 @@ export function computeInsights(data: Data, range: number) {
   const hl = LINES.map(l => ({ model: l, total: openNow.filter(d => affLines(d).includes(l)).length })).filter(x => x.total).sort((a, b) => b.total - a.total);
   const hMax = Math.max(1, ...hl.flatMap(m => hk.map(k => hN(m.model, k))));
   const heat = hl.map(m => ({
-    model: m.model, sub: `${LINFO[m.model].models.length} models · ${LINFO[m.model].plat}`, total: m.total, href: '/defects?' + qs({ line: m.model, open: 1 }),
+    model: m.model, sub: `${LINFO[m.model].models.length} models, ${LINFO[m.model].plat}`, total: m.total, href: '/defects?' + qs({ line: m.model, open: 1 }),
     cells: hk.map(k => {
       const n = hN(m.model, k), t = n / hMax;
       return {
         n: n ? String(n) : '-',
         bg: n ? `oklch(${(0.95 - t * 0.45).toFixed(3)} ${(0.04 + t * 0.15).toFixed(3)} 293)` : 'oklch(0.985 0.004 290)',
         fg: t > 0.5 ? '#fff' : n ? 'oklch(0.32 0.1 293)' : 'oklch(0.7 0.01 290)',
-        tip: `${m.model} · ${SEV[k].l}: ${n} open`, href: '/defects?' + qs({ line: m.model, sev: k, open: 1 })
+        tip: `${m.model}, ${SEV[k].l}: ${n} open`, href: '/defects?' + qs({ line: m.model, sev: k, open: 1 })
       };
     })
   }));
@@ -185,11 +185,11 @@ export function computeInsights(data: Data, range: number) {
   };
   const activeD = topD.map(({ d, n }) => {
     const c = d.activity.filter(a => a.t === 'c' && a.at >= T).length;
-    return { ...ppl(d), id: d.id, th: thumbOf(d.model), title: d.title, icon: SEV[d.sev].icon, fg: SEV[d.sev].c, meta: `${d.model} · ${statusL(d)} · ${c} comment${c === 1 ? '' : 's'}`, n: String(n), nL: n === 1 ? 'update' : 'updates', spark: spark(d), sparkTip, href: '/defects/' + d.id };
+    return { ...ppl(d), id: d.id, th: thumbOf(d.model), title: d.title, icon: SEV[d.sev].icon, fg: SEV[d.sev].c, meta: `${d.model}, ${statusL(d)}, ${c} comment${c === 1 ? '' : 's'}`, n: String(n), nL: n === 1 ? 'update' : 'updates', spark: spark(d), sparkTip, href: '/defects/' + d.id };
   });
   const activeR = topR.map(({ r, n }) => ({
     ...ppl(r), id: r.id, th: thumbOf(rModelId(r, D)), title: r.title, icon: RST[r.status].icon, fg: RST[r.status].fg,
-    meta: `${r.type} · ${RST[r.status].l} · ${r.reviewers.length} reviewer${r.reviewers.length === 1 ? '' : 's'}`, n: String(n), nL: n === 1 ? 'update' : 'updates', spark: spark(r), sparkTip, href: '/reviews/' + r.id
+    meta: `${r.type}, ${RST[r.status].l}, ${r.reviewers.length} reviewer${r.reviewers.length === 1 ? '' : 's'}`, n: String(n), nL: n === 1 ? 'update' : 'updates', spark: spark(r), sparkTip, href: '/reviews/' + r.id
   }));
 
   // Migration
@@ -203,7 +203,7 @@ export function computeInsights(data: Data, range: number) {
   const mxC = Math.max(1, ...compG.map(x => x.ds.length));
   const byComp = compG.map(({ c, ds }) => ({
     comp: c, wave: 'Wave ' + (WAVE[c] || 3), total: ds.length, w: (ds.length / mxC) * 100 + '%', href: '/defects?' + qs({ comp: c }),
-    segs: MIGORD.map(k => ({ k, n: ds.filter(d => migOf(d) === k).length })).filter(s => s.n).map(s => ({ n: s.n, c: MIG[s.k].c, tip: `${c}: ${s.n} · ${MIG[s.k].l}`, href: '/defects?' + qs({ comp: c, mig: s.k }) }))
+    segs: MIGORD.map(k => ({ k, n: ds.filter(d => migOf(d) === k).length })).filter(s => s.n).map(s => ({ n: s.n, c: MIG[s.k].c, tip: `${c}: ${s.n}, ${MIG[s.k].l}`, href: '/defects?' + qs({ comp: c, mig: s.k }) }))
   }));
 
   // Severity targets for defects reported in the period
@@ -260,7 +260,7 @@ function donutGeometry(states: { label: string; desc: string; c: string; n: numb
   return it.map(i => {
     const lx = i.right ? cx + R + 40 : cx - R - 40;
     return {
-      d: i.d, c: i.s.c, href: i.s.href, tip: i.s.label + ': ' + i.s.desc, label: i.s.label, val: `${i.s.n} · ${i.s.pct}`,
+      d: i.d, c: i.s.c, href: i.s.href, tip: i.s.label + ': ' + i.s.desc, label: i.s.label, val: `${i.s.n}, ${i.s.pct}`,
       lp: `${f1(i.ex)},${f1(i.ey)} ${f1(i.bx)},${f1(i.by)} ${lx},${f1(i.by)}`, dx: f1(i.ex), dy: f1(i.ey),
       lx: (((i.right ? lx + 8 : lx - 8) / 520) * 100).toFixed(2) + '%', ly: ((i.by / 280) * 100).toFixed(2) + '%',
       tr: i.right ? 'translate(0,-50%)' : 'translate(-100%,-50%)', ta: (i.right ? 'left' : 'right') as 'left' | 'right'

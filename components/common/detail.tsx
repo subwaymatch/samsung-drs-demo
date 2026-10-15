@@ -51,7 +51,7 @@ export function PersonCard({ label, person, when }: { label: string; person: Per
             <NextLink href={person.href} className="text-[15px] font-[650] text-inherit">{person.name}</NextLink>
             {person.en !== person.name ? <span className="text-sm text-muted">{person.en}</span> : null}
           </div>
-          <span>{person.title} · {person.teamName}</span>
+          <span>{person.title}, {person.teamName}</span>
           <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5 text-sm text-muted">
             <a href={'mailto:' + person.email} className="flex items-center gap-1.5"><Icon name="mail" size={14} />{person.email}</a>
             <span>{when}</span>
@@ -181,7 +181,7 @@ export function RecordsAcrossSystems({ sub, legacyTitle, legacy, next, synced, o
       </div>
       <div className="grid gap-x-8 gap-y-2 [grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr))]">
         <RecordColumn title={legacyTitle} items={legacy} onOpen={onOpen} />
-        <RecordColumn title="New · Perforce and Atlassian" items={next} onOpen={onOpen} />
+        <RecordColumn title="New, Perforce and Atlassian" items={next} onOpen={onOpen} />
       </div>
       <span className="text-sm text-muted">{synced}</span>
     </section>

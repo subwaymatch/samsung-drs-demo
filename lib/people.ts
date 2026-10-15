@@ -28,10 +28,10 @@ export function av(id: string): PersonView {
   return v;
 }
 
-/** Name in both scripts when they differ, e.g. "김지현 · Jihyun Kim". */
+/** Name in both scripts when they differ, e.g. "김지현 (Jihyun Kim)". */
 export const bothNames = (id: string) => {
   const u = UM[id];
-  return !u ? 'Unknown' : u.en !== u.name ? `${u.name} · ${u.en}` : u.name;
+  return !u ? 'Unknown' : u.en !== u.name ? `${u.name} (${u.en})` : u.name;
 };
 
 export const personOption = (id: string, sub?: string): Option => {
@@ -40,6 +40,6 @@ export const personOption = (id: string, sub?: string): Option => {
 };
 
 export const userOptions = () =>
-  USERS.map(u => personOption(u.id, ROLE[u.role] + ' · ' + TM[u.team].name));
+  USERS.map(u => personOption(u.id, ROLE[u.role] + ', ' + TM[u.team].name));
 export const engineerOptions = () => USERS.filter(u => u.role === 'eng').map(u => personOption(u.id));
 export const reviewerOptions = () => USERS.filter(u => u.role === 'cr').map(u => personOption(u.id));

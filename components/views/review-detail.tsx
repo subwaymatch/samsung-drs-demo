@@ -84,7 +84,7 @@ export function ReviewDetail({ id }: { id: string }) {
     });
     setNote('');
     setNoteErr('');
-    flash(dec === 'approved' ? (ns === 'approved' ? 'Approved by all reviewers · vote synced to Swarm' : 'Approval recorded · waiting on other reviewers') : dec === 'changes' ? 'Modification requested · vote synced to Swarm' : 'Change denied · Swarm review rejected');
+    flash(dec === 'approved' ? (ns === 'approved' ? 'Approved by all reviewers, vote synced to Swarm' : 'Approval recorded, waiting on other reviewers') : dec === 'changes' ? 'Modification requested, vote synced to Swarm' : 'Change denied, Swarm review rejected');
   };
   const ld = r.linked ? data.defects.find(x => x.id === r.linked) : undefined;
   const fetchSwarm = () => {
@@ -112,7 +112,7 @@ export function ReviewDetail({ id }: { id: string }) {
             variant={sub ? 'subOn' : 'secondary'}
             icon={sub ? 'bell-ring' : 'bell'}
             title={sub ? 'Click to stop notifications for this review' : 'Get notified about comments, status changes and decisions'}
-            onClick={() => { setSubscribed(r.id, meId, !sub); flash(sub ? 'Unsubscribed from ' + r.id : `Subscribed to ${r.id} · updates go to Notifications and your summary email`); }}
+            onClick={() => { setSubscribed(r.id, meId, !sub); flash(sub ? 'Unsubscribed from ' + r.id : `Subscribed to ${r.id}, updates go to Notifications and your summary email`); }}
           >
             {sub ? 'Subscribed' : 'Subscribe'}
           </Button>
@@ -217,7 +217,7 @@ export function ReviewDetail({ id }: { id: string }) {
               icon="refresh-cw"
               onClick={() => {
                 upd(x => { const rv = x.reviewers.map(v => (v.dec === 'changes' ? { ...v, dec: null } : v)); return { ...log(x, 'resubmitted for review'), reviewers: rv, status: computeStatus(rv) }; });
-                flash('Resubmitted · shelved files updated in Swarm');
+                flash('Resubmitted, shelved files updated in Swarm');
               }}
             >
               Resubmit for review
@@ -234,13 +234,13 @@ export function ReviewDetail({ id }: { id: string }) {
           </section>
           {r.attachments.length ? (
             <section className="flex flex-col gap-3.5">
-              <h3 className="text-sm font-semibold text-muted">Attachments · {r.attachments.length}</h3>
+              <h3 className="text-sm font-semibold text-muted">Attachments ({r.attachments.length})</h3>
               <Attachments items={r.attachments} />
             </section>
           ) : null}
           <RecordsAcrossSystems
             sub={rec.sub}
-            legacyTitle="Legacy · IBM Rational and Review Board"
+            legacyTitle="Legacy, IBM Rational and Review Board"
             legacy={rec.legacy}
             next={rec.next}
             synced={rec.synced}
@@ -261,7 +261,7 @@ export function ReviewDetail({ id }: { id: string }) {
             <div className="flex flex-wrap items-center justify-between gap-3">
               <div className="flex flex-col gap-1">
                 <h3 className="text-base font-[650]">Changed files</h3>
-                <span className="text-sm text-muted">{r.files.length ? `${r.files.length} file${r.files.length > 1 ? 's' : ''} · +${add} -${del} · Click a line to comment` : 'Not synced from Helix Swarm yet'}</span>
+                <span className="text-sm text-muted">{r.files.length ? `${r.files.length} file${r.files.length > 1 ? 's' : ''}, +${add} -${del}, Click a line to comment` : 'Not synced from Helix Swarm yet'}</span>
               </div>
               {r.files.length ? <div className="max-w-full overflow-x-auto"><Segmented ariaLabel="Diff layout" items={DIFF_MODES} value={mode} onValueChange={v => setPrefs({ diff: v as 'sbs' | 'uni' })} /></div> : null}
             </div>
@@ -276,7 +276,7 @@ export function ReviewDetail({ id }: { id: string }) {
                 onComment={(fIdx, key, no, text) => {
                   const at = nowStr(), path = r.files[fIdx].path;
                   upd(x => ({ ...x, lineComments: [...(x.lineComments || []), { f: fIdx, key, no, u: meId, at, x: text }], activity: [...x.activity, A('c', meId, at, text, null, [], path + ':' + no)] }));
-                  flash('Line comment added · synced to Swarm');
+                  flash('Line comment added, synced to Swarm');
                 }}
               />
             ))}

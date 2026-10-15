@@ -109,7 +109,7 @@ function DefectFormInner({ d }: { d?: Defect }) {
         fw: f.fw.trim() || '-', reporter: meId, assignees: f.assignees, created: at, desc: f.desc.trim(), steps: f.steps.trim(), attachments: f.attachments, activity: act
       });
       router.push('/defects/' + newId);
-      flash(newId + ' reported · P4 job ' + jobOf(newId) + ' created');
+      flash(newId + ' reported, P4 job ' + jobOf(newId) + ' created');
     } else if (d) {
       updDefect(d.id, x => ({
         ...x, title: f.title.trim(), affects: affFromVals(f.aff, f.model), model: f.model!, comp: f.comp!, sev: f.sev, status: f.status, fw: f.fw,
@@ -143,7 +143,7 @@ function DefectFormInner({ d }: { d?: Defect }) {
               {dupes.map(x => (
                 <a key={x.id} href={'/defects/' + x.id} target="_blank" rel="noreferrer" className="grid grid-cols-[96px_minmax(0,1fr)_auto] items-center gap-3.5 border-b border-line-soft py-2.5 text-inherit no-underline last:border-b-0 hover:text-accent-text hover:no-underline">
                   <span className="font-mono text-sm text-muted">{x.id}</span>
-                  <span className="flex min-w-0 flex-col gap-[3px]"><span className="bui-trunc">{x.title}</span><span className="text-sm text-muted">{x.comp} · reported {fFull(x.created)}</span></span>
+                  <span className="flex min-w-0 flex-col gap-[3px]"><span className="bui-trunc">{x.title}</span><span className="text-sm text-muted">{x.comp}, reported {fFull(x.created)}</span></span>
                   <span className="flex items-center gap-1.5 font-[550] whitespace-nowrap" style={{ color: DST[x.status].fg }}><Icon name={DST[x.status].icon} size={14} />{DST[x.status].l}</span>
                 </a>
               ))}

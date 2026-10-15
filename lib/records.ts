@@ -64,8 +64,8 @@ export const migInfo = (k: MigState) => MIG[k];
 export const ccOf = (w: number, series: string) => {
   const stream = (series || 'printing').toLowerCase() + '_fw_int';
   return w < 3
-    ? { state: 'Read-only · history imported to P4', meta: `UCM activity on ${stream} · frozen ${WAVE_CUTOVER[w]}` }
-    : { state: 'Active · imported to P4 every hour', meta: `UCM activity on ${stream} · cutover ${WAVE_CUTOVER[3]}` };
+    ? { state: 'Read-only, history imported to P4', meta: `UCM activity on ${stream}, frozen ${WAVE_CUTOVER[w]}` }
+    : { state: 'Active, imported to P4 every hour', meta: `UCM activity on ${stream}, cutover ${WAVE_CUTOVER[3]}` };
 };
 export const cqPri = CQ_PRI;
 export const cqState = CQ_STATE;

@@ -14,7 +14,7 @@ export function AboutView() {
         <DrsLogo width={96} label="Defects and Reviews System logo" />
         <div className="flex flex-col gap-1.5">
           <h1 className="text-[32px] leading-[1.2] font-bold tracking-[-0.02em]">Defects and Reviews System</h1>
-          <p className="text-[15px] leading-[1.7] text-muted">Samsung Electronics · Printing Solutions Business · 2016-2017</p>
+          <p className="text-[15px] leading-[1.7] text-muted">Samsung Electronics, Printing Solutions Business, 2016-2017</p>
         </div>
       </div>
       <section className="flex max-w-[680px] flex-col gap-4 border-t border-line pt-6 text-[17px] leading-[1.7] text-pretty text-ink-3">
