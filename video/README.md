@@ -48,6 +48,13 @@ Remotion downloads Chrome Headless Shell on its first render. To use one that is
 
 The captures, fonts and the app's images (copied from `../public` by `pnpm assets`, which `studio` and `render` run first) are gitignored. `src/layout.json` is committed, since the scenes' zoom targets depend on it.
 
+The render is a high-quality master (CRF 16, about 36 MB). For a smaller copy to put on a website, and a poster frame from the title card:
+
+```sh
+ffmpeg -i out/drs-showcase.mp4 -c:v libx264 -preset slow -crf 20 -movflags +faststart out/drs-showcase-web.mp4
+node scripts/stills.mjs DrsShowcase:110 --scale=1   # out/stills/DrsShowcase-110.png
+```
+
 Each scene is also its own composition under **Scenes** in the Studio. To render stills for review:
 
 ```sh

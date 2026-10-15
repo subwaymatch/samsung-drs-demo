@@ -53,11 +53,6 @@ export const SCENES: Scene[] = [
   { id: 'outro', beats: 12, render: p => <Outro credit={p.credit} url={p.url} />, enter: [irisIn(), 2] }
 ];
 
-/** Frame each scene starts on (the start of its transition in). */
-export const SCENE_STARTS = SCENES.reduce<number[]>((acc, s, i) => {
-  acc.push(i ? acc[i - 1] + beats(SCENES[i - 1].beats) - beats(s.enter ? s.enter[1] : 0) : 0);
-  return acc;
-}, []);
 
 export const TOTAL_FRAMES = SCENES.reduce((n, s) => n + beats(s.beats) - (s.enter ? beats(s.enter[1]) : 0), 0);
 
