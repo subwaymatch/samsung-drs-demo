@@ -13,5 +13,8 @@
     "not_found_handling": "none",
     "binding": "ASSETS"
   },
+  // Workers Builds runs `wrangler preview` for non-production branches, which
+  // requires this block. Empty: Previews use the top-level settings.
+  "previews": {},
   "observability": { "enabled": true }
 }
