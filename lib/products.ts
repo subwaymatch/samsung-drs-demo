@@ -38,6 +38,8 @@ export interface Spec {
   k: string;
   v: string;
   mono?: boolean;
+  /** Sales regions, shown with a map. */
+  region?: boolean;
 }
 export interface ModelInfo {
   has: boolean;
@@ -85,17 +87,19 @@ export function modelInfo(id: string, fw?: string): ModelInfo {
       { k: 'Connectivity', v: conn },
       ...(fw ? [{ k: 'Firmware', v: fw }] : [])
     ],
+    // Shown as three rows of three beside the sales region map: lifecycle,
+    // hardware, then print engine and firmware.
     eng: [
-      { k: 'Sales region', v: regions[h % 3] },
+      { k: 'Sales region', v: regions[h % 3], region: true },
       { k: 'Launched', v: m.launch.slice(5) + ' ' + m.launch.slice(0, 4) },
+      { k: 'Support status', v: support },
+      { k: 'Units in field', v: year >= 2017 && fleet < 5 ? 'Pre-launch / ramp-up' : '~' + Math.round(fleet) + 'K' },
       { k: 'Platform', v: PLAT[m.series] },
       { k: 'Controller', v: soc },
       { k: 'Memory', v: mem },
-      { k: 'Emulations', v: pdl },
       { k: 'Engine', v: (color ? 'Tandem color laser' : 'Mono laser') + ', ' + (a3 ? 'Duty 150K' : 'Duty ' + (m.series === 'Xpress' ? '10K' : '80K')) },
-      { k: 'Firmware branch', v: branch, mono: true },
-      { k: 'Units in field', v: year >= 2017 && fleet < 5 ? 'Pre-launch / ramp-up' : '~' + Math.round(fleet) + 'K' },
-      { k: 'Support status', v: support }
+      { k: 'Emulations', v: pdl },
+      { k: 'Firmware branch', v: branch, mono: true }
     ]
   };
 }

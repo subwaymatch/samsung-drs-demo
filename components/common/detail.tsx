@@ -5,7 +5,7 @@ import { useState, type ReactNode } from 'react';
 import { DEC, RST } from '@/lib/constants';
 import { fAt } from '@/lib/dates';
 import { av } from '@/lib/people';
-import { thumbOf, type ModelInfo } from '@/lib/products';
+import { thumbOf, type ModelInfo, type Spec } from '@/lib/products';
 import { parts } from '@/lib/records';
 import type { AffChip, RelRow } from '@/lib/relations';
 import type { Activity, Attachment, Option, PersonView } from '@/lib/types';
@@ -16,6 +16,7 @@ import { MentionTextarea } from '../ui/fields';
 import { Attachments, FileButton } from '../ui/files';
 import { Icon } from '../ui/icon';
 import { Person } from '../ui/person';
+import { RegionMap } from '../ui/region-map';
 import { Note, PhotoPlaceholder, StatusLabel, Thumb } from './basics';
 import { Clickable } from './clickable';
 
@@ -97,8 +98,21 @@ export function AffectedProducts({ chips, addItems, sub, onAdd, onRemove }: { ch
   );
 }
 
+function SpecItem({ s }: { s: Spec }) {
+  return (
+    <div className="flex min-w-0 flex-col gap-[3px]">
+      <span className="text-sm text-muted">{s.k}</span>
+      <span className={'font-[550] [overflow-wrap:anywhere] ' + (s.mono ? 'font-mono text-sm' : '')}>
+        {s.mono ? s.v.split('/').map((seg, i) => (i ? <span key={i}>/<wbr />{seg}</span> : seg)) : s.v}
+      </span>
+    </div>
+  );
+}
+
 export function ProductPanel({ pm }: { pm: ModelInfo }) {
   if (!pm.has) return null;
+  const region = pm.eng.find(s => s.region);
+  const rest = pm.eng.filter(s => !s.region);
   return (
     <div className="flex flex-wrap items-center gap-6 border-y border-line py-5">
       <Thumb th={thumbOf(pm.id)} w={168} h={120} iconSize={32} label />
@@ -114,15 +128,22 @@ export function ProductPanel({ pm }: { pm: ModelInfo }) {
         </div>
         <div className="flex flex-col gap-3 border-t border-line-soft pt-3.5">
           <span className="text-sm font-semibold text-ink-4">Engineering</span>
-          <div className="grid gap-x-6 gap-y-3 [grid-template-columns:repeat(auto-fit,minmax(170px,1fr))]">
-            {pm.eng.map(s => (
-              <div key={s.k} className="flex min-w-0 flex-col gap-[3px]">
-                <span className="text-sm text-muted">{s.k}</span>
-                <span className={'font-[550] [overflow-wrap:anywhere] ' + (s.mono ? 'font-mono text-sm' : '')}>
-                  {s.mono ? s.v.split('/').map((seg, i) => (i ? <span key={i}>/<wbr />{seg}</span> : seg)) : s.v}
-                </span>
+          <div className="flex flex-wrap gap-x-8 gap-y-5">
+            {region ? (
+              <div className="flex min-w-0 flex-[0_1_220px] flex-col gap-[3px]">
+                <span className="text-sm text-muted">{region.k}</span>
+                <span className="font-[550]">{region.v}</span>
+                <div className="mt-2.5">
+                  <RegionMap label={region.v} />
+                </div>
               </div>
-            ))}
+            ) : null}
+            {/* Three columns beside the map; below it when three no longer fit, then two on phones. */}
+            <div className="grid min-w-0 flex-[1_1_470px] content-start gap-x-6 gap-y-3 [grid-template-columns:repeat(auto-fit,minmax(max(140px,calc((100%_-_48px)_/_3)),1fr))]">
+              {rest.map(s => (
+                <SpecItem key={s.k} s={s} />
+              ))}
+            </div>
           </div>
         </div>
       </div>
