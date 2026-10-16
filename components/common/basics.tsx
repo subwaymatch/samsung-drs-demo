@@ -4,6 +4,7 @@ import NextLink from 'next/link';
 import type { CSSProperties, ReactNode } from 'react';
 import { Button } from '../ui/button';
 import { Icon } from '../ui/icon';
+import { smallPhoto } from '@/lib/people';
 import type { Thumb as ThumbT } from '@/lib/products';
 
 export function PageHeader({ title, sub, action }: { title: ReactNode; sub?: ReactNode; action?: ReactNode }) {
@@ -21,7 +22,7 @@ export function PageHeader({ title, sub, action }: { title: ReactNode; sub?: Rea
 export function SectionTitle({ title, sub, right, small }: { title: ReactNode; sub?: ReactNode; right?: ReactNode; small?: boolean }) {
   const head = (
     <div className="flex min-w-0 flex-col gap-1">
-      <h3 className={small ? 'text-sm font-semibold text-muted' : 'text-base font-[650]'}>{title}</h3>
+      {small ? <h3 className="text-sm font-semibold text-muted">{title}</h3> : <h2 className="text-base font-[650]">{title}</h2>}
       {sub ? <span className="text-sm leading-normal text-pretty text-muted">{sub}</span> : null}
     </div>
   );
@@ -108,7 +109,7 @@ export function PhotoPlaceholder({ w, h, iconSize = 24, title, src }: { w: numbe
     <div title={title} className={'grid flex-none place-items-center overflow-hidden rounded ' + (src ? '' : 'bg-[oklch(0.965_0.015_293)]')} style={{ width: w, height: h }}>
       {src ? (
         // eslint-disable-next-line @next/next/no-img-element
-        <img src={src} alt="" loading="lazy" decoding="async" className="block h-full w-full object-cover object-top" />
+        <img src={w <= 96 ? smallPhoto(src) : src} alt="" loading="lazy" decoding="async" className="block h-full w-full object-cover object-top" />
       ) : (
         <Icon name="user" size={iconSize} color="oklch(0.68 0.07 293)" />
       )}
@@ -165,7 +166,7 @@ export interface Scope {
 /** Underlined tabs with counts, used for list scopes. */
 export function ScopeTabs({ scopes, value, onChange }: { scopes: Scope[]; value: string; onChange: (k: string) => void }) {
   return (
-    <div className="flex gap-7 overflow-x-auto overflow-y-hidden border-b border-line [scrollbar-width:none]" role="tablist">
+    <div className="flex gap-7 overflow-x-auto overflow-y-hidden border-b border-line [scrollbar-width:none] max-sm:pr-6 max-sm:[mask-image:linear-gradient(to_right,#000_calc(100%-40px),transparent)]" role="tablist">
       {scopes.map(t => {
         const on = t.k === value;
         return (
@@ -210,26 +211,9 @@ export function QuickFilters({ chips, clearHref, source = 'Filtered from Insight
   );
 }
 
-/** Column header that sorts on click. */
-export function SortHeader({ label, k, sort, onSort, style }: { label: string; k: string; sort: { k: string; d: 1 | -1 }; onSort: (k: string) => void; style?: CSSProperties }) {
-  const on = sort.k === k;
-  return (
-    <button
-      type="button"
-      onClick={() => onSort(k)}
-      className="flex cursor-pointer items-center gap-1.5 border-0 bg-transparent p-0 text-left text-sm font-semibold text-muted select-none hover:text-ink-2"
-      style={style}
-      aria-sort={on ? (sort.d > 0 ? 'ascending' : 'descending') : undefined}
-    >
-      {label}
-      <Icon name={on ? (sort.d > 0 ? 'arrow-up' : 'arrow-down') : 'chevrons-up-down'} size={13} color={on ? 'var(--color-accent-text)' : 'oklch(0.75 0.01 290)'} />
-    </button>
-  );
-}
-
 export function Loading() {
   return (
-    <div className="mx-auto flex max-w-[1200px] animate-pulse flex-col gap-6" aria-busy="true" aria-label="Loading">
+    <div className="mx-auto flex max-w-[1200px] animate-pulse flex-col gap-6 motion-reduce:animate-none" aria-busy="true" aria-label="Loading">
       <div className="h-7 w-48 rounded bg-[oklch(0.96_0.01_290)]" />
       <div className="h-4 w-96 max-w-full rounded bg-[oklch(0.97_0.008_290)]" />
       <div className="mt-6 grid gap-3">

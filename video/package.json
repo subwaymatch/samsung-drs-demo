@@ -8,8 +8,11 @@
     "assets": "node scripts/assets.mjs",
     "capture": "node scripts/capture.mjs",
     "music": "node scripts/music.mjs",
+    "sfx": "node scripts/sfx.mjs",
+    "sfx:prep": "node scripts/sfx-prep.mjs",
     "studio": "node scripts/assets.mjs && remotion studio",
-    "render": "node scripts/assets.mjs && remotion render DrsShowcase out/drs-showcase.mp4",
+    "render": "node scripts/assets.mjs && remotion render DrsShowcase out/drs-showcase.mp4 --crf=16",
+    "render:web": "node scripts/assets.mjs && node scripts/render-web.mjs",
     "still": "remotion still",
     "typecheck": "tsc --noEmit"
   },

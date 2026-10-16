@@ -66,6 +66,9 @@ export interface P4Fix {
   desc: string;
 }
 
+/** How a resolved or closed defect was resolved. */
+export type Resolution = 'fixed' | 'duplicate' | 'cannot_reproduce' | 'as_designed';
+
 export interface Defect {
   id: string;
   title: string;
@@ -84,6 +87,8 @@ export interface Defect {
   affects?: Affects;
   related?: string[];
   p4?: P4Fix[];
+  /** Set once the defect is resolved or closed. */
+  resolution?: Resolution;
 }
 
 export interface Reviewer {

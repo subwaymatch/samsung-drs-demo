@@ -30,8 +30,36 @@ export const thumbOf = (id: string): Thumb => ({ id, photo: productPhoto(id), hi
 /** The model a review is about: its linked defect's model, or one named in its title or branch. */
 export const rModelId = (r: Review, D: Defect[]) => {
   const ld = r.linked ? D.find(x => x.id === r.linked) : undefined;
-  const mid = ld ? ld.model : (r.title.match(/SL-[A-Z]\d+[A-Z]*/) || r.branch.match(/[a-z]\d{4}[a-z]*/i) || [''])[0];
-  return MM[mid] ? mid : MM['SL-' + String(mid).toUpperCase()] ? 'SL-' + String(mid).toUpperCase() : '';
+  const mid = ld ? ld.model : (r.title.match(/PS-[A-Z]\d+[A-Z]*/) || r.branch.match(/[a-z]\d{4}[a-z]*/i) || [''])[0];
+  return MM[mid] ? mid : MM['PS-' + String(mid).toUpperCase()] ? 'PS-' + String(mid).toUpperCase() : '';
+};
+
+/**
+ * What a model can do, from the same rules as its spec table. Defect and
+ * feature templates list the capabilities they need, so a copy defect is never
+ * filed against a printer that cannot copy.
+ */
+export type Cap = 'copy' | 'scan' | 'fax' | 'color' | 'a3' | 'hdd' | 'wifi' | 'ps' | 'office' | 'lcd' | 'touch' | 'smartux' | 'finisher';
+export function capsOf(id: string): Set<Cap> {
+  const m = MM[id];
+  if (!m) return new Set();
+  const a3 = /A3/.test(m.kind), color = /Color/.test(m.kind), mfp = /MFP|copier/.test(m.kind), xp = m.series === 'Xpress', mx = m.series === 'MultiXpress';
+  const caps: Cap[] = [];
+  if (mfp) caps.push('copy', 'scan', 'lcd');
+  if (mfp && (/F/.test(id.slice(-3)) || a3)) caps.push('fax');
+  if (color) caps.push('color');
+  if (a3) caps.push('a3', 'finisher');
+  if (mx) caps.push('hdd', 'smartux', 'touch');
+  else if (!xp && mfp) caps.push('touch');
+  if (/W$/.test(id)) caps.push('wifi');
+  // Business models: PostScript and PDF, a second tray, secure print, a text display.
+  if (!xp) caps.push('ps', 'office', 'lcd');
+  return new Set(caps);
+}
+/** Whether a model has every capability in the list. */
+export const hasCaps = (id: string, needs: readonly Cap[] = []) => {
+  const c = capsOf(id);
+  return needs.every(n => c.has(n));
 };
 
 export interface Spec {
@@ -55,25 +83,25 @@ const hash = (s: string) => [...s].reduce((a, c) => (a * 31 + c.charCodeAt(0)) >
 export function modelInfo(id: string, fw?: string): ModelInfo {
   const m = MM[id];
   if (!m) return { has: false, id: '', series: '', kind: '', specs: [], eng: [] };
-  const a3 = /A3/.test(m.kind), color = /Color/.test(m.kind), mfp = /MFP|copier/.test(m.kind);
+  const caps = capsOf(id), a3 = caps.has('a3'), color = caps.has('color'), mfp = caps.has('copy');
   const num = +(id.match(/\d+/) || [0])[0];
   const ppm = a3
     ? Math.max(20, Math.round(num / 100) * (color ? 5 : 6) + (num % 100 === 0 ? 0 : 5))
     : Math.max(18, Math.min(45, Math.round(num / 100) + (color ? 0 : 10)));
-  const fn = mfp ? (/F/.test(id.slice(-3)) || a3 ? 'Print, Copy, Scan, Fax' : 'Print, Copy, Scan') : 'Print';
-  const conn = /W$/.test(id) ? 'USB, Ethernet, Wi-Fi' : 'USB, Ethernet';
+  const fn = mfp ? (caps.has('fax') ? 'Print, Copy, Scan, Fax' : 'Print, Copy, Scan') : 'Print';
+  const conn = caps.has('wifi') ? 'USB, Ethernet, Wi-Fi' : 'USB, Ethernet';
   const h = hash(id);
   const regions =
     m.series === 'Xpress' ? ['Global', 'Korea, China, SEA', 'Americas, Europe']
       : m.series === 'ProXpress' ? ['Global', 'Americas, Europe, Korea', 'Europe, CIS, MEA']
         : ['Korea, Europe, Americas', 'Global (A3 channel)', 'Korea, Japan, Europe'];
   const soc = m.series === 'MultiXpress' ? 'Samsung Exynos-based, 1.5 GHz quad' : m.series === 'ProXpress' ? 'ARM Cortex-A9, 1 GHz dual' : 'ARM9, 600 MHz';
-  const mem = m.series === 'MultiXpress' ? '4 GB, 320 GB HDD' : m.series === 'ProXpress' ? (mfp ? '512 MB, 4 GB eMMC' : '512 MB') : '128 MB';
-  const pdl = m.series === 'Xpress' ? 'SPL, PCL6' : 'PCL5e/6, PostScript 3, PDF';
+  const mem = caps.has('hdd') ? '4 GB, 320 GB HDD' : m.series === 'ProXpress' ? (mfp ? '512 MB, 4 GB eMMC' : '512 MB') : '128 MB';
+  const pdl = caps.has('ps') ? 'PCL5e/6, PostScript 3, PDF' : 'SPL, PCL6';
   const year = +m.launch.slice(0, 4);
   const fleet = (m.series === 'Xpress' ? 120 : m.series === 'ProXpress' ? 45 : 12) * (1 + (h % 5)) * (year >= 2017 ? 0.2 : year === 2016 ? 0.6 : 1);
   const support = year >= 2016 ? 'Active development' : year === 2015 ? 'Active (fixes and features)' : 'Maintenance (fixes only)';
-  const branch = '//depot/printing/fw/' + id.replace('SL-', '').toLowerCase().replace(/[a-z]+$/, '');
+  const branch = '//depot/printing/fw/' + id.replace('PS-', '').toLowerCase().replace(/[a-z]+$/, '');
   return {
     has: true,
     id,
@@ -107,6 +135,7 @@ export function modelInfo(id: string, fw?: string): ModelInfo {
 // Affected products. A defect is reported on one model and can also affect
 // whole product lines (shared firmware) or individual sibling models.
 
+/** Components whose defects often affect a whole product line, since its models share the firmware. */
 const AFF_COMPS = ['SyncThru Web UI', 'Network / Wi-Fi', 'Print Driver', 'Power / Sleep', 'Panel UI', 'Security', 'Mobile Print'];
 
 export const seqOf = (id: string) => {
@@ -115,11 +144,12 @@ export const seqOf = (id: string) => {
   return +String(id).replace(/\D/g, '').slice(-4) || 0;
 };
 
-const affSeed = (id: string, model: string, comp: string): Affects => {
+/** The other products a defect affects, limited to models that have the capabilities it needs. */
+export const affSeed = (id: string, model: string, comp: string, needs: readonly Cap[] = []): Affects => {
   const n = seqOf(id), li = LINFO[LINE_OF(model)];
   if (!li) return { lines: [], models: [] };
-  if (AFF_COMPS.includes(comp) && n % 3 === 0) return { lines: [LINE_OF(model)], models: [] };
-  const sib = li.models.filter(m => m !== model);
+  if (AFF_COMPS.includes(comp) && n % 3 === 0 && li.models.every(m => hasCaps(m, needs))) return { lines: [LINE_OF(model)], models: [] };
+  const sib = li.models.filter(m => m !== model && hasCaps(m, needs));
   if (n % 4 === 1 && sib.length) {
     const k = n % sib.length;
     return { lines: [], models: sib.slice(k, k + 1 + (n % 2)) };
@@ -140,7 +170,7 @@ export const affModels = (x: Defect) => {
   return v;
 };
 export const affLines = (x: Defect) => [...new Set(affModels(x).map(LINE_OF))];
-/** Short label for lists: "SL-C480FW +2" or "ProXpress Color line". */
+/** Short label for lists: "PS-C570FW +2" or "ProXpress Color line". */
 export const affLabel = (x: Defect) => {
   const a = affOf(x), k = affModels(x).length - 1;
   return a.lines.length ? a.lines.join(', ') + ' line' + (a.lines.length > 1 ? 's' : '') : k > 0 ? `${x.model} +${k}` : x.model;

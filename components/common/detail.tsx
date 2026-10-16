@@ -19,6 +19,7 @@ import { Person } from '../ui/person';
 import { RegionMap } from '../ui/region-map';
 import { Note, PhotoPlaceholder, StatusLabel, Thumb } from './basics';
 import { Clickable } from './clickable';
+import { eventText, langOf } from '@/lib/text';
 
 export const SideLabel = ({ icon, children, right }: { icon: string; children: ReactNode; right?: ReactNode }) => (
   <div className="mb-1.5 flex items-center justify-between gap-2.5">
@@ -49,7 +50,7 @@ export function PersonCard({ label, person, when }: { label: string; person: Per
         <PhotoPlaceholder w={56} h={70} src={person.photo} title={person.photo ? person.name : 'Photo placeholder'} />
         <div className="flex min-w-0 flex-col gap-1">
           <div className="flex flex-wrap items-baseline gap-2">
-            <NextLink href={person.href} className="text-[15px] font-[650] text-inherit">{person.name}</NextLink>
+            <NextLink href={person.href} lang={langOf(person.name)} className="text-[15px] font-[650] text-inherit">{person.name}</NextLink>
             {person.en !== person.name ? <span className="text-sm text-muted">{person.en}</span> : null}
           </div>
           <span>{person.title}, {person.teamName}</span>
@@ -67,7 +68,7 @@ export function AffectedProducts({ chips, addItems, sub, onAdd, onRemove }: { ch
   return (
     <section className="flex flex-col gap-3">
       <div className="flex flex-col gap-1">
-        <h3 className="text-base font-[650]">Affected products</h3>
+        <h2 className="text-base font-[650]">Affected products</h2>
         <span className="text-sm text-muted">{sub}</span>
       </div>
       <div className="flex flex-wrap items-center gap-2">
@@ -195,7 +196,7 @@ export function RecordsAcrossSystems({ sub, legacyTitle, legacy, next, synced, o
     <section className="flex flex-col gap-4 border-t border-line pt-6">
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div className="flex min-w-0 flex-[1_1_320px] flex-col gap-1">
-          <h3 className="text-base font-[650]">Records across systems</h3>
+          <h2 className="text-base font-[650]">Records across systems</h2>
           <span className="text-sm leading-normal text-pretty text-muted">{sub}</span>
         </div>
         <Button variant="ghost" size="sm" icon="refresh-cw" onClick={onSync}>Sync now</Button>
@@ -231,7 +232,7 @@ export function RelatedSection({ title, sub, linkLabel, linked, sugg, pick, onLi
     <section className="flex flex-col gap-3 border-t border-line pt-6">
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div className="flex min-w-0 flex-[1_1_320px] flex-col gap-1">
-          <h3 className="text-base font-[650]">{title}</h3>
+          <h2 className="text-base font-[650]">{title}</h2>
           <span className="text-sm leading-normal text-pretty text-muted">{sub}</span>
         </div>
         <Button variant="ghost" size="sm" icon="link" onClick={() => setOpen(o => !o)}>{linkLabel}</Button>
@@ -274,7 +275,7 @@ export function ActivityFeed({ items }: { items: Activity[] }) {
           return (
             <div key={i} className="flex items-center gap-3 pl-1.5 text-muted">
               <Person person={who} size={20} />
-              <span><strong className="font-semibold text-ink">{who.name}</strong> {a.x}</span>
+              <span><strong lang={langOf(who.name)} className="font-semibold text-ink">{who.name}</strong> <span lang={langOf(a.x)}>{eventText(a.x, who.name)}</span></span>
               <span className="ml-auto text-sm whitespace-nowrap">{fAt(a.at)}</span>
             </div>
           );
@@ -285,12 +286,12 @@ export function ActivityFeed({ items }: { items: Activity[] }) {
             <Person person={who} size={32} />
             <div className="flex min-w-0 flex-1 flex-col gap-2 pt-1" style={isD && rs ? { borderLeft: '2px solid ' + rs.fg, paddingLeft: 16 } : undefined}>
               <div className="flex flex-wrap items-center gap-2.5">
-                <strong className="font-semibold">{who.name}</strong>
+                <strong lang={langOf(who.name)} className="font-semibold">{who.name}</strong>
                 {isD && rs ? <StatusLabel l={DEC[a.dec!]} fg={rs.fg} icon={rs.icon} size={14} weight={600} className="gap-1.5" /> : null}
                 <span className="text-sm text-muted">{fAt(a.at)}</span>
                 {a.loc ? <span className="flex items-center gap-1.5 font-mono text-sm text-muted"><Icon name="file-code" size={14} />{a.loc}</span> : null}
               </div>
-              <div className="leading-[1.7] whitespace-pre-wrap text-pretty"><RichText text={a.x} /></div>
+              <div lang={langOf(a.x)} className="leading-[1.7] whitespace-pre-wrap text-pretty"><RichText text={a.x} /></div>
               {a.att && a.att.length ? <Attachments items={a.att} /> : null}
             </div>
           </div>

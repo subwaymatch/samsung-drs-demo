@@ -35,7 +35,7 @@ export function ReviewForm({ id }: { id?: string }) {
   const sp = useSearchParams();
   if (!app) return <Loading />;
   const r = id ? app.data.reviews.find(x => x.id === id) : undefined;
-  if (id && !r) return <NotFoundView />;
+  if (id && !r) return <NotFoundView back={{ href: '/reviews', label: 'Code reviews' }} />;
   return <ReviewFormInner key={id || 'new'} r={r} linkedDefect={sp.get('defect')} />;
 }
 

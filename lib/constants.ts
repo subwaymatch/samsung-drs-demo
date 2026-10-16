@@ -1,4 +1,4 @@
-import type { DefectStatus, MigState, Model, ReviewStatus, Role, Severity, Team, User } from './types';
+import type { DefectStatus, MigState, Model, Resolution, ReviewStatus, Role, Severity, Team, User } from './types';
 
 export const ORG = 'Samsung Electronics';
 export const DIVISION = 'Printing Solutions Business';
@@ -55,7 +55,8 @@ const USER_SEED: UserSeed[] = [
 
 export const USERS: User[] = USER_SEED.map(u => ({
   ...u,
-  email: u.en.toLowerCase().replace(/\s+/g, '.') + '@samsung.com',
+  // A reserved domain: the mock names could belong to real people.
+  email: u.en.toLowerCase().replace(/\s+/g, '.') + '@example.com',
   photo: '/photos/' + u.id + '.webp',
   site: /SRI-Bangalore/.test(u.title) ? 'Bangalore, India' : 'Suwon, Korea'
 }));
@@ -64,29 +65,29 @@ export const ROLE: Record<Role, string> = { qa: 'QA', eng: 'Engineer', cr: 'Code
 
 export const MODELS: Model[] = (
   [
-    ['SL-M2020W', 'Xpress', 'Mono laser printer', '2013-Q3'], ['SL-M2070FW', 'Xpress', 'Mono laser MFP', '2013-Q3'],
-    ['SL-M2830DW', 'Xpress', 'Mono laser printer', '2014-Q2'], ['SL-M2880FW', 'Xpress', 'Mono laser MFP', '2014-Q2'],
-    ['SL-M2835DW', 'Xpress', 'Mono laser printer', '2016-Q2'], ['SL-M2885FW', 'Xpress', 'Mono laser MFP', '2016-Q2'],
-    ['SL-C430W', 'Xpress', 'Color laser printer', '2014-Q3'], ['SL-C480FW', 'Xpress', 'Color laser MFP', '2014-Q3'],
-    ['SL-C1810W', 'Xpress', 'Color laser printer', '2014-Q1'], ['SL-C1860FW', 'Xpress', 'Color laser MFP', '2014-Q1'],
-    ['SL-M3320ND', 'ProXpress', 'Mono laser printer', '2014-Q1'], ['SL-M3820ND', 'ProXpress', 'Mono laser printer', '2014-Q1'],
-    ['SL-M3870FW', 'ProXpress', 'Mono laser MFP', '2014-Q2'], ['SL-M4020ND', 'ProXpress', 'Mono laser printer', '2014-Q2'],
-    ['SL-M4070FR', 'ProXpress', 'Mono laser MFP', '2014-Q2'], ['SL-M4080FX', 'ProXpress', 'Mono laser MFP', '2015-Q1'],
-    ['SL-M4530ND', 'ProXpress', 'Mono laser printer', '2014-Q4'], ['SL-M4580FX', 'ProXpress', 'Mono laser MFP', '2014-Q4'],
-    ['SL-M3015DW', 'ProXpress', 'Mono laser printer', '2016-Q3'], ['SL-M3065FW', 'ProXpress', 'Mono laser MFP', '2016-Q3'],
-    ['SL-M4025ND', 'ProXpress', 'Mono laser printer', '2017-Q1'], ['SL-M4075FR', 'ProXpress', 'Mono laser MFP', '2017-Q1'],
-    ['SL-C2620DW', 'ProXpress', 'Color laser printer', '2015-Q2'], ['SL-C2670FW', 'ProXpress', 'Color laser MFP', '2015-Q2'],
-    ['SL-C3010ND', 'ProXpress', 'Color laser printer', '2015-Q3'], ['SL-C3060FR', 'ProXpress', 'Color laser MFP', '2015-Q3'],
-    ['SL-C4010ND', 'ProXpress', 'Color laser printer', '2016-Q1'], ['SL-C4060FX', 'ProXpress', 'Color laser MFP', '2016-Q1'],
-    ['SL-C2680FX', 'ProXpress', 'Color laser MFP', '2017-Q2'],
-    ['SL-K2200ND', 'MultiXpress', 'Mono A3 copier', '2015-Q1'], ['SL-K4250RX', 'MultiXpress', 'Mono A3 copier', '2015-Q3'],
-    ['SL-K4350LX', 'MultiXpress', 'Mono A3 copier', '2015-Q3'], ['SL-K7600LX', 'MultiXpress', 'Mono A3 copier', '2015-Q4'],
-    ['SL-K4300LX', 'MultiXpress', 'Mono A3 copier', '2016-Q4'], ['SL-K7400LX', 'MultiXpress', 'Mono A3 copier', '2016-Q4'],
-    ['SL-K7500LX', 'MultiXpress', 'Mono A3 copier', '2016-Q4'],
-    ['SL-X3220NR', 'MultiXpress', 'Color A3 copier', '2015-Q2'], ['SL-X3280NR', 'MultiXpress', 'Color A3 copier', '2015-Q2'],
-    ['SL-X4220RX', 'MultiXpress', 'Color A3 copier', '2015-Q4'], ['SL-X4300LX', 'MultiXpress', 'Color A3 copier', '2015-Q4'],
-    ['SL-X7400LX', 'MultiXpress', 'Color A3 copier', '2015-Q4'], ['SL-X7500LX', 'MultiXpress', 'Color A3 copier', '2015-Q4'],
-    ['SL-X7600LX', 'MultiXpress', 'Color A3 copier', '2015-Q4'], ['SL-X4250LX', 'MultiXpress', 'Color A3 copier', '2017-Q1']
+    ['PS-M2110W', 'Xpress', 'Mono laser printer', '2013-Q3'], ['PS-M2160FW', 'Xpress', 'Mono laser MFP', '2013-Q3'],
+    ['PS-M2920DW', 'Xpress', 'Mono laser printer', '2014-Q2'], ['PS-M2970FW', 'Xpress', 'Mono laser MFP', '2014-Q2'],
+    ['PS-M2925DW', 'Xpress', 'Mono laser printer', '2016-Q2'], ['PS-M2975FW', 'Xpress', 'Mono laser MFP', '2016-Q2'],
+    ['PS-C520W', 'Xpress', 'Color laser printer', '2014-Q3'], ['PS-C570FW', 'Xpress', 'Color laser MFP', '2014-Q3'],
+    ['PS-C1900W', 'Xpress', 'Color laser printer', '2014-Q1'], ['PS-C1950FW', 'Xpress', 'Color laser MFP', '2014-Q1'],
+    ['PS-M3410ND', 'ProXpress', 'Mono laser printer', '2014-Q1'], ['PS-M3910ND', 'ProXpress', 'Mono laser printer', '2014-Q1'],
+    ['PS-M3960FW', 'ProXpress', 'Mono laser MFP', '2014-Q2'], ['PS-M4110ND', 'ProXpress', 'Mono laser printer', '2014-Q2'],
+    ['PS-M4160FR', 'ProXpress', 'Mono laser MFP', '2014-Q2'], ['PS-M4170FX', 'ProXpress', 'Mono laser MFP', '2015-Q1'],
+    ['PS-M4620ND', 'ProXpress', 'Mono laser printer', '2014-Q4'], ['PS-M4670FX', 'ProXpress', 'Mono laser MFP', '2014-Q4'],
+    ['PS-M3105DW', 'ProXpress', 'Mono laser printer', '2016-Q3'], ['PS-M3155FW', 'ProXpress', 'Mono laser MFP', '2016-Q3'],
+    ['PS-M4115ND', 'ProXpress', 'Mono laser printer', '2017-Q1'], ['PS-M4165FR', 'ProXpress', 'Mono laser MFP', '2017-Q1'],
+    ['PS-C2710DW', 'ProXpress', 'Color laser printer', '2015-Q2'], ['PS-C2760FW', 'ProXpress', 'Color laser MFP', '2015-Q2'],
+    ['PS-C3100ND', 'ProXpress', 'Color laser printer', '2015-Q3'], ['PS-C3150FR', 'ProXpress', 'Color laser MFP', '2015-Q3'],
+    ['PS-C4100ND', 'ProXpress', 'Color laser printer', '2016-Q1'], ['PS-C4150FX', 'ProXpress', 'Color laser MFP', '2016-Q1'],
+    ['PS-C2770FX', 'ProXpress', 'Color laser MFP', '2017-Q2'],
+    ['PS-K2290ND', 'MultiXpress', 'Mono A3 copier', '2015-Q1'], ['PS-K4340RX', 'MultiXpress', 'Mono A3 copier', '2015-Q3'],
+    ['PS-K4440LX', 'MultiXpress', 'Mono A3 copier', '2015-Q3'], ['PS-K7690LX', 'MultiXpress', 'Mono A3 copier', '2015-Q4'],
+    ['PS-K4390LX', 'MultiXpress', 'Mono A3 copier', '2016-Q4'], ['PS-K7490LX', 'MultiXpress', 'Mono A3 copier', '2016-Q4'],
+    ['PS-K7590LX', 'MultiXpress', 'Mono A3 copier', '2016-Q4'],
+    ['PS-X3310NR', 'MultiXpress', 'Color A3 copier', '2015-Q2'], ['PS-X3370NR', 'MultiXpress', 'Color A3 copier', '2015-Q2'],
+    ['PS-X4310RX', 'MultiXpress', 'Color A3 copier', '2015-Q4'], ['PS-X4390LX', 'MultiXpress', 'Color A3 copier', '2015-Q4'],
+    ['PS-X7490LX', 'MultiXpress', 'Color A3 copier', '2015-Q4'], ['PS-X7590LX', 'MultiXpress', 'Color A3 copier', '2015-Q4'],
+    ['PS-X7690LX', 'MultiXpress', 'Color A3 copier', '2015-Q4'], ['PS-X4340LX', 'MultiXpress', 'Color A3 copier', '2017-Q1']
   ] as const
 ).map(([id, series, kind, launch]) => ({ id, series, kind, launch }));
 export const MIDS = MODELS.map(m => m.id);
@@ -118,6 +119,8 @@ export const DST: Record<DefectStatus, { l: string; fg: string; icon: string }> 
   closed: { l: 'Closed', fg: 'oklch(0.48 0.01 290)', icon: 'lock' }
 };
 export const DST_KEYS = Object.keys(DST) as DefectStatus[];
+export const RESOLUTION: Record<Resolution, string> = { fixed: 'Fixed', duplicate: 'Duplicate', cannot_reproduce: 'Cannot reproduce', as_designed: 'Works as designed' };
+export const RESOLUTION_KEYS = Object.keys(RESOLUTION) as Resolution[];
 
 export const RST: Record<ReviewStatus, { l: string; fg: string; icon: string }> = {
   pending: { l: 'Awaiting reviewer', fg: 'oklch(0.45 0.02 290)', icon: 'clock' },
@@ -151,6 +154,8 @@ export const WAVE: Record<string, number> = {
   'Panel UI': 2, 'Network / Wi-Fi': 2, Fax: 2, 'Power / Sleep': 2, Security: 2
 };
 export const WAVE_CUTOVER: Record<number, string> = { 1: 'Nov 2016', 2: 'Apr 2017', 3: 'Dec 2017' };
+/** First day each wave works only in Perforce and Helix Swarm. */
+export const WAVE_CUTOVER_DAY: Record<number, string> = { 1: '2016-11-01', 2: '2017-04-01', 3: '2017-12-01' };
 export const MIG: Record<MigState, { l: string; d: string; c: string; fg: string; icon: string }> = {
   jira: { l: 'Migrated to Jira', d: 'Jira leads; the ClearQuest record is read-only', c: 'oklch(0.5 0.19 293)', fg: 'oklch(0.42 0.19 293)', icon: 'check-check' },
   mirrored: { l: 'Mirrored', d: 'ClearQuest leads; DRS keeps a Jira copy in sync', c: 'oklch(0.74 0.11 293)', fg: 'oklch(0.48 0.16 293)', icon: 'arrow-left-right' },

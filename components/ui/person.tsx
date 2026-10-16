@@ -5,11 +5,13 @@ import { PreviewCard } from '@base-ui/react/preview-card';
 import NextLink from 'next/link';
 import type { PersonView } from '@/lib/types';
 import { Icon } from './icon';
+import { langOf } from '@/lib/text';
+import { smallPhoto } from '@/lib/people';
 
 export function Avatar({ person, size = 28 }: { person: Pick<PersonView, 'ini' | 'bg' | 'fg' | 'name'> & { photo?: string }; size?: number }) {
   return (
     <BaseAvatar.Root className="bui-av" title={person.name} style={{ width: size, height: size, color: person.fg, fontSize: Math.round(size * 0.36) }}>
-      {person.photo ? <BaseAvatar.Image src={person.photo} alt="" className="h-full w-full object-cover object-[50%_15%]" /> : null}
+      {person.photo ? <BaseAvatar.Image src={smallPhoto(person.photo)} alt="" className="h-full w-full object-cover object-[50%_15%]" /> : null}
       <BaseAvatar.Fallback className="grid h-full w-full place-items-center" style={{ background: person.bg }}>{person.ini}</BaseAvatar.Fallback>
     </BaseAvatar.Root>
   );
@@ -27,7 +29,7 @@ export function Person({ person, size = 28, showName }: { person: PersonView; si
         render={<NextLink href={person.href} />}
       >
         <Avatar person={person} size={size} />
-        {showName ? <span className="bui-trunc font-[550]">{person.name}</span> : null}
+        {showName ? <span lang={langOf(person.name)} className="bui-trunc font-[550]">{person.name}</span> : null}
       </PreviewCard.Trigger>
       <PreviewCard.Portal>
         <PreviewCard.Positioner className="bui-positioner" sideOffset={8}>
@@ -35,7 +37,7 @@ export function Person({ person, size = 28, showName }: { person: PersonView; si
             <div className="flex items-start gap-3.5">
               <Avatar person={person} size={48} />
               <div className="flex min-w-0 flex-col gap-1">
-                <span className="text-base font-[650]">{person.name}</span>
+                <span lang={langOf(person.name)} className="text-base font-[650]">{person.name}</span>
                 {person.en && person.en !== person.name ? <span className="bui-item-sub">{person.en}</span> : null}
                 <span>{person.title}</span>
                 <span className="bui-item-sub">{person.teamName}</span>
@@ -60,7 +62,7 @@ export function Person({ person, size = 28, showName }: { person: PersonView; si
 /** Overlapping avatars with a "+N" overflow chip. */
 export function PeopleStack({ people, more, moreTip, label }: { people: PersonView[]; more?: string; moreTip?: string; label?: string }) {
   return (
-    <div onClick={e => e.stopPropagation()} aria-label={label} className="flex items-center justify-end pl-1.5">
+    <div onClick={e => e.stopPropagation()} role="group" aria-label={label} title={label} className="flex items-center justify-end pl-1.5">
       {people.map(p => (
         <span key={p.id} className="-ml-1.5 flex rounded-full bg-white shadow-[0_0_0_2px_#fff]">
           <Person person={p} size={28} />

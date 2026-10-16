@@ -1,4 +1,4 @@
-import { AMBER, CQ_PRI, CQ_STATE, DEC, GOOD, JIRA_ST, LOGO, MIG, MM, MUTED, RST, SEV, UM, WAVE } from './constants';
+import { AMBER, CQ_PRI, CQ_STATE, DEC, GOOD, JIRA_ST, LOGO, MIG, MUTED, RST, SEV, UM, WAVE, WAVE_CUTOVER_DAY } from './constants';
 import { fDate, fDur, hrs, nowStr } from './dates';
 import { affOf, modelInfo, rModelId } from './products';
 import { ccOf, cqOf, cqOfReview, crNum, jiraOf, jobOf, migOf, migW, p4Of, rbOf, tgtEval } from './records';
@@ -35,7 +35,7 @@ const migSub = (mg: string, what: string, w: number) =>
       : 'Jira is the source of truth. The ClearQuest record is read-only and kept for history.';
 
 export function defectRecords(d: Defect, cls: Changelist[], ago: string) {
-  const mg = migOf(d), M = MIG[mg], w = WAVE[d.comp] || 3, cq = cqOf(d.id), cc = ccOf(w, MM[d.model] ? MM[d.model].series : '');
+  const mg = migOf(d), M = MIG[mg], w = WAVE[d.comp] || 3, cq = cqOf(d.id), cc = ccOf(w, d.created);
   const isDone = d.status === 'resolved' || d.status === 'closed';
   const conf = d.sev === 'critical' || d.sev === 'major' || isDone ? { id: 'Page ' + (48000 + crNumOfDefect(d) * 3), title: (isDone ? 'Root cause: ' : 'Investigation: ') + d.id } : null;
   const owner = d.assignees.length ? UM[d.assignees[0]].en : 'Unassigned';
@@ -52,7 +52,7 @@ export function defectRecords(d: Defect, cls: Changelist[], ago: string) {
       mg === 'legacy'
         ? { sys: 'Jira', id: '', master: false, state: 'Not created yet', fg: MUTED, meta: `Created when ${d.comp} moves to Jira in wave ${w}` }
         : { sys: 'Jira', id: jiraOf(d.id), master: mg === 'jira', state: JIRA_ST[d.status], fg: 'inherit', meta: (mg === 'jira' ? 'Project PRT, migrated from ' : 'Project PRT, mirrored from ') + cq },
-      { sys: 'Perforce P4', id: jobOf(d.id), master: false, state: cls.length ? cls.length + ' changelist' + (cls.length > 1 ? 's' : '') + ' linked' : 'No changelists yet', fg: cls.length ? 'inherit' : MUTED, meta: 'Fixes recorded on the job with p4 fix' },
+      { sys: 'Perforce P4', id: jobOf(d.id), master: false, state: cls.length ? cls.length + ' changelist' + (cls.length > 1 ? 's' : '') + ' linked' : isDone ? 'No changelists linked' : 'No changelists yet', fg: cls.length ? 'inherit' : MUTED, meta: 'Fixes recorded on the job with p4 fix' },
       conf
         ? { sys: 'Confluence', id: conf.id, master: false, state: conf.title, fg: 'inherit', meta: 'Space: Printing FW Quality' }
         : { sys: 'Confluence', id: '', master: false, state: 'No page yet', fg: MUTED, meta: 'Root-cause pages are written for major and critical defects' }
@@ -104,7 +104,9 @@ export function reviewRecords(r: Review, D: Defect[], swAgo: string, ago: string
   const rw = ld ? WAVE[ld.comp] || 3 : /^(web|drv|tools)\//.test(r.branch) ? 1 : /^(ui|net|sol|sec)\//.test(r.branch) ? 2 : 3;
   const mg = ld ? migOf(ld) : migW(rw, n), M = MIG[mg];
   const pm = reviewModel(r, D);
-  const cc = ccOf(rw, pm.has ? pm.series : '');
+  const cc = ccOf(rw, r.submitted);
+  // Reviews requested after the team's cutover were made in Helix Swarm and never existed in Review Board.
+  const inRb = r.submitted < WAVE_CUTOVER_DAY[rw];
   const jk = jiraOf(ld ? ld.id : r.id);
   const conf = r.status === 'approved' ? 'Test report: ' + r.id : r.type === 'Feature' || r.type === 'Firmware update' ? 'Design notes: ' + r.id : '';
   const sub = migSub(mg, 'this team', rw);
@@ -114,7 +116,9 @@ export function reviewRecords(r: Review, D: Defect[], swAgo: string, ago: string
     legacy: [
       { sys: 'Rational ClearQuest', id: cqId, master: mg !== 'jira', state: mg === 'jira' ? 'Read-only, moved to Jira' : cqState, fg: mg === 'jira' ? MUTED : 'inherit', meta: `${cqType}, on approval: ${onApprove}` },
       { sys: 'Rational ClearCase', id: cqId, master: false, state: cc.state, fg: 'inherit', meta: cc.meta },
-      { sys: 'Review Board', id: rbOf(r), master: false, state: mg === 'legacy' ? 'Active, mirrored to Helix Swarm' : 'Read-only, history imported to Swarm', fg: mg === 'legacy' ? 'inherit' : MUTED, meta: mg === 'legacy' ? `Team moves to Helix Swarm in wave ${rw}` : 'Review comments and Ship It votes imported' }
+      ...(inRb
+        ? [{ sys: 'Review Board', id: rbOf(r), master: false, state: mg === 'legacy' ? 'Active, mirrored to Helix Swarm' : 'Read-only, history imported to Swarm', fg: mg === 'legacy' ? 'inherit' : MUTED, meta: mg === 'legacy' ? `Team moves to Helix Swarm in wave ${rw}` : 'Review comments and Ship It votes imported' }]
+        : [])
     ].map(withLogo),
     next: [
       { sys: 'Helix Swarm', id: 'Review ' + p.swId, master: false, state: sw[0], fg: sw[2], meta: `${swarm.up} up, ${swarm.down} down, tests ${swarm.tests.toLowerCase()}` },

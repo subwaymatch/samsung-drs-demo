@@ -6,21 +6,21 @@ import { C, MONO, SANS } from '../theme';
 // Device photos from public/products with a generic label for each. The model
 // names in the demo are made up, so the video shows only the kind of device.
 const DEVICES: [string, string][] = [
-  ['sl-c1810w', 'Color laser printer'], ['sl-c1860fw', 'Color laser MFP'], ['sl-c2620dw', 'Color laser printer'],
-  ['sl-c2670fw', 'Color laser MFP'], ['sl-c2680fx', 'Color laser MFP'], ['sl-c3010nd', 'Color laser printer'],
-  ['sl-c3060fr', 'Color laser MFP'], ['sl-c4010nd', 'Color laser printer'], ['sl-c4060fx', 'Color laser MFP'],
-  ['sl-c430w', 'Color laser printer'], ['sl-c480fw', 'Color laser MFP'], ['sl-k2200nd', 'Mono A3 copier'],
-  ['sl-k4250rx', 'Mono A3 copier'], ['sl-k4300lx', 'Mono A3 copier'], ['sl-k4350lx', 'Mono A3 copier'],
-  ['sl-k7400lx', 'Mono A3 copier'], ['sl-k7500lx', 'Mono A3 copier'], ['sl-k7600lx', 'Mono A3 copier'],
-  ['sl-m2020w', 'Mono laser printer'], ['sl-m2070fw', 'Mono laser MFP'], ['sl-m2830dw', 'Mono laser printer'],
-  ['sl-m2835dw', 'Mono laser printer'], ['sl-m2880fw', 'Mono laser MFP'], ['sl-m2885fw', 'Mono laser MFP'],
-  ['sl-m3015dw', 'Mono laser printer'], ['sl-m3065fw', 'Mono laser MFP'], ['sl-m3320nd', 'Mono laser printer'],
-  ['sl-m3820nd', 'Mono laser printer'], ['sl-m3870fw', 'Mono laser MFP'], ['sl-m4020nd', 'Mono laser printer'],
-  ['sl-m4025nd', 'Mono laser printer'], ['sl-m4070fr', 'Mono laser MFP'], ['sl-m4075fr', 'Mono laser MFP'],
-  ['sl-m4080fx', 'Mono laser MFP'], ['sl-m4530nd', 'Mono laser printer'], ['sl-m4580fx', 'Mono laser MFP'],
-  ['sl-x3220nr', 'Color A3 copier'], ['sl-x3280nr', 'Color A3 copier'], ['sl-x4220rx', 'Color A3 copier'],
-  ['sl-x4250lx', 'Color A3 copier'], ['sl-x4300lx', 'Color A3 copier'], ['sl-x7400lx', 'Color A3 copier'],
-  ['sl-x7500lx', 'Color A3 copier'], ['sl-x7600lx', 'Color A3 copier']
+  ['ps-c1900w', 'Color laser printer'], ['ps-c1950fw', 'Color laser MFP'], ['ps-c2710dw', 'Color laser printer'],
+  ['ps-c2760fw', 'Color laser MFP'], ['ps-c2770fx', 'Color laser MFP'], ['ps-c3100nd', 'Color laser printer'],
+  ['ps-c3150fr', 'Color laser MFP'], ['ps-c4100nd', 'Color laser printer'], ['ps-c4150fx', 'Color laser MFP'],
+  ['ps-c520w', 'Color laser printer'], ['ps-c570fw', 'Color laser MFP'], ['ps-k2290nd', 'Mono A3 copier'],
+  ['ps-k4340rx', 'Mono A3 copier'], ['ps-k4390lx', 'Mono A3 copier'], ['ps-k4440lx', 'Mono A3 copier'],
+  ['ps-k7490lx', 'Mono A3 copier'], ['ps-k7590lx', 'Mono A3 copier'], ['ps-k7690lx', 'Mono A3 copier'],
+  ['ps-m2110w', 'Mono laser printer'], ['ps-m2160fw', 'Mono laser MFP'], ['ps-m2920dw', 'Mono laser printer'],
+  ['ps-m2925dw', 'Mono laser printer'], ['ps-m2970fw', 'Mono laser MFP'], ['ps-m2975fw', 'Mono laser MFP'],
+  ['ps-m3105dw', 'Mono laser printer'], ['ps-m3155fw', 'Mono laser MFP'], ['ps-m3410nd', 'Mono laser printer'],
+  ['ps-m3910nd', 'Mono laser printer'], ['ps-m3960fw', 'Mono laser MFP'], ['ps-m4110nd', 'Mono laser printer'],
+  ['ps-m4115nd', 'Mono laser printer'], ['ps-m4160fr', 'Mono laser MFP'], ['ps-m4165fr', 'Mono laser MFP'],
+  ['ps-m4170fx', 'Mono laser MFP'], ['ps-m4620nd', 'Mono laser printer'], ['ps-m4670fx', 'Mono laser MFP'],
+  ['ps-x3310nr', 'Color A3 copier'], ['ps-x3370nr', 'Color A3 copier'], ['ps-x4310rx', 'Color A3 copier'],
+  ['ps-x4340lx', 'Color A3 copier'], ['ps-x4390lx', 'Color A3 copier'], ['ps-x7490lx', 'Color A3 copier'],
+  ['ps-x7590lx', 'Color A3 copier'], ['ps-x7690lx', 'Color A3 copier']
 ];
 
 // Interleave so each row mixes small printers with big copiers.

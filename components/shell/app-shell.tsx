@@ -3,16 +3,15 @@
 import NextLink from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
-import { DST, RST, SEV, TM, USERS } from '@/lib/constants';
+import { flushSync } from 'react-dom';
 import { buildNotifs, isUnread, readOf } from '@/lib/notifications';
 import { av } from '@/lib/people';
 import { isActiveReview, isOpen } from '@/lib/records';
 import { useApp } from '@/lib/store';
-import type { Option } from '@/lib/types';
 import { Button } from '../ui/button';
-import { Combobox } from '../ui/combobox';
 import { Icon } from '../ui/icon';
 import { Person } from '../ui/person';
+import { GlobalSearch } from './global-search';
 import { DrsLogo, SamsungWordmark } from './logo';
 import { DEFAULT_UI, ShellContext, type KeyRow, type Shell, type UiState } from './shell-context';
 
@@ -84,15 +83,16 @@ export function AppShell({ children }: { children: ReactNode }) {
   const registerRows = useCallback((rows: KeyRow[], onEscape?: () => void) => {
     rowsRef.current = { rows, onEscape };
   }, []);
+  // Focus the search box in the same keystroke, so nothing typed right after
+  // Ctrl+K is lost; open the sidebar or drawer first when it is hidden.
   const focusSearch = useCallback(() => {
-    const go = () => document.getElementById('gsearch')?.focus();
-    if (window.matchMedia('(max-width: 959px)').matches) {
-      setDrawer(true);
-      setTimeout(go, 50);
-    } else {
-      setSideOpen(true);
-      setTimeout(go, 50);
+    const el = document.getElementById('gsearch');
+    if (el && el.getClientRects().length) {
+      el.focus();
+      return;
     }
+    flushSync(() => (window.matchMedia('(max-width: 959px)').matches ? setDrawer(true) : setSideOpen(true)));
+    document.getElementById('gsearch')?.focus();
   }, []);
 
   // Keyboard shortcuts
@@ -161,14 +161,6 @@ export function AppShell({ children }: { children: ReactNode }) {
 
   const data = app?.data, prefs = app?.prefs;
   const meId = prefs?.meId || 'u1';
-  const gItems = useMemo<Option[]>(() => {
-    if (!data) return [];
-    return [
-      ...USERS.map(u => ({ value: '/teams/' + u.id, label: u.name + (u.en !== u.name ? ' (' + u.en + ')' : ''), sub: u.title + ', ' + TM[u.team].name, avatar: av(u.id) })),
-      ...data.defects.map(d => ({ value: '/defects/' + d.id, label: d.id + '  ' + d.title, sub: d.model + ', ' + DST[d.status].l, icon: SEV[d.sev].icon, color: SEV[d.sev].c })),
-      ...data.reviews.map(r => ({ value: '/reviews/' + r.id, label: r.id + '  ' + r.title, sub: r.type + ', ' + RST[r.status].l, icon: 'git-pull-request', color: RST[r.status].fg }))
-    ];
-  }, [data]);
   const unread = useMemo(() => {
     if (!data || !prefs) return 0;
     const rd = readOf(prefs.read, meId);
@@ -210,22 +202,13 @@ export function AppShell({ children }: { children: ReactNode }) {
               <Button variant="ghost" size="sm" icon="panel-left-close" iconOnly title="Collapse sidebar" onClick={() => (narrow ? setDrawer(false) : setSideOpen(false))} />
             </div>
           </div>
-          <Combobox
-            items={gItems}
-            value={null}
-            onValueChange={v => {
-              if (!v) return;
-              document.getElementById('gsearch')?.blur();
-              router.push(v);
-            }}
-            placeholder="Search"
+          <GlobalSearch
+            data={data}
             shortcut={[modKey, 'K']}
-            leadIcon="search"
-            inputId="gsearch"
-            limit={30}
-            resetOnSelect
-            emptyText="No defects, reviews or people match"
-            ariaLabel="Search defects, code reviews and people"
+            onPick={href => {
+              document.getElementById('gsearch')?.blur();
+              router.push(href);
+            }}
           />
           <nav className="flex flex-col gap-1">
             {NAV.map(n => (
@@ -254,6 +237,9 @@ export function AppShell({ children }: { children: ReactNode }) {
               <div className="h-8" />
             )}
           </div>
+          <NextLink href="/about" className="-mt-2 px-1 text-xs leading-normal text-muted no-underline hover:text-accent-ink hover:no-underline">
+            Portfolio demo with mock data. Not affiliated with Samsung Electronics.
+          </NextLink>
         </aside>
 
         <main ref={mainRef} className="min-w-0 flex-[1_1_auto]">
@@ -262,6 +248,7 @@ export function AppShell({ children }: { children: ReactNode }) {
             <NextLink href="/" aria-label="Go to Insights">
               <DrsLogo width={26} />
             </NextLink>
+            <NextLink href="/about" className="rounded-full bg-accent-wash px-2.5 py-1 text-xs font-semibold text-accent-ink no-underline hover:no-underline">Portfolio demo</NextLink>
             <div className="ml-auto">
               <Button variant="ghost" icon="search" iconOnly title="Search everything" onClick={focusSearch} />
             </div>

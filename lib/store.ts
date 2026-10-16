@@ -6,6 +6,7 @@
 // generates data.
 
 import { useSyncExternalStore } from 'react';
+import { startClockAfter } from './dates';
 import { DEF_SUM, type SummarySettings } from './digest';
 import type { ReadState, Subs } from './notifications';
 import { SEED_VERSION, seed } from './seed/generate';
@@ -79,6 +80,8 @@ function init(): AppState {
   const stored = readJSON<Edits>(EDITS_KEY);
   edits = stored && stored.v === SEED_VERSION ? { ...emptyEdits(), ...stored } : emptyEdits();
   const prefs = { ...DEFAULT_PREFS, ...(readJSON<Partial<Prefs>>(PREFS_KEY) || {}) };
+  // Resume the demo clock after the latest saved edit, so new entries sort after it.
+  [...Object.values(edits.d), ...Object.values(edits.r)].forEach(o => o.activity.forEach(a => startClockAfter(a.at)));
   return { data: applyEdits(seed(), edits), prefs };
 }
 

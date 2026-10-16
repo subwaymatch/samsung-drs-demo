@@ -10,6 +10,7 @@ import { Loading, Note, PhotoPlaceholder, StatusLabel } from '../common/basics';
 import { Clickable } from '../common/clickable';
 import { Icon } from '../ui/icon';
 import { NotFoundView } from './not-found-view';
+import { langOf } from '@/lib/text';
 
 export function ProfileView({ id }: { id: string }) {
   const app = useApp();
@@ -32,7 +33,7 @@ export function ProfileView({ id }: { id: string }) {
     return { openD, revs, acts, counts };
   }, [app, id, u]);
   if (!app) return <Loading />;
-  if (!u || !v) return <NotFoundView text="This person is not in the directory." />;
+  if (!u || !v) return <NotFoundView text="This person is not in the directory." back={{ href: '/teams', label: 'Teams' }} />;
   const stats = [
     u.role === 'qa' ? { l: 'Defects reported', n: v.counts.reported } : null,
     u.role === 'eng' ? { l: 'Defects assigned', n: v.counts.assigned } : null,
@@ -49,7 +50,7 @@ export function ProfileView({ id }: { id: string }) {
         <PhotoPlaceholder w={160} h={200} iconSize={48} src={u.photo} title={u.photo ? u.name : 'Photo placeholder'} />
         <div className="flex max-w-[680px] min-w-0 flex-[1_1_360px] flex-col gap-2.5">
           <div className="flex flex-col gap-1">
-            <h1 className="text-2xl font-bold tracking-[-0.02em]">{u.name}</h1>
+            <h1 lang={langOf(u.name)} className="text-2xl font-bold tracking-[-0.02em]">{u.name}</h1>
             {u.en !== u.name ? <span className="text-muted">{u.en}</span> : null}
           </div>
           <span className="font-[550]">{u.title}</span>
@@ -70,7 +71,7 @@ export function ProfileView({ id }: { id: string }) {
       </div>
       <div className="grid gap-x-14 gap-y-10 [grid-template-columns:repeat(auto-fit,minmax(min(100%,440px),1fr))]">
         <section className="flex flex-col border-t border-line pt-6">
-          <h3 className="mb-2 text-base font-[650]">Open defects assigned ({v.openD.length})</h3>
+          <h2 className="mb-2 text-base font-[650]">Open defects assigned ({v.openD.length})</h2>
           {v.openD.slice(0, 8).map(x => (
             <Clickable key={x.id} href={'/defects/' + x.id} className="row-link grid grid-cols-[16px_92px_minmax(0,1fr)_auto] items-center gap-3 border-b border-line-soft py-3 last:border-b-0">
               <Icon name={SEV[x.sev].icon} size={16} color={SEV[x.sev].c} />
@@ -82,7 +83,7 @@ export function ProfileView({ id }: { id: string }) {
           {!v.openD.length ? <span className="pt-2 text-muted">No open defects assigned.</span> : null}
         </section>
         <section className="flex flex-col border-t border-line pt-6">
-          <h3 className="mb-2 text-base font-[650]">Active code reviews ({v.revs.length})</h3>
+          <h2 className="mb-2 text-base font-[650]">Active code reviews ({v.revs.length})</h2>
           {v.revs.slice(0, 8).map(x => (
             <Clickable key={x.id} href={'/reviews/' + x.id} className="row-link grid grid-cols-[16px_92px_minmax(0,1fr)_auto] items-center gap-3 border-b border-line-soft py-3 last:border-b-0">
               <Icon name={TYPE_ICON[x.type]} size={16} color={MUTED} />
@@ -95,7 +96,7 @@ export function ProfileView({ id }: { id: string }) {
         </section>
       </div>
       <section className="flex flex-col pt-2">
-        <h3 className="mb-2 text-base font-[650]">Recent activity</h3>
+        <h2 className="mb-2 text-base font-[650]">Recent activity</h2>
         {v.acts.map(({ x, o, p }, i) => (
           <Clickable key={o.id + i} href={p + o.id} className="row-link grid grid-cols-[92px_minmax(0,1fr)_auto] items-center gap-3.5 border-b border-line-soft py-3 last:border-b-0">
             <span className="font-mono text-sm text-muted">{o.id}</span>

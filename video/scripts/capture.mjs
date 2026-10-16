@@ -25,10 +25,10 @@ const VH = 900;
 mkdirSync(OUT, { recursive: true });
 const browser = await chromium.launch(process.env.CHROMIUM_PATH ? { executablePath: process.env.CHROMIUM_PATH } : {});
 const ctx = await browser.newContext({ viewport: { width: VW, height: VH }, deviceScaleFactor: 2, reducedMotion: 'reduce' });
-// The demo's "now" is its fixed date at the viewer's time of day, which shows in
-// durations such as "Overdue by 2.5 days". Pin the clock so captures match.
-const CLOCK = process.env.DRS_CLOCK || '20:45';
-await ctx.clock.setFixedTime(new Date(`2026-01-01T${CLOCK}:00`));
+// The demo clock starts at Sep 15, 2017 18:00 and runs with the visit. Freeze the
+// browser clock so durations such as "Overdue by 2.5 days" stay the same while
+// a capture runs.
+await ctx.clock.setFixedTime(new Date('2026-01-01T09:00:00'));
 const page = await ctx.newPage();
 const only = process.argv.slice(2);
 // A partial capture updates its own entries and keeps everything else.
@@ -110,6 +110,8 @@ const sections = {
     for (const [label, name] of [['7 days', 'insights-stats-7d'], ['90 days', 'insights-stats-90d'], ['6 months', 'insights-stats-6m'], ['30 days', 'insights-stats-30d']]) {
       await page.getByRole('button', { name: label }).or(page.getByRole('tab', { name: label })).or(page.getByRole('radio', { name: label })).first().click();
       await page.mouse.move(VW - 2, VH - 2);
+      // Measure from the top: once scrolled, the period bar sticks to the top of the window.
+      await page.evaluate(() => window.scrollTo(0, 0));
       await settle(500);
       const a = await span('Showing', '6 months'), b = await span('Median review turnaround', 'Open defects');
       const r = { x: b.x - 24, y: a.y - 16, w: b.w + 48, h: b.y + b.h - a.y + 32 };
@@ -156,7 +158,7 @@ const sections = {
   async newDefect() {
     await go('/defects/new');
     await shot('newdefect-0');
-    const title = '[SL-C3060FR] 양면 인쇄 용지 걸림 0x21';
+    const title = '[PS-C3150FR] 양면 인쇄 용지 걸림 0x21';
     const titleInput = page.getByRole('textbox', { name: 'Title' });
     await titleInput.click();
     const tstops = [12, 16, 19, 22, title.length];
@@ -167,10 +169,10 @@ const sections = {
     }
     const model = page.getByRole('combobox', { name: 'Model' });
     await model.click();
-    await page.keyboard.type('C3060', { delay: 40 });
+    await page.keyboard.type('C3150', { delay: 40 });
     await settle(500);
     await shot('newdefect-' + (tstops.length + 1));
-    await page.getByRole('option', { name: /SL-C3060FR/ }).click();
+    await page.getByRole('option', { name: /PS-C3150FR/ }).click();
     await page.mouse.move(VW - 2, VH - 2);
     await settle(600);
     await shot('newdefect-' + (tstops.length + 2));
@@ -180,7 +182,7 @@ const sections = {
       frames: tstops.length + 3,
       titleBox: await titleInput.boundingBox(),
       modelBox: await model.boundingBox(),
-      dupes: await rect('Possible duplicates on SL-C3060FR', 'div.flex.flex-col.gap-1\\.5')
+      dupes: await rect('Possible duplicates on PS-C3150FR', 'div.flex.flex-col.gap-1\\.5')
     };
   },
 
@@ -193,8 +195,8 @@ const sections = {
     layout.defect = {
       id: DEFECT,
       height: await pageHeight(),
-      title: await rect('[SL-C3060FR] 양면 인쇄 시 2페이지 이후 용지 걸림 (Jam 0x21) 발생', 'h1'),
-      product: await span('Samsung ProXpress SL-C3060FR', 'Support status'),
+      title: await rect('[PS-C3150FR] 양면 인쇄 시 2페이지 이후 용지 걸림 (Jam 0x21) 발생', 'h1'),
+      product: await span('Samsung ProXpress PS-C3150FR', 'Support status'),
       targets: await span('Critical severity targets', 'Was due Sep 13'),
       records: await rect('Records across systems', 'section'),
       relmap: await rect('Relationship map', 'section'),
@@ -213,7 +215,7 @@ const sections = {
     layout.review = {
       id: REVIEW,
       height: await pageHeight(),
-      title: await rect('Restore duplex reverse motor timing for SL-C3060FR (Jam 0x21)', 'h1'),
+      title: await rect('Restore duplex reverse motor timing for PS-C3150FR (Jam 0x21)', 'h1'),
       turnaround: await span('Review turnaround', 'Submission to first decision, target 48h'),
       reviewers: await span('1 of 2 approved', 'Reviewing'),
       records: await rect('Records across systems', 'section'),

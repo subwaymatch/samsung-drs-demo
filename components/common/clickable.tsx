@@ -1,13 +1,17 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
-import type { CSSProperties, KeyboardEvent, ReactNode } from 'react';
+import Link from 'next/link';
+import { useId, type CSSProperties, type KeyboardEvent, type ReactNode } from 'react';
 
 /**
- * A row or chart mark that navigates on click and Enter. Used where an <a>
- * would wrap other links (avatars link to profiles).
+ * A row, card or chart mark that opens a page. With an href it holds a real
+ * link stretched over the whole element, so Ctrl+click, middle-click and link
+ * previews work, while links and controls inside it (avatars, checkboxes) sit
+ * above the stretched link and keep working. The link is named by the element's
+ * text unless ariaLabel is given. tip shows a tooltip on hover and focus.
+ * Without an href, onOpen makes it a button.
  */
-export function Clickable({ href, onOpen, children, className = '', style, title, krow, ariaLabel }: {
+export function Clickable({ href, onOpen, children, className = '', style, title, krow, ariaLabel, tip, tipAlign }: {
   href?: string;
   onOpen?: () => void;
   children?: ReactNode;
@@ -16,24 +20,40 @@ export function Clickable({ href, onOpen, children, className = '', style, title
   title?: string;
   krow?: number;
   ariaLabel?: string;
+  tip?: string;
+  tipAlign?: 'start' | 'end';
 }) {
-  const router = useRouter();
-  const go = () => {
-    if (onOpen) onOpen();
-    else if (href) router.push(href);
-  };
-  const enabled = !!(href || onOpen);
+  const id = useId();
+  const tipProps = tip ? { 'data-tip': tip, 'data-tip-align': tipAlign } : {};
+  if (href) {
+    const positioned = /(^|\s)(absolute|fixed|sticky)(\s|$)/.test(className);
+    return (
+      <div id={id} data-krow={krow} className={'clk ' + (positioned ? '' : 'relative ') + className} style={style} {...tipProps}>
+        <Link
+          href={href}
+          prefetch={false}
+          className="clk-link focus-ring"
+          title={title}
+          aria-label={ariaLabel}
+          aria-labelledby={ariaLabel ? undefined : id}
+          onClick={onOpen ? e => { if (!e.metaKey && !e.ctrlKey && !e.shiftKey && e.button === 0) onOpen(); } : undefined}
+        />
+        {children}
+      </div>
+    );
+  }
   return (
     <div
-      role={enabled ? 'link' : undefined}
-      tabIndex={enabled ? 0 : undefined}
+      role={onOpen ? 'button' : undefined}
+      tabIndex={onOpen ? 0 : undefined}
       title={title}
       aria-label={ariaLabel}
       data-krow={krow}
-      className={(enabled ? 'focus-ring cursor-pointer ' : '') + className}
+      className={(onOpen ? 'focus-ring cursor-pointer ' : '') + className}
       style={style}
-      onClick={enabled ? go : undefined}
-      onKeyDown={enabled ? (e: KeyboardEvent) => { if (e.key === 'Enter' && e.target === e.currentTarget) go(); } : undefined}
+      onClick={onOpen}
+      onKeyDown={onOpen ? (e: KeyboardEvent) => { if ((e.key === 'Enter' || e.key === ' ') && e.target === e.currentTarget) { e.preventDefault(); onOpen(); } } : undefined}
+      {...tipProps}
     >
       {children}
     </div>

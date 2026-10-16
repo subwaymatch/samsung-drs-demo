@@ -3,7 +3,7 @@
 import { useRouter } from 'next/navigation';
 import { useMemo } from 'react';
 import { MODELS, TEAMS } from '@/lib/constants';
-import { fFull, TODAY } from '@/lib/dates';
+import { fFull, TNOW } from '@/lib/dates';
 import { computeInsights, RANGES } from '@/lib/insights';
 import { systemGraph } from '@/lib/relations';
 import { useApp } from '@/lib/store';
@@ -47,7 +47,7 @@ export function InsightsView() {
           <div className="flex flex-wrap items-center gap-x-6 gap-y-2 pb-1 text-sm text-ink-5">
             <span className="flex items-center gap-2">
               <Icon name="calendar-clock" size={16} color="var(--color-accent-ink)" />
-              Data through {fFull(TODAY + ' 00:00')}
+              Data through {fFull(TNOW)}, {TNOW.slice(11)}
             </span>
             <span className="flex items-center gap-2">
               <span className="h-1.5 w-1.5 rounded-full bg-[oklch(0.62_0.14_155)]" />
@@ -62,7 +62,7 @@ export function InsightsView() {
           className="overflow-hidden border-y border-[oklch(0.92_0.01_290)] bg-surface"
           style={mainW ? { width: mainW, marginLeft: `calc(50% - ${mainW / 2}px)` } : undefined}
         >
-          <RelGraph nodes={graph.nodes} edges={graph.edges} height={680} />
+          {mainW > 0 && mainW < 640 ? <SystemList graph={graph} /> : <RelGraph nodes={graph.nodes} edges={graph.edges} height={680} />}
         </div>
         <div className="flex flex-wrap gap-5 text-sm text-ink-5">
           <span className="flex items-center gap-2"><span className="h-1.5 w-1.5 rounded-full bg-[oklch(0.62_0.14_155)]" />Connected and in sync</span>
@@ -119,7 +119,7 @@ export function InsightsView() {
           }
         >
           <div className="flex flex-col gap-2">
-            <div className="relative overflow-hidden" style={{ maxHeight: compOpen || !compMore ? 'none' : 300 }}>
+            <div id="comp-list" className="relative overflow-hidden" style={{ maxHeight: compOpen || !compMore ? 'none' : 300 }}>
               <div className="flex flex-col gap-3.5">
                 {st.byComp.map(m => (
                   <div key={m.comp} className="grid grid-cols-[150px_minmax(0,1fr)_32px] items-center gap-4">
@@ -138,7 +138,7 @@ export function InsightsView() {
             </div>
             {compMore ? (
               <div className="flex justify-center">
-                <Button variant="ghost" size="sm" icon={compOpen ? 'chevron-up' : 'chevron-down'} onClick={() => setUi({ compOpen: !compOpen })}>
+                <Button variant="ghost" size="sm" icon={compOpen ? 'chevron-up' : 'chevron-down'} ariaExpanded={compOpen} ariaControls="comp-list" onClick={() => setUi({ compOpen: !compOpen })}>
                   {compOpen ? 'Show fewer' : `Show all ${st.byComp.length} components`}
                 </Button>
               </div>
@@ -153,7 +153,7 @@ export function InsightsView() {
           <span>Showing</span>
           <span className="font-[650] text-ink tabular-nums">{st.periodL}</span>
         </div>
-        <div role="tablist" aria-label="Reporting period" className="-mb-px flex items-stretch gap-6 self-stretch overflow-x-auto overflow-y-hidden">
+        <div role="tablist" aria-label="Reporting period" className="-mb-px flex items-stretch gap-6 self-stretch overflow-x-auto overflow-y-hidden [scrollbar-width:none] max-sm:pr-6 max-sm:[mask-image:linear-gradient(to_right,#000_calc(100%-40px),transparent)]">
           {RANGES.map(r => {
             const on = r.n === range;
             return (
@@ -226,7 +226,7 @@ export function InsightsView() {
         }
       >
         <div className="flex flex-col gap-2.5">
-          <div className="relative ml-9 h-[220px]">
+          <div className="relative ml-9 h-[220px]" role="group" aria-label={'Code review turnaround chart. ' + st.tatSummary}>
             {st.ticks.map(t => (
               <div key={t.l} className="absolute inset-x-0 border-t border-[oklch(0.94_0.006_290)]" style={{ bottom: t.pos }}>
                 <span className="absolute -top-2 -left-9 w-7 text-right text-sm text-faint tabular-nums">{t.l}</span>
@@ -234,18 +234,19 @@ export function InsightsView() {
             ))}
             <div className="absolute inset-0 flex items-end" style={{ gap: st.gap }}>
               {st.tat.map((b, i) => (
-                <Clickable key={i} href={b.href || undefined} title={b.tip} className="min-w-0 flex-1 rounded-t-[2px] hover:opacity-75" style={{ height: b.h, background: b.c }} />
+                <Clickable key={i} href={b.href || undefined} tip={b.tip} tipAlign={tipAlign(i, st.tat.length)} ariaLabel={b.tip.replace('\n', ': ')} className="min-w-0 flex-1 rounded-t-[2px] hover:opacity-75" style={{ height: b.h, background: b.c }} />
               ))}
             </div>
             <div className="pointer-events-none absolute inset-x-0 border-t-[1.5px] border-dashed border-[oklch(0.35_0.01_290)]" style={{ bottom: st.targetPos }}>
               <span className="absolute -top-5 right-0 bg-white px-1 text-sm font-semibold text-[oklch(0.3_0.01_290)]">Target 48h</span>
             </div>
           </div>
-          <div className="ml-9 flex" style={{ gap: st.gap }}>
+          <div className="ml-9 flex" style={{ gap: st.gap }} aria-hidden>
             {st.tat.map((b, i) => (
               <span key={i} className="flex min-w-0 flex-1 overflow-visible text-sm whitespace-nowrap text-muted" style={{ justifyContent: b.ja }}>{b.label}</span>
             ))}
           </div>
+          <DataTable caption="Code review turnaround" head={['Period', 'Median turnaround', 'Decisions']} rows={st.tat.map(b => [b.span, b.v, String(b.n)])} />
         </div>
       </Section>
 
@@ -261,7 +262,7 @@ export function InsightsView() {
           }
         >
           <div className="flex flex-1 flex-col gap-2.5">
-            <div className="relative ml-8 min-h-[240px] flex-1">
+            <div className="relative ml-8 min-h-[240px] flex-1" role="group" aria-label={'Defects reported vs resolved chart. ' + st.flowNote}>
               {st.flowTicks.map(t => (
                 <div key={t.l} className="absolute inset-x-0 border-t border-[oklch(0.94_0.006_290)]" style={{ bottom: t.pos }}>
                   <span className="absolute -top-2.5 -left-8 w-6 text-right text-sm text-muted tabular-nums">{t.l}</span>
@@ -270,24 +271,25 @@ export function InsightsView() {
               <div className="absolute inset-0 flex items-end" style={{ gap: st.flowGap }}>
                 {st.flow.map((b, i) => (
                   <div key={i} className="flex h-full min-w-0 flex-1 items-end gap-0.5">
-                    <Clickable href={b.href1} title={b.tip1} className="flex-1 rounded-t-[2px] bg-[oklch(0.55_0.17_293)] hover:opacity-75" style={{ height: b.h1 }} />
-                    <Clickable href={b.href2} title={b.tip2} className="flex-1 rounded-t-[2px] bg-[oklch(0.68_0.14_160)] hover:opacity-75" style={{ height: b.h2 }} />
+                    <Clickable href={b.href1} tip={b.tip1} tipAlign={tipAlign(i, st.flow.length)} ariaLabel={b.tip1.replace('\n', ': ')} className="flex-1 rounded-t-[2px] bg-[oklch(0.55_0.17_293)] hover:opacity-75" style={{ height: b.h1 }} />
+                    <Clickable href={b.href2} tip={b.tip2} tipAlign={tipAlign(i, st.flow.length)} ariaLabel={b.tip2.replace('\n', ': ')} className="flex-1 rounded-t-[2px] bg-[oklch(0.68_0.14_160)] hover:opacity-75" style={{ height: b.h2 }} />
                   </div>
                 ))}
               </div>
             </div>
-            <div className="ml-8 flex" style={{ gap: st.flowGap }}>
+            <div className="ml-8 flex" style={{ gap: st.flowGap }} aria-hidden>
               {st.flow.map((b, i) => <span key={i} className="min-w-0 flex-1 overflow-visible text-sm whitespace-nowrap text-muted">{b.label}</span>)}
             </div>
           </div>
           <span className="text-sm text-ink-5">{st.flowNote}</span>
+          <DataTable caption="Defects reported vs resolved" head={['Period', 'Reported', 'Resolved']} rows={st.flow.map(b => [b.span, String(b.rep), String(b.res)])} />
         </Section>
 
         <Section title="Review outcomes" sub={st.outcomeSub}>
-          <div className="grid grid-cols-[repeat(20,minmax(0,1fr))] gap-[3px]">
-            {st.waffle.map((c, i) => <Clickable key={i} href={c.href || undefined} title={c.tip} className="aspect-square rounded-[2px] hover:opacity-70" style={{ background: c.c }} />)}
+          <div className="grid grid-cols-[repeat(20,minmax(0,1fr))] gap-[3px]" aria-hidden>
+            {st.waffle.map((c, i) => <div key={i} data-tip={c.tip} data-tip-align={i % 20 < 4 ? 'start' : i % 20 > 15 ? 'end' : undefined} className="aspect-square rounded-[2px]" style={{ background: c.c }} />)}
           </div>
-          <span className="text-sm text-muted">Each square is 1% of first decisions</span>
+          <span className="text-sm text-muted">Each square is 1% of submitted reviews</span>
           <div className="flex flex-col">
             {st.outcomes.map(o => (
               <Clickable key={o.k} href={o.href} className="row-link flex items-center gap-3 border-b border-line-soft py-3.5 last:border-b-0">
@@ -324,23 +326,31 @@ export function InsightsView() {
                   <span className="bui-trunc text-sm text-muted">{m.sub}</span>
                 </Clickable>
                 {m.cells.map((c, i) => (
-                  <Clickable key={i} href={c.href} title={c.tip} className="flex h-[50px] items-center justify-center rounded font-semibold tabular-nums hover:shadow-[inset_0_0_0_2px_oklch(0.4_0.19_293)]" style={{ background: c.bg, color: c.fg }}>
+                  <Clickable key={i} href={c.href} tip={c.tip} ariaLabel={c.tip} className="flex h-[50px] items-center justify-center rounded font-semibold tabular-nums hover:shadow-[inset_0_0_0_2px_oklch(0.4_0.19_293)]" style={{ background: c.bg, color: c.fg }}>
                     {c.n}
                   </Clickable>
                 ))}
                 <span className="text-right font-[650] tabular-nums">{m.total}</span>
               </div>
             )) : <span className="py-6 text-muted">No open defects.</span>}
+            {st.heat.length ? (
+              <div className="mt-2 grid grid-cols-[minmax(150px,1.9fr)_repeat(4,minmax(52px,1fr))_44px] items-center gap-1 border-t border-line pt-3">
+                <span className="flex flex-col gap-[3px]"><span className="font-[550]">Unique open defects</span><span className="text-sm text-muted">Each defect counted once</span></span>
+                {st.heatUnique.cells.map((n, i) => <span key={i} className="text-center font-semibold tabular-nums">{n || '-'}</span>)}
+                <span className="text-right font-[650] tabular-nums">{st.heatUnique.total}</span>
+              </div>
+            ) : null}
           </div>
+          {st.heatUnique.multi ? <span className="text-sm text-muted">A defect that affects several lines is counted in each, so the rows add up to more than the unique total.</span> : null}
         </Section>
 
-        <Section title="Turnaround by change type" sub="Five most common change types, median hours to first decision, dashed line is the 48h target">
+        <Section title="Turnaround by change type" sub="Most common change types, median hours to first decision, dashed line is the 48h target">
           <div className="flex flex-col gap-[18px]">
             {st.byType.map(t => (
               <Clickable key={t.type} href={t.href} className="row-link grid grid-cols-[140px_minmax(0,1fr)_56px] items-center gap-4 py-1">
                 <div className="flex items-center gap-2.5">
                   <Icon name={t.icon} size={16} color="var(--color-muted)" />
-                  <div className="flex flex-col gap-0.5"><span>{t.type}</span><span className="text-sm text-muted">{t.n} reviews</span></div>
+                  <div className="flex flex-col gap-0.5"><span>{t.type}</span><span className="text-sm text-muted">{t.nL}</span></div>
                 </div>
                 <div className="relative h-3">
                   <div className="h-full rounded-[1px]" style={{ width: t.w, background: t.c }} />
@@ -354,15 +364,15 @@ export function InsightsView() {
       </div>
 
       <div className="grid grid-cols-[minmax(0,1fr)] gap-10">
-        <ActiveList title="Most active defects" sub="Comments, status changes and assignments in the selected period" rows={st.activeD} idW={128} />
-        <ActiveList title="Most active code reviews" sub="Comments, reviewer assignments and decisions in the selected period" rows={st.activeR} idW={96} />
+        <ActiveList title="Most active defects" sub="Comments, status changes and assignments in the selected period. Ties go to the most recently active." rows={st.activeD} idW={128} />
+        <ActiveList title="Most active code reviews" sub="Comments, reviewer assignments and decisions in the selected period. Ties go to the most recently active." rows={st.activeR} idW={96} />
       </div>
 
       <Section title="Code review team" sub="Reviewer workload and responsiveness in the selected period" gap="gap-3">
         <div className="overflow-x-auto">
           <div className="min-w-[640px]">
             <div className={'grid grid-cols-[minmax(0,1.6fr)_1fr_1fr_1.4fr_1fr] gap-5 border-b border-line ' + TH}>
-              <span>Reviewer</span><span className="text-right">Decisions</span><span className="text-right">Median</span><span>Within 48h</span><span className="text-right">In queue now</span>
+              <span>Reviewer</span><span className="text-right" title="Each reviewer's first decision on a review. A review with two reviewers counts once for each.">Reviewer decisions</span><span className="text-right">Median</span><span>Within 48h</span><span className="text-right">In queue now</span>
             </div>
             {st.team.map(r => (
               <Clickable key={r.id} href={r.href} className="row-link grid grid-cols-[minmax(0,1.6fr)_1fr_1fr_1.4fr_1fr] items-center gap-5 border-b border-line-soft py-4 last:border-b-0">
@@ -380,6 +390,58 @@ export function InsightsView() {
         </div>
       </Section>
     </div>
+  );
+}
+
+type Graph = ReturnType<typeof systemGraph>;
+type SysData = { name: string; role: string; logo?: string; sync?: string; meta?: string; href?: string; label?: string; note?: string; metaLines?: { icon: string; text: string }[] };
+
+/** The seven-system diagram as a list, for phones: legacy systems, DRS, then the new systems. */
+function SystemList({ graph }: { graph: Graph }) {
+  const sys = graph.nodes.filter(n => n.type === 'sys' && n.id !== 'hub');
+  const labels = graph.nodes.filter(n => n.type === 'label').map(n => n.data as unknown as SysData);
+  const hub = graph.nodes.find(n => n.id === 'hub')!.data as unknown as SysData;
+  const card = (d: SysData, hubCard = false) => (
+    <div className={'flex flex-col gap-1.5 rounded-lg border px-4 py-3.5 ' + (hubCard ? 'border-[oklch(0.75_0.12_293)] bg-accent-wash' : 'border-line bg-white')}>
+      <span className="flex items-center gap-2.5 font-[650]">
+        {d.logo ? <img src={d.logo} alt="" className="block h-4 w-auto" /> : null}
+        {d.name}
+      </span>
+      <span className="text-sm text-ink-5">{d.role}</span>
+      {d.meta ? <span className="text-sm font-[550]">{d.meta}</span> : null}
+      {d.metaLines ? <span className="text-sm font-[550]">{d.metaLines.map(m => m.text).join(', ')}</span> : null}
+      {d.sync ? <span className="flex items-center gap-2 text-sm text-muted"><span className="h-1.5 w-1.5 rounded-full bg-[oklch(0.62_0.14_155)]" />{d.sync}</span> : null}
+    </div>
+  );
+  const group = (i: number, items: typeof sys) => (
+    <div className="flex flex-col gap-2.5">
+      <div className="flex flex-col gap-0.5"><span className="font-[650]">{labels[i]?.label}</span><span className="text-sm text-muted">{labels[i]?.note}</span></div>
+      {items.map(n => <div key={n.id}>{card(n.data as unknown as SysData)}</div>)}
+    </div>
+  );
+  const arrow = <div aria-hidden className="flex justify-center text-[oklch(0.55_0.17_293)]"><Icon name="arrow-down" size={18} /></div>;
+  return (
+    <div className="flex flex-col gap-3 px-4 py-5">
+      {group(0, sys.filter(n => n.position.x < 0))}
+      {arrow}
+      {card(hub, true)}
+      {arrow}
+      {group(1, sys.filter(n => n.position.x > 0))}
+    </div>
+  );
+}
+
+/** Tooltips on the first and last bars open inwards so they stay inside the chart. */
+const tipAlign = (i: number, n: number) => (i < 3 ? 'start' : i > n - 4 ? 'end' : undefined);
+
+/** The numbers behind a chart, for screen readers. */
+function DataTable({ caption, head, rows }: { caption: string; head: string[]; rows: string[][] }) {
+  return (
+    <table className="sr-only">
+      <caption>{caption}</caption>
+      <thead><tr>{head.map(h => <th key={h} scope="col">{h}</th>)}</tr></thead>
+      <tbody>{rows.map((r, i) => <tr key={i}>{r.map((c, k) => (k ? <td key={k}>{c}</td> : <th key={k} scope="row">{c}</th>))}</tr>)}</tbody>
+    </table>
   );
 }
 

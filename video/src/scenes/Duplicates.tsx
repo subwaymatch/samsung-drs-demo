@@ -6,6 +6,7 @@ import { Spotlight, window01 } from '../components/Overlays';
 import { Pointer, pointerAt } from '../components/Pointer';
 import { Screen } from '../components/Screen';
 import { cap, L } from '../layout';
+import { Clicks, Keystrokes } from '../components/Sfx';
 
 const N = L.newDefect;
 // Frames 1-5 type the title word by word, 6 opens the model picker, 7 shows the duplicates.
@@ -40,6 +41,14 @@ export const Duplicates: React.FC = () => {
 
   return (
     <FeatureFrame
+      stage={
+        <>
+          {/* Typing the title, then a click on the model field, the model number, and a click on the match. */}
+          <Keystrokes at={Array.from({ length: 20 }, (_, i) => 14 + i * 2.5)} />
+          <Clicks at={[OPEN - 4, PICK - 2]} />
+          <Keystrokes at={[OPEN - 2, OPEN, OPEN + 1, OPEN + 3]} seed={5} />
+        </>
+      }
       navigated
       index="03"
       label="Report"

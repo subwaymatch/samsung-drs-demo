@@ -1,4 +1,4 @@
-import { CQ_PRI, CQ_STATE, MIG, TGT, USERS, WAVE, WAVE_CUTOVER } from './constants';
+import { CQ_PRI, CQ_STATE, MIG, TGT, USERS, WAVE, WAVE_CUTOVER, WAVE_CUTOVER_DAY } from './constants';
 import { hrs, MON, pd } from './dates';
 import { seqOf } from './products';
 import type { Activity, Attachment, Decision, Defect, FileDiff, MigState, Review, Reviewer, ReviewStatus } from './types';
@@ -61,8 +61,12 @@ export const migW = (w: number, n: number): MigState => {
 export const migOf = (d: Defect) => migW(WAVE[d.comp] || 3, seqOf(d.id));
 export const migInfo = (k: MigState) => MIG[k];
 
-export const ccOf = (w: number, series: string) => {
-  const stream = (series || 'printing').toLowerCase() + '_fw_int';
+/** The UCM integration stream of each wave: components that move together share one. */
+const CC_STREAM: Record<number, string> = { 1: 'sw_apps_int', 2: 'device_sw_int', 3: 'engine_fw_int' };
+/** The ClearCase side of a record in wave w, created or submitted at. */
+export const ccOf = (w: number, at: string) => {
+  const stream = CC_STREAM[w] || CC_STREAM[3];
+  if (at >= WAVE_CUTOVER_DAY[w]) return { state: 'Not used', meta: `Started in Perforce after the ${WAVE_CUTOVER[w]} cutover; ${stream} is frozen` };
   return w < 3
     ? { state: 'Read-only, history imported to P4', meta: `UCM activity on ${stream}, frozen ${WAVE_CUTOVER[w]}` }
     : { state: 'Active, imported to P4 every hour', meta: `UCM activity on ${stream}, cutover ${WAVE_CUTOVER[3]}` };

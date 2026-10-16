@@ -1,0 +1,74 @@
+[
+  {
+    "name": "whoosh",
+    "text": "A soft, airy whoosh that swirls around in a circle and opens up, like a smooth transition in a clean software product video. Gentle, no impact, no music.",
+    "duration_seconds": 1.4,
+    "prompt_influence": 0.6
+  },
+  {
+    "name": "connect",
+    "text": "A gentle magical shimmer that rises and resolves into a soft sparkling chime, as if glowing lines connect to a hub. Bright, airy and subtle, for a software product video. No music, no voice.",
+    "duration_seconds": 1.8,
+    "prompt_influence": 0.6
+  },
+  {
+    "name": "click",
+    "text": "A single soft computer mouse click, close and clean, no room reverb.",
+    "duration_seconds": 0.5,
+    "prompt_influence": 0.7,
+    "cuts": {
+      "click": [
+        0.024,
+        0.13
+      ]
+    },
+    "drive_db": 6
+  },
+  {
+    "name": "typing",
+    "text": "Someone typing at a steady pace on a quiet low-profile laptop keyboard, separate distinct key presses, close and clean, no room reverb.",
+    "duration_seconds": 3,
+    "prompt_influence": 0.6,
+    "cuts": {
+      "key-1": [
+        0.136,
+        0.219
+      ],
+      "key-2": [
+        0.295,
+        0.378
+      ],
+      "key-3": [
+        0.556,
+        0.639
+      ],
+      "key-4": [
+        0.64,
+        0.723
+      ],
+      "key-5": [
+        0.925,
+        1.008
+      ],
+      "key-6": [
+        1.309,
+        1.392
+      ],
+      "key-7": [
+        1.798,
+        1.881
+      ],
+      "key-8": [
+        1.888,
+        1.971
+      ]
+    },
+    "drive_db": 6
+  },
+  {
+    "name": "highlight",
+    "text": "A soft, warm UI chime with a gentle glassy sparkle, as three photos light up at once. Short, bright and subtle, for a software product video. No music.",
+    "duration_seconds": 1.2,
+    "prompt_influence": 0.6
+  }
+]

@@ -30,8 +30,11 @@ export function NotificationsView() {
   const unread = nl.filter(n => isUnread(n, rd)).length;
   const pg = pagerOf(fl.length, page, PS);
   const rows = fl.slice((pg.p - 1) * PS, pg.p * PS);
-  const open = (n: (typeof nl)[number]) => {
+  const markRead = (n: (typeof nl)[number]) => {
     if (isUnread(n, rd)) setRead(meId, { ids: [...rd.ids, n.id] });
+  };
+  const open = (n: (typeof nl)[number]) => {
+    markRead(n);
     router.push(n.href);
   };
   useKeyRows(rows.map(n => ({ open: () => open(n) })));
@@ -62,7 +65,8 @@ export function NotificationsView() {
           return (
             <Clickable
               key={n.id}
-              onOpen={() => open(n)}
+              href={n.href}
+              onOpen={() => markRead(n)}
               krow={i}
               className="row-link grid grid-cols-[8px_32px_minmax(0,1fr)_auto] items-start gap-3.5 border-b border-line-soft py-4 pr-3 pl-2 last:border-b-0"
               style={i === kIdx ? KEY_ROW : { background: un ? 'oklch(0.985 0.012 293)' : 'transparent' }}

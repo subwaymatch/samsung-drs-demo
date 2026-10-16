@@ -9,7 +9,7 @@ export const D0 = '2016-01-04';
 export const TODAY = '2017-09-15';
 /** Exclusive end of the reporting window (the day after TODAY). */
 export const END = '2017-09-16';
-/** Reference time used for severity target checks in Insights. */
+/** The demo's "now" when a visit starts: the recorded history ends here, and every duration is measured from it. */
 export const TNOW = TODAY + ' 18:00';
 
 export const pad = (n: number) => String(n).padStart(2, '0');
@@ -52,10 +52,24 @@ export const dayIdx = (k: string) => Math.round((dOf(k.slice(0, 10)).getTime() -
 /** Day index of END: the right edge of every Insights chart. */
 export const ED = dayIdx(END);
 
-/** The demo clock: TODAY at the viewer's current time of day. */
+// The demo clock starts at TNOW, or at the latest saved edit if that is later,
+// and runs with the visit, so every visitor sees the same history and the same
+// durations whatever their own time of day. It never goes backwards, so a new
+// entry always sorts after earlier ones, and it stops at the end of TODAY.
+const visitStart = Date.now();
+let clockBase = TNOW;
+let lastNow = '';
+/** Start the demo clock no earlier than this timestamp (the latest saved edit). */
+export const startClockAfter = (at: string) => {
+  if (at > clockBase) clockBase = at;
+};
+/** The demo's current time: TNOW plus the time spent in this visit. */
 export const nowStr = () => {
-  const d = new Date();
-  return TODAY + ' ' + pad(d.getHours()) + ':' + pad(d.getMinutes());
+  const mins = Math.floor((Date.now() - visitStart) / 6e4);
+  const s = fmt(new Date(pd(clockBase).getTime() + mins * 6e4));
+  const capped = s > TODAY + ' 23:59' ? TODAY + ' 23:59' : s;
+  if (capped > lastNow) lastNow = capped;
+  return lastNow;
 };
 
 export const byAt = <T extends { at: string }>(a: T, b: T) => (a.at < b.at ? -1 : a.at > b.at ? 1 : 0);

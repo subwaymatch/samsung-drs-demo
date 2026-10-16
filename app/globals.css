@@ -37,6 +37,10 @@
     padding: 0;
     background: #fff;
   }
+  /* Keep the layout from shifting when a short list removes the page scrollbar. */
+  html {
+    scrollbar-gutter: stable;
+  }
   body {
     font-family: var(--font-sans);
     font-size: 14px;
@@ -220,6 +224,9 @@
   .bui-item-sub { font-size: 14px; color: var(--color-muted); }
   .bui-item-ind { display: flex; color: var(--color-accent); flex: none; }
   .bui-empty { padding: 10px; font-size: 14px; color: var(--color-muted); }
+  .bui-search-popup { width: min(480px, calc(100vw - 32px)); }
+  .bui-sgroup + .bui-sgroup { margin-top: 6px; border-top: 1px solid var(--color-line-soft); padding-top: 6px; }
+  .bui-sgroup-label { padding: 6px 10px 4px; font-size: 12px; font-weight: 600; color: var(--color-muted); }
   .bui-empty:empty { display: none; }
 
   .bui-group { display: inline-flex; align-items: stretch; }
@@ -245,6 +252,9 @@
   .bui-cb:hover { border-color: oklch(0.8 0.04 293); }
   .bui-cb:has(.bui-chip) { padding-top: 6px; padding-bottom: 6px; row-gap: 8px; }
   .bui-cb-dashed { border-style: dashed; border-color: oklch(0.82 0.05 293); }
+  /* Fields that failed validation. */
+  .bui-input[aria-invalid="true"],
+  .bui-cb:has(.bui-cb-input[aria-invalid="true"]) { border-color: oklch(0.6 0.19 25); }
   .bui-cb-input { flex: 1; min-width: 80px; height: 28px; border: none; outline: none; background: transparent; font-family: inherit; font-size: 14px; color: var(--color-ink); padding: 0 2px; }
   .bui-cb-btn { display: flex; align-items: center; justify-content: center; width: 26px; height: 26px; border: none; background: none; border-radius: 3px; color: var(--color-faint); cursor: pointer; flex: none; }
   .bui-chips { display: contents; }
@@ -282,6 +292,45 @@
   /* Clickable list rows and labels shift to the accent color on hover. */
   .row-link { cursor: pointer; }
   .row-link:hover { color: var(--color-accent-text); }
+
+  /* Clickable: a link stretched over the element, under the links and controls inside it. */
+  .clk { cursor: pointer; }
+  .clk-link { position: absolute; inset: 0; z-index: 0; border-radius: inherit; }
+  .clk :where(a:not(.clk-link):not(.row-stretch), button, input, label, [role="checkbox"], [role="button"]) { position: relative; z-index: 1; }
+  /* In list rows the item's own link (in its ID cell) is stretched over the row. */
+  .row-stretch::after { content: ""; position: absolute; inset: 0; z-index: 0; }
+  .row-stretch:focus-visible { outline: none; }
+  .clk:has(.row-stretch:focus-visible) { outline: 2px solid oklch(0.6 0.16 293); outline-offset: 2px; border-radius: 4px; }
+
+  /* Tooltips for chart marks and cells: data-tip on the element. */
+  [data-tip] { position: relative; }
+  [data-tip]:hover::after,
+  [data-tip]:focus-within::after {
+    content: attr(data-tip);
+    position: absolute;
+    bottom: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 40;
+    width: max-content;
+    max-width: 260px;
+    padding: 6px 9px;
+    border-radius: 6px;
+    background: oklch(0.24 0.03 290);
+    color: #fff;
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 1.35;
+    white-space: pre-line;
+    text-align: left;
+    pointer-events: none;
+    box-shadow: 0 6px 18px oklch(0.2 0.05 290 / 0.25);
+  }
+  [data-tip][data-tip-align="start"]:hover::after,
+  [data-tip][data-tip-align="start"]:focus-within::after { left: 0; transform: none; }
+  [data-tip][data-tip-align="end"]:hover::after,
+  [data-tip][data-tip-align="end"]:focus-within::after { left: auto; right: 0; transform: none; }
+
   .hover-dim:hover { opacity: 0.75; }
 }
 
@@ -290,3 +339,15 @@
 .react-flow__controls-button { border-bottom-color: var(--color-line) !important; }
 .react-flow__edge-textbg { fill: #fff; }
 .react-flow__node { font-family: var(--font-sans); }
+
+/* Respect reduced motion: no loading pulse or animated transitions. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
