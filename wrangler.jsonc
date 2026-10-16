@@ -3,7 +3,8 @@
   "name": "samsung-drs-demo",
   "compatibility_date": "2026-10-15",
   "compatibility_flags": ["nodejs_compat"],
-  "main": "vinext/server/fetch-handler",
+  // The vinext app, plus /stream/* for the About page's video.
+  "main": "./worker/index.ts",
   // Static files (public/ and /_next/static) are served directly; every other
   // request falls through to the Worker. No run_worker_first rule: it also
   // routes Vite's dev-server modules to the Worker and breaks `pnpm dev`.

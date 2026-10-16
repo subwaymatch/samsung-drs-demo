@@ -69,7 +69,7 @@ cp out/drs-showcase-web.mp4 ../public/video/drs-showcase-v2.mp4
 node scripts/stills.mjs DrsShowcase:110 --scale=1   # out/stills/DrsShowcase-110.png, then ../public/video/drs-showcase-v2.webp
 ```
 
-`../public/_headers` lets browsers cache `/video/*` for a year, so give a new render a new version number (`v3` next) in both file names and in `components/views/about-view.tsx`.
+`../public/_headers` lets browsers cache `/video/*` for a year, so give a new render a new version number (`v3` next) in both file names and in `components/views/about-view.tsx`. The page plays the MP4 from `/stream/` rather than `/video/`, so that it can seek; see [Showcase video](../README.md#showcase-video) in the main README.
 
 Each scene is also its own composition under **Scenes** in the Studio. To render stills for review:
 

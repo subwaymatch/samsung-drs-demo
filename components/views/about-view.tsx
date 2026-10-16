@@ -17,17 +17,18 @@ export function AboutView() {
           <p className="text-[15px] leading-[1.7] text-muted">Samsung Electronics, Printing Solutions Business, 2016-2017</p>
         </div>
       </div>
-      {/* Rendered by `pnpm render:web` in video/. Bump the version in both file names when it changes, since public/_headers caches them for a year. */}
+      {/* Rendered by `pnpm render:web` in video/. Bump the version in both file names when it changes, since public/_headers caches them for a year.
+          The video plays from /stream, which sends the parts of public/video/drs-showcase-v2.mp4 the player asks for, so it can seek. */}
       <figure className="m-0 flex flex-col gap-3">
         <video
           className="block aspect-video w-full rounded-lg bg-[oklch(0.15_0.03_290)] shadow-[0_0_0_1px_oklch(0.45_0.05_293/0.12),0_24px_50px_-28px_oklch(0.3_0.12_293/0.5)]"
           controls
           playsInline
-          preload="none"
+          preload="metadata"
           poster="/video/drs-showcase-v2.webp"
           aria-label="DRS showcase video"
         >
-          <source src="/video/drs-showcase-v2.mp4" type="video/mp4" />
+          <source src="/stream/drs-showcase-v2.mp4" type="video/mp4" />
         </video>
         <figcaption className="text-sm text-muted">A one-minute tour of DRS, with music.</figcaption>
       </figure>

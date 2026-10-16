@@ -66,7 +66,7 @@ pnpm run deploy   # builds and deploys to Cloudflare Workers
 
 To deploy from Git with Workers Builds instead, connect the repository in the Cloudflare dashboard and use `pnpm build` as the build command and `npx wrangler deploy` as the deploy command. The build writes `.wrangler/deploy/config.json`, which points Wrangler at the generated `dist/server/wrangler.json`.
 
-`wrangler.jsonc` has no `run_worker_first` rule. With one, the dev server also routes Vite's own modules to the Worker and `pnpm dev` serves 404s.
+`wrangler.jsonc` has no `run_worker_first` rule. With one, the dev server also routes Vite's own modules to the Worker and `pnpm dev` serves 404s. Its `main` is `worker/index.ts`, which hands everything but `/stream/*` (see below) to the vinext app.
 
 Link previews use `public/og-image.png` (a 1200x630 screenshot of Insights) and absolute URLs from `metadataBase` in `app/layout.tsx`; update it if the demo moves to another domain.
 
@@ -75,6 +75,8 @@ Link previews use `public/og-image.png` (a 1200x630 screenshot of Insights) and 
 `video/` is a [Remotion](https://www.remotion.dev) project that captures the running app and renders a 66-second showcase video. See [video/README.md](video/README.md).
 
 The About page plays a copy of it from `public/video`, encoded to stay under the 25 MiB limit for a single Workers static asset. `public/_headers` lets browsers and Cloudflare cache those files for a year, so a new render gets a new version in its file name.
+
+Workers static assets answer a Range request with the whole file, and a browser can only seek a video with partial (206) responses. So the page plays it from `/stream/<file>` instead: `worker/index.ts` sends `/stream/*` to `worker/stream.ts` ahead of the vinext app, and that reads `public/video/<file>` from the assets binding and sends the bytes asked for. The binding gives no file sizes, so `vite.config.ts` records them at build time (`virtual:video-sizes`).
 
 ## Credits
 
