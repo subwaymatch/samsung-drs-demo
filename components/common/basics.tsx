@@ -165,7 +165,7 @@ export interface Scope {
 /** Underlined tabs with counts, used for list scopes. */
 export function ScopeTabs({ scopes, value, onChange }: { scopes: Scope[]; value: string; onChange: (k: string) => void }) {
   return (
-    <div className="flex gap-7 overflow-x-auto overflow-y-hidden border-b border-line [scrollbar-width:none]" role="tablist">
+    <div className="flex gap-7 overflow-x-auto overflow-y-hidden border-b border-line [scrollbar-width:none] max-sm:pr-6 max-sm:[mask-image:linear-gradient(to_right,#000_calc(100%-40px),transparent)]" role="tablist">
       {scopes.map(t => {
         const on = t.k === value;
         return (
@@ -207,23 +207,6 @@ export function QuickFilters({ chips, clearHref, source = 'Filtered from Insight
         Clear filters
       </NextLink>
     </div>
-  );
-}
-
-/** Column header that sorts on click. */
-export function SortHeader({ label, k, sort, onSort, style }: { label: string; k: string; sort: { k: string; d: 1 | -1 }; onSort: (k: string) => void; style?: CSSProperties }) {
-  const on = sort.k === k;
-  return (
-    <button
-      type="button"
-      onClick={() => onSort(k)}
-      className="flex cursor-pointer items-center gap-1.5 border-0 bg-transparent p-0 text-left text-sm font-semibold text-muted select-none hover:text-ink-2"
-      style={style}
-      aria-sort={on ? (sort.d > 0 ? 'ascending' : 'descending') : undefined}
-    >
-      {label}
-      <Icon name={on ? (sort.d > 0 ? 'arrow-up' : 'arrow-down') : 'chevrons-up-down'} size={13} color={on ? 'var(--color-accent-text)' : 'oklch(0.75 0.01 290)'} />
-    </button>
   );
 }
 

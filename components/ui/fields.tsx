@@ -6,7 +6,15 @@ import type { Option } from '@/lib/types';
 import { Icon } from './icon';
 import { Lead } from './lead';
 
-export function Input({ value, onChange, placeholder, icon, mono, id, autoFocus, ariaLabel }: {
+/** Form validation state passed to an input. */
+export interface FieldAria {
+  invalid?: boolean;
+  describedBy?: string;
+  required?: boolean;
+}
+const formAria = (c: FieldAria) => ({ 'aria-invalid': c.invalid || undefined, 'aria-describedby': c.describedBy, 'aria-required': c.required || undefined });
+
+export function Input({ value, onChange, placeholder, icon, mono, id, autoFocus, ariaLabel, invalid, describedBy, required }: FieldAria & {
   value: string;
   onChange: (v: string) => void;
   placeholder?: string;
@@ -21,6 +29,7 @@ export function Input({ value, onChange, placeholder, icon, mono, id, autoFocus,
       id={id}
       autoFocus={autoFocus}
       aria-label={ariaLabel}
+      {...formAria({ invalid, describedBy, required })}
       className={'bui-input' + (mono ? ' bui-mono' : '') + (icon ? ' bui-with-icon' : '')}
       value={value ?? ''}
       placeholder={placeholder}
@@ -38,11 +47,13 @@ export function Input({ value, onChange, placeholder, icon, mono, id, autoFocus,
   );
 }
 
-export function Textarea({ value, onChange, placeholder, rows = 4, ariaLabel }: { value: string; onChange: (v: string) => void; placeholder?: string; rows?: number; ariaLabel?: string }) {
+export function Textarea({ value, onChange, placeholder, rows = 4, ariaLabel, id, invalid, describedBy, required }: FieldAria & { value: string; onChange: (v: string) => void; placeholder?: string; rows?: number; ariaLabel?: string; id?: string }) {
   return (
     <textarea
+      id={id}
       rows={rows}
       aria-label={ariaLabel}
+      {...formAria({ invalid, describedBy, required })}
       className="bui-input bui-textarea"
       value={value ?? ''}
       placeholder={placeholder}

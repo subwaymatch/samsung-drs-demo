@@ -5,6 +5,7 @@ import { PreviewCard } from '@base-ui/react/preview-card';
 import NextLink from 'next/link';
 import type { PersonView } from '@/lib/types';
 import { Icon } from './icon';
+import { langOf } from '@/lib/text';
 
 export function Avatar({ person, size = 28 }: { person: Pick<PersonView, 'ini' | 'bg' | 'fg' | 'name'> & { photo?: string }; size?: number }) {
   return (
@@ -27,7 +28,7 @@ export function Person({ person, size = 28, showName }: { person: PersonView; si
         render={<NextLink href={person.href} />}
       >
         <Avatar person={person} size={size} />
-        {showName ? <span className="bui-trunc font-[550]">{person.name}</span> : null}
+        {showName ? <span lang={langOf(person.name)} className="bui-trunc font-[550]">{person.name}</span> : null}
       </PreviewCard.Trigger>
       <PreviewCard.Portal>
         <PreviewCard.Positioner className="bui-positioner" sideOffset={8}>
@@ -35,7 +36,7 @@ export function Person({ person, size = 28, showName }: { person: PersonView; si
             <div className="flex items-start gap-3.5">
               <Avatar person={person} size={48} />
               <div className="flex min-w-0 flex-col gap-1">
-                <span className="text-base font-[650]">{person.name}</span>
+                <span lang={langOf(person.name)} className="text-base font-[650]">{person.name}</span>
                 {person.en && person.en !== person.name ? <span className="bui-item-sub">{person.en}</span> : null}
                 <span>{person.title}</span>
                 <span className="bui-item-sub">{person.teamName}</span>

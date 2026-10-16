@@ -12,7 +12,16 @@ interface Common {
   emptyText?: string;
   limit?: number;
   ariaLabel?: string;
+  /** Form validation: marks the input invalid and points to its error message. */
+  invalid?: boolean;
+  describedBy?: string;
+  required?: boolean;
 }
+const formAria = (c: Pick<Common, 'invalid' | 'describedBy' | 'required'>) => ({
+  'aria-invalid': c.invalid || undefined,
+  'aria-describedby': c.describedBy,
+  'aria-required': c.required || undefined
+});
 
 const label = (i: Option | null) => (i ? i.label : '');
 const same = (a: Option, b: Option) => !!a && !!b && a.value === b.value;
@@ -47,7 +56,7 @@ function Popup({ emptyText }: { emptyText: string }) {
  * Filterable single select. With resetOnSelect it acts as a picker: it reports
  * the choice and clears itself, e.g. "Add assignee".
  */
-export function Combobox({ items, value, onValueChange, placeholder, emptyText = 'No matches', limit, ariaLabel, resetOnSelect, dashed, leadIcon, inputId, shortcut }: Common & {
+export function Combobox({ items, value, onValueChange, placeholder, emptyText = 'No matches', limit, ariaLabel, resetOnSelect, dashed, leadIcon, inputId, shortcut, invalid, describedBy, required }: Common & {
   value: string | null;
   onValueChange: (v: string | null) => void;
   resetOnSelect?: boolean;
@@ -79,7 +88,7 @@ export function Combobox({ items, value, onValueChange, placeholder, emptyText =
         ) : vObj ? (
           <Lead it={vObj} />
         ) : null}
-        <BaseCombobox.Input className="bui-cb-input" placeholder={placeholder} id={inputId} aria-label={ariaLabel || placeholder} style={shortcut ? { minWidth: 0 } : undefined} />
+        <BaseCombobox.Input className="bui-cb-input" placeholder={placeholder} id={inputId} aria-label={ariaLabel || placeholder} style={shortcut ? { minWidth: 0 } : undefined} {...formAria({ invalid, describedBy, required })} />
         {shortcut ? (
           <span aria-hidden className="pointer-events-none flex flex-none gap-[3px]">
             {shortcut.map(s => <kbd key={s} className="kbd">{s}</kbd>)}
@@ -96,7 +105,8 @@ export function Combobox({ items, value, onValueChange, placeholder, emptyText =
 }
 
 /** Filterable multi-select with removable chips. */
-export function MultiCombobox({ items, value, onValueChange, placeholder, emptyText = 'No matches', limit, ariaLabel }: Common & {
+export function MultiCombobox({ items, value, onValueChange, placeholder, emptyText = 'No matches', limit, ariaLabel, invalid, describedBy, required, inputId }: Common & {
+  inputId?: string;
   value: string[];
   onValueChange: (v: string[]) => void;
 }) {
@@ -126,7 +136,7 @@ export function MultiCombobox({ items, value, onValueChange, placeholder, emptyT
               ))
             }
           </BaseCombobox.Value>
-          <BaseCombobox.Input className="bui-cb-input" placeholder={vObj.length ? '' : placeholder} aria-label={ariaLabel || placeholder} />
+          <BaseCombobox.Input className="bui-cb-input" placeholder={vObj.length ? '' : placeholder} id={inputId} aria-label={ariaLabel || placeholder} {...formAria({ invalid, describedBy, required })} />
         </BaseCombobox.Chips>
       </BaseCombobox.InputGroup>
       <Popup emptyText={emptyText} />

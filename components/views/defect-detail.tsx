@@ -30,6 +30,7 @@ import { Person } from '../ui/person';
 import { Select } from '../ui/select';
 import { sevOptions } from './defects-list';
 import { NotFoundView } from './not-found-view';
+import { langOf } from '@/lib/text';
 
 export function DefectDetail({ id }: { id: string }) {
   const app = useApp();
@@ -55,7 +56,7 @@ export function DefectDetail({ id }: { id: string }) {
   const engItems = useMemo(() => engineerOptions(), []);
 
   if (!app) return <Loading />;
-  if (!d || !derived || !prefs) return <NotFoundView />;
+  if (!d || !derived || !prefs) return <NotFoundView text={`There is no defect ${id}. It may have been deleted.`} back={{ href: '/defects', label: 'Defects' }} />;
 
   const upd = (fn: (x: Defect) => Defect) => updDefect(d.id, fn);
   const log = (x: Defect, text: string): Defect => ({ ...x, activity: [...x.activity, A('e', meId, nowStr(), text)] });
@@ -89,7 +90,7 @@ export function DefectDetail({ id }: { id: string }) {
             <span className="flex items-center gap-2"><Icon name={SEV[d.sev].icon} color={SEV[d.sev].c} size={16} />{SEV[d.sev].l}</span>
             <span title={rec.mig.d}><StatusLabel l={rec.mig.l} fg={rec.mig.fg} icon={rec.mig.icon} /></span>
           </div>
-          <h1 className="text-2xl leading-[1.4] font-bold tracking-[-0.02em] text-pretty">{d.title}</h1>
+          <h1 lang={langOf(d.title)} className="text-2xl leading-[1.4] font-bold tracking-[-0.02em] text-pretty">{d.title}</h1>
         </div>
         <div className="flex flex-wrap items-center gap-2.5">
           <Button
@@ -135,12 +136,12 @@ export function DefectDetail({ id }: { id: string }) {
         <div className="flex min-w-0 flex-[1_1_560px] flex-col gap-9">
           <section className="flex flex-col gap-2.5">
             <h2 className="text-sm font-semibold text-muted">Description</h2>
-            <p className="leading-[1.75] whitespace-pre-wrap text-pretty">{d.desc}</p>
+            <p lang={langOf(d.desc)} className="leading-[1.75] whitespace-pre-wrap text-pretty">{d.desc}</p>
           </section>
           {d.steps ? (
             <section className="flex flex-col gap-2.5">
               <h2 className="text-sm font-semibold text-muted">Steps to reproduce</h2>
-              <p className="border-l-2 border-accent-rule py-0.5 pl-4 leading-[1.8] whitespace-pre-wrap">{d.steps}</p>
+              <p lang={langOf(d.steps)} className="border-l-2 border-accent-rule py-0.5 pl-4 leading-[1.8] whitespace-pre-wrap">{d.steps}</p>
             </section>
           ) : null}
           {d.attachments.length ? (

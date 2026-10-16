@@ -10,6 +10,7 @@ import { engineerOptions } from '@/lib/people';
 import { affFromVals, affOf, affToVals, lineOptions, modelOptions } from '@/lib/products';
 import { A, cqOf, jobOf, simil, toks } from '@/lib/records';
 import { addDefect, updDefect, useApp } from '@/lib/store';
+import { listJoin } from '@/lib/text';
 import type { Attachment, Defect, DefectStatus, Severity } from '@/lib/types';
 import { Loading } from '../common/basics';
 import { useShell } from '../shell/shell-context';
@@ -36,22 +37,64 @@ interface Form {
   attachments: Attachment[];
 }
 
-export const Field = ({ label, hint, children }: { label: string; hint?: string; children: React.ReactNode }) => (
-  <div className="flex flex-col gap-2">
-    {hint ? (
-      <div className="flex flex-col gap-0.5"><span className="text-sm font-semibold text-ink-4">{label}</span><span className="text-sm text-pretty text-muted">{hint}</span></div>
-    ) : (
-      <span className="text-sm font-semibold text-ink-4">{label}</span>
-    )}
-    {children}
-  </div>
-);
+/**
+ * A labelled form field. With htmlFor the label is a real <label> for the input
+ * with that id; error shows under the field with the id `${htmlFor}-err`, which
+ * the input should name in aria-describedby.
+ */
+export const Field = ({ label, hint, htmlFor, required, error, children }: { label: string; hint?: string; htmlFor?: string; required?: boolean; error?: string; children: React.ReactNode }) => {
+  const text = (
+    <>
+      {label}
+      {required ? <span className="font-normal text-muted"> (required)</span> : null}
+    </>
+  );
+  const lbl = htmlFor ? <label htmlFor={htmlFor} className="text-sm font-semibold text-ink-4">{text}</label> : <span className="text-sm font-semibold text-ink-4">{text}</span>;
+  return (
+    <div className="flex flex-col gap-2">
+      {hint ? <div className="flex flex-col gap-0.5">{lbl}<span className="text-sm text-pretty text-muted">{hint}</span></div> : lbl}
+      {children}
+      {error ? <span id={htmlFor + '-err'} className="flex items-center gap-1.5 text-sm text-danger"><Icon name="circle-alert" size={14} />{error}</span> : null}
+    </div>
+  );
+};
+
+type Req = 'title' | 'model' | 'comp' | 'desc';
+const REQ: { k: Req; id: string; label: string; msg: string }[] = [
+  { k: 'title', id: 'df-title', label: 'Title', msg: 'Enter a short summary of the issue.' },
+  { k: 'model', id: 'df-model', label: 'Reported on', msg: 'Choose the model the defect was found on.' },
+  { k: 'comp', id: 'df-comp', label: 'Component', msg: 'Choose a component.' },
+  { k: 'desc', id: 'df-desc', label: 'Description', msg: 'Describe what happens and what was expected.' }
+];
+const missing = (f: Form): Partial<Record<Req, string>> =>
+  Object.fromEntries(REQ.filter(r => (r.k === 'title' || r.k === 'desc' ? !f[r.k].trim() : !f[r.k])).map(r => [r.k, r.msg]));
+
+/** An unsent report, kept in this browser so leaving the page does not lose it. */
+const DRAFT_KEY = 'drs-defect-draft-v1';
+const loadDraft = (): Form | null => {
+  try {
+    const s = localStorage.getItem(DRAFT_KEY);
+    return s ? (JSON.parse(s) as Form) : null;
+  } catch {
+    return null;
+  }
+};
+const saveDraft = (f: Form | null) => {
+  try {
+    if (f) localStorage.setItem(DRAFT_KEY, JSON.stringify({ ...f, attachments: [] }));
+    else localStorage.removeItem(DRAFT_KEY);
+  } catch {
+    // Storage blocked: the form still works, the draft just is not kept.
+  }
+};
+const BLANK: Form = { title: '', model: null, comp: null, aff: [], sev: 'major', status: 'open', fw: '', desc: '', steps: '', assignees: [], attachments: [] };
+const isBlank = (f: Form) => !f.title.trim() && !f.model && !f.comp && !f.aff.length && !f.fw.trim() && !f.desc.trim() && !f.steps.trim() && !f.assignees.length;
 
 export function DefectForm({ id }: { id?: string }) {
   const app = useApp();
   if (!app) return <Loading />;
   const d = id ? app.data.defects.find(x => x.id === id) : undefined;
-  if (id && !d) return <NotFoundView />;
+  if (id && !d) return <NotFoundView back={{ href: '/defects', label: 'Defects' }} />;
   return <DefectFormInner key={id || 'new'} d={d} />;
 }
 
@@ -61,15 +104,28 @@ function DefectFormInner({ d }: { d?: Defect }) {
   const { flash } = useShell();
   const meId = app.prefs.meId;
   const [clone] = useState(() => (d ? null : takeDraft('defect')));
+  // A new report (not a clone) picks up where an unsent one left off.
+  const [restored] = useState(() => (!d && !clone ? loadDraft() : null));
   const [f, setF] = useState<Form>(() =>
     d
       ? { title: d.title, model: d.model, comp: d.comp, aff: affToVals(affOf(d)), sev: d.sev, status: d.status, fw: d.fw, desc: d.desc, steps: d.steps, assignees: [...d.assignees], attachments: [...d.attachments] }
       : clone
         ? { title: clone.title + ' (clone)', model: clone.model, comp: clone.comp, aff: clone.aff, sev: clone.sev as Severity, status: 'open', fw: clone.fw, desc: clone.desc, steps: clone.steps, assignees: clone.assignees, attachments: [] }
-        : { title: '', model: null, comp: null, aff: [], sev: 'major', status: 'open', fw: '', desc: '', steps: '', assignees: [], attachments: [] }
+        : restored || BLANK
   );
-  const [err, setErr] = useState('');
-  const set = <K extends keyof Form>(k: K, v: Form[K]) => { setF(x => ({ ...x, [k]: v })); setErr(''); };
+  const [errs, setErrs] = useState<Partial<Record<Req, string>>>({});
+  const [tried, setTried] = useState(false);
+  const keepDraft = !d && !clone;
+  const set = <K extends keyof Form>(k: K, v: Form[K]) => {
+    setF(x => {
+      const nx = { ...x, [k]: v };
+      // After a failed save, errors clear as each field is fixed.
+      if (tried) setErrs(missing(nx));
+      if (keepDraft) saveDraft(isBlank(nx) ? null : nx);
+      return nx;
+    });
+  };
+  const discard = () => { saveDraft(null); setF(BLANK); setErrs({}); setTried(false); };
   const models = useMemo(() => modelOptions(), []);
   const comps = useMemo(() => COMPS.map(c => ({ value: c, label: c })), []);
   const affItems = useMemo(() => [...lineOptions(), ...modelOptions().filter(m => m.value !== f.model)], [f.model]);
@@ -91,10 +147,16 @@ function DefectFormInner({ d }: { d?: Defect }) {
   const back = d ? '/defects/' + d.id : '/defects';
 
   const save = () => {
-    if (!f.title.trim()) return setErr('Title is required.');
-    if (!f.model) return setErr('Choose a model.');
-    if (!f.comp) return setErr('Choose a component.');
-    if (!f.desc.trim()) return setErr('Description is required.');
+    // Check every required field at once and move focus to the first one to fix.
+    const e = missing(f);
+    setErrs(e);
+    setTried(true);
+    const first = REQ.find(r => e[r.k]);
+    if (first) {
+      document.getElementById(first.id)?.focus();
+      return;
+    }
+    if (keepDraft) saveDraft(null);
     const at = nowStr();
     if (mode === 'new') {
       const yy = TODAY.slice(2, 4);
@@ -105,7 +167,7 @@ function DefectFormInner({ d }: { d?: Defect }) {
         A('e', meId, at, 'submitted ClearQuest record ' + cqOf(newId)), ...f.assignees.map(u => A('e', meId, at, 'assigned ' + UM[u].name))
       ];
       addDefect({
-        id: newId, title: f.title.trim(), affects: affFromVals(f.aff, f.model), model: f.model, comp: f.comp, sev: f.sev, status: f.status,
+        id: newId, title: f.title.trim(), affects: affFromVals(f.aff, f.model), model: f.model!, comp: f.comp!, sev: f.sev, status: f.status,
         fw: f.fw.trim() || '-', reporter: meId, assignees: f.assignees, created: at, desc: f.desc.trim(), steps: f.steps.trim(), attachments: f.attachments, activity: act
       });
       router.push('/defects/' + newId);
@@ -127,10 +189,23 @@ function DefectFormInner({ d }: { d?: Defect }) {
         <h1 className="text-2xl font-bold tracking-[-0.02em]">{heading}</h1>
       </div>
       <div className="flex flex-col gap-6">
-        <Field label="Title"><Input value={f.title} onChange={v => set('title', v)} placeholder="[모델명] 증상 요약 / Short summary of the issue" ariaLabel="Title" /></Field>
+        {restored && !isBlank(f) ? (
+          <div className="flex flex-wrap items-center gap-3 rounded-md bg-accent-wash px-4 py-3">
+            <Icon name="history" size={16} color="var(--color-accent-ink)" />
+            <span className="flex-1">Restored the report you had not sent yet.</span>
+            <Button variant="ghost" size="sm" icon="trash-2" onClick={discard}>Discard draft</Button>
+          </div>
+        ) : null}
+        <Field label="Title" htmlFor="df-title" required error={errs.title}>
+          <Input id="df-title" value={f.title} onChange={v => set('title', v)} placeholder="[모델명] 증상 요약 / Short summary of the issue" required invalid={!!errs.title} describedBy={errs.title ? 'df-title-err' : undefined} />
+        </Field>
         <div className="grid gap-5 [grid-template-columns:repeat(auto-fit,minmax(200px,1fr))]">
-          <Field label="Reported on"><Combobox items={models} value={f.model} onValueChange={v => set('model', v)} placeholder="Type a model, e.g. PS-M4170FX" ariaLabel="Model" /></Field>
-          <Field label="Component"><Combobox items={comps} value={f.comp} onValueChange={v => set('comp', v)} placeholder="Type to search" ariaLabel="Component" /></Field>
+          <Field label="Reported on" htmlFor="df-model" required error={errs.model}>
+            <Combobox inputId="df-model" items={models} value={f.model} onValueChange={v => set('model', v)} placeholder="Type a model, e.g. PS-M4170FX" ariaLabel="Model" required invalid={!!errs.model} describedBy={errs.model ? 'df-model-err' : undefined} />
+          </Field>
+          <Field label="Component" htmlFor="df-comp" required error={errs.comp}>
+            <Combobox inputId="df-comp" items={comps} value={f.comp} onValueChange={v => set('comp', v)} placeholder="Type to search" ariaLabel="Component" required invalid={!!errs.comp} describedBy={errs.comp ? 'df-comp-err' : undefined} />
+          </Field>
         </div>
         <Field label="Also affects" hint="Add a whole product line when the defect is in shared firmware, or pick individual models.">
           <MultiCombobox items={affItems} value={f.aff} onValueChange={v => set('aff', v)} placeholder="Search product lines and models" ariaLabel="Also affects" />
@@ -152,11 +227,14 @@ function DefectFormInner({ d }: { d?: Defect }) {
           <span className="text-sm font-semibold text-ink-4">Severity</span>
           <div className="max-w-full overflow-x-auto"><Segmented ariaLabel="Severity" items={sevOptions()} value={f.sev} onValueChange={v => set('sev', v as Severity)} /></div>
         </div>
-        <Field label="Status"><div className="max-w-full overflow-x-auto"><Segmented ariaLabel="Status" items={dStatusOptions()} value={f.status} onValueChange={v => set('status', v as DefectStatus)} /></div></Field>
+        {/* A new report starts open or in progress; it is resolved later, from the defect page. */}
+        <Field label="Status"><div className="max-w-full overflow-x-auto"><Segmented ariaLabel="Status" items={mode === 'new' ? dStatusOptions().filter(o => o.value === 'open' || o.value === 'in_progress') : dStatusOptions()} value={f.status} onValueChange={v => set('status', v as DefectStatus)} /></div></Field>
         <div className="grid gap-5 [grid-template-columns:repeat(auto-fit,minmax(200px,1fr))]">
           <Field label="Firmware / driver version"><Input mono value={f.fw} onChange={v => set('fw', v)} placeholder={f.model && MM[f.model] ? (MM[f.model].series === 'MultiXpress' ? 'V5.10.03.24' : MM[f.model].series === 'ProXpress' ? 'V4.00.03.24' : 'V3.00.03.24') : 'V4.00.03.24'} ariaLabel="Firmware version" /></Field>
         </div>
-        <Field label="Description"><Textarea value={f.desc} onChange={v => set('desc', v)} rows={5} placeholder="What happens, and what was expected?" ariaLabel="Description" /></Field>
+        <Field label="Description" htmlFor="df-desc" required error={errs.desc}>
+          <Textarea id="df-desc" value={f.desc} onChange={v => set('desc', v)} rows={5} placeholder="What happens, and what was expected?" required invalid={!!errs.desc} describedBy={errs.desc ? 'df-desc-err' : undefined} />
+        </Field>
         <Field label="Steps to reproduce"><Textarea value={f.steps} onChange={v => set('steps', v)} rows={4} placeholder="1. ..." ariaLabel="Steps to reproduce" /></Field>
         <Field label="Assignees"><MultiCombobox items={engItems} value={f.assignees} onValueChange={v => set('assignees', v)} placeholder="Type a name" ariaLabel="Assignees" /></Field>
         <div className="flex flex-col gap-3">
@@ -165,10 +243,16 @@ function DefectFormInner({ d }: { d?: Defect }) {
           <Attachments items={f.attachments} onRemove={i => set('attachments', f.attachments.filter((_, j) => j !== i))} />
           <div className="flex"><FileButton onFiles={list => set('attachments', [...f.attachments, ...list])}>Add files</FileButton></div>
         </div>
-        {err ? <span className="border-l-[3px] border-danger-rule py-1 pl-3.5 text-danger" role="alert">{err}</span> : null}
+        <div role="alert">
+          {tried && Object.keys(errs).length ? (
+            <span className="block border-l-[3px] border-danger-rule py-1 pl-3.5 text-danger">
+              {`Fill in ${listJoin(REQ.filter(r => errs[r.k]).map(r => r.label))} to ${mode === 'new' ? 'report this defect' : 'save'}.`}
+            </span>
+          ) : null}
+        </div>
       </div>
       <div className="flex justify-end gap-2.5 border-t border-line pt-6">
-        <Button variant="secondary" onClick={() => router.push(back)}>Cancel</Button>
+        <Button variant="secondary" onClick={() => { if (keepDraft) saveDraft(null); router.push(back); }}>Cancel</Button>
         <Button variant="primary" icon="check" onClick={save}>{mode === 'new' ? 'Report defect' : 'Save changes'}</Button>
       </div>
     </div>

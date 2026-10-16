@@ -62,7 +62,7 @@ export function InsightsView() {
           className="overflow-hidden border-y border-[oklch(0.92_0.01_290)] bg-surface"
           style={mainW ? { width: mainW, marginLeft: `calc(50% - ${mainW / 2}px)` } : undefined}
         >
-          <RelGraph nodes={graph.nodes} edges={graph.edges} height={680} />
+          {mainW > 0 && mainW < 640 ? <SystemList graph={graph} /> : <RelGraph nodes={graph.nodes} edges={graph.edges} height={680} />}
         </div>
         <div className="flex flex-wrap gap-5 text-sm text-ink-5">
           <span className="flex items-center gap-2"><span className="h-1.5 w-1.5 rounded-full bg-[oklch(0.62_0.14_155)]" />Connected and in sync</span>
@@ -153,7 +153,7 @@ export function InsightsView() {
           <span>Showing</span>
           <span className="font-[650] text-ink tabular-nums">{st.periodL}</span>
         </div>
-        <div role="tablist" aria-label="Reporting period" className="-mb-px flex items-stretch gap-6 self-stretch overflow-x-auto overflow-y-hidden">
+        <div role="tablist" aria-label="Reporting period" className="-mb-px flex items-stretch gap-6 self-stretch overflow-x-auto overflow-y-hidden [scrollbar-width:none] max-sm:pr-6 max-sm:[mask-image:linear-gradient(to_right,#000_calc(100%-40px),transparent)]">
           {RANGES.map(r => {
             const on = r.n === range;
             return (
@@ -389,6 +389,44 @@ export function InsightsView() {
           </div>
         </div>
       </Section>
+    </div>
+  );
+}
+
+type Graph = ReturnType<typeof systemGraph>;
+type SysData = { name: string; role: string; logo?: string; sync?: string; meta?: string; href?: string; label?: string; note?: string; metaLines?: { icon: string; text: string }[] };
+
+/** The seven-system diagram as a list, for phones: legacy systems, DRS, then the new systems. */
+function SystemList({ graph }: { graph: Graph }) {
+  const sys = graph.nodes.filter(n => n.type === 'sys' && n.id !== 'hub');
+  const labels = graph.nodes.filter(n => n.type === 'label').map(n => n.data as unknown as SysData);
+  const hub = graph.nodes.find(n => n.id === 'hub')!.data as unknown as SysData;
+  const card = (d: SysData, hubCard = false) => (
+    <div className={'flex flex-col gap-1.5 rounded-lg border px-4 py-3.5 ' + (hubCard ? 'border-[oklch(0.75_0.12_293)] bg-accent-wash' : 'border-line bg-white')}>
+      <span className="flex items-center gap-2.5 font-[650]">
+        {d.logo ? <img src={d.logo} alt="" className="block h-4 w-auto" /> : null}
+        {d.name}
+      </span>
+      <span className="text-sm text-ink-5">{d.role}</span>
+      {d.meta ? <span className="text-sm font-[550]">{d.meta}</span> : null}
+      {d.metaLines ? <span className="text-sm font-[550]">{d.metaLines.map(m => m.text).join(', ')}</span> : null}
+      {d.sync ? <span className="flex items-center gap-2 text-sm text-muted"><span className="h-1.5 w-1.5 rounded-full bg-[oklch(0.62_0.14_155)]" />{d.sync}</span> : null}
+    </div>
+  );
+  const group = (i: number, items: typeof sys) => (
+    <div className="flex flex-col gap-2.5">
+      <div className="flex flex-col gap-0.5"><span className="font-[650]">{labels[i]?.label}</span><span className="text-sm text-muted">{labels[i]?.note}</span></div>
+      {items.map(n => <div key={n.id}>{card(n.data as unknown as SysData)}</div>)}
+    </div>
+  );
+  const arrow = <div aria-hidden className="flex justify-center text-[oklch(0.55_0.17_293)]"><Icon name="arrow-down" size={18} /></div>;
+  return (
+    <div className="flex flex-col gap-3 px-4 py-5">
+      {group(0, sys.filter(n => n.position.x < 0))}
+      {arrow}
+      {card(hub, true)}
+      {arrow}
+      {group(1, sys.filter(n => n.position.x > 0))}
     </div>
   );
 }

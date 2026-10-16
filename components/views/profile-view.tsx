@@ -10,6 +10,7 @@ import { Loading, Note, PhotoPlaceholder, StatusLabel } from '../common/basics';
 import { Clickable } from '../common/clickable';
 import { Icon } from '../ui/icon';
 import { NotFoundView } from './not-found-view';
+import { langOf } from '@/lib/text';
 
 export function ProfileView({ id }: { id: string }) {
   const app = useApp();
@@ -32,7 +33,7 @@ export function ProfileView({ id }: { id: string }) {
     return { openD, revs, acts, counts };
   }, [app, id, u]);
   if (!app) return <Loading />;
-  if (!u || !v) return <NotFoundView text="This person is not in the directory." />;
+  if (!u || !v) return <NotFoundView text="This person is not in the directory." back={{ href: '/teams', label: 'Teams' }} />;
   const stats = [
     u.role === 'qa' ? { l: 'Defects reported', n: v.counts.reported } : null,
     u.role === 'eng' ? { l: 'Defects assigned', n: v.counts.assigned } : null,
@@ -49,7 +50,7 @@ export function ProfileView({ id }: { id: string }) {
         <PhotoPlaceholder w={160} h={200} iconSize={48} src={u.photo} title={u.photo ? u.name : 'Photo placeholder'} />
         <div className="flex max-w-[680px] min-w-0 flex-[1_1_360px] flex-col gap-2.5">
           <div className="flex flex-col gap-1">
-            <h1 className="text-2xl font-bold tracking-[-0.02em]">{u.name}</h1>
+            <h1 lang={langOf(u.name)} className="text-2xl font-bold tracking-[-0.02em]">{u.name}</h1>
             {u.en !== u.name ? <span className="text-muted">{u.en}</span> : null}
           </div>
           <span className="font-[550]">{u.title}</span>

@@ -28,6 +28,7 @@ import { Person } from '../ui/person';
 import { Segmented } from '../ui/toggles';
 import { linkRelated } from './defect-detail';
 import { NotFoundView } from './not-found-view';
+import { langOf } from '@/lib/text';
 
 export function ReviewDetail({ id }: { id: string }) {
   const app = useApp();
@@ -50,7 +51,7 @@ export function ReviewDetail({ id }: { id: string }) {
   const people = useMemo(() => USERS.filter(u => u.id !== meId).map(u => personOption(u.id)), [meId]);
 
   if (!app) return <Loading />;
-  if (!r || !derived || !prefs || !data) return <NotFoundView />;
+  if (!r || !derived || !prefs || !data) return <NotFoundView text={`There is no code review ${id}. It may have been deleted.`} back={{ href: '/reviews', label: 'Code reviews' }} />;
 
   const me = UM[meId], isCR = me.role === 'cr', isAuthor = r.author === meId;
   const myRv = r.reviewers.find(v => v.u === meId);
@@ -105,7 +106,7 @@ export function ReviewDetail({ id }: { id: string }) {
             <span className="flex items-center gap-2"><Icon name={TYPE_ICON[r.type]} color="var(--color-muted)" size={16} />{r.type}</span>
             <span title={rec.mig.d}><StatusLabel l={rec.mig.l} fg={rec.mig.fg} icon={rec.mig.icon} /></span>
           </div>
-          <h1 className="text-2xl leading-[1.4] font-bold tracking-[-0.02em] text-pretty">{r.title}</h1>
+          <h1 lang={langOf(r.title)} className="text-2xl leading-[1.4] font-bold tracking-[-0.02em] text-pretty">{r.title}</h1>
         </div>
         <div className="flex flex-wrap items-center gap-2.5">
           <Button
@@ -230,7 +231,7 @@ export function ReviewDetail({ id }: { id: string }) {
         <div className="flex min-w-0 flex-[1_1_560px] flex-col gap-9">
           <section className="flex flex-col gap-2.5">
             <h2 className="text-sm font-semibold text-muted">Summary of change</h2>
-            <p className="leading-[1.75] whitespace-pre-wrap text-pretty">{r.desc}</p>
+            <p lang={langOf(r.desc)} className="leading-[1.75] whitespace-pre-wrap text-pretty">{r.desc}</p>
           </section>
           {r.attachments.length ? (
             <section className="flex flex-col gap-3.5">

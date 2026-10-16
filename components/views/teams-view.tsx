@@ -8,6 +8,7 @@ import { useShell } from '../shell/shell-context';
 import { Input } from '../ui/fields';
 import { Icon } from '../ui/icon';
 import { Select } from '../ui/select';
+import { langOf } from '@/lib/text';
 
 export function TeamsView() {
   const { ui, setUi } = useShell();
@@ -41,7 +42,7 @@ export function TeamsView() {
                 <PhotoPlaceholder w={96} h={120} iconSize={32} src={u.photo} title={u.photo ? u.name : 'Photo placeholder, photos/' + u.id + '.png'} />
                 <div className="flex min-w-0 flex-1 flex-col gap-1.5">
                   <div className="flex flex-col gap-0.5">
-                    <NextLink href={'/teams/' + u.id} className="w-max text-base font-[650] text-inherit">{u.name}</NextLink>
+                    <NextLink href={'/teams/' + u.id} lang={langOf(u.name)} className="w-max text-base font-[650] text-inherit">{u.name}</NextLink>
                     {u.en !== u.name ? <span className="text-sm text-muted">{u.en}</span> : null}
                   </div>
                   <span>{u.title}</span>
