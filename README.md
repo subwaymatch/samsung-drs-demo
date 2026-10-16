@@ -64,6 +64,8 @@ To deploy from Git with Workers Builds instead, connect the repository in the Cl
 
 `video/` is a [Remotion](https://www.remotion.dev) project that captures the running app and renders a 66-second showcase video. See [video/README.md](video/README.md).
 
+The About page plays a copy of it from `public/video`, encoded to stay under the 25 MiB limit for a single Workers static asset. `public/_headers` lets browsers and Cloudflare cache those files for a year, so a new render gets a new version in its file name.
+
 ## Credits
 
 Product logos in `public/logos` belong to their owners and are used only to label the systems DRS synced with. The Perforce mark is from [Simple Icons](https://simpleicons.org). Fonts: [Pretendard](https://github.com/orioncactus/pretendard) and [JetBrains Mono](https://www.jetbrains.com/lp/mono/). The sales region map in device details is built from [Natural Earth](https://www.naturalearthdata.com) 1:110m countries (public domain) by `scripts/region-map.mjs`, which writes `lib/region-map.ts`.

@@ -49,12 +49,27 @@ Remotion downloads Chrome Headless Shell on its first render. To use one that is
 
 The captures, fonts and the app's images (copied from `../public` by `pnpm assets`, which `studio` and `render` run first) are gitignored. `src/layout.json` is committed, since the scenes' zoom targets depend on it.
 
-The render is a high-quality master (CRF 16, about 34 MB). For a smaller copy to put on a website, and a poster frame from the title card:
+The render is a high-quality master (CRF 16, about 37 MB).
+
+## Web copy
+
+The About page plays a copy served as a static asset, and Cloudflare Workers caps each static asset at 25 MiB. `pnpm render:web` makes one that fits:
 
 ```sh
-ffmpeg -i out/drs-showcase.mp4 -c:v libx264 -preset slow -crf 20 -movflags +faststart out/drs-showcase-web.mp4
-node scripts/stills.mjs DrsShowcase:110 --scale=1   # out/stills/DrsShowcase-110.png
+pnpm render:web              # writes out/drs-showcase-web.mp4, aiming for 24.5 MiB
+pnpm render:web 24 --reuse   # encodes again from the last run's frames, aiming for 24 MiB
 ```
+
+It renders lossless PNG frames and a WAV of the soundtrack to `out/web`, then a two-pass x264 encode spends the size budget exactly, with 192 kbps AAC audio. That looks better than shrinking the master, which would compress the video twice. The frames take about 2 GB; delete `out/web` when you are done.
+
+To publish it, copy the file to `../public/video/` and make a poster from the title card, saved as WebP (quality 86) next to it:
+
+```sh
+cp out/drs-showcase-web.mp4 ../public/video/drs-showcase-v1.mp4
+node scripts/stills.mjs DrsShowcase:110 --scale=1   # out/stills/DrsShowcase-110.png, then ../public/video/drs-showcase-v1.webp
+```
+
+`../public/_headers` lets browsers cache `/video/*` for a year, so give a new render a new version number (`v2`) in both file names and in `components/views/about-view.tsx`.
 
 Each scene is also its own composition under **Scenes** in the Studio. To render stills for review:
 

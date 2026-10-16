@@ -17,6 +17,20 @@ export function AboutView() {
           <p className="text-[15px] leading-[1.7] text-muted">Samsung Electronics, Printing Solutions Business, 2016-2017</p>
         </div>
       </div>
+      {/* Rendered by `pnpm render:web` in video/. Bump the version in both file names when it changes, since public/_headers caches them for a year. */}
+      <figure className="m-0 flex flex-col gap-3">
+        <video
+          className="block aspect-video w-full rounded-lg bg-[oklch(0.15_0.03_290)] shadow-[0_0_0_1px_oklch(0.45_0.05_293/0.12),0_24px_50px_-28px_oklch(0.3_0.12_293/0.5)]"
+          controls
+          playsInline
+          preload="none"
+          poster="/video/drs-showcase-v1.webp"
+          aria-label="DRS showcase video"
+        >
+          <source src="/video/drs-showcase-v1.mp4" type="video/mp4" />
+        </video>
+        <figcaption className="text-sm text-muted">A one-minute tour of DRS, with music.</figcaption>
+      </figure>
       <section className="flex max-w-[680px] flex-col gap-4 border-t border-line pt-6 text-[17px] leading-[1.7] text-pretty text-ink-3">
         <p>This is a demo of an application I built at Samsung Electronics' printing division.</p>
         <p>DRS tracks defects and code reviews for printer and copier firmware, measures them against severity targets, and keeps records linked across IBM Rational, Review Board, Perforce, Helix Swarm, Jira and Confluence.</p>
