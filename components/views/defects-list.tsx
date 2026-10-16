@@ -11,7 +11,7 @@ import { A, firstRes, isOpen, lastAt, migOf, tgtEval } from '@/lib/records';
 import { updDefects, useApp } from '@/lib/store';
 import type { Defect, DefectStatus, Option, Severity } from '@/lib/types';
 import { EmptyState, Loading, PageHeader, Pagination, pagerOf, QuickFilters, ScopeTabs, SortHeader, StatusLabel, Thumb } from '../common/basics';
-import { Clickable, stop } from '../common/clickable';
+import { Clickable, KEY_ROW, stop } from '../common/clickable';
 import { useKeyRows, useShell } from '../shell/shell-context';
 import { Button, LinkButton } from '../ui/button';
 import { Combobox } from '../ui/combobox';
@@ -21,7 +21,6 @@ import { Person } from '../ui/person';
 import { Select } from '../ui/select';
 import { Checkbox } from '../ui/toggles';
 
-const HLBG = 'oklch(0.975 0.018 293)', HLSH = 'inset 3px 0 0 oklch(0.55 0.19 293)';
 export const rangeChip = (pre: string, f?: string | null, t?: string | null) =>
   !f ? `${pre} until ${short(addD(t || '', -1))}` : `${pre} ${short(f)} - ${t ? short(addD(t, -1)) : 'now'}`;
 
@@ -144,7 +143,7 @@ export function DefectsList() {
           <Button variant="ghost" size="sm" icon="x" onClick={() => setSel([])}>Clear selection</Button>
         </div>
       ) : null}
-      <div className="overflow-x-auto">
+      <div className="-mx-3 overflow-x-auto px-3">
         <div style={{ minWidth: compact ? 760 : 1016 }}>
           <div className="grid items-center gap-5 border-b border-line py-3 text-sm font-semibold text-muted" style={{ gridTemplateColumns: cols }}>
             <div className="flex items-center" onClick={stop}>
@@ -169,7 +168,7 @@ export function DefectsList() {
                   href={'/defects/' + d.id}
                   krow={i}
                   className="row-link grid items-center gap-5 border-b border-line-soft py-4 last:border-b-0"
-                  style={{ gridTemplateColumns: cols, background: i === kIdx ? HLBG : ck ? 'oklch(0.982 0.012 293)' : 'transparent', boxShadow: i === kIdx ? HLSH : 'none' }}
+                  style={{ gridTemplateColumns: cols, ...(i === kIdx ? KEY_ROW : { background: ck ? 'oklch(0.982 0.012 293)' : 'transparent' }) }}
                 >
                   <div className="flex items-center" onClick={stop}>
                     <Checkbox ariaLabel={'Select ' + d.id} checked={ck} onCheckedChange={v => toggle(d.id, v)} />
