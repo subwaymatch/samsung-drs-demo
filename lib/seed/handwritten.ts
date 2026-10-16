@@ -10,7 +10,7 @@ type HwDefect = Omit<Defect, 'steps' | 'attachments'> & Partial<Pick<Defect, 'st
 export const HW_DEFECTS: HwDefect[] = [
   // ---- September 2017: the current showcase ----
   {
-    id: 'D:duplex', title: '[SL-C3060FR] 양면 인쇄 시 2페이지 이후 용지 걸림 (Jam 0x21) 발생', model: 'SL-C3060FR', comp: 'Print Engine', sev: 'critical', status: 'in_progress', fw: 'V4.00.03.24',
+    id: 'D:duplex', title: '[PS-C3150FR] 양면 인쇄 시 2페이지 이후 용지 걸림 (Jam 0x21) 발생', model: 'PS-C3150FR', comp: 'Print Engine', sev: 'critical', status: 'in_progress', fw: 'V4.00.03.24',
     reporter: 'u1', assignees: ['u2', 'u5'], created: '2017-09-11 09:42',
     desc: 'A4 80g 용지로 양면 인쇄 시, 2페이지 출력 직후 듀플렉스 유닛에서 Jam 0x21이 반복적으로 발생합니다. 단면 인쇄에서는 재현되지 않습니다.\n발생 빈도: 10회 중 7회',
     steps: '1. 트레이 1에 A4 80g 용지 적재\n2. PC에서 4페이지 문서를 양면 인쇄로 전송\n3. 2페이지 출력 후 듀플렉스 반전 구간에서 정지\n4. 조작부에 "용지 걸림 0x21" 표시',
@@ -24,7 +24,7 @@ export const HW_DEFECTS: HwDefect[] = [
     ]
   },
   {
-    id: 'D:addrbook', title: 'SyncThru Web Service: Address book import fails for CSV files over 500 entries', model: 'SL-M4080FX', comp: 'SyncThru Web UI', sev: 'major', status: 'open', fw: 'V4.00.03.11',
+    id: 'D:addrbook', title: 'SyncThru Web Service: Address book import fails for CSV files over 500 entries', model: 'PS-M4170FX', comp: 'SyncThru Web UI', sev: 'major', status: 'open', fw: 'V4.00.03.11',
     reporter: 'u8', assignees: ['u9'], created: '2017-09-08 13:05',
     desc: 'Importing an address book CSV with more than 500 entries through SyncThru Web Service returns "Import failed (E-302)" and no entries are saved. Files with 500 or fewer entries import correctly.',
     steps: '1. Log in to SyncThru Web Service as admin\n2. Address Book > Individual > Import\n3. Select a CSV with 501+ entries\n4. Click Import',
@@ -36,7 +36,7 @@ export const HW_DEFECTS: HwDefect[] = [
     ]
   },
   {
-    id: 'D:faxsleep', title: '[SL-M4080FX] 팩스 수신 직후 절전 모드 진입 시 수신 문서 일부 유실', model: 'SL-M4080FX', comp: 'Fax', sev: 'critical', status: 'open', fw: 'V4.00.03.11',
+    id: 'D:faxsleep', title: '[PS-M4170FX] 팩스 수신 직후 절전 모드 진입 시 수신 문서 일부 유실', model: 'PS-M4170FX', comp: 'Fax', sev: 'critical', status: 'open', fw: 'V4.00.03.11',
     reporter: 'u1', assignees: ['u4'], created: '2017-09-07 17:20',
     desc: '팩스 수신 완료 후 1분 이내 절전 모드로 진입하면 메모리에 저장된 수신 문서의 마지막 페이지가 출력되지 않고 유실됩니다.',
     steps: '1. 절전 모드 진입 시간을 1분으로 설정\n2. 외부 팩스에서 3페이지 문서 송신\n3. 수신 완료 후 대기\n4. 절전 복귀 후 3페이지 누락 확인',
@@ -48,7 +48,7 @@ export const HW_DEFECTS: HwDefect[] = [
     ]
   },
   {
-    id: 'D:wfd', title: 'Wi-Fi Direct pairing drops after firmware update on SL-M2020W', model: 'SL-M2020W', comp: 'Network / Wi-Fi', sev: 'major', status: 'in_progress', fw: 'V3.00.03.08',
+    id: 'D:wfd', title: 'Wi-Fi Direct pairing drops after firmware update on PS-M2110W', model: 'PS-M2110W', comp: 'Network / Wi-Fi', sev: 'major', status: 'in_progress', fw: 'V3.00.03.08',
     reporter: 'u8', assignees: ['u4', 'u10'], created: '2017-09-06 11:15',
     desc: 'After updating to V3.00.03.08, Wi-Fi Direct connections from Android devices disconnect after roughly 3 minutes idle and cannot reconnect without power cycling the printer.',
     steps: '1. Update firmware to V3.00.03.08\n2. Connect an Android phone via Wi-Fi Direct\n3. Leave idle for 3+ minutes\n4. Try to print from Samsung Mobile Print',
@@ -59,7 +59,7 @@ export const HW_DEFECTS: HwDefect[] = [
     ]
   },
   {
-    id: 'D:a3adf', title: '[SL-X7600LX] ADF 스캔 시 A3 원본 하단 약 3mm 잘림', model: 'SL-X7600LX', comp: 'Scanner / ADF', sev: 'major', status: 'open', fw: 'V5.10.03.03',
+    id: 'D:a3adf', title: '[PS-X7690LX] ADF 스캔 시 A3 원본 하단 약 3mm 잘림', model: 'PS-X7690LX', comp: 'Scanner / ADF', sev: 'major', status: 'open', fw: 'V5.10.03.03',
     reporter: 'u23', assignees: ['u5'], created: '2017-09-05 10:30',
     desc: 'ADF로 A3 원본 스캔 시 하단 약 3mm가 잘려서 저장됩니다. 평판(플래튼) 스캔에서는 정상입니다.',
     attachments: [F_('a3_adf_scan_cut.jpg', 1830000, 'image/jpeg'), F_('a3_platen_ok.jpg', 1790000, 'image/jpeg')],
@@ -69,7 +69,7 @@ export const HW_DEFECTS: HwDefect[] = [
     ]
   },
   {
-    id: 'D:tonerko', title: '조작부 UI: "토너 부족" 경고가 한국어 설정에서 영문으로 표시됨', model: 'SL-C480FW', comp: 'Panel UI', sev: 'minor', status: 'resolved', fw: 'V3.00.03.30',
+    id: 'D:tonerko', title: '조작부 UI: "토너 부족" 경고가 한국어 설정에서 영문으로 표시됨', model: 'PS-C570FW', comp: 'Panel UI', sev: 'minor', status: 'resolved', fw: 'V3.00.03.30',
     reporter: 'u1', assignees: ['u3'], created: '2017-08-31 09:10',
     desc: '언어를 한국어로 설정해도 토너 부족 경고가 "Toner Low"로 표시됩니다.',
     attachments: [F_('panel_toner_low_en.jpg', 540000, 'image/jpeg')],
@@ -80,7 +80,7 @@ export const HW_DEFECTS: HwDefect[] = [
     ]
   },
   {
-    id: 'D:watermark', title: 'PCL6 driver: Watermark shifts 12 mm right on Letter size in landscape', model: 'SL-M4080FX', comp: 'Print Driver', sev: 'minor', status: 'resolved', fw: 'UPD 3.04.01',
+    id: 'D:watermark', title: 'PCL6 driver: Watermark shifts 12 mm right on Letter size in landscape', model: 'PS-M4170FX', comp: 'Print Driver', sev: 'minor', status: 'resolved', fw: 'UPD 3.04.01',
     reporter: 'u16', assignees: ['u9'], created: '2017-08-29 14:00',
     desc: 'With a text watermark enabled, Letter landscape jobs print the watermark about 12 mm right of center. A4 is not affected.',
     activity: [
@@ -89,11 +89,13 @@ export const HW_DEFECTS: HwDefect[] = [
     ]
   },
   {
-    id: 'D:colorreg', title: '[SL-C480FW] 컬러 레지스트레이션 자동 보정 후 시안 번짐', model: 'SL-C480FW', comp: 'Print Engine', sev: 'major', status: 'closed', fw: 'V3.00.03.28',
+    id: 'D:colorreg', title: '[PS-C570FW] 컬러 레지스트레이션 자동 보정 후 시안 번짐', model: 'PS-C570FW', comp: 'Print Engine', sev: 'major', status: 'closed', fw: 'V3.00.03.28',
     reporter: 'u1', assignees: ['u5', 'u2'], created: '2017-08-24 10:00',
     desc: '자동 컬러 레지스트레이션 실행 후 시안(C) 색상이 약 0.3mm 번져 보입니다.',
+    p4: [{ cl: '1450862', u: 'u2', at: '2017-08-29 15:12', desc: '컬러 레지스트레이션 보정 시 시안 오프셋 부호 수정' }],
     activity: [
       A('e', 'u1', '2017-08-24 10:00', 'reported this defect'), A('e', 'u1', '2017-08-24 10:01', 'assigned 최영호'), A('e', 'u5', '2017-08-25 09:00', 'assigned 박성민'),
+      A('e', 'u2', '2017-08-29 15:12', 'linked changelist 1450862 to {JOB:colorreg} (p4 fix)'),
       A('c', 'u2', '2017-08-29 15:20', '보정 패턴 측정 시 시안 오프셋 부호가 반대로 적용되고 있었습니다. 수정 펌웨어 빌드 서버에 올렸습니다.'),
       A('e', 'u2', '2017-08-30 10:00', 'changed status to Resolved'),
       A('c', 'u1', '2017-09-01 14:50', 'V3.00.03.30에서 수정 확인했습니다. 종료합니다.'),
@@ -101,18 +103,20 @@ export const HW_DEFECTS: HwDefect[] = [
     ]
   },
   {
-    id: 'D:staple', title: 'Finisher staple count mismatch when a job exceeds 50 sheets', model: 'SL-X7600LX', comp: 'Finisher', sev: 'major', status: 'closed', fw: 'V5.10.03.01',
+    id: 'D:staple', title: 'Finisher staple count mismatch when a job exceeds 50 sheets', model: 'PS-X7690LX', comp: 'Finisher', sev: 'major', status: 'closed', fw: 'V5.10.03.01',
     reporter: 'u23', assignees: ['u33'], created: '2017-08-22 16:20',
     desc: 'Jobs over 50 sheets are split into sets, but the staple count reported to the job log is off by one per set.',
+    p4: [{ cl: '1449781', u: 'u33', at: '2017-08-24 11:12', desc: 'Report the staple count after the last set is stapled' }],
     activity: [
       A('e', 'u23', '2017-08-22 16:20', 'reported this defect'), A('e', 'u23', '2017-08-22 16:21', 'assigned 유하린'),
       A('c', 'u33', '2017-08-24 11:10', '세트 분할 시 마지막 스테이플 신호가 로그에 반영되지 않습니다. 피니셔 펌웨어 쪽에서 카운트 보고 시점을 수정했습니다.'),
+      A('e', 'u33', '2017-08-24 11:12', 'linked changelist 1449781 to {JOB:staple} (p4 fix)'),
       A('e', 'u33', '2017-08-25 18:00', 'changed status to Resolved'),
       A('e', 'u23', '2017-08-30 11:00', 'changed status to Closed')
     ]
   },
   {
-    id: 'D:smbko', title: '[ProXpress M4070FR] SMB 네트워크 스캔 전송 시 한글 파일명 깨짐', model: 'SL-M4070FR', comp: 'Network / Wi-Fi', sev: 'minor', status: 'in_progress', fw: 'V4.00.03.40',
+    id: 'D:smbko', title: '[ProXpress M4160FR] SMB 네트워크 스캔 전송 시 한글 파일명 깨짐', model: 'PS-M4160FR', comp: 'Network / Wi-Fi', sev: 'minor', status: 'in_progress', fw: 'V4.00.03.40',
     reporter: 'u1', assignees: ['u3'], created: '2017-09-04 15:30',
     desc: 'Scan to SMB 기능으로 파일명에 한글을 입력하면 Windows 공유 폴더에서 파일명이 깨져서 저장됩니다.',
     attachments: [F_('smb_filename_broken.png', 280000, 'image/png')],
@@ -122,17 +126,17 @@ export const HW_DEFECTS: HwDefect[] = [
     ]
   },
   {
-    id: 'D:tonerlow', title: 'Toner low warning appears at 40% remaining with MLT-D203L cartridge', model: 'SL-M4070FR', comp: 'Toner / Supplies', sev: 'trivial', status: 'open', fw: 'V4.00.03.40',
+    id: 'D:tonerlow', title: 'Toner low warning appears at 40% remaining with MLT-D203L cartridge', model: 'PS-M4160FR', comp: 'Toner / Supplies', sev: 'trivial', status: 'open', fw: 'V4.00.03.40',
     reporter: 'u8', assignees: [], created: '2017-09-13 09:00',
     desc: 'With a new MLT-D203L high-yield cartridge, the toner low warning appears when the gauge still shows about 40% remaining.',
     activity: [A('e', 'u8', '2017-09-13 09:00', 'reported this defect')]
   },
   {
-    id: 'D:tls', title: '[SL-M4580FX] SyncThru HTTPS still accepts TLS 1.0 after "TLS 1.2 only" is set', model: 'SL-M4580FX', comp: 'Security', sev: 'critical', status: 'in_progress', fw: 'V4.00.03.18',
+    id: 'D:tls', title: '[PS-M4670FX] SyncThru HTTPS still accepts TLS 1.0 after "TLS 1.2 only" is set', model: 'PS-M4670FX', comp: 'Security', sev: 'critical', status: 'in_progress', fw: 'V4.00.03.18',
     reporter: 'u24', assignees: ['u26'], created: '2017-09-12 10:20',
     desc: 'With Security > Network Security > SSL/TLS set to "TLS 1.2 only", sslscan still reports TLS 1.0 and 1.1 as accepted on port 443. The setting is saved and shown correctly in SyncThru after reboot.\nFound by the nightly security scan on the release candidate for the public-sector tender.',
     steps: '1. SyncThru > Settings > Security > SSL/TLS: select "TLS 1.2 only"\n2. Apply and reboot the device\n3. Run sslscan against port 443\n4. TLS 1.0 and TLS 1.1 are still listed as accepted',
-    attachments: [F_('sslscan_m4580fx_0912.txt', 14200, 'text/plain'), F_('syncthru_tls_setting.png', 210000, 'image/png')],
+    attachments: [F_('sslscan_m4670fx_0912.txt', 14200, 'text/plain'), F_('syncthru_tls_setting.png', 210000, 'image/png')],
     affects: { lines: ['ProXpress Mono', 'ProXpress Color'], models: [] },
     activity: [
       A('e', 'u24', '2017-09-12 10:20', 'reported this defect'), A('e', 'u24', '2017-09-12 10:21', 'assigned 황보라'),
@@ -143,10 +147,10 @@ export const HW_DEFECTS: HwDefect[] = [
     ]
   },
   {
-    id: 'D:mopria', title: '[SL-M2885FW] Mopria print from Android 7.1 fails with "Printer unavailable"', model: 'SL-M2885FW', comp: 'Mobile Print', sev: 'major', status: 'open', fw: 'V3.00.03.12',
+    id: 'D:mopria', title: '[PS-M2975FW] Mopria print from Android 7.1 fails with "Printer unavailable"', model: 'PS-M2975FW', comp: 'Mobile Print', sev: 'major', status: 'open', fw: 'V3.00.03.12',
     reporter: 'u8', assignees: ['u20'], created: '2017-09-14 15:45',
     desc: 'Printing from the Mopria Print Service on Android 7.1 fails with "Printer unavailable" right after the job is sent. Android 6.0 devices print correctly on the same network.\nThe device log shows Get-Printer-Attributes returning client-error-bad-request.',
-    steps: '1. Connect a Pixel (Android 7.1.2) to the same Wi-Fi network\n2. Open a PDF and choose Print > SL-M2885FW via Mopria\n3. Tap Print\n4. The notification shows "Printer unavailable"',
+    steps: '1. Connect a Pixel (Android 7.1.2) to the same Wi-Fi network\n2. Open a PDF and choose Print > PS-M2975FW via Mopria\n3. Tap Print\n4. The notification shows "Printer unavailable"',
     attachments: [F_('ipp_trace_android71.pcapng', 1240000, 'application/vnd.tcpdump.pcap'), F_('mopria_logcat.txt', 88000, 'text/plain')],
     activity: [
       A('e', 'u8', '2017-09-14 15:45', 'reported this defect'), A('e', 'u8', '2017-09-14 15:46', 'assigned Vikram Rao'),
@@ -154,7 +158,7 @@ export const HW_DEFECTS: HwDefect[] = [
     ]
   },
   {
-    id: 'D:cardauth', title: '[SL-X4300LX] 사원증 인증(HID iCLASS) 후 보안 인쇄 작업 목록이 비어 있음', model: 'SL-X4300LX', comp: 'Security', sev: 'major', status: 'in_progress', fw: 'V5.10.03.06',
+    id: 'D:cardauth', title: '[PS-X4390LX] 사원증 인증(HID iCLASS) 후 보안 인쇄 작업 목록이 비어 있음', model: 'PS-X4390LX', comp: 'Security', sev: 'major', status: 'in_progress', fw: 'V5.10.03.06',
     reporter: 'u23', assignees: ['u30'], created: '2017-09-07 14:05',
     desc: 'HID iCLASS 사원증으로 로그인하면 보안 인쇄 작업 목록이 비어 있습니다. 같은 사용자가 ID/비밀번호로 로그인하면 작업이 정상적으로 보입니다.\n카드 번호가 0으로 시작하는 사용자만 발생합니다.',
     steps: '1. 카드 번호가 0으로 시작하는 사원증 등록\n2. PC에서 보안 인쇄 작업 전송\n3. 조작부에서 사원증으로 로그인\n4. 보안 인쇄 > 작업 목록 확인',
@@ -166,19 +170,19 @@ export const HW_DEFECTS: HwDefect[] = [
     ]
   },
   {
-    id: 'D:copyid', title: '[SL-K4350LX] ID 카드 복사 시 뒷면 이미지가 앞면과 겹쳐서 출력됨', model: 'SL-K4350LX', comp: 'Copy', sev: 'minor', status: 'open', fw: 'V5.10.03.06',
+    id: 'D:copyid', title: '[PS-K4440LX] ID 카드 복사 시 뒷면 이미지가 앞면과 겹쳐서 출력됨', model: 'PS-K4440LX', comp: 'Copy', sev: 'minor', status: 'open', fw: 'V5.10.03.06',
     reporter: 'u23', assignees: ['u25'], created: '2017-09-12 16:30',
     desc: '"ID 카드 복사"에서 앞면과 뒷면을 스캔하면 출력물에서 두 이미지가 약 10mm 겹칩니다. A4 용지에서만 발생하고 Letter에서는 정상입니다.',
     attachments: [F_('idcard_copy_overlap.jpg', 1120000, 'image/jpeg')],
     activity: [A('e', 'u23', '2017-09-12 16:30', 'reported this defect'), A('e', 'u23', '2017-09-12 16:31', 'assigned 송민재')]
   },
   {
-    id: 'D:udp', title: 'Universal Print Driver hangs the Windows 10 (1703) spooler when Secure Print is selected', model: 'SL-M4580FX', comp: 'Print Driver', sev: 'critical', status: 'in_progress', fw: 'UPD 3.04.01',
+    id: 'D:udp', title: 'Universal Print Driver hangs the Windows 10 (1703) spooler when Secure Print is selected', model: 'PS-M4670FX', comp: 'Print Driver', sev: 'critical', status: 'in_progress', fw: 'UPD 3.04.01',
     reporter: 'u16', assignees: ['u27', 'u18'], created: '2017-09-01 11:00',
     desc: 'On Windows 10 Creators Update (1703), choosing Secure Print in the UPD printing preferences and clicking OK freezes the print dialog. spoolsv.exe stops responding, and other users on the print server cannot print until the service is restarted.\nWindows 10 1607 is not affected.',
     steps: '1. Install UPD 3.04.01 on Windows 10 1703 (x64)\n2. Open Printing Preferences\n3. Job Mode: Secure Print, enter a PIN\n4. Click OK, then print from Notepad',
     attachments: [F_('spoolsv_hang.dmp', 48200000, 'application/octet-stream'), F_('procmon_trace.zip', 6200000, 'application/zip')],
-    affects: { lines: [], models: ['SL-M4080FX', 'SL-C3060FR', 'SL-X7600LX'] },
+    affects: { lines: [], models: ['PS-M4170FX', 'PS-C3150FR', 'PS-X7690LX'] },
     activity: [
       A('e', 'u16', '2017-09-01 11:00', 'reported this defect'), A('e', 'u16', '2017-09-01 11:01', 'assigned Kavya Reddy'),
       A('c', 'u27', '2017-09-01 16:20', 'Reproduced. The Secure Print dialog queries device status synchronously on the spooler thread; on 1703 that call blocks while the dialog is modal.'),
@@ -190,7 +194,7 @@ export const HW_DEFECTS: HwDefect[] = [
 
   // ---- 2016 and early 2017 history ----
   {
-    id: 'D:gcp', title: 'Google Cloud Print registration fails behind an authenticated proxy', model: 'SL-M2070FW', comp: 'Network / Wi-Fi', sev: 'major', status: 'closed', fw: 'V3.00.01.17',
+    id: 'D:gcp', title: 'Google Cloud Print registration fails behind an authenticated proxy', model: 'PS-M2160FW', comp: 'Network / Wi-Fi', sev: 'major', status: 'closed', fw: 'V3.00.01.17',
     reporter: 'u8', assignees: ['u4'], created: '2016-03-08 10:15',
     desc: 'Registering the printer with Google Cloud Print fails with "Connection error" when the network requires an authenticated HTTP proxy. Registration works on networks without a proxy.',
     activity: [
@@ -204,24 +208,26 @@ export const HW_DEFECTS: HwDefect[] = [
     ]
   },
   {
-    id: 'D:staplesensor', title: '[SL-K7600LX] 스테이플 카트리지 교체 후에도 "스테이플 없음" 경고가 사라지지 않음', model: 'SL-K7600LX', comp: 'Finisher', sev: 'major', status: 'closed', fw: 'V5.10.01.12',
+    id: 'D:staplesensor', title: '[PS-K7690LX] 스테이플 카트리지 교체 후에도 "스테이플 없음" 경고가 사라지지 않음', model: 'PS-K7690LX', comp: 'Finisher', sev: 'major', status: 'closed', fw: 'V5.10.01.12',
     reporter: 'u1', assignees: ['u22'], created: '2016-05-24 10:40',
     desc: '스테이플 카트리지를 새것으로 교체해도 "스테이플 없음" 경고가 계속 표시되고 스테이플 작업이 진행되지 않습니다. 피니셔 커버를 두 번 열고 닫으면 정상화됩니다.',
     attachments: [F_('staple_sensor_waveform.png', 420000, 'image/png')],
+    p4: [{ cl: '1352340', u: 'u22', at: '2016-06-01 16:52', desc: '스테이플 카트리지 센서 디바운스 시간 30ms에서 60ms로 변경' }],
     activity: [
       A('e', 'u1', '2016-05-24 10:40', 'reported this defect'), A('e', 'u1', '2016-05-24 10:41', 'assigned 배준혁'),
       A('c', 'u22', '2016-05-25 15:10', '카트리지 장착 시 센서 신호에 약 30ms 채터링이 있습니다. 펌웨어에서 디바운스 시간을 늘리면 해결될 것으로 보입니다.', null, [F_('staple_sensor_waveform.png', 420000, 'image/png')]),
       A('e', 'u22', '2016-05-25 15:11', 'changed status to In progress'),
+      A('e', 'u22', '2016-06-01 16:52', 'linked changelist 1352340 to {JOB:staplesensor} (p4 fix)'),
       A('e', 'u22', '2016-06-01 17:00', 'changed status to Resolved'),
       A('c', 'u1', '2016-06-03 11:20', 'V5.10.01.14에서 카트리지 교체 50회 반복 테스트 이상 없습니다. 종료합니다.'),
       A('e', 'u1', '2016-06-03 11:21', 'changed status to Closed')
     ]
   },
   {
-    id: 'D:eco', title: '[SL-M3065FW] 절전 모드 소비전력 2.1W 측정 (에너지스타 기준 초과)', model: 'SL-M3065FW', comp: 'Power / Sleep', sev: 'critical', status: 'closed', fw: 'V4.00.02.06',
+    id: 'D:eco', title: '[PS-M3155FW] 절전 모드 소비전력 2.1W 측정 (에너지스타 기준 초과)', model: 'PS-M3155FW', comp: 'Power / Sleep', sev: 'critical', status: 'closed', fw: 'V4.00.02.06',
     reporter: 'u15', assignees: ['u17'], created: '2016-10-18 09:30',
     desc: '에너지스타 사전 측정에서 슬립 모드 소비전력이 2.1W로 측정되었습니다. 기준은 1.6W 이하입니다. 유선 네트워크 연결 시에만 발생합니다.',
-    attachments: [F_('power_measure_m3065fw.csv', 18000, 'text/csv')],
+    attachments: [F_('power_measure_m3155fw.csv', 18000, 'text/csv')],
     activity: [
       A('e', 'u15', '2016-10-18 09:30', 'reported this defect'), A('e', 'u15', '2016-10-18 09:31', 'assigned 장현우'),
       A('c', 'u17', '2016-10-18 16:00', '슬립 진입 시 이더넷 PHY가 저전력 모드로 내려가지 않고 있습니다. WoL 대기에 필요한 최소 상태로 내리도록 수정하겠습니다.'),
@@ -235,7 +241,7 @@ export const HW_DEFECTS: HwDefect[] = [
     ]
   },
   {
-    id: 'D:xss', title: 'SyncThru: stored XSS in the device location field', model: 'SL-M4580FX', comp: 'Security', sev: 'critical', status: 'closed', fw: 'V4.00.02.21',
+    id: 'D:xss', title: 'SyncThru: stored XSS in the device location field', model: 'PS-M4670FX', comp: 'Security', sev: 'critical', status: 'closed', fw: 'V4.00.02.21',
     reporter: 'u14', assignees: ['u26'], created: '2016-12-06 13:20',
     desc: 'The device location field in SyncThru accepts HTML and renders it unescaped on the Information page, so a script entered by an admin runs for every visitor.\nFound in the static analysis review and confirmed manually. Affects every ProXpress model on the XOA platform.',
     affects: { lines: ['ProXpress Mono', 'ProXpress Color'], models: [] },
@@ -254,24 +260,24 @@ export const HW_DEFECTS: HwDefect[] = [
 
 export const HW_REVIEWS: Review[] = [
   {
-    id: 'CR:duplex', title: 'Restore duplex reverse motor timing for SL-C3060FR (Jam 0x21)', type: 'Bug fix', branch: 'fw/c3060/fix-duplex-jam-0x21', author: 'u2',
+    id: 'CR:duplex', title: 'Restore duplex reverse motor timing for PS-C3150FR (Jam 0x21)', type: 'Bug fix', branch: 'fw/c3150/fix-duplex-jam-0x21', author: 'u2',
     reviewers: RV('u7', 'u11:approved'), status: 'in_review', linked: 'D:duplex', submitted: '2017-09-14 11:15',
     desc: 'V4.00.03.20에서 변경된 듀플렉스 반전 모터 구동 타이밍(-18ms)을 원복합니다. 최영호 책임 측정 결과 센서 응답은 정상 범위로, 타이밍 변경이 원인으로 확인되었습니다.\n\n테스트: A4 / Letter 80g, 양면 200매 × 3회, Jam 0건',
     attachments: [F_('duplex_200x3_test_report.pdf', 420000, 'application/pdf')],
     files: [
       FD('engine/duplex/duplex_motor.c', ['@@ -212,7 +212,7 @@ static void duplex_reverse_start(void)', ' {', '     motor_set_dir(DUPLEX_MOTOR, DIR_REVERSE);', '-    timer_start(DUPLEX_TMR, DUPLEX_REV_DELAY_MS - 18);', '+    timer_start(DUPLEX_TMR, DUPLEX_REV_DELAY_MS);', '     sensor_arm(DUPLEX_EXIT_SNS);', ' }']),
-      FD('engine/duplex/duplex_cfg.h', ['@@ -40,3 +40,4 @@', ' #if defined(MODEL_C3060)', '+/* Do not shorten: exit sensor needs >= 140 ms after reverse start ({D:duplex}) */', ' #define DUPLEX_REV_DELAY_MS   (142)'])
+      FD('engine/duplex/duplex_cfg.h', ['@@ -40,3 +40,4 @@', ' #if defined(MODEL_C3150)', '+/* Do not shorten: exit sensor needs >= 140 ms after reverse start ({D:duplex}) */', ' #define DUPLEX_REV_DELAY_MS   (142)'])
     ],
     activity: [
       A('e', 'u2', '2017-09-14 11:15', 'requested a code review'), A('e', 'u7', '2017-09-14 13:02', 'assigned 한도윤 as reviewer'),
       A('e', 'u7', '2017-09-14 13:03', 'assigned 윤재석 as reviewer'),
       A('d', 'u11', '2017-09-14 18:40', 'LGTM. 타이밍 원복과 주석 추가 확인했습니다.', 'approved'),
-      A('c', 'u7', '2017-09-15 09:15', 'duplex_cfg.h 매크로가 C3060 계열 외 다른 모델에도 영향 있는지 확인 부탁드립니다. C3010 계열이 같은 헤더를 사용합니다.'),
-      A('c', 'u2', '2017-09-15 10:02', 'C3010 계열은 별도 오버라이드 값을 사용해서 영향 없습니다. 빌드 로그 첨부합니다.', null, [F_('build_c3010_c3060.log', 96000, 'text/plain')])
+      A('c', 'u7', '2017-09-15 09:15', 'duplex_cfg.h 매크로가 C3150 계열 외 다른 모델에도 영향 있는지 확인 부탁드립니다. C3100 계열이 같은 헤더를 사용합니다.'),
+      A('c', 'u2', '2017-09-15 10:02', 'C3100 계열은 별도 오버라이드 값을 사용해서 영향 없습니다. 빌드 로그 첨부합니다.', null, [F_('build_c3100_c3150.log', 96000, 'text/plain')])
     ]
   },
   {
-    id: 'CR:wfd', title: 'Wi-Fi Direct reconnect: refresh group owner info on idle timeout', type: 'Firmware update', branch: 'fw/m2020/wfd-reconnect', author: 'u4',
+    id: 'CR:wfd', title: 'Wi-Fi Direct reconnect: refresh group owner info on idle timeout', type: 'Firmware update', branch: 'fw/m2110/wfd-reconnect', author: 'u4',
     reviewers: RV('u6:changes'), status: 'changes', linked: 'D:wfd', submitted: '2017-09-12 16:40',
     desc: 'On idle timeout, refresh the group owner info and reconnect instead of tearing the session down. Targets firmware V3.00.03.10.',
     attachments: [],
@@ -299,7 +305,7 @@ export const HW_REVIEWS: Review[] = [
     activity: [A('e', 'u3', '2017-09-04 10:00', 'requested a code review'), A('e', 'u11', '2017-09-04 10:40', 'assigned 정민아 as reviewer'), A('d', 'u6', '2017-09-04 16:25', '문구 검수 완료. 승인합니다.', 'approved')]
   },
   {
-    id: 'CR:securepin', title: 'Secure print: PIN release on MultiXpress X7600 panel', type: 'Feature', branch: 'sol/x7600/secure-pin-release', author: 'u10',
+    id: 'CR:securepin', title: 'Secure print: PIN release on MultiXpress X7690 panel', type: 'Feature', branch: 'sol/x7690/secure-pin-release', author: 'u10',
     reviewers: RV('u7:approved', 'u11:approved'), status: 'approved', linked: '', submitted: '2017-08-30 14:00',
     desc: '보안 인쇄 작업을 조작부에서 PIN 입력 후 출력하는 기능을 추가합니다. PIN 5회 오류 시 작업이 삭제됩니다.',
     files: [], attachments: [F_('secure_print_flow.mp4', 15800000, 'video/mp4')],
@@ -317,7 +323,7 @@ export const HW_REVIEWS: Review[] = [
     activity: [A('e', 'u9', '2017-09-01 11:00', 'requested a code review'), A('e', 'u7', '2017-09-01 11:40', 'assigned 윤재석 as reviewer'), A('d', 'u11', '2017-09-02 10:20', 'Verified on Letter, Legal and A4. Approved.', 'approved')]
   },
   {
-    id: 'CR:faxflush', title: 'Fax: flush RX buffer to NAND before entering sleep', type: 'Bug fix', branch: 'fw/m4080/fax-rx-flush', author: 'u4',
+    id: 'CR:faxflush', title: 'Fax: flush RX buffer to NAND before entering sleep', type: 'Bug fix', branch: 'fw/m4170/fax-rx-flush', author: 'u4',
     reviewers: [], status: 'pending', linked: 'D:faxsleep', submitted: '2017-09-13 18:00',
     desc: 'Forces a flush of the fax receive buffer from the power manager prepare-sleep hook.', attachments: [],
     files: [FD('fax/fax_power.c', ['@@ -130,5 +130,7 @@ int fax_pm_prepare_sleep(void)', '     if (fax_rx_active())', '         return PM_BUSY;', '+    if (fax_rx_buffer_dirty())', '+        fax_rx_flush_nand();   /* {D:faxsleep} */', '     return PM_OK;'])],
@@ -335,7 +341,7 @@ export const HW_REVIEWS: Review[] = [
   {
     id: 'CR:tls', title: 'SyncThru: rebuild the TLS context when the minimum protocol version changes', type: 'Security fix', branch: 'web/syncthru/tls-min-version-reload', author: 'u26',
     reviewers: RV('u28'), status: 'in_review', linked: 'D:tls', submitted: '2017-09-14 17:20',
-    desc: 'Rebuilds the SSL context whenever the minimum TLS version or cipher list changes, instead of reusing the context created at boot. Also stops offering TLS 1.0/1.1 cipher suites when "TLS 1.2 only" is set.\n\nTested: sslscan and the nightly security suite on SL-M4580FX and SL-C3060FR.',
+    desc: 'Rebuilds the SSL context whenever the minimum TLS version or cipher list changes, instead of reusing the context created at boot. Also stops offering TLS 1.0/1.1 cipher suites when "TLS 1.2 only" is set.\n\nTested: sslscan and the nightly security suite on PS-M4670FX and PS-C3150FR.',
     attachments: [F_('nightly_security_suite_0914.html', 184000, 'text/html')],
     files: [
       FD('web/syncthru/httpd/tls_config.c', ['@@ -101,9 +101,14 @@ int tls_config_apply(const sec_policy_t *p)', ' \tif (!p)', ' \t\treturn -EINVAL;', '-\ttls_set_min_version(g_ctx, p->min_version);', '-\ttls_set_ciphers(g_ctx, p->ciphers);', '-\treturn 0;', '+\ttls_ctx_t *next = tls_ctx_new(p->min_version, p->ciphers);', '+\tif (!next)', '+\t\treturn -ENOMEM;', '+\t/* Existing sessions keep the old context until they close. */', '+\ttls_ctx_t *old = atomic_xchg(&g_ctx, next);', '+\ttls_ctx_release_when_idle(old);', '+\treturn 0;', ' }']),
@@ -360,7 +366,7 @@ export const HW_REVIEWS: Review[] = [
     ]
   },
   {
-    id: 'CR:cardauth', title: 'Secure print: compare badge UIDs as strings', type: 'Bug fix', branch: 'sol/x4300/badge-uid-leading-zero', author: 'u30',
+    id: 'CR:cardauth', title: 'Secure print: compare badge UIDs as strings', type: 'Bug fix', branch: 'sol/x4390/badge-uid-leading-zero', author: 'u30',
     reviewers: RV('u28:changes'), status: 'changes', linked: 'D:cardauth', submitted: '2017-09-11 18:00',
     desc: '카드 UID를 숫자로 변환하지 않고 문자열 그대로 비교합니다. 기존에 숫자로 저장된 매핑은 부팅 시 한 번 변환합니다.',
     attachments: [],
@@ -392,7 +398,7 @@ export const HW_REVIEWS: Review[] = [
     activity: [A('e', 'u13', '2017-09-13 16:00', 'requested a code review'), A('e', 'u7', '2017-09-13 16:20', 'assigned 한도윤 as reviewer')]
   },
   {
-    id: 'CR:gcp', title: 'Cloud Print: use the SyncThru proxy credentials for registration', type: 'Bug fix', branch: 'fw/m2070/fix-gcp-proxy-auth', author: 'u4',
+    id: 'CR:gcp', title: 'Cloud Print: use the SyncThru proxy credentials for registration', type: 'Bug fix', branch: 'fw/m2160/fix-gcp-proxy-auth', author: 'u4',
     reviewers: RV('u11:approved'), status: 'approved', linked: 'D:gcp', submitted: '2016-03-15 17:40',
     desc: 'Passes the proxy user name and password saved in SyncThru to the Cloud Print HTTP client. Previously only the proxy host and port were used.',
     attachments: [],
@@ -403,7 +409,7 @@ export const HW_REVIEWS: Review[] = [
     ]
   },
   {
-    id: 'CR:eco', title: 'Power: put the Ethernet PHY in low-power mode during deep sleep', type: 'Bug fix', branch: 'fw/m3065/fix-sleep-phy-power', author: 'u17',
+    id: 'CR:eco', title: 'Power: put the Ethernet PHY in low-power mode during deep sleep', type: 'Bug fix', branch: 'fw/m3155/fix-sleep-phy-power', author: 'u17',
     reviewers: RV('u6:approved', 'u11:approved'), status: 'approved', linked: 'D:eco', submitted: '2016-10-20 18:30',
     desc: '슬립 진입 시 이더넷 PHY를 Energy Efficient Ethernet 저전력 모드로 전환하고, WoL 매직 패킷 감지만 유지합니다.\n\n측정: 슬립 소비전력 2.1W에서 1.3W로 감소 (에너지스타 기준 1.6W)',
     attachments: [F_('power_after_fix.csv', 17000, 'text/csv')],

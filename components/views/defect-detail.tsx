@@ -2,7 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 import { useMemo, useState } from 'react';
-import { DST, DST_KEYS, RST, SEV, UM, USERS } from '@/lib/constants';
+import { DST, RESOLUTION, RESOLUTION_KEYS, RST, SEV, UM, USERS } from '@/lib/constants';
 import { setDraft } from '@/lib/drafts';
 import { fAt, fFull, nowStr } from '@/lib/dates';
 import { isSubscribed } from '@/lib/notifications';
@@ -11,7 +11,7 @@ import { affOf, affToVals, modelInfo } from '@/lib/products';
 import { A, autoSub, jobOf, lastAt } from '@/lib/records';
 import { addAffected, affectedView, defectGraph, relatedView, removeAffected } from '@/lib/relations';
 import { deleteDefect, setSubscribed, updDefect, updReview, useApp } from '@/lib/store';
-import type { Defect, DefectStatus, Severity } from '@/lib/types';
+import type { Defect, DefectStatus, Resolution, Severity } from '@/lib/types';
 import { defectChangelists, defectRecords, defectTargets } from '@/lib/views';
 import { Loading, Note, StatusLabel } from '../common/basics';
 import { Clickable } from '../common/clickable';
@@ -59,11 +59,19 @@ export function DefectDetail({ id }: { id: string }) {
 
   const upd = (fn: (x: Defect) => Defect) => updDefect(d.id, fn);
   const log = (x: Defect, text: string): Defect => ({ ...x, activity: [...x.activity, A('e', meId, nowStr(), text)] });
-  const setStatus = (k: DefectStatus) => {
+  // Status moves along the workflow: start work, resolve with a resolution,
+  // verify and close, or reopen. Reopening clears the resolution.
+  const setStatus = (k: DefectStatus, res?: Resolution) => {
     if (d.status === k) return;
-    upd(x => ({ ...log(x, 'changed status to ' + DST[k].l), status: k }));
-    flash(`${d.id} set to ${DST[k].l}`);
+    const done = k === 'resolved' || k === 'closed';
+    upd(x => {
+      let next = log(x, 'changed status to ' + DST[k].l);
+      if (res && res !== x.resolution) next = log(next, 'set resolution to ' + RESOLUTION[res]);
+      return { ...next, status: k, resolution: done ? res || x.resolution || 'fixed' : undefined };
+    });
+    flash(`${d.id} set to ${DST[k].l}` + (res ? ', ' + RESOLUTION[res] : ''));
   };
+  const isDone = d.status === 'resolved' || d.status === 'closed';
   const rec = defectRecords(d, derived.cls, synced);
   const tg = defectTargets(d);
   const sub = isSubscribed(prefs.subs, d, meId), auto = autoSub(d, meId);
@@ -97,7 +105,9 @@ export function DefectDetail({ id }: { id: string }) {
             items={[
               d.status === 'closed'
                 ? { icon: 'lock-open', label: 'Reopen', sub: 'Set status back to Open', onClick: () => { setStatus('open'); flash(d.id + ' reopened'); } }
-                : { icon: 'lock', label: 'Close', sub: 'Mark as verified and closed', onClick: () => { setStatus('closed'); flash(d.id + ' closed, ClearQuest record closed'); } },
+                : d.status === 'resolved'
+                  ? { icon: 'lock', label: 'Verify and close', sub: 'Confirm the resolution and close', onClick: () => { setStatus('closed'); flash(d.id + ' closed, ClearQuest record closed'); } }
+                  : { icon: 'circle-check', label: 'Resolve as fixed', sub: 'Set status to Resolved', onClick: () => setStatus('resolved', 'fixed') },
               { icon: 'copy-plus', label: 'Clone with changes', sub: 'Open a new report prefilled from this one', onClick: () => { setDraft({ kind: 'defect', cloneOf: d.id, title: d.title, aff: affToVals(affOf(d)), model: d.model, comp: d.comp, sev: d.sev, status: 'open', fw: d.fw, desc: d.desc, steps: d.steps, assignees: [...d.assignees] }); router.push('/defects/new'); } },
               { icon: 'git-pull-request', label: 'Request code review', sub: 'Start a review linked to this defect', onClick: () => router.push('/reviews/new?defect=' + d.id) },
               { icon: 'link-2', label: 'Copy link', onClick: () => { navigator.clipboard?.writeText(location.origin + '/defects/' + d.id).catch(() => {}); flash('Link copied'); } },
@@ -237,7 +247,11 @@ export function DefectDetail({ id }: { id: string }) {
                 </div>
               ))}
             </div>
-            {!derived.cls.length ? <Note icon="git-commit" title="No changelists linked yet" text={`Fixes appear here once they are recorded on ${jobOf(d.id)} with p4 fix.`} /> : null}
+            {!derived.cls.length ? (
+              isDone && d.resolution && d.resolution !== 'fixed'
+                ? <Note icon="git-commit" title="No changelists linked" text={`Resolved as ${RESOLUTION[d.resolution].toLowerCase()}, so no code change was needed.`} />
+                : <Note icon="git-commit" title={isDone ? 'No changelists linked' : 'No changelists linked yet'} text={`Fixes appear here once they are recorded on ${jobOf(d.id)} with p4 fix.`} />
+            ) : null}
           </section>
 
           <section className="flex flex-col gap-[22px] border-t border-line pt-6">
@@ -260,28 +274,21 @@ export function DefectDetail({ id }: { id: string }) {
               {tg.f.sub ? <span className="text-sm text-muted">{tg.f.sub}</span> : null}
             </div>
           </div>
-          <div className="flex flex-col gap-2 border-t border-line pt-6">
+          <div className="flex flex-col gap-3 border-t border-line pt-6">
             <SideLabel icon="circle-dot">Status</SideLabel>
-            <div role="radiogroup" aria-label="Status" className="flex flex-col gap-0.5">
-              {DST_KEYS.map(k => {
-                const on = d.status === k;
-                return (
-                  <button
-                    key={k}
-                    type="button"
-                    role="radio"
-                    aria-checked={on}
-                    onClick={() => setStatus(k)}
-                    className="flex h-8 cursor-pointer items-center gap-2.5 rounded border-0 bg-transparent p-0 text-left text-sm font-[550] transition-[opacity,filter] hover:opacity-100 hover:[filter:none]"
-                    style={{ color: on ? DST[k].fg : 'oklch(0.45 0.01 290)', filter: on ? 'none' : 'grayscale(1)', opacity: on ? 1 : 0.5 }}
-                  >
-                    <Icon name={DST[k].icon} size={16} />
-                    <span>{DST[k].l}</span>
-                    {on ? <Icon name="check" size={16} strokeWidth={2.5} /> : null}
-                  </button>
-                );
-              })}
+            <div className="flex flex-wrap items-baseline gap-x-2.5 gap-y-1">
+              <StatusLabel {...DST[d.status]} weight={600} />
+              {isDone && d.resolution ? <span className="text-sm text-muted">{RESOLUTION[d.resolution]}</span> : null}
             </div>
+            <div className="flex flex-wrap gap-2">
+              {d.status === 'open' ? <Button variant="secondary" size="sm" icon="circle-dot" onClick={() => setStatus('in_progress')}>Start work</Button> : null}
+              {d.status === 'in_progress' ? <Button variant="secondary" size="sm" icon="circle" onClick={() => setStatus('open')}>Stop work</Button> : null}
+              {d.status === 'resolved' ? <Button variant="secondary" size="sm" icon="lock" onClick={() => setStatus('closed')}>Verify and close</Button> : null}
+              {isDone ? <Button variant="secondary" size="sm" icon="rotate-ccw" onClick={() => setStatus('open')}>Reopen</Button> : null}
+            </div>
+            {!isDone ? (
+              <Select ariaLabel="Resolve as" placeholder="Resolve as..." value={null} items={RESOLUTION_KEYS.map(k => ({ value: k, label: RESOLUTION[k], icon: 'circle-check', color: DST.resolved.fg }))} onValueChange={v => setStatus('resolved', v as Resolution)} />
+            ) : null}
           </div>
           <div className="flex flex-col gap-2">
             <SideLabel icon="flag">Severity</SideLabel>

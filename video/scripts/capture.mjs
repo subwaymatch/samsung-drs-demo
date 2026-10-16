@@ -156,7 +156,7 @@ const sections = {
   async newDefect() {
     await go('/defects/new');
     await shot('newdefect-0');
-    const title = '[SL-C3060FR] 양면 인쇄 용지 걸림 0x21';
+    const title = '[PS-C3150FR] 양면 인쇄 용지 걸림 0x21';
     const titleInput = page.getByRole('textbox', { name: 'Title' });
     await titleInput.click();
     const tstops = [12, 16, 19, 22, title.length];
@@ -167,10 +167,10 @@ const sections = {
     }
     const model = page.getByRole('combobox', { name: 'Model' });
     await model.click();
-    await page.keyboard.type('C3060', { delay: 40 });
+    await page.keyboard.type('C3150', { delay: 40 });
     await settle(500);
     await shot('newdefect-' + (tstops.length + 1));
-    await page.getByRole('option', { name: /SL-C3060FR/ }).click();
+    await page.getByRole('option', { name: /PS-C3150FR/ }).click();
     await page.mouse.move(VW - 2, VH - 2);
     await settle(600);
     await shot('newdefect-' + (tstops.length + 2));
@@ -180,7 +180,7 @@ const sections = {
       frames: tstops.length + 3,
       titleBox: await titleInput.boundingBox(),
       modelBox: await model.boundingBox(),
-      dupes: await rect('Possible duplicates on SL-C3060FR', 'div.flex.flex-col.gap-1\\.5')
+      dupes: await rect('Possible duplicates on PS-C3150FR', 'div.flex.flex-col.gap-1\\.5')
     };
   },
 
@@ -193,8 +193,8 @@ const sections = {
     layout.defect = {
       id: DEFECT,
       height: await pageHeight(),
-      title: await rect('[SL-C3060FR] 양면 인쇄 시 2페이지 이후 용지 걸림 (Jam 0x21) 발생', 'h1'),
-      product: await span('Samsung ProXpress SL-C3060FR', 'Support status'),
+      title: await rect('[PS-C3150FR] 양면 인쇄 시 2페이지 이후 용지 걸림 (Jam 0x21) 발생', 'h1'),
+      product: await span('Samsung ProXpress PS-C3150FR', 'Support status'),
       targets: await span('Critical severity targets', 'Was due Sep 13'),
       records: await rect('Records across systems', 'section'),
       relmap: await rect('Relationship map', 'section'),
@@ -213,7 +213,7 @@ const sections = {
     layout.review = {
       id: REVIEW,
       height: await pageHeight(),
-      title: await rect('Restore duplex reverse motor timing for SL-C3060FR (Jam 0x21)', 'h1'),
+      title: await rect('Restore duplex reverse motor timing for PS-C3150FR (Jam 0x21)', 'h1'),
       turnaround: await span('Review turnaround', 'Submission to first decision, target 48h'),
       reviewers: await span('1 of 2 approved', 'Reviewing'),
       records: await rect('Records across systems', 'section'),

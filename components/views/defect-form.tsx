@@ -129,7 +129,7 @@ function DefectFormInner({ d }: { d?: Defect }) {
       <div className="flex flex-col gap-6">
         <Field label="Title"><Input value={f.title} onChange={v => set('title', v)} placeholder="[모델명] 증상 요약 / Short summary of the issue" ariaLabel="Title" /></Field>
         <div className="grid gap-5 [grid-template-columns:repeat(auto-fit,minmax(200px,1fr))]">
-          <Field label="Reported on"><Combobox items={models} value={f.model} onValueChange={v => set('model', v)} placeholder="Type a model, e.g. SL-M4080FX" ariaLabel="Model" /></Field>
+          <Field label="Reported on"><Combobox items={models} value={f.model} onValueChange={v => set('model', v)} placeholder="Type a model, e.g. PS-M4170FX" ariaLabel="Model" /></Field>
           <Field label="Component"><Combobox items={comps} value={f.comp} onValueChange={v => set('comp', v)} placeholder="Type to search" ariaLabel="Component" /></Field>
         </div>
         <Field label="Also affects" hint="Add a whole product line when the defect is in shared firmware, or pick individual models.">
