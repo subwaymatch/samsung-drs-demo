@@ -24,10 +24,10 @@ export function AboutView() {
           controls
           playsInline
           preload="none"
-          poster="/video/drs-showcase-v1.webp"
+          poster="/video/drs-showcase-v2.webp"
           aria-label="DRS showcase video"
         >
-          <source src="/video/drs-showcase-v1.mp4" type="video/mp4" />
+          <source src="/video/drs-showcase-v2.mp4" type="video/mp4" />
         </video>
         <figcaption className="text-sm text-muted">A one-minute tour of DRS, with music.</figcaption>
       </figure>

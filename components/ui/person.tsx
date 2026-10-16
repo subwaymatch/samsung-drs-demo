@@ -62,7 +62,7 @@ export function Person({ person, size = 28, showName }: { person: PersonView; si
 /** Overlapping avatars with a "+N" overflow chip. */
 export function PeopleStack({ people, more, moreTip, label }: { people: PersonView[]; more?: string; moreTip?: string; label?: string }) {
   return (
-    <div onClick={e => e.stopPropagation()} aria-label={label} className="flex items-center justify-end pl-1.5">
+    <div onClick={e => e.stopPropagation()} role="group" aria-label={label} title={label} className="flex items-center justify-end pl-1.5">
       {people.map(p => (
         <span key={p.id} className="-ml-1.5 flex rounded-full bg-white shadow-[0_0_0_2px_#fff]">
           <Person person={p} size={28} />
