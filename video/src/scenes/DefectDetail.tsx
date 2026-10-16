@@ -1,6 +1,6 @@
 import React from 'react';
 import { useCurrentFrame } from 'remotion';
-import { camAt, frame as framed, pad, rectToScreen } from '../components/camera';
+import { camAt, frame as framed, pad, rectToScreen, scrollToShow } from '../components/camera';
 import { FeatureFrame } from '../components/FeatureFrame';
 import { Spotlight, window01 } from '../components/Overlays';
 import { Screen } from '../components/Screen';
@@ -15,7 +15,7 @@ export const DefectDetail: React.FC = () => {
   const cam = camAt(f, [
     { at: 0, scroll: 0, zoom: 1, fx: 800, fy: 450 },
     { at: 26 },
-    { at: 48, ...framed(pad(D.targets, 20), 0, 40) },
+    { at: 48, ...framed(pad(D.targets, 20), scrollToShow(D.targets), 40) },
     { at: 92 },
     { at: 122, ...framed(D.records, recScroll, 90) },
     { at: 160 },

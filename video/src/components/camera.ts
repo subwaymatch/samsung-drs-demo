@@ -77,3 +77,6 @@ export function union(...rs: Rect[]): Rect {
 }
 
 export const pad = (r: Rect, px: number, py = px): Rect => ({ x: r.x - px, y: r.y - py, w: r.w + 2 * px, h: r.h + 2 * py });
+
+/** Smallest scroll that brings the bottom of `r`, plus `margin`, into the first screen. */
+export const scrollToShow = (r: Rect, margin = 60) => Math.max(0, r.y + r.h + margin - SCREEN_H);

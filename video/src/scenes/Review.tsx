@@ -1,6 +1,6 @@
 import React from 'react';
 import { useCurrentFrame } from 'remotion';
-import { camAt, frame as framed, pad, rectToScreen } from '../components/camera';
+import { camAt, frame as framed, pad, rectToScreen, scrollToShow } from '../components/camera';
 import { FeatureFrame } from '../components/FeatureFrame';
 import { Spotlight, window01 } from '../components/Overlays';
 import { Screen } from '../components/Screen';
@@ -25,7 +25,7 @@ export const Review: React.FC = () => {
   const cam = camAt(f, [
     { at: 0, scroll: 0, zoom: 1, fx: 800, fy: 450 },
     { at: 20 },
-    { at: 40, ...framed(pad(R.turnaround, 16), 0, 40) },
+    { at: 40, ...framed(pad(R.turnaround, 16), scrollToShow(R.turnaround), 40) },
     { at: 70 },
     { at: 96, ...framed(HUNK, diffScroll, 30) },
     { at: 128 },

@@ -43,6 +43,8 @@ pnpm render         # writes out/drs-showcase.mp4
 
 `pnpm capture` drives the app with Playwright at 1600x900 and 2x scale. If Playwright has no browser yet, run `pnpm exec playwright install chromium` first. Set `DRS_URL` to capture a deployed copy instead of `http://localhost:5173`.
 
+To re-capture only some pages, name their sections: `insights`, `defects`, `palette`, `newDefect`, `defect`, `review` or `other`. For example, `pnpm capture defect review` after a change to the detail pages updates those captures and their positions in `src/layout.json` and leaves the rest alone. The demo shows durations such as "Overdue by 2.5 days" relative to the viewer's time of day, so captures pin the browser clock to 20:45; set `DRS_CLOCK` to change it.
+
 Remotion downloads Chrome Headless Shell on its first render. To use one that is already installed, set `REMOTION_BROWSER_EXECUTABLE` to its path.
 
 The captures, fonts and the app's images (copied from `../public` by `pnpm assets`, which `studio` and `render` run first) are gitignored. `src/layout.json` is committed, since the scenes' zoom targets depend on it.
