@@ -101,7 +101,7 @@ export function DigestsView({ kind: kindIn, date }: { kind?: string; date?: stri
 
         <aside className="flex min-w-[280px] flex-[0_1_320px] flex-col gap-7 border-l border-line pl-8 max-[900px]:border-l-0 max-[900px]:pl-0">
           <div className="flex flex-col gap-1.5">
-            <h3 className="text-base font-[650]">Email settings</h3>
+            <h2 className="text-base font-[650]">Email settings</h2>
             <span className="text-sm leading-normal text-muted">Changes save automatically. The email preview uses your current filters.</span>
           </div>
           <section className="flex flex-col gap-4">

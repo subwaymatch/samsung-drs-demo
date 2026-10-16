@@ -70,7 +70,7 @@ export function ProfileView({ id }: { id: string }) {
       </div>
       <div className="grid gap-x-14 gap-y-10 [grid-template-columns:repeat(auto-fit,minmax(min(100%,440px),1fr))]">
         <section className="flex flex-col border-t border-line pt-6">
-          <h3 className="mb-2 text-base font-[650]">Open defects assigned ({v.openD.length})</h3>
+          <h2 className="mb-2 text-base font-[650]">Open defects assigned ({v.openD.length})</h2>
           {v.openD.slice(0, 8).map(x => (
             <Clickable key={x.id} href={'/defects/' + x.id} className="row-link grid grid-cols-[16px_92px_minmax(0,1fr)_auto] items-center gap-3 border-b border-line-soft py-3 last:border-b-0">
               <Icon name={SEV[x.sev].icon} size={16} color={SEV[x.sev].c} />
@@ -82,7 +82,7 @@ export function ProfileView({ id }: { id: string }) {
           {!v.openD.length ? <span className="pt-2 text-muted">No open defects assigned.</span> : null}
         </section>
         <section className="flex flex-col border-t border-line pt-6">
-          <h3 className="mb-2 text-base font-[650]">Active code reviews ({v.revs.length})</h3>
+          <h2 className="mb-2 text-base font-[650]">Active code reviews ({v.revs.length})</h2>
           {v.revs.slice(0, 8).map(x => (
             <Clickable key={x.id} href={'/reviews/' + x.id} className="row-link grid grid-cols-[16px_92px_minmax(0,1fr)_auto] items-center gap-3 border-b border-line-soft py-3 last:border-b-0">
               <Icon name={TYPE_ICON[x.type]} size={16} color={MUTED} />
@@ -95,7 +95,7 @@ export function ProfileView({ id }: { id: string }) {
         </section>
       </div>
       <section className="flex flex-col pt-2">
-        <h3 className="mb-2 text-base font-[650]">Recent activity</h3>
+        <h2 className="mb-2 text-base font-[650]">Recent activity</h2>
         {v.acts.map(({ x, o, p }, i) => (
           <Clickable key={o.id + i} href={p + o.id} className="row-link grid grid-cols-[92px_minmax(0,1fr)_auto] items-center gap-3.5 border-b border-line-soft py-3 last:border-b-0">
             <span className="font-mono text-sm text-muted">{o.id}</span>

@@ -21,7 +21,7 @@ export function PageHeader({ title, sub, action }: { title: ReactNode; sub?: Rea
 export function SectionTitle({ title, sub, right, small }: { title: ReactNode; sub?: ReactNode; right?: ReactNode; small?: boolean }) {
   const head = (
     <div className="flex min-w-0 flex-col gap-1">
-      <h3 className={small ? 'text-sm font-semibold text-muted' : 'text-base font-[650]'}>{title}</h3>
+      {small ? <h3 className="text-sm font-semibold text-muted">{title}</h3> : <h2 className="text-base font-[650]">{title}</h2>}
       {sub ? <span className="text-sm leading-normal text-pretty text-muted">{sub}</span> : null}
     </div>
   );
@@ -229,7 +229,7 @@ export function SortHeader({ label, k, sort, onSort, style }: { label: string; k
 
 export function Loading() {
   return (
-    <div className="mx-auto flex max-w-[1200px] animate-pulse flex-col gap-6" aria-busy="true" aria-label="Loading">
+    <div className="mx-auto flex max-w-[1200px] animate-pulse flex-col gap-6 motion-reduce:animate-none" aria-busy="true" aria-label="Loading">
       <div className="h-7 w-48 rounded bg-[oklch(0.96_0.01_290)]" />
       <div className="h-4 w-96 max-w-full rounded bg-[oklch(0.97_0.008_290)]" />
       <div className="mt-6 grid gap-3">

@@ -22,14 +22,27 @@ interface Common {
 const cls = (variant: ButtonVariant, size?: 'sm', iconOnly?: boolean, extra?: string) =>
   ['bui-btn', 'bui-' + variant, size === 'sm' ? 'bui-sm' : '', iconOnly ? 'bui-icon-only' : '', extra || ''].filter(Boolean).join(' ');
 
-export function Button({ variant = 'secondary', size, icon, iconRight, iconOnly, title, children, className, style, onClick, disabled, type = 'button' }: Common & {
+export function Button({ variant = 'secondary', size, icon, iconRight, iconOnly, title, children, className, style, onClick, disabled, type = 'button', ariaExpanded, ariaControls }: Common & {
   onClick?: MouseEventHandler<HTMLButtonElement>;
   disabled?: boolean;
   type?: 'button' | 'submit';
+  /** For buttons that show or hide a region. */
+  ariaExpanded?: boolean;
+  ariaControls?: string;
 }) {
   const is = size === 'sm' ? 14 : 16;
   return (
-    <BaseButton type={type} className={cls(variant, size, iconOnly, className)} style={style} onClick={onClick} disabled={disabled} title={title} aria-label={iconOnly ? title : undefined}>
+    <BaseButton
+      type={type}
+      className={cls(variant, size, iconOnly, className)}
+      style={style}
+      onClick={onClick}
+      disabled={disabled}
+      title={title}
+      aria-label={iconOnly ? title : undefined}
+      aria-expanded={ariaExpanded}
+      aria-controls={ariaControls}
+    >
       {icon ? <Icon name={icon} size={is} /> : null}
       {children}
       {iconRight ? <Icon name={iconRight} size={is} /> : null}

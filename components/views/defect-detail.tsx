@@ -134,18 +134,18 @@ export function DefectDetail({ id }: { id: string }) {
       <div className="flex flex-wrap items-start gap-10">
         <div className="flex min-w-0 flex-[1_1_560px] flex-col gap-9">
           <section className="flex flex-col gap-2.5">
-            <h3 className="text-sm font-semibold text-muted">Description</h3>
+            <h2 className="text-sm font-semibold text-muted">Description</h2>
             <p className="leading-[1.75] whitespace-pre-wrap text-pretty">{d.desc}</p>
           </section>
           {d.steps ? (
             <section className="flex flex-col gap-2.5">
-              <h3 className="text-sm font-semibold text-muted">Steps to reproduce</h3>
+              <h2 className="text-sm font-semibold text-muted">Steps to reproduce</h2>
               <p className="border-l-2 border-accent-rule py-0.5 pl-4 leading-[1.8] whitespace-pre-wrap">{d.steps}</p>
             </section>
           ) : null}
           {d.attachments.length ? (
             <section className="flex flex-col gap-3.5">
-              <h3 className="text-sm font-semibold text-muted">Attachments ({d.attachments.length})</h3>
+              <h2 className="text-sm font-semibold text-muted">Attachments ({d.attachments.length})</h2>
               <Attachments items={d.attachments} />
             </section>
           ) : null}
@@ -162,7 +162,7 @@ export function DefectDetail({ id }: { id: string }) {
 
           <section className="flex flex-col gap-4 border-t border-line pt-6">
             <div className="flex flex-col gap-1">
-              <h3 className="text-base font-[650]">Relationship map</h3>
+              <h2 className="text-base font-[650]">Relationship map</h2>
               <span className="text-sm leading-normal text-pretty text-muted">Related defects, code reviews and affected product lines. Click a card to open it; drag to pan.</span>
             </div>
             <div className="overflow-hidden rounded-md border border-[oklch(0.92_0.01_290)] bg-surface">
@@ -187,7 +187,7 @@ export function DefectDetail({ id }: { id: string }) {
 
           <section className="flex flex-col gap-3 border-t border-line pt-6">
             <div className="flex items-center justify-between gap-3">
-              <h3 className="text-base font-[650]">Linked code reviews</h3>
+              <h2 className="text-base font-[650]">Linked code reviews</h2>
               <Button variant="ghost" size="sm" icon="git-pull-request" onClick={() => router.push('/reviews/new?defect=' + d.id)}>Request code review</Button>
             </div>
             <div className="flex flex-col">
@@ -205,11 +205,11 @@ export function DefectDetail({ id }: { id: string }) {
           <section className="flex flex-col gap-3 border-t border-line pt-6">
             <div className="flex flex-wrap items-center justify-between gap-3">
               <div className="flex flex-col gap-1">
-                <h3 className="flex items-center gap-2.5 text-base font-[650]">
+                <h2 className="flex items-center gap-2.5 text-base font-[650]">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img src="/logos/perforce.svg" alt="" className="block h-[18px] w-auto" />
                   Perforce changelists
-                </h3>
+                </h2>
                 <span className="text-sm text-muted">Fixes recorded on P4 job <span className="font-mono">{jobOf(d.id)}</span></span>
               </div>
               <Button variant="ghost" size="sm" icon="link" onClick={() => { setLinkCl(o => !o); setClInput(''); setClErr(''); }}>Link changelist</Button>
@@ -255,7 +255,7 @@ export function DefectDetail({ id }: { id: string }) {
           </section>
 
           <section className="flex flex-col gap-[22px] border-t border-line pt-6">
-            <h3 className="text-base font-[650]">Activity</h3>
+            <h2 className="text-base font-[650]">Activity</h2>
             <ActivityFeed items={d.activity} />
             <Composer me={av(meId)} people={people} onPost={(t, att) => upd(x => ({ ...x, activity: [...x.activity, A('c', meId, nowStr(), t, null, att)] }))} />
           </section>

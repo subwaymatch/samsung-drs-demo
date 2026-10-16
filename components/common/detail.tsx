@@ -67,7 +67,7 @@ export function AffectedProducts({ chips, addItems, sub, onAdd, onRemove }: { ch
   return (
     <section className="flex flex-col gap-3">
       <div className="flex flex-col gap-1">
-        <h3 className="text-base font-[650]">Affected products</h3>
+        <h2 className="text-base font-[650]">Affected products</h2>
         <span className="text-sm text-muted">{sub}</span>
       </div>
       <div className="flex flex-wrap items-center gap-2">
@@ -195,7 +195,7 @@ export function RecordsAcrossSystems({ sub, legacyTitle, legacy, next, synced, o
     <section className="flex flex-col gap-4 border-t border-line pt-6">
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div className="flex min-w-0 flex-[1_1_320px] flex-col gap-1">
-          <h3 className="text-base font-[650]">Records across systems</h3>
+          <h2 className="text-base font-[650]">Records across systems</h2>
           <span className="text-sm leading-normal text-pretty text-muted">{sub}</span>
         </div>
         <Button variant="ghost" size="sm" icon="refresh-cw" onClick={onSync}>Sync now</Button>
@@ -231,7 +231,7 @@ export function RelatedSection({ title, sub, linkLabel, linked, sugg, pick, onLi
     <section className="flex flex-col gap-3 border-t border-line pt-6">
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div className="flex min-w-0 flex-[1_1_320px] flex-col gap-1">
-          <h3 className="text-base font-[650]">{title}</h3>
+          <h2 className="text-base font-[650]">{title}</h2>
           <span className="text-sm leading-normal text-pretty text-muted">{sub}</span>
         </div>
         <Button variant="ghost" size="sm" icon="link" onClick={() => setOpen(o => !o)}>{linkLabel}</Button>

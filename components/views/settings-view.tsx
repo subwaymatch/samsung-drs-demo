@@ -34,7 +34,7 @@ export function SettingsView() {
     <div className="mx-auto flex max-w-[960px] flex-col gap-10">
       <PageHeader title="Settings" sub="Preferences are saved in this browser." />
       <section className="flex flex-col">
-        <h3 className="mb-2 text-base font-[650]">Preferences</h3>
+        <h2 className="mb-2 text-base font-[650]">Preferences</h2>
         <Row title="Code review diffs" sub="How file changes appear in code reviews.">
           <div className="overflow-x-auto"><Segmented ariaLabel="Diff layout" items={DIFF_MODES} value={app.prefs.diff} onValueChange={v => setPrefs({ diff: v as 'sbs' | 'uni' })} /></div>
         </Row>
@@ -50,7 +50,7 @@ export function SettingsView() {
         </Row>
       </section>
       <section className="flex flex-col">
-        <h3 className="mb-2 text-base font-[650]">Demo</h3>
+        <h2 className="mb-2 text-base font-[650]">Demo</h2>
         <Row title="Signed in as" sub="Switch users to see each role's permissions. Code Review Team members can assign reviewers and approve changes.">
           <div className="flex w-full max-w-[420px] flex-col gap-2.5">
             <Combobox items={users} value={app.prefs.meId} onValueChange={v => { if (v) { setPrefs({ meId: v }); flash('Signed in as ' + UM[v].name); } }} placeholder="Switch user" ariaLabel="Signed in as" />

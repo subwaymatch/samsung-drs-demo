@@ -282,6 +282,41 @@
   /* Clickable list rows and labels shift to the accent color on hover. */
   .row-link { cursor: pointer; }
   .row-link:hover { color: var(--color-accent-text); }
+
+  /* Clickable: a link stretched over the element, under the links and controls inside it. */
+  .clk { cursor: pointer; }
+  .clk-link { position: absolute; inset: 0; z-index: 0; border-radius: inherit; }
+  .clk :where(a:not(.clk-link), button, input, label, [role="checkbox"], [role="button"]) { position: relative; z-index: 1; }
+
+  /* Tooltips for chart marks and cells: data-tip on the element. */
+  [data-tip] { position: relative; }
+  [data-tip]:hover::after,
+  [data-tip]:focus-within::after {
+    content: attr(data-tip);
+    position: absolute;
+    bottom: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 40;
+    width: max-content;
+    max-width: 260px;
+    padding: 6px 9px;
+    border-radius: 6px;
+    background: oklch(0.24 0.03 290);
+    color: #fff;
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 1.35;
+    white-space: pre-line;
+    text-align: left;
+    pointer-events: none;
+    box-shadow: 0 6px 18px oklch(0.2 0.05 290 / 0.25);
+  }
+  [data-tip][data-tip-align="start"]:hover::after,
+  [data-tip][data-tip-align="start"]:focus-within::after { left: 0; transform: none; }
+  [data-tip][data-tip-align="end"]:hover::after,
+  [data-tip][data-tip-align="end"]:focus-within::after { left: auto; right: 0; transform: none; }
+
   .hover-dim:hover { opacity: 0.75; }
 }
 
@@ -290,3 +325,15 @@
 .react-flow__controls-button { border-bottom-color: var(--color-line) !important; }
 .react-flow__edge-textbg { fill: #fff; }
 .react-flow__node { font-family: var(--font-sans); }
+
+/* Respect reduced motion: no loading pulse or animated transitions. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

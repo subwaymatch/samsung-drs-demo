@@ -3,6 +3,7 @@ import { addD, D0, dayIdx, ED, END, hrs, lbl, median, short, shortY, TNOW } from
 import { av } from './people';
 import { affLines, LINES, LINFO, rModelId, thumbOf } from './products';
 import { firstDec, firstRes, isOpen, migOf, tgtEval } from './records';
+import { plural } from './text';
 import type { Data, Defect, Review, Severity } from './types';
 
 /** Generated spot illustrations for the KPI tiles. */
@@ -23,14 +24,10 @@ const GREEN = 'oklch(0.62 0.14 155)', AMBER_BAR = 'oklch(0.78 0.14 75)', GOOD_TX
 const tone = (p: number | null) => (p == null ? 'oklch(0.88 0.01 290)' : p >= 80 ? GREEN : p >= 50 ? AMBER_BAR : 'oklch(0.6 0.19 25)');
 
 interface Bucket { s: number; e: number }
+/** Equal buckets ending on the last day of data; the first one can be shorter. */
 const buckets = (start: number, size: number): Bucket[] => {
   const out: Bucket[] = [];
   for (let e = ED; e > start; e -= size) out.unshift({ s: Math.max(start, e - size), e });
-  // Fold a stub first bucket into the next full week.
-  if (size === 7 && out.length > 1 && out[0].e - out[0].s <= 3) {
-    out[1] = { s: out[0].s, e: out[1].e };
-    out.shift();
-  }
   return out;
 };
 
@@ -41,7 +38,7 @@ export function computeInsights(data: Data, range: number) {
   const bK = (b: Bucket) => addD(D0, b.s);
   const wq = (b: Bucket) => ({ from: bK(b), to: addD(D0, b.e) });
   const inB = (x: number, b: Bucket) => x >= b.s && x < b.e;
-  const spanL = (b: Bucket) => (b.e - b.s === 1 ? lbl(bK(b)) : b.e - b.s === 7 ? `Week of ${short(bK(b))}` : `${short(bK(b))} - ${short(addD(D0, b.e - 1))}`);
+  const spanL = (b: Bucket) => (b.e - b.s === 1 ? lbl(bK(b)) : b.e - b.s === 7 ? `Week of ${short(bK(b))}` : `${short(bK(b))} - ${short(addD(D0, b.e - 1))} (${b.e - b.s} days)`);
 
   // Review turnaround: hours from submission to the first decision.
   const rv = R.filter(r => r.status !== 'withdrawn').map(r => {
@@ -55,7 +52,9 @@ export function computeInsights(data: Data, range: number) {
   const within = cur.length ? (cur.filter(x => x.hours <= 48).length / cur.length) * 100 : 0;
 
   const dv = D.map(d => ({ d, w: dayIdx(d.created), res: firstRes(d) }));
-  const resIn = (a: number, b: number) => dv.filter(x => x.w >= a && x.w < b && x.res).map(x => hrs(x.d.created, x.res!) / 24);
+  // Every defect first resolved in the period, whenever it was reported: the
+  // same population as the resolved bars in the reported vs resolved chart.
+  const resIn = (a: number, b: number) => dv.filter(x => x.res && dayIdx(x.res) >= a && dayIdx(x.res) < b).map(x => hrs(x.d.created, x.res!) / 24);
   const rC = resIn(start, ED), rP = resIn(pStart, start);
   const openNow = D.filter(isOpen);
   const openThen = dv.filter(x => x.d.created < T && (!x.res || x.res >= T)).length;
@@ -66,8 +65,8 @@ export function computeInsights(data: Data, range: number) {
   });
   const kpis = [
     { label: 'Median review turnaround', art: ART + 'median-review-turnaround.webp', value: medC.toFixed(1), unit: 'h', ...delta(medC - medP, 'h', true, 1), sub: `${Math.round(within)}% decided within the 48h target`, href: '/reviews?' + qs({ from: fromK, to: END }) },
-    { label: 'First-pass approval', art: ART + 'first-pass-approval.webp', value: fpC.toFixed(0), unit: '%', ...delta(fpC - fpP, ' pts', false, 1), sub: `${cur.length} review decisions`, href: '/reviews?' + qs({ outcome: 'approved', from: fromK, to: END }) },
-    { label: 'Median time to resolve', art: ART + 'median-time-to-resolve.webp', value: median(rC).toFixed(1), unit: 'days', ...delta(median(rC) - median(rP), ' days', true, 1), sub: `${rC.length} defects resolved`, href: '/defects?' + qs({ by: 'resolved', from: fromK, to: END }) },
+    { label: 'First-pass approval', art: ART + 'first-pass-approval.webp', value: fpC.toFixed(0), unit: '%', ...delta(fpC - fpP, ' pts', false, 1), sub: plural(cur.length, 'review decision'), href: '/reviews?' + qs({ outcome: 'approved', from: fromK, to: END }) },
+    { label: 'Median time to resolve', art: ART + 'median-time-to-resolve.webp', value: median(rC).toFixed(1), unit: 'days', ...delta(median(rC) - median(rP), ' days', true, 1), sub: `${plural(rC.length, 'defect')} resolved`, href: '/defects?' + qs({ by: 'resolved', from: fromK, to: END }) },
     { label: 'Open defects', art: ART + 'open-defects.webp', value: String(openNow.length), unit: '', ...delta(openNow.length - openThen, '', true, 0, `since ${shortY(fromK)}`), sub: `${openNow.filter(d => d.sev === 'critical').length} critical`, href: '/defects?open=1' }
   ];
 
@@ -81,14 +80,15 @@ export function computeInsights(data: Data, range: number) {
   for (let v = 0; v <= max; v += 24) ticks.push({ pos: (v / max) * 100 + '%', l: v + 'h' });
   const tat = weeks.map((w, i) => ({
     ...(tatN[i]
-      ? { h: (tatV[i] / max) * 100 + '%', c: tatV[i] > 48 ? AMBER_BAR : GREEN, tip: `${spanL(w)}: ${tatV[i].toFixed(1)}h median`, href: '/reviews?' + qs(wq(w)) }
-      : { h: '2px', c: 'oklch(0.9 0.01 290)', tip: `${spanL(w)}: no review decisions`, href: '' }),
+      ? { h: (tatV[i] / max) * 100 + '%', c: tatV[i] > 48 ? AMBER_BAR : GREEN, tip: `${spanL(w)}\nMedian ${tatV[i].toFixed(1)}h, ${plural(tatN[i], 'decision')}`, href: '/reviews?' + qs(wq(w)) }
+      : { h: '2px', c: 'oklch(0.9 0.01 290)', tip: `${spanL(w)}\nNo review decisions`, href: '' }),
+    span: spanL(w), v: tatN[i] ? tatV[i].toFixed(1) + 'h' : '-', n: tatN[i],
     label: (weeks.length - 1 - i) % every === 0 ? short(bK(w)) : '',
     ja: i === 0 && weeks.length > 1 ? 'flex-start' : i === weeks.length - 1 && weeks.length > 1 ? 'flex-end' : 'center'
   }));
 
   // Defects reported vs resolved
-  const fwk = buckets(start, range <= 7 ? 1 : 7);
+  const fwk = buckets(start, range <= 30 ? 1 : 7);
   const rep = fwk.map(w => dv.filter(x => inB(x.w, w)).length);
   const res = fwk.map(w => dv.filter(x => x.res && inB(dayIdx(x.res), w)).length);
   const fmax = Math.max(fwk.length && range <= 7 ? 5 : 10, Math.ceil(Math.max(...rep, ...res) / 5) * 5);
@@ -98,7 +98,7 @@ export function computeInsights(data: Data, range: number) {
   const fEvery = fwk.length > 20 ? 4 : fwk.length > 8 ? 2 : 1;
   const flow = fwk.map((w, i) => ({
     h1: (rep[i] / fmax) * 100 + '%', h2: (res[i] / fmax) * 100 + '%',
-    tip1: `${spanL(w)}: ${rep[i]} reported`, tip2: `${spanL(w)}: ${res[i]} resolved`,
+    tip1: `${spanL(w)}\n${rep[i]} reported`, tip2: `${spanL(w)}\n${res[i]} resolved`, span: spanL(w), rep: rep[i], res: res[i],
     label: (fwk.length - 1 - i) % fEvery === 0 ? short(bK(w)) : '',
     href1: '/defects?' + qs(wq(w)), href2: '/defects?' + qs({ by: 'resolved', ...wq(w) })
   }));
@@ -129,16 +129,20 @@ export function computeInsights(data: Data, range: number) {
   const heat = hl.map(m => ({
     model: m.model, sub: `${LINFO[m.model].models.length} models, ${LINFO[m.model].plat}`, total: m.total, href: '/defects?' + qs({ line: m.model, open: 1 }),
     cells: hk.map(k => {
-      const n = hN(m.model, k), t = n / hMax;
+      // Light cells take dark text and dark cells white text. The scale skips the
+      // middle tones, where neither would reach 4.5:1.
+      const n = hN(m.model, k), t = n / hMax, L = t <= 0.5 ? 0.95 - t * 0.46 : 0.5 - (t - 0.5) * 0.2;
       return {
         n: n ? String(n) : '-',
-        bg: n ? `oklch(${(0.95 - t * 0.45).toFixed(3)} ${(0.04 + t * 0.15).toFixed(3)} 293)` : 'oklch(0.985 0.004 290)',
-        fg: t > 0.5 ? '#fff' : n ? 'oklch(0.32 0.1 293)' : 'oklch(0.7 0.01 290)',
+        bg: n ? `oklch(${L.toFixed(3)} ${(0.04 + t * 0.15).toFixed(3)} 293)` : 'oklch(0.985 0.004 290)',
+        fg: n && L <= 0.5 ? '#fff' : n ? 'oklch(0.28 0.1 293)' : 'oklch(0.62 0.01 290)',
         tip: `${m.model}, ${SEV[k].l}: ${n} open`, href: '/defects?' + qs({ line: m.model, sev: k, open: 1 })
       };
     })
   }));
   const heatCols = hk.map(k => ({ l: SEV[k].l, icon: SEV[k].icon, c: SEV[k].c }));
+  // A defect that affects several lines counts once in each, so rows can add up to more than the open total.
+  const heatUnique = { total: openNow.length, cells: hk.map(k => openNow.filter(d => d.sev === k).length), multi: openNow.filter(d => affLines(d).length > 1).length };
 
   // Turnaround by change type
   const bt = TYPES.map(t => {
@@ -146,7 +150,7 @@ export function computeInsights(data: Data, range: number) {
     return { type: t, icon: TYPE_ICON[t], n: a.length, med: median(a.map(x => x.hours)), href: '/reviews?' + qs({ type: t, from: fromK, to: END }) };
   }).filter(t => t.n).sort((a, b) => b.n - a.n).slice(0, 5);
   const btMax = Math.max(72, Math.ceil(Math.max(0, ...bt.map(t => t.med)) / 24) * 24);
-  const byType = bt.map(t => ({ ...t, v: t.med.toFixed(1) + 'h', w: (t.med / btMax) * 100 + '%', c: t.med > 48 ? AMBER_BAR : GREEN }));
+  const byType = bt.map(t => ({ ...t, nL: plural(t.n, 'review'), v: t.med.toFixed(1) + 'h', w: (t.med / btMax) * 100 + '%', c: t.med > 48 ? AMBER_BAR : GREEN }));
 
   // Code review team
   const rd = R.flatMap(r => {
@@ -165,8 +169,11 @@ export function computeInsights(data: Data, range: number) {
 
   // Most active items
   const cnt = (o: Defect | Review) => o.activity.filter(a => a.at >= T).length;
-  const topD = D.map(d => ({ d, n: cnt(d) })).filter(x => x.n).sort((a, b) => b.n - a.n).slice(0, 6);
-  const topR = R.map(r => ({ r, n: cnt(r) })).filter(x => x.n).sort((a, b) => b.n - a.n).slice(0, 6);
+  const last = (o: Defect | Review) => (o.activity.length ? o.activity[o.activity.length - 1].at : '');
+  // Most updates first; ties go to the most recently active.
+  const rank = (a: { n: number; at: string }, b: { n: number; at: string }) => b.n - a.n || (a.at < b.at ? 1 : a.at > b.at ? -1 : 0);
+  const topD = D.map(d => ({ d, n: cnt(d), at: last(d) })).filter(x => x.n).sort(rank).slice(0, 6);
+  const topR = R.map(r => ({ r, n: cnt(r), at: last(r) })).filter(x => x.n).sort(rank).slice(0, 6);
   const nb = range === 7 ? 7 : range === 30 ? 15 : 13, bsz = range / nb;
   const spark = (o: Defect | Review) => {
     const c = Array(nb).fill(0);
@@ -181,7 +188,8 @@ export function computeInsights(data: Data, range: number) {
   const sparkTip = `Activity over the last ${rangeL}, ${bsz === 1 ? 'by day' : bsz === 2 ? 'in 2-day steps' : bsz <= 7 ? 'by week' : 'in 2-week steps'}`;
   const ppl = (o: Defect | Review) => {
     const ids = [...new Set(o.activity.filter(a => a.at >= T).sort((a, b) => (a.at < b.at ? 1 : -1)).map(a => a.u))], x = ids.length - 5;
-    return { people: ids.slice(0, 5).map(av), more: x > 0 ? '+' + x : '', moreTip: x > 0 ? ids.slice(5).map(u => (UM[u] || { name: '' }).name).join(', ') : '', peopleL: ids.length + ' people active' };
+    const names = ids.map(u => (UM[u] || { name: '' }).name);
+    return { people: ids.slice(0, 5).map(av), more: x > 0 ? '+' + x : '', moreTip: x > 0 ? names.slice(5).join(', ') : '', peopleL: `${plural(ids.length, 'person', 'people')} active in this period: ${names.join(', ')}` };
   };
   const activeD = topD.map(({ d, n }) => {
     const c = d.activity.filter(a => a.t === 'c' && a.at >= T).length;
@@ -213,28 +221,34 @@ export function computeInsights(data: Data, range: number) {
     const rS = ev.filter(x => x.r.done || x.r.late), fS = ev.filter(x => x.f.done || x.f.late);
     const rp = rS.length ? (rS.filter(x => x.r.met).length / rS.length) * 100 : null;
     const fpp = fS.length ? (fS.filter(x => x.f.met).length / fS.length) * 100 : null;
-    const late = D.filter(d => d.sev === k && isOpen(d) && tgtEval(d, TNOW).f.late).length;
+    // Open and past target, among the defects reported in the period like the rest of the row.
+    const late = inP.filter(d => d.sev === k && isOpen(d) && tgtEval(d, TNOW).f.late).length;
     return {
       k, l: SEV[k].l, icon: SEV[k].icon, c: SEV[k].c, rl: t.rl, fl: t.fl,
       rp: rp == null ? '-' : Math.round(rp) + '%', rw: (rp || 0) + '%', rc: tone(rp),
       fp: fpp == null ? '-' : Math.round(fpp) + '%', fw: (fpp || 0) + '%', fc: tone(fpp),
-      late: String(late), lateFg: late ? BAD : MUTED, href: '/defects?' + qs(late ? { sev: k, late: 1 } : { sev: k, open: 1 })
+      late: String(late), lateFg: late ? BAD : MUTED, href: '/defects?' + qs(late ? { sev: k, late: 1, from: fromK, to: END } : { sev: k, from: fromK, to: END })
     };
   });
 
   return {
     kpis, tat, ticks, targetPos: (48 / max) * 100 + '%', gap: weeks.length <= 7 ? '20px' : weeks.length <= 13 ? '10px' : weeks.length <= 20 ? '6px' : '4px',
-    bucketL: range <= 30 ? 'by day' : 'by week',
+    bucketL: range <= 30 ? 'by day' : 'by week, ending on the last day of data',
+    tatSummary: `Median ${medC.toFixed(1)}h from submission to first decision over ${plural(cur.length, 'review decision')}; ${st48(tatV, tatN)} over the 48h target.`,
     periodL: `${shortY(fromK, addD(END, -1))} - ${short(addD(END, -1))}, ${addD(END, -1).slice(0, 4)}`,
     flow, flowTicks, flowGap: fwk.length <= 7 ? '20px' : fwk.length <= 13 ? '10px' : '4px',
-    flowSub: range <= 7 ? 'Daily count' : 'Weekly count', flowNote: `${sr} reported and ${ssum} resolved in the last ${rangeL}.`,
-    outcomes, waffle, outcomeSub: `${nOut} reviews submitted in the last ${rangeL}, by first decision or withdrawal`,
-    heat, heatCols, byType, typeTarget: (48 / btMax) * 100 + '%', team, activeD, activeR,
+    flowSub: range <= 30 ? 'Daily count' : 'Weekly count, ending on the last day of data', flowNote: `${sr} reported and ${ssum} resolved in the last ${rangeL}.`,
+    outcomes, waffle, outcomeSub: `${plural(nOut, 'review')} submitted in the last ${rangeL}, by first decision or withdrawal`,
+    heat, heatCols, heatUnique, byType, typeTarget: (48 / btMax) * 100 + '%', team, activeD, activeR,
     mig: { states, donut, total: String(D.length), sub: `All ${D.length} defects, by where their source of truth lives` }, byComp,
     tg, tgSub: `Defects reported in the last ${rangeL}. A response is the first comment or status change by someone other than the reporter.`
   };
 }
 
+const st48 = (v: number[], n: number[]) => {
+  const over = v.filter((x, i) => n[i] && x > 48).length, all = n.filter(Boolean).length;
+  return `${over} of ${all} ${all === 1 ? 'period' : 'periods'} with decisions`;
+};
 const statusL = (d: Defect) => ({ open: 'Open', in_progress: 'In progress', resolved: 'Resolved', closed: 'Closed' })[d.status];
 
 /** Donut slices with leader lines and label positions, in a 520 × 280 box. */

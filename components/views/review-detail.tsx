@@ -229,12 +229,12 @@ export function ReviewDetail({ id }: { id: string }) {
       <div className="flex flex-wrap items-start gap-10">
         <div className="flex min-w-0 flex-[1_1_560px] flex-col gap-9">
           <section className="flex flex-col gap-2.5">
-            <h3 className="text-sm font-semibold text-muted">Summary of change</h3>
+            <h2 className="text-sm font-semibold text-muted">Summary of change</h2>
             <p className="leading-[1.75] whitespace-pre-wrap text-pretty">{r.desc}</p>
           </section>
           {r.attachments.length ? (
             <section className="flex flex-col gap-3.5">
-              <h3 className="text-sm font-semibold text-muted">Attachments ({r.attachments.length})</h3>
+              <h2 className="text-sm font-semibold text-muted">Attachments ({r.attachments.length})</h2>
               <Attachments items={r.attachments} />
             </section>
           ) : null}
@@ -260,7 +260,7 @@ export function ReviewDetail({ id }: { id: string }) {
           <section className="flex flex-col gap-5 border-t border-line pt-6">
             <div className="flex flex-wrap items-center justify-between gap-3">
               <div className="flex flex-col gap-1">
-                <h3 className="text-base font-[650]">Changed files</h3>
+                <h2 className="text-base font-[650]">Changed files</h2>
                 <span className="text-sm text-muted">{r.files.length ? `${r.files.length} file${r.files.length > 1 ? 's' : ''}, +${add} -${del}, Click a line to comment` : 'Not synced from Helix Swarm yet'}</span>
               </div>
               {r.files.length ? <div className="max-w-full overflow-x-auto"><Segmented ariaLabel="Diff layout" items={DIFF_MODES} value={mode} onValueChange={v => setPrefs({ diff: v as 'sbs' | 'uni' })} /></div> : null}
@@ -297,7 +297,7 @@ export function ReviewDetail({ id }: { id: string }) {
             ) : null}
           </section>
           <section className="flex flex-col gap-[22px] border-t border-line pt-6">
-            <h3 className="text-base font-[650]">Activity</h3>
+            <h2 className="text-base font-[650]">Activity</h2>
             <ActivityFeed items={r.activity} />
             <Composer me={av(meId)} people={people} onPost={(t, att) => upd(x => ({ ...x, activity: [...x.activity, A('c', meId, nowStr(), t, null, att)] }))} />
           </section>

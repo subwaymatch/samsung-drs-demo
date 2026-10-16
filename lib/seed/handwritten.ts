@@ -126,9 +126,9 @@ export const HW_DEFECTS: HwDefect[] = [
     ]
   },
   {
-    id: 'D:tonerlow', title: 'Toner low warning appears at 40% remaining with MLT-D203L cartridge', model: 'PS-M4160FR', comp: 'Toner / Supplies', sev: 'trivial', status: 'open', fw: 'V4.00.03.40',
+    id: 'D:tonerlow', title: 'Toner low warning appears at 40% remaining with PT-D293L cartridge', model: 'PS-M4160FR', comp: 'Toner / Supplies', sev: 'trivial', status: 'open', fw: 'V4.00.03.40',
     reporter: 'u8', assignees: [], created: '2017-09-13 09:00',
-    desc: 'With a new MLT-D203L high-yield cartridge, the toner low warning appears when the gauge still shows about 40% remaining.',
+    desc: 'With a new PT-D293L high-yield cartridge, the toner low warning appears when the gauge still shows about 40% remaining.',
     activity: [A('e', 'u8', '2017-09-13 09:00', 'reported this defect')]
   },
   {
