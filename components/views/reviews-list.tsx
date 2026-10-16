@@ -11,7 +11,7 @@ import { firstDec, lastAt } from '@/lib/records';
 import { useApp } from '@/lib/store';
 import type { Option, Review } from '@/lib/types';
 import { EmptyState, Loading, PageHeader, Pagination, pagerOf, QuickFilters, ScopeTabs, SortHeader, StatusLabel, Thumb } from '../common/basics';
-import { Clickable } from '../common/clickable';
+import { Clickable, KEY_ROW } from '../common/clickable';
 import { useKeyRows, useShell } from '../shell/shell-context';
 import { LinkButton } from '../ui/button';
 import { Input } from '../ui/fields';
@@ -20,7 +20,6 @@ import { Person } from '../ui/person';
 import { Select } from '../ui/select';
 import { rangeChip } from './defects-list';
 
-const HLBG = 'oklch(0.975 0.018 293)', HLSH = 'inset 3px 0 0 oklch(0.55 0.19 293)';
 
 export function ReviewsList() {
   const app = useApp();
@@ -101,7 +100,7 @@ export function ReviewsList() {
         </div>
       </div>
       <QuickFilters chips={view.chips} clearHref="/reviews" />
-      <div className="overflow-x-auto">
+      <div className="-mx-3 overflow-x-auto px-3">
         <div style={{ minWidth: compact ? 680 : 1116 }}>
           <div className="grid gap-5 border-b border-line py-3 text-sm font-semibold text-muted" style={{ gridTemplateColumns: cols }}>
             {!compact ? <span /> : null}
@@ -122,7 +121,7 @@ export function ReviewsList() {
                   href={'/reviews/' + r.id}
                   krow={i}
                   className="row-link grid items-center gap-5 border-b border-line-soft py-4 last:border-b-0"
-                  style={{ gridTemplateColumns: cols, background: i === kIdx ? HLBG : 'transparent', boxShadow: i === kIdx ? HLSH : 'none' }}
+                  style={{ gridTemplateColumns: cols, ...(i === kIdx ? KEY_ROW : { background: 'transparent' }) }}
                 >
                   {!compact ? <Thumb th={thumbOf(rModelId(r, data.defects))} /> : null}
                   <span className="font-mono text-sm text-muted">{r.id}</span>

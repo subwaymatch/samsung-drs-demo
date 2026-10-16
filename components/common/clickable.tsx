@@ -41,3 +41,16 @@ export function Clickable({ href, onOpen, children, className = '', style, title
 }
 
 export const stop = (e: { stopPropagation: () => void }) => e.stopPropagation();
+
+const KEY_BG = 'oklch(0.965 0.024 293)';
+/**
+ * The row the keyboard cursor (J/K) is on: a tinted pill that reaches 12px past
+ * the row on both sides, so nothing is drawn over the row's first column. Lists
+ * inside a scroll container need 12px of horizontal padding to show it.
+ */
+export const KEY_ROW: CSSProperties = {
+  background: KEY_BG,
+  borderRadius: 10,
+  borderBottomColor: 'transparent',
+  boxShadow: `-12px 0 0 ${KEY_BG}, 12px 0 0 ${KEY_BG}`
+};

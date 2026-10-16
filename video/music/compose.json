@@ -1,0 +1,171 @@
+{
+  "model_id": "music_v2_5",
+  "composition_plan": {
+    "chunks": [
+      {
+        "text": "[Intro]",
+        "duration_ms": 4000,
+        "positive_styles": [
+          "120 BPM",
+          "4/4 time",
+          "F major",
+          "airy ambient intro",
+          "warm analog pads",
+          "shimmering plucked synth accent",
+          "no drums",
+          "soft sub presence implied",
+          "clean polished electronic production"
+        ],
+        "negative_styles": [
+          "vocals",
+          "singing",
+          "spoken word",
+          "heavy distortion",
+          "aggressive drops"
+        ],
+        "context_adherence": "high"
+      },
+      {
+        "text": "[Build]",
+        "duration_ms": 10000,
+        "positive_styles": [
+          "120 BPM",
+          "4/4 time",
+          "F major",
+          "soft four-on-the-floor kick",
+          "bright plucked synth arpeggios",
+          "gentle sub bass entrance",
+          "tight minimal drums",
+          "gradual lift into the groove",
+          "clean modern electronic mix"
+        ],
+        "negative_styles": [
+          "vocals",
+          "singing",
+          "spoken word",
+          "heavy distortion",
+          "aggressive drops"
+        ],
+        "context_adherence": "high"
+      },
+      {
+        "text": "[Main Groove]",
+        "duration_ms": 16000,
+        "positive_styles": [
+          "120 BPM",
+          "4/4 time",
+          "F major",
+          "full drum pattern with crisp kick and clap",
+          "steady sub bass line",
+          "bright plucked synth arpeggios",
+          "warm analog pads supporting harmony",
+          "confident forward motion",
+          "wide stereo polish",
+          "focused product-demo energy"
+        ],
+        "negative_styles": [
+          "vocals",
+          "singing",
+          "spoken word",
+          "heavy distortion",
+          "aggressive drops"
+        ],
+        "context_adherence": "high"
+      },
+      {
+        "text": "[Second Groove]",
+        "duration_ms": 20000,
+        "positive_styles": [
+          "120 BPM",
+          "4/4 time",
+          "F major",
+          "full groove sustained",
+          "light counter-melody on glassy synth tones",
+          "tight minimal drums",
+          "sub bass with smooth articulation",
+          "warm pads holding the harmony",
+          "slightly more motion without raising intensity",
+          "refined commercial electronic texture"
+        ],
+        "negative_styles": [
+          "vocals",
+          "singing",
+          "spoken word",
+          "heavy distortion",
+          "aggressive drops"
+        ],
+        "context_adherence": "high"
+      },
+      {
+        "text": "[Breakdown]",
+        "duration_ms": 4000,
+        "positive_styles": [
+          "120 BPM",
+          "4/4 time",
+          "F major",
+          "drums drop out",
+          "pads and soft synth texture only",
+          "reduced bass foundation",
+          "open spacious harmony",
+          "brief suspended breakdown",
+          "calm confidence before the lift"
+        ],
+        "negative_styles": [
+          "vocals",
+          "singing",
+          "spoken word",
+          "heavy distortion",
+          "aggressive drops"
+        ],
+        "context_adherence": "high"
+      },
+      {
+        "text": "[Lift]",
+        "duration_ms": 6000,
+        "positive_styles": [
+          "120 BPM",
+          "4/4 time",
+          "F major",
+          "soft drums return",
+          "uplifting harmonic lift",
+          "plucked arpeggios re-enter with clarity",
+          "gentle sub bass pulse",
+          "warm analog pads",
+          "controlled energy rebuild",
+          "clean optimistic finish"
+        ],
+        "negative_styles": [
+          "vocals",
+          "singing",
+          "spoken word",
+          "heavy distortion",
+          "aggressive drops"
+        ],
+        "context_adherence": "high"
+      },
+      {
+        "text": "[Outro]",
+        "duration_ms": 6000,
+        "positive_styles": [
+          "120 BPM",
+          "4/4 time",
+          "F major",
+          "sustained final chord",
+          "natural reverb tail",
+          "no abrupt cut",
+          "pads and glassy overtones fading naturally",
+          "resolved ending",
+          "polished cinematic product-signoff"
+        ],
+        "negative_styles": [
+          "vocals",
+          "singing",
+          "spoken word",
+          "heavy distortion",
+          "aggressive drops"
+        ],
+        "context_adherence": "high"
+      }
+    ]
+  }
+}

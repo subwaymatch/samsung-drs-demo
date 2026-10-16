@@ -1,0 +1,39 @@
+{
+  "name": "drs-showcase-video",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Remotion showcase video for the Defects and Reviews System demo.",
+  "type": "module",
+  "scripts": {
+    "assets": "node scripts/assets.mjs",
+    "capture": "node scripts/capture.mjs",
+    "music": "node scripts/music.mjs",
+    "studio": "node scripts/assets.mjs && remotion studio",
+    "render": "node scripts/assets.mjs && remotion render DrsShowcase out/drs-showcase.mp4",
+    "still": "remotion still",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@remotion/cli": "4.0.535",
+    "@remotion/fonts": "4.0.535",
+    "@remotion/paths": "4.0.535",
+    "@remotion/transitions": "4.0.535",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "remotion": "4.0.535"
+  },
+  "devDependencies": {
+    "@fontsource/jetbrains-mono": "^5.3.0",
+    "@remotion/bundler": "4.0.535",
+    "@remotion/renderer": "4.0.535",
+    "@types/react": "^19.3.0",
+    "playwright": "1.56.1",
+    "pretendard": "^1.3.9",
+    "typescript": "^5.9.3"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "esbuild"
+    ]
+  }
+}

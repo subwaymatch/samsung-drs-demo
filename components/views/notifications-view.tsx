@@ -8,14 +8,13 @@ import { buildNotifs, isUnread, readOf } from '@/lib/notifications';
 import { av } from '@/lib/people';
 import { setRead, useApp } from '@/lib/store';
 import { EmptyState, Loading, PageHeader, Pagination, pagerOf } from '../common/basics';
-import { Clickable } from '../common/clickable';
+import { Clickable, KEY_ROW } from '../common/clickable';
 import { useKeyRows, useShell } from '../shell/shell-context';
 import { Button } from '../ui/button';
 import { Icon } from '../ui/icon';
 import { Person } from '../ui/person';
 import { Segmented } from '../ui/toggles';
 
-const HLBG = 'oklch(0.975 0.018 293)', HLSH = 'inset 3px 0 0 oklch(0.55 0.19 293)';
 
 export function NotificationsView() {
   const app = useApp();
@@ -66,7 +65,7 @@ export function NotificationsView() {
               onOpen={() => open(n)}
               krow={i}
               className="row-link grid grid-cols-[8px_32px_minmax(0,1fr)_auto] items-start gap-3.5 border-b border-line-soft py-4 pr-3 pl-2 last:border-b-0"
-              style={{ background: i === kIdx ? HLBG : un ? 'oklch(0.985 0.012 293)' : 'transparent', boxShadow: i === kIdx ? HLSH : 'none' }}
+              style={i === kIdx ? KEY_ROW : { background: un ? 'oklch(0.985 0.012 293)' : 'transparent' }}
             >
               <span className="mt-3 h-2 w-2 rounded-full" style={{ background: un ? 'oklch(0.55 0.19 293)' : 'transparent' }} aria-label={un ? 'Unread' : undefined} />
               <Person person={who} size={32} />
