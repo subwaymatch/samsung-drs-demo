@@ -4,6 +4,7 @@ import { AbsoluteFill, Img, interpolate, spring, staticFile, useCurrentFrame, us
 import { DrsMark } from '../components/Logo';
 import { FadeUp, Words } from '../components/Overlays';
 import { C, EASE, EASE_OUT, MONO, SANS } from '../theme';
+import { Sfx, SFX_LEVEL } from '../components/Sfx';
 
 type Sys = { name: string; logo: string; logoH: number; stat: string; sync: string; edge: string };
 
@@ -95,6 +96,8 @@ export const Systems: React.FC = () => {
 
   return (
     <AbsoluteFill style={{ fontFamily: SANS, color: C.ink }}>
+      {/* A shimmer as the first legacy line reaches DRS (frame 84). */}
+      <Sfx at={83} name="connect" volume={SFX_LEVEL.connect} frames={54} />
       <div style={{ position: 'absolute', left: 0, right: 0, top: 58, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 16, textAlign: 'center' }}>
         <FadeUp start={0} dur={14}>
           <div style={{ fontFamily: MONO, fontSize: 18, fontWeight: 500, letterSpacing: '0.16em', color: C.accent }}>MID-MIGRATION, TEAM BY TEAM</div>

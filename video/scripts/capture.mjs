@@ -25,10 +25,10 @@ const VH = 900;
 mkdirSync(OUT, { recursive: true });
 const browser = await chromium.launch(process.env.CHROMIUM_PATH ? { executablePath: process.env.CHROMIUM_PATH } : {});
 const ctx = await browser.newContext({ viewport: { width: VW, height: VH }, deviceScaleFactor: 2, reducedMotion: 'reduce' });
-// The demo's "now" is its fixed date at the viewer's time of day, which shows in
-// durations such as "Overdue by 2.5 days". Pin the clock so captures match.
-const CLOCK = process.env.DRS_CLOCK || '20:45';
-await ctx.clock.setFixedTime(new Date(`2026-01-01T${CLOCK}:00`));
+// The demo clock starts at Sep 15, 2017 18:00 and runs with the visit. Freeze the
+// browser clock so durations such as "Overdue by 2.5 days" stay the same while
+// a capture runs.
+await ctx.clock.setFixedTime(new Date('2026-01-01T09:00:00'));
 const page = await ctx.newPage();
 const only = process.argv.slice(2);
 // A partial capture updates its own entries and keeps everything else.
@@ -110,6 +110,8 @@ const sections = {
     for (const [label, name] of [['7 days', 'insights-stats-7d'], ['90 days', 'insights-stats-90d'], ['6 months', 'insights-stats-6m'], ['30 days', 'insights-stats-30d']]) {
       await page.getByRole('button', { name: label }).or(page.getByRole('tab', { name: label })).or(page.getByRole('radio', { name: label })).first().click();
       await page.mouse.move(VW - 2, VH - 2);
+      // Measure from the top: once scrolled, the period bar sticks to the top of the window.
+      await page.evaluate(() => window.scrollTo(0, 0));
       await settle(500);
       const a = await span('Showing', '6 months'), b = await span('Median review turnaround', 'Open defects');
       const r = { x: b.x - 24, y: a.y - 16, w: b.w + 48, h: b.y + b.h - a.y + 32 };

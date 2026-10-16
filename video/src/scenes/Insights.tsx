@@ -6,6 +6,7 @@ import { Spotlight, window01 } from '../components/Overlays';
 import { Pointer, pointerAt } from '../components/Pointer';
 import { Screen } from '../components/Screen';
 import { cap, L } from '../layout';
+import { Clicks } from '../components/Sfx';
 
 const I = L.insights;
 const RANGE_Y = I.range.y + I.range.h / 2 - 6;
@@ -50,6 +51,7 @@ export const Insights: React.FC = () => {
 
   return (
     <FeatureFrame
+      stage={<Clicks at={CLICKS} />}
       index="01"
       label="Insights"
       title="Every team against its targets"

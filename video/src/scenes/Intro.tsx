@@ -4,6 +4,7 @@ import { NightBg } from '../components/Backgrounds';
 import { DrsMark } from '../components/Logo';
 import { FadeUp, Words } from '../components/Overlays';
 import { EASE, MONO, SANS } from '../theme';
+import { Sfx, SFX_LEVEL } from '../components/Sfx';
 
 const clampX = { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' } as const;
 
@@ -18,6 +19,8 @@ export const Intro: React.FC = () => {
   return (
     <AbsoluteFill style={{ fontFamily: SANS }}>
       <NightBg />
+      {/* A whoosh into the hole that opens onto the next scene (frame 120); it peaks 4 frames in. */}
+      <Sfx at={117} name="whoosh" volume={SFX_LEVEL.whoosh} frames={42} />
       {/* Expanding halo behind the mark */}
       <div
         style={{

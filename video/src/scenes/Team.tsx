@@ -2,6 +2,7 @@ import React from 'react';
 import { AbsoluteFill, Img, interpolate, spring, staticFile, useCurrentFrame, useVideoConfig } from 'remotion';
 import { Eyebrow, FadeUp, Words } from '../components/Overlays';
 import { C, EASE, MONO, SANS } from '../theme';
+import { Sfx, SFX_LEVEL } from '../components/Sfx';
 
 // The people on D-17-0363 and CR-2225: reported, fixed and approved.
 const STORY: Record<string, { verb: string; name: string; role: string }> = {
@@ -99,6 +100,8 @@ export const Team: React.FC = () => {
 
   return (
     <AbsoluteFill style={{ fontFamily: SANS, color: C.ink }}>
+      {/* A chime as the reporter, fixer and approver light up (frame 92). */}
+      <Sfx at={92} name="highlight" volume={SFX_LEVEL.highlight} frames={36} />
       <div style={{ position: 'absolute', left: 0, right: 0, top: 70, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 16, textAlign: 'center' }}>
         <FadeUp start={0} dur={14}>
           <Eyebrow index="07" label="The people" />
