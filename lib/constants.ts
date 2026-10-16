@@ -55,7 +55,8 @@ const USER_SEED: UserSeed[] = [
 
 export const USERS: User[] = USER_SEED.map(u => ({
   ...u,
-  email: u.en.toLowerCase().replace(/\s+/g, '.') + '@samsung.com',
+  // A reserved domain: the mock names could belong to real people.
+  email: u.en.toLowerCase().replace(/\s+/g, '.') + '@example.com',
   photo: '/photos/' + u.id + '.webp',
   site: /SRI-Bangalore/.test(u.title) ? 'Bangalore, India' : 'Suwon, Korea'
 }));

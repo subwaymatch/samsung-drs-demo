@@ -61,7 +61,7 @@ export function DigestsView({ kind: kindIn, date }: { kind?: string; date?: stri
           </div>
           <article className="flex flex-col gap-7 border-t border-line pt-6">
             <div className="grid grid-cols-[56px_minmax(0,1fr)] gap-x-4 gap-y-2">
-              <span className="text-muted">From</span><span>DRS Notifications &lt;drs-noreply@samsung.com&gt;</span>
+              <span className="text-muted">From</span><span>DRS Notifications &lt;drs-noreply@example.com&gt;</span>
               <span className="text-muted">To</span><span className="[overflow-wrap:anywhere]">{[me.email, ...ss.cc.map(u => (UM[u] || { email: '' }).email).filter(Boolean)].join(', ')}</span>
               <span className="text-muted">Sent</span><span>{email.sentAt}</span>
             </div>

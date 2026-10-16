@@ -2,7 +2,7 @@
   "name": "samsung-drs-demo",
   "version": "1.0.0",
   "private": true,
-  "description": "Defects and Reviews System (DRS): a recreation of a defect and code review tracker built at Samsung Electronics' printing division, 2016–2017.",
+  "description": "Defects and Reviews System (DRS): a recreation of a defect and code review tracker built at Samsung Electronics' printing division, 2016-2017.",
   "type": "module",
   "packageManager": "pnpm@10.28.0",
   "scripts": {

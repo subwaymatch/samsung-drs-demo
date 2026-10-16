@@ -3,11 +3,23 @@ import type { ReactNode } from 'react';
 import { AppShell } from '@/components/shell/app-shell';
 import './globals.css';
 
+const DESCRIPTION =
+  "A recreation of the Defects and Reviews System built at Samsung Electronics' printing division in 2016-2017: defect tracking, code review and a bridge across IBM Rational, Review Board, Perforce, Helix Swarm, Jira and Confluence.";
+
 export const metadata: Metadata = {
+  // Absolute URLs for link previews. Change it if the demo moves.
+  metadataBase: new URL('https://samsung-drs-demo.subwaymatch.workers.dev'),
   title: { default: 'Defects and Reviews System (DRS)', template: '%s - DRS' },
-  description:
-    "A recreation of the Defects and Reviews System built at Samsung Electronics' printing division in 2016-2017: defect tracking, code review and a bridge across IBM Rational, Review Board, Perforce, Helix Swarm, Jira and Confluence.",
-  icons: { icon: '/drs-logo.svg' }
+  description: DESCRIPTION,
+  icons: { icon: '/drs-logo.svg', apple: '/apple-touch-icon.png' },
+  openGraph: {
+    type: 'website',
+    siteName: 'DRS demo',
+    title: 'Defects and Reviews System (DRS)',
+    description: DESCRIPTION,
+    images: [{ url: '/og-image.png', width: 1200, height: 630, alt: 'DRS Insights: the seven-system diagram and defect and code review metrics' }]
+  },
+  twitter: { card: 'summary_large_image', title: 'Defects and Reviews System (DRS)', description: DESCRIPTION, images: ['/og-image.png'] }
 };
 
 export const viewport: Viewport = {

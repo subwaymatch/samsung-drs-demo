@@ -43,3 +43,6 @@ export const userOptions = () =>
   USERS.map(u => personOption(u.id, ROLE[u.role] + ', ' + TM[u.team].name));
 export const engineerOptions = () => USERS.filter(u => u.role === 'eng').map(u => personOption(u.id));
 export const reviewerOptions = () => USERS.filter(u => u.role === 'cr').map(u => personOption(u.id));
+
+/** The 192 x 288 copy of a portrait, for avatars and team cards; the full 320 x 480 one is for profiles. */
+export const smallPhoto = (src: string) => src.replace('/photos/', '/photos/sm/');

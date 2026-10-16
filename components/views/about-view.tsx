@@ -34,8 +34,9 @@ export function AboutView() {
       <section className="flex max-w-[680px] flex-col gap-4 border-t border-line pt-6 text-[17px] leading-[1.7] text-pretty text-ink-3">
         <p>This is a demo of an application I built at Samsung Electronics' printing division.</p>
         <p>DRS tracks defects and code reviews for printer and copier firmware, measures them against severity targets, and keeps records linked across IBM Rational, Review Board, Perforce, Helix Swarm, Jira and Confluence.</p>
-        <p>Printer models, defects, code reviews, people and other product and brand details have been replaced with mock data.</p>
+        <p>Defects, code reviews, people, email addresses and engineering specs are mock data. Printer model numbers are made up, and the product photos are generated stand-ins. Samsung and its product line names appear only for context.</p>
         <p>Some of the original libraries have been deprecated and are no longer available, so they have been replaced with newer ones.</p>
+        <p className="text-[15px] text-muted">This demo is not affiliated with or endorsed by Samsung Electronics. Samsung is a trademark of its owner.</p>
       </section>
       <section className="flex max-w-[680px] flex-col text-[15px]">
         {ROWS.map(([k, icon, v], i) => (

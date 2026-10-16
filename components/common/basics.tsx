@@ -4,6 +4,7 @@ import NextLink from 'next/link';
 import type { CSSProperties, ReactNode } from 'react';
 import { Button } from '../ui/button';
 import { Icon } from '../ui/icon';
+import { smallPhoto } from '@/lib/people';
 import type { Thumb as ThumbT } from '@/lib/products';
 
 export function PageHeader({ title, sub, action }: { title: ReactNode; sub?: ReactNode; action?: ReactNode }) {
@@ -108,7 +109,7 @@ export function PhotoPlaceholder({ w, h, iconSize = 24, title, src }: { w: numbe
     <div title={title} className={'grid flex-none place-items-center overflow-hidden rounded ' + (src ? '' : 'bg-[oklch(0.965_0.015_293)]')} style={{ width: w, height: h }}>
       {src ? (
         // eslint-disable-next-line @next/next/no-img-element
-        <img src={src} alt="" loading="lazy" decoding="async" className="block h-full w-full object-cover object-top" />
+        <img src={w <= 96 ? smallPhoto(src) : src} alt="" loading="lazy" decoding="async" className="block h-full w-full object-cover object-top" />
       ) : (
         <Icon name="user" size={iconSize} color="oklch(0.68 0.07 293)" />
       )}

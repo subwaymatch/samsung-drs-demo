@@ -237,6 +237,9 @@ export function AppShell({ children }: { children: ReactNode }) {
               <div className="h-8" />
             )}
           </div>
+          <NextLink href="/about" className="-mt-2 px-1 text-xs leading-normal text-muted no-underline hover:text-accent-ink hover:no-underline">
+            Portfolio demo with mock data. Not affiliated with Samsung Electronics.
+          </NextLink>
         </aside>
 
         <main ref={mainRef} className="min-w-0 flex-[1_1_auto]">
@@ -245,6 +248,7 @@ export function AppShell({ children }: { children: ReactNode }) {
             <NextLink href="/" aria-label="Go to Insights">
               <DrsLogo width={26} />
             </NextLink>
+            <NextLink href="/about" className="rounded-full bg-accent-wash px-2.5 py-1 text-xs font-semibold text-accent-ink no-underline hover:no-underline">Portfolio demo</NextLink>
             <div className="ml-auto">
               <Button variant="ghost" icon="search" iconOnly title="Search everything" onClick={focusSearch} />
             </div>
