@@ -1,5 +1,5 @@
 import React from 'react';
-import { AbsoluteFill, Img, interpolate, staticFile, useCurrentFrame } from 'remotion';
+import { AbsoluteFill, Easing, Img, interpolate, staticFile, useCurrentFrame } from 'remotion';
 import { DrsMark } from '../components/Logo';
 import { Eyebrow, FadeUp, Words } from '../components/Overlays';
 import { cap } from '../layout';
@@ -11,6 +11,7 @@ const PAPER_W = 760;
 const K = PAPER_W / CROP.w;
 const SLOT_Y = 994;
 const PRINTER = { x: 1040, w: 900 };
+const FEED = Easing.bezier(0.3, 0.15, 0.35, 1);
 
 const Pill: React.FC<{ children: React.ReactNode }> = ({ children }) => (
   <div style={{ display: 'flex', alignItems: 'center', gap: 10, height: 44, padding: '0 18px', borderRadius: 22, background: '#fff', boxShadow: `0 0 0 1px ${C.accentRule}`, fontSize: 19, fontWeight: 600, color: C.ink3 }}>
@@ -20,12 +21,10 @@ const Pill: React.FC<{ children: React.ReactNode }> = ({ children }) => (
 
 export const Digests: React.FC = () => {
   const f = useCurrentFrame();
-  // The sheet feeds up out of the printer in short steps, like lines being printed.
-  const t = interpolate(f, [12, 104], [0, 1], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
-  const steps = 28;
-  const stepped = (Math.floor(t * steps) + EASE_OUT(Math.min(1, ((t * steps) % 1) * 2.2))) / steps;
-  const eased = EASE_OUT(Math.min(1, stepped));
-  const rise = eased * (SLOT_Y - 120);
+  // The sheet feeds up out of the printer in one continuous motion: a gentle
+  // start, a steady middle and a soft stop. (Moving it in line-by-line steps
+  // left frames where it stood still, which read as lag at 30 fps.)
+  const rise = interpolate(f, [12, 104], [0, SLOT_Y - 120], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: FEED });
   const led = Math.sin(f / 3) > 0 || f > 104;
   const printer = interpolate(f, [0, 16], [0, 1], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: EASE_OUT });
 
