@@ -78,6 +78,16 @@ The About page plays a copy of it from `public/video`, encoded to stay under the
 
 Workers static assets answer a Range request with the whole file, and a browser can only seek a video with partial (206) responses. So the page plays it from `/stream/<file>` instead: `worker/index.ts` sends `/stream/*` to `worker/stream.ts` ahead of the vinext app, and that reads `public/video/<file>` from the assets binding and sends the bytes asked for. The binding gives no file sizes, so `vite.config.ts` records them at build time (`virtual:video-sizes`).
 
+## Generated images
+
+The product shots in `public/products`, the staff portraits in `public/photos` and the Insights illustrations in `public/illustrations` are generated stand-ins, made with OpenAI's GPT Image 2.5 (`gpt-image-2.5-flare`) at `quality: "low"` on a transparent background and saved as small transparent WebP files sized for the thumbnails they fill. They stay as they are and do not need regenerating.
+
+Any new or replacement image is generated with GPT Image 2.6 (`gpt-image-2.6-flare`, or `gpt-image-2.6-sunburst`, the same release at the same price) at `quality: "low"` with `background: "transparent"`, and saved the same way. Three things to know about 2.6:
+
+- OpenAI's Batch API does not accept either 2.6 model (it answers `model_not_found`), so send each request synchronously.
+- At `low` it is 664 image output tokens at 1536x1024 or 1024x1536 and 824 at 1024x1024, about $0.02-0.025 an image at $30 per 1M (2.5 used 158 and 196).
+- A subject comes back at alpha 254, not 255, so count 250 and above as opaque when checking a cut-out.
+
 ## Credits
 
 Product logos in `public/logos` belong to their owners and are used only to label the systems DRS synced with. The Perforce mark is from [Simple Icons](https://simpleicons.org). Fonts: [Pretendard](https://github.com/orioncactus/pretendard) and [JetBrains Mono](https://www.jetbrains.com/lp/mono/). The sales region map in device details is built from [Natural Earth](https://www.naturalearthdata.com) 1:110m countries (public domain) by `scripts/region-map.mjs`, which writes `lib/region-map.ts`.
