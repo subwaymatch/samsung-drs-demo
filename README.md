@@ -1,6 +1,6 @@
 # Defects and Reviews System (DRS)
 
-A recreation of the defect and code review tracker I built at Samsung Electronics' printing division in 2016-2017. Firmware, QA and code review teams in Suwon and Bangalore used it to track defects and code reviews for printer and copier firmware, measure them against severity targets, and keep records linked while moving from IBM Rational ClearQuest and Review Board to Perforce, Helix Swarm, Jira and Confluence.
+A demo of the defect and code review tracker at Samsung Electronics' printing division in 2016-2017.
 
 Defects, reviews, people, email addresses and engineering specs are mock data. Model numbers are made up ("PS-" ids that are not real products), product photos are generated stand-ins, and Samsung and its product line names appear only for context. This demo is not affiliated with or endorsed by Samsung Electronics.
 
