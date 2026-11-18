@@ -88,6 +88,8 @@ Any new or replacement image is generated with GPT Image 2.6 (`gpt-image-2.6-fla
 - At `low` it is 664 image output tokens at 1536x1024 or 1024x1536 and 824 at 1024x1024, about $0.02-0.025 an image at $30 per 1M (2.5 used 158 and 196).
 - A subject comes back at alpha 254, not 255, so count 250 and above as opaque when checking a cut-out.
 
+The 35 isometric illustrations in `public/illustrations` were made with `gpt-image-2.6-sunburst` at `quality: "low"` on a transparent background. The prompt asks for violet accents, which are then turned into warm greys, so the illustrations are white throughout: `python3 scripts/illustrations/degrey.py IN.png OUT.png` (Pillow and NumPy) does that to a generated image. Each is trimmed to its drawing and at most 512px on the long side. `lib/illustrations.ts` lists them with their sizes and subjects, and `illustrationSrc(name)` gives a file. Their prompts are in `scripts/illustrations/prompts.json`. They are not placed in the interface yet.
+
 ## Credits
 
 Product logos in `public/logos` belong to their owners and are used only to label the systems DRS synced with. The Perforce mark is from [Simple Icons](https://simpleicons.org). Fonts: [Pretendard](https://github.com/orioncactus/pretendard) and [JetBrains Mono](https://www.jetbrains.com/lp/mono/). The sales region map in device details is built from [Natural Earth](https://www.naturalearthdata.com) 1:110m countries (public domain) by `scripts/region-map.mjs`, which writes `lib/region-map.ts`.
