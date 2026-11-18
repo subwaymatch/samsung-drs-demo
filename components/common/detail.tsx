@@ -48,7 +48,7 @@ export function PersonCard({ label, person, when }: { label: string; person: Per
         <PhotoPlaceholder w={56} h={70} src={person.photo} title={person.photo ? person.name : 'Photo placeholder'} />
         <div className="flex min-w-0 flex-col gap-1">
           <div className="flex flex-wrap items-baseline gap-2">
-            <Link to={person.href} lang={langOf(person.name)} className="text-[15px] font-[650] text-inherit">{person.name}</Link>
+            <Link to={person.href} lang={langOf(person.name)} className="text-[15px] font-semibold text-inherit">{person.name}</Link>
             {person.en !== person.name ? <span className="text-sm text-muted">{person.en}</span> : null}
           </div>
           <span>{person.title}, {person.teamName}</span>
@@ -66,7 +66,7 @@ export function AffectedProducts({ chips, addItems, sub, onAdd, onRemove }: { ch
   return (
     <section className="flex flex-col gap-3">
       <div className="flex flex-col gap-1">
-        <h2 className="text-base font-[650]">Affected products</h2>
+        <h2 className="text-base font-semibold">Affected products</h2>
         <span className="text-sm text-muted">{sub}</span>
       </div>
       <div className="flex flex-wrap items-center gap-2">
@@ -74,7 +74,7 @@ export function AffectedProducts({ chips, addItems, sub, onAdd, onRemove }: { ch
           <span
             key={c.key}
             title={c.tip}
-            className="inline-flex min-h-[34px] items-center gap-2 rounded-md border pr-2 pl-3"
+            className="inline-flex min-h-9 items-center gap-2 rounded-md border pr-2 pl-3"
             style={{ borderColor: c.primary ? 'oklch(0.86 0.06 293)' : 'oklch(0.9 0.012 290)', background: c.primary ? 'oklch(0.96 0.03 293)' : '#fff' }}
           >
             <Icon name={c.icon} size={15} color="oklch(0.5 0.12 293)" />
@@ -99,7 +99,7 @@ export function AffectedProducts({ chips, addItems, sub, onAdd, onRemove }: { ch
 
 function SpecItem({ s }: { s: Spec }) {
   return (
-    <div className="flex min-w-0 flex-col gap-[3px]">
+    <div className="flex min-w-0 flex-col gap-1">
       <span className="text-sm text-muted">{s.k}</span>
       <span className={'font-[550] [overflow-wrap:anywhere] ' + (s.mono ? 'font-mono text-sm' : '')}>
         {s.mono ? s.v.split('/').map((seg, i) => (i ? <span key={i}>/<wbr />{seg}</span> : seg)) : s.v}
@@ -117,19 +117,19 @@ export function ProductPanel({ pm }: { pm: ModelInfo }) {
       <Thumb th={thumbOf(pm.id)} w={168} h={120} iconSize={32} label />
       <div className="flex min-w-0 flex-[1_1_320px] flex-col gap-3">
         <div className="flex flex-col gap-0.5">
-          <span className="text-base font-[650]">Samsung {pm.series} {pm.id}</span>
+          <span className="text-base font-semibold">Samsung {pm.series} {pm.id}</span>
           <span className="text-muted">{pm.kind}</span>
         </div>
         <div className="grid gap-x-6 gap-y-3 [grid-template-columns:repeat(auto-fit,minmax(130px,1fr))]">
           {pm.specs.map(s => (
-            <div key={s.k} className="flex min-w-0 flex-col gap-[3px]"><span className="text-sm text-muted">{s.k}</span><span className="font-[550]">{s.v}</span></div>
+            <div key={s.k} className="flex min-w-0 flex-col gap-1"><span className="text-sm text-muted">{s.k}</span><span className="font-[550]">{s.v}</span></div>
           ))}
         </div>
         <div className="flex flex-col gap-3 border-t border-line-soft pt-3.5">
           <span className="text-sm font-semibold text-ink-4">Engineering</span>
           <div className="flex flex-wrap gap-x-8 gap-y-5">
             {region ? (
-              <div className="flex min-w-0 flex-[0_1_220px] flex-col gap-[3px]">
+              <div className="flex min-w-0 flex-[0_1_220px] flex-col gap-1">
                 <span className="text-sm text-muted">{region.k}</span>
                 <span className="font-[550]">{region.v}</span>
                 <div className="mt-2.5">
@@ -152,7 +152,7 @@ export function ProductPanel({ pm }: { pm: ModelInfo }) {
 
 export function ConfirmDelete({ id, noun, onCancel, onConfirm }: { id: string; noun: string; onCancel: () => void; onConfirm: () => void }) {
   return (
-    <div className="flex flex-wrap items-center gap-4 border-l-[3px] border-danger-rule py-3 pl-[18px]" role="alert">
+    <div className="flex flex-wrap items-center gap-4 border-l-[3px] border-danger-rule py-3 pl-5" role="alert">
       <span className="flex-[1_1_280px]">Delete <strong>{id}</strong> and its comments and attachments? This can't be undone.</span>
       <div className="flex gap-2.5">
         <Button variant="secondary" onClick={onCancel}>Cancel</Button>
@@ -194,7 +194,7 @@ export function RecordsAcrossSystems({ sub, legacyTitle, legacy, next, synced, o
     <section className="flex flex-col gap-4 border-t border-line pt-6">
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div className="flex min-w-0 flex-[1_1_320px] flex-col gap-1">
-          <h2 className="text-base font-[650]">Records across systems</h2>
+          <h2 className="text-base font-semibold">Records across systems</h2>
           <span className="text-sm leading-normal text-pretty text-muted">{sub}</span>
         </div>
         <Button variant="ghost" size="sm" icon="refresh-cw" onClick={onSync}>Sync now</Button>
@@ -230,7 +230,7 @@ export function RelatedSection({ title, sub, linkLabel, linked, sugg, pick, onLi
     <section className="flex flex-col gap-3 border-t border-line pt-6">
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div className="flex min-w-0 flex-[1_1_320px] flex-col gap-1">
-          <h2 className="text-base font-[650]">{title}</h2>
+          <h2 className="text-base font-semibold">{title}</h2>
           <span className="text-sm leading-normal text-pretty text-muted">{sub}</span>
         </div>
         <Button variant="ghost" size="sm" icon="link" onClick={() => setOpen(o => !o)}>{linkLabel}</Button>

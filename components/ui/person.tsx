@@ -35,7 +35,7 @@ export function Person({ person, size = 28, showName }: { person: PersonView; si
             <div className="flex items-start gap-3.5">
               <Avatar person={person} size={48} />
               <div className="flex min-w-0 flex-col gap-1">
-                <span lang={langOf(person.name)} className="text-base font-[650]">{person.name}</span>
+                <span lang={langOf(person.name)} className="text-base font-semibold">{person.name}</span>
                 {person.en && person.en !== person.name ? <span className="bui-item-sub">{person.en}</span> : null}
                 <span>{person.title}</span>
                 <span className="bui-item-sub">{person.teamName}</span>

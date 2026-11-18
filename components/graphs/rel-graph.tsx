@@ -65,7 +65,7 @@ function SysNode({ data }: NodeProps<Node<D>>) {
       <Handles />
       <div className="flex items-center gap-2.5">
         {data.logo ? <img src={s(data.logo)} alt="" className="block flex-none object-contain object-left" style={{ width: hub ? 30 : 28, height: hub ? 26 : 16 }} /> : null}
-        <span className="font-[650]" style={{ fontSize: hub ? 16 : 14 }}>{s(data.name)}</span>
+        <span className="font-semibold" style={{ fontSize: hub ? 16 : 14 }}>{s(data.name)}</span>
       </div>
       <span className="text-sm leading-[1.4] text-muted">{s(data.role)}</span>
       {data.meta ? <span className="text-sm font-semibold tabular-nums" style={{ color: hub ? 'oklch(0.42 0.17 293)' : 'oklch(0.3 0.02 290)' }}>{s(data.meta)}</span> : null}
@@ -92,7 +92,7 @@ function SysNode({ data }: NodeProps<Node<D>>) {
 function LabelNode({ data }: NodeProps<Node<D>>) {
   return (
     <div className="flex flex-col gap-0.5" style={{ width: Number(data.w) || 210 }}>
-      <span className="text-sm font-[650] text-ink-2">{s(data.label)}</span>
+      <span className="text-sm font-semibold text-ink-2">{s(data.label)}</span>
       {data.note ? <span className="text-sm text-muted">{s(data.note)}</span> : null}
     </div>
   );

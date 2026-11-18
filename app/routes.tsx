@@ -66,7 +66,7 @@ export function AppRoutes() {
       <Route path="/settings" element={<Page title="Settings"><SettingsView /></Page>} />
       <Route path="/about" element={<Page title="About"><AboutView /></Page>} />
 
-      <Route path="*" element={<NotFoundView text="This page doesn't exist." />} />
+      <Route path="*" element={<NotFoundView text="This page doesn't exist" />} />
     </Routes>
   );
 }

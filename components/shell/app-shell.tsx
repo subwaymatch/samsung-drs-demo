@@ -254,7 +254,7 @@ export function AppShell({ children }: { children: ReactNode }) {
         </main>
 
         {toast ? (
-          <div role="status" className="fixed bottom-7 left-1/2 z-[70] max-w-[calc(100vw-32px)] -translate-x-1/2 rounded bg-[oklch(0.25_0.03_293)] px-[18px] py-3 text-white shadow-[0_8px_24px_oklch(0.2_0.05_290/0.25)]">
+          <div role="status" className="fixed bottom-7 left-1/2 z-[70] max-w-[calc(100vw-32px)] -translate-x-1/2 rounded bg-[oklch(0.25_0.03_293)] px-5 py-3 text-white shadow-[0_8px_24px_oklch(0.2_0.05_290/0.25)]">
             {toast}
           </div>
         ) : null}

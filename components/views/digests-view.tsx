@@ -64,14 +64,14 @@ export function DigestsView({ kind: kindIn, date }: { kind?: string; date?: stri
               <span className="text-muted">Sent</span><span>{email.sentAt}</span>
             </div>
             <div className="flex flex-col gap-2.5">
-              <h2 className="text-2xl leading-[1.35] font-bold tracking-[-0.02em]">{email.subject}</h2>
+              <h2 className="text-2xl leading-[1.35] font-semibold tracking-[-0.02em]">{email.subject}</h2>
               <p className="leading-[1.7] text-ink-3">{email.greeting}</p>
             </div>
             <div className="grid gap-5 [grid-template-columns:repeat(auto-fit,minmax(130px,1fr))]">
               {email.stats.map(x => (
                 <div key={x.label} className="flex flex-col gap-1.5 border-l-2 border-accent-rule py-0.5 pl-4">
                   <span className="text-sm font-semibold text-muted">{x.label}</span>
-                  <span className="text-2xl font-bold tabular-nums">{x.n}</span>
+                  <span className="text-2xl font-semibold tabular-nums">{x.n}</span>
                 </div>
               ))}
             </div>
@@ -79,14 +79,14 @@ export function DigestsView({ kind: kindIn, date }: { kind?: string; date?: stri
               <section key={sec.key} className="flex flex-col">
                 <div className="flex items-center gap-2.5 border-b border-line pb-2.5">
                   <Icon name={sec.icon} size={16} color="var(--color-muted)" />
-                  <h3 className="text-base font-[650]">{sec.title}</h3>
+                  <h3 className="text-base font-semibold">{sec.title}</h3>
                   <span className="text-sm text-muted tabular-nums">{sec.count}</span>
                 </div>
                 {sec.items.map((it, j) => (
                   <Clickable key={it.id + j} href={it.href} className="row-link grid grid-cols-[16px_92px_minmax(0,1fr)] items-center gap-3 border-b border-line-soft py-3 last:border-b-0">
                     <Icon name={it.icon} size={16} color={it.color} />
                     <span className="font-mono text-sm text-muted">{it.id}</span>
-                    <div className="flex min-w-0 flex-col gap-[3px]"><span className="bui-trunc font-[550]">{it.title}</span><span className="bui-trunc text-sm text-muted">{it.meta}</span></div>
+                    <div className="flex min-w-0 flex-col gap-1"><span className="bui-trunc font-[550]">{it.title}</span><span className="bui-trunc text-sm text-muted">{it.meta}</span></div>
                   </Clickable>
                 ))}
                 {sec.count > 8 ? <div className="flex pt-2.5"><LinkButton href={sec.moreHref} variant="link" size="sm">{sec.more}</LinkButton></div> : null}
@@ -99,7 +99,7 @@ export function DigestsView({ kind: kindIn, date }: { kind?: string; date?: stri
 
         <aside className="flex min-w-[280px] flex-[0_1_320px] flex-col gap-7 border-l border-line pl-8 max-[900px]:border-l-0 max-[900px]:pl-0">
           <div className="flex flex-col gap-1.5">
-            <h2 className="text-base font-[650]">Email settings</h2>
+            <h2 className="text-base font-semibold">Email settings</h2>
             <span className="text-sm leading-normal text-muted">Changes save automatically. The email preview uses your current filters.</span>
           </div>
           <section className="flex flex-col gap-4">
@@ -116,7 +116,7 @@ export function DigestsView({ kind: kindIn, date }: { kind?: string; date?: stri
               .map(n => (
                 <span key={n.label} className="flex items-start gap-2 text-sm text-muted">
                   <span className="flex h-5 flex-none items-center"><Icon name="clock" size={14} /></span>
-                  <span className="flex flex-col gap-[5px]"><span className="leading-5">{n.label}</span><span className="font-[550] text-ink-2">{n.when}</span></span>
+                  <span className="flex flex-col gap-1"><span className="leading-5">{n.label}</span><span className="font-[550] text-ink-2">{n.when}</span></span>
                 </span>
               ))}
           </section>
@@ -150,7 +150,7 @@ export function DigestsView({ kind: kindIn, date }: { kind?: string; date?: stri
             <span className="flex min-w-0 items-center gap-2.5">
               <Icon name="mail" size={16} color="var(--color-muted)" />
               <span className="[overflow-wrap:anywhere]">{me.email}</span>
-              <span className="inline-flex h-5 flex-none items-center rounded-[3px] bg-accent-soft px-[7px] text-sm font-semibold text-accent-ink">Me</span>
+              <span className="inline-flex h-5 flex-none items-center rounded-[3px] bg-accent-soft px-2 text-sm font-semibold text-accent-ink">Me</span>
             </span>
             <span className="text-sm text-muted">Also send to</span>
             <MultiCombobox items={cc} value={ss.cc} onValueChange={v => set({ cc: v })} placeholder="Add people" ariaLabel="Also send to" />

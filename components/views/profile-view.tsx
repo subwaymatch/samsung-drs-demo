@@ -31,7 +31,7 @@ export function ProfileView({ id }: { id: string }) {
     return { openD, revs, acts, counts };
   }, [app, id, u]);
   if (!app) return <Loading />;
-  if (!u || !v) return <NotFoundView text="This person is not in the directory." back={{ href: '/teams', label: 'Teams' }} />;
+  if (!u || !v) return <NotFoundView text="This person is not in the directory" back={{ href: '/teams', label: 'Teams' }} />;
   const stats = [
     u.role === 'qa' ? { l: 'Defects reported', n: v.counts.reported } : null,
     u.role === 'eng' ? { l: 'Defects assigned', n: v.counts.assigned } : null,
@@ -48,7 +48,7 @@ export function ProfileView({ id }: { id: string }) {
         <PhotoPlaceholder w={160} h={200} iconSize={48} src={u.photo} title={u.photo ? u.name : 'Photo placeholder'} />
         <div className="flex max-w-[680px] min-w-0 flex-[1_1_360px] flex-col gap-2.5">
           <div className="flex flex-col gap-1">
-            <h1 lang={langOf(u.name)} className="text-2xl font-bold tracking-[-0.02em]">{u.name}</h1>
+            <h1 lang={langOf(u.name)} className="text-2xl font-semibold tracking-[-0.02em]">{u.name}</h1>
             {u.en !== u.name ? <span className="text-muted">{u.en}</span> : null}
           </div>
           <span className="font-[550]">{u.title}</span>
@@ -60,7 +60,7 @@ export function ProfileView({ id }: { id: string }) {
               {stats.map(s => (
                 <div key={s.l} className="flex flex-col gap-1 border-l-2 border-accent-rule py-0.5 pl-4">
                   <span className="text-sm font-semibold text-muted">{s.l}</span>
-                  <span className="text-xl font-bold tabular-nums">{s.n}</span>
+                  <span className="text-xl font-semibold tabular-nums">{s.n}</span>
                 </div>
               ))}
             </div>
@@ -69,43 +69,43 @@ export function ProfileView({ id }: { id: string }) {
       </div>
       <div className="grid gap-x-14 gap-y-10 [grid-template-columns:repeat(auto-fit,minmax(min(100%,440px),1fr))]">
         <section className="flex flex-col border-t border-line pt-6">
-          <h2 className="mb-2 text-base font-[650]">Open defects assigned ({v.openD.length})</h2>
+          <h2 className="mb-2 text-base font-semibold">Open defects assigned ({v.openD.length})</h2>
           {v.openD.slice(0, 8).map(x => (
             <Clickable key={x.id} href={'/defects/' + x.id} className="row-link grid grid-cols-[16px_92px_minmax(0,1fr)_auto] items-center gap-3 border-b border-line-soft py-3 last:border-b-0">
               <Icon name={SEV[x.sev].icon} size={16} color={SEV[x.sev].c} />
               <span className="font-mono text-sm text-muted">{x.id}</span>
-              <div className="flex min-w-0 flex-col gap-[3px]"><span className="bui-trunc font-[550]">{x.title}</span><span className="bui-trunc text-sm text-muted">{x.model}, {x.comp}</span></div>
+              <div className="flex min-w-0 flex-col gap-1"><span className="bui-trunc font-[550]">{x.title}</span><span className="bui-trunc text-sm text-muted">{x.model}, {x.comp}</span></div>
               <StatusLabel {...DST[x.status]} size={14} className="gap-1.5" />
             </Clickable>
           ))}
-          {!v.openD.length ? <span className="pt-2 text-muted">No open defects assigned.</span> : null}
+          {!v.openD.length ? <span className="pt-2 text-muted">No open defects assigned</span> : null}
         </section>
         <section className="flex flex-col border-t border-line pt-6">
-          <h2 className="mb-2 text-base font-[650]">Active code reviews ({v.revs.length})</h2>
+          <h2 className="mb-2 text-base font-semibold">Active code reviews ({v.revs.length})</h2>
           {v.revs.slice(0, 8).map(x => (
             <Clickable key={x.id} href={'/reviews/' + x.id} className="row-link grid grid-cols-[16px_92px_minmax(0,1fr)_auto] items-center gap-3 border-b border-line-soft py-3 last:border-b-0">
               <Icon name={TYPE_ICON[x.type]} size={16} color={MUTED} />
               <span className="font-mono text-sm text-muted">{x.id}</span>
-              <div className="flex min-w-0 flex-col gap-[3px]"><span className="bui-trunc font-[550]">{x.title}</span><span className="bui-trunc text-sm text-muted">{(x.author === id ? 'Author' : 'Reviewer') + ', ' + x.type}</span></div>
+              <div className="flex min-w-0 flex-col gap-1"><span className="bui-trunc font-[550]">{x.title}</span><span className="bui-trunc text-sm text-muted">{(x.author === id ? 'Author' : 'Reviewer') + ', ' + x.type}</span></div>
               <StatusLabel {...RST[x.status]} size={14} className="gap-1.5" />
             </Clickable>
           ))}
-          {!v.revs.length ? <span className="pt-2 text-muted">No active code reviews.</span> : null}
+          {!v.revs.length ? <span className="pt-2 text-muted">No active code reviews</span> : null}
         </section>
       </div>
       <section className="flex flex-col pt-2">
-        <h2 className="mb-2 text-base font-[650]">Recent activity</h2>
+        <h2 className="mb-2 text-base font-semibold">Recent activity</h2>
         {v.acts.map(({ x, o, p }, i) => (
           <Clickable key={o.id + i} href={p + o.id} className="row-link grid grid-cols-[92px_minmax(0,1fr)_auto] items-center gap-3.5 border-b border-line-soft py-3 last:border-b-0">
             <span className="font-mono text-sm text-muted">{o.id}</span>
-            <div className="flex min-w-0 flex-col gap-[3px]">
+            <div className="flex min-w-0 flex-col gap-1">
               <span className="bui-trunc">{x.t === 'e' ? x.x.charAt(0).toUpperCase() + x.x.slice(1) : x.t === 'd' && x.dec ? DEC[x.dec] : 'Commented' + (x.loc ? ' on ' + x.loc : '')}</span>
               <span className="bui-trunc text-sm text-muted">{o.title}</span>
             </div>
             <span className="text-sm whitespace-nowrap text-muted">{fAt(x.at)}</span>
           </Clickable>
         ))}
-        {!v.acts.length ? <Note className="mt-2" icon="clock" title="No activity yet" text="Defects, code reviews and comments from this person will show here." /> : null}
+        {!v.acts.length ? <Note className="mt-2" icon="clock" title="No activity yet" text="Defects, code reviews and comments from this person will show here" /> : null}
       </section>
     </div>
   );

@@ -31,7 +31,7 @@ export function TeamsView() {
       {teams.map(t => (
         <section key={t.k} className="flex flex-col gap-7 border-t border-line pt-7">
           <div className="flex flex-wrap items-baseline justify-between gap-4">
-            <div className="flex flex-col gap-1"><h2 className="text-base font-[650]">{t.name}</h2><span className="text-muted">{t.desc}</span></div>
+            <div className="flex flex-col gap-1"><h2 className="text-base font-semibold">{t.name}</h2><span className="text-muted">{t.desc}</span></div>
             <span className="text-sm text-muted">{t.members.length + (t.members.length === 1 ? ' person' : ' people')}</span>
           </div>
           <div className="grid gap-x-12 gap-y-9 [grid-template-columns:repeat(auto-fill,minmax(min(100%,360px),1fr))]">
@@ -40,7 +40,7 @@ export function TeamsView() {
                 <PhotoPlaceholder w={96} h={120} iconSize={32} src={u.photo} title={u.photo ? u.name : 'Photo placeholder, photos/' + u.id + '.png'} />
                 <div className="flex min-w-0 flex-1 flex-col gap-1.5">
                   <div className="flex flex-col gap-0.5">
-                    <Link to={'/teams/' + u.id} lang={langOf(u.name)} className="w-max text-base font-[650] text-inherit">{u.name}</Link>
+                    <Link to={'/teams/' + u.id} lang={langOf(u.name)} className="w-max text-base font-semibold text-inherit">{u.name}</Link>
                     {u.en !== u.name ? <span className="text-sm text-muted">{u.en}</span> : null}
                   </div>
                   <span>{u.title}</span>
@@ -52,7 +52,7 @@ export function TeamsView() {
           </div>
         </section>
       ))}
-      {!teams.length ? <EmptyState icon="users" title="No people match this search" text="Check the spelling, or search by team or role instead." /> : null}
+      {!teams.length ? <EmptyState icon="users" title="No people match this search" text="Check the spelling, or search by team or role instead" /> : null}
     </div>
   );
 }

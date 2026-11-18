@@ -40,7 +40,7 @@ export function InsightsView() {
     <div className="mx-auto flex max-w-[1200px] flex-col gap-10">
       <PageHeader
         title="Insights"
-        sub={`${app.data.defects.length} defects and ${app.data.reviews.length} code reviews from ${TEAMS.length} teams across ${MODELS.length} printer and copier models.`}
+        sub={`${app.data.defects.length} defects and ${app.data.reviews.length} code reviews from ${TEAMS.length} teams across ${MODELS.length} printer and copier models`}
         action={
           <div className="flex flex-wrap items-center gap-x-6 gap-y-2 pb-1 text-sm text-ink-5">
             <span className="flex items-center gap-2">
@@ -99,7 +99,7 @@ export function InsightsView() {
               </Clickable>
             ))}
             <div className="pointer-events-none absolute top-1/2 left-1/2 flex -translate-x-1/2 -translate-y-1/2 flex-col items-center gap-0.5">
-              <span className="text-[28px] leading-none font-bold tabular-nums">{st.mig.total}</span>
+              <span className="text-[28px] leading-none font-semibold tabular-nums">{st.mig.total}</span>
               <span className="text-sm text-muted">defects</span>
             </div>
           </div>
@@ -149,7 +149,7 @@ export function InsightsView() {
         <div className="flex min-h-12 items-center gap-2.5 text-muted">
           <Icon name="calendar" size={16} color="oklch(0.55 0.12 293)" />
           <span>Showing</span>
-          <span className="font-[650] text-ink tabular-nums">{st.periodL}</span>
+          <span className="font-semibold text-ink tabular-nums">{st.periodL}</span>
         </div>
         <div role="tablist" aria-label="Reporting period" className="-mb-px flex items-stretch gap-6 self-stretch overflow-x-auto overflow-y-hidden [scrollbar-width:none] max-sm:pr-6 max-sm:[mask-image:linear-gradient(to_right,#000_calc(100%-40px),transparent)]">
           {RANGES.map(r => {
@@ -161,7 +161,7 @@ export function InsightsView() {
                 role="tab"
                 aria-selected={on}
                 onClick={() => setUi({ range: r.n })}
-                className="flex min-h-12 cursor-pointer items-center gap-[7px] border-0 border-b-2 border-solid bg-transparent px-0.5 text-sm whitespace-nowrap hover:text-accent-ink"
+                className="flex min-h-12 cursor-pointer items-center gap-2 border-0 border-b-2 border-solid bg-transparent px-0.5 text-sm whitespace-nowrap hover:text-accent-ink"
                 style={{ borderBottomColor: on ? 'var(--color-accent)' : 'transparent', color: on ? 'var(--color-accent-ink)' : 'var(--color-ink-5)', fontWeight: on ? 650 : 500 }}
               >
                 <Icon name={r.icon} size={15} />
@@ -175,15 +175,10 @@ export function InsightsView() {
       <div className="grid gap-x-6 gap-y-7" style={KPI_GRID}>
         {st.kpis.map(k => (
           <Clickable key={k.label} href={k.href} className="flex flex-col gap-2 border-l-2 border-accent-rule py-0.5 pl-5 hover:border-accent-bar">
-            <div className="flex items-start justify-between gap-3">
-              <div className="flex min-w-0 flex-col gap-2">
-                <span className="text-sm font-semibold text-ink-5">{k.label}</span>
-                <div className="flex items-baseline gap-1">
-                  <span className="text-[32px] leading-[1.1] font-bold tracking-[-0.02em] tabular-nums">{k.value}</span>
-                  <span className="font-[550] text-muted">{k.unit}</span>
-                </div>
-              </div>
-              <img src={k.art} alt="" width={64} height={64} decoding="async" className="block flex-none" />
+            <span className="text-sm font-semibold text-ink-5">{k.label}</span>
+            <div className="flex items-baseline gap-1">
+              <span className="text-[32px] leading-[1.1] font-semibold tracking-[-0.02em] tabular-nums">{k.value}</span>
+              <span className="font-[550] text-muted">{k.unit}</span>
             </div>
             <span className="text-sm font-semibold" style={{ color: k.dc }}>{k.delta}</span>
             <span className="text-sm text-muted">{k.sub}</span>
@@ -217,8 +212,8 @@ export function InsightsView() {
         gap="gap-6"
         right={
           <div className="flex items-center gap-5 text-sm text-ink-5">
-            <span className="flex items-center gap-[7px]"><span className="h-2.5 w-2.5 rounded-[2px] bg-[oklch(0.62_0.14_155)]" />Within 48h target</span>
-            <span className="flex items-center gap-[7px]"><span className="h-2.5 w-2.5 rounded-[2px] bg-[oklch(0.78_0.14_75)]" />Over target</span>
+            <span className="flex items-center gap-2"><span className="h-2.5 w-2.5 rounded-[2px] bg-[oklch(0.62_0.14_155)]" />Within 48h target</span>
+            <span className="flex items-center gap-2"><span className="h-2.5 w-2.5 rounded-[2px] bg-[oklch(0.78_0.14_75)]" />Over target</span>
           </div>
         }
       >
@@ -253,8 +248,8 @@ export function InsightsView() {
           sub={st.flowSub}
           right={
             <div className="flex items-center gap-4 text-sm text-ink-5">
-              <span className="flex items-center gap-[7px]"><span className="h-2.5 w-2.5 rounded-[2px] bg-[oklch(0.55_0.17_293)]" />Reported</span>
-              <span className="flex items-center gap-[7px]"><span className="h-2.5 w-2.5 rounded-[2px] bg-[oklch(0.68_0.14_160)]" />Resolved</span>
+              <span className="flex items-center gap-2"><span className="h-2.5 w-2.5 rounded-[2px] bg-[oklch(0.55_0.17_293)]" />Reported</span>
+              <span className="flex items-center gap-2"><span className="h-2.5 w-2.5 rounded-[2px] bg-[oklch(0.68_0.14_160)]" />Resolved</span>
             </div>
           }
         >
@@ -283,7 +278,7 @@ export function InsightsView() {
         </Section>
 
         <Section title="Review outcomes" sub={st.outcomeSub}>
-          <div className="grid grid-cols-[repeat(20,minmax(0,1fr))] gap-[3px]" aria-hidden>
+          <div className="grid grid-cols-[repeat(20,minmax(0,1fr))] gap-1" aria-hidden>
             {st.waffle.map((c, i) => <div key={i} data-tip={c.tip} data-tip-align={i % 20 < 4 ? 'start' : i % 20 > 15 ? 'end' : undefined} className="aspect-square rounded-[2px]" style={{ background: c.c }} />)}
           </div>
           <span className="text-sm text-muted">Each square is 1% of submitted reviews</span>
@@ -291,9 +286,9 @@ export function InsightsView() {
             {st.outcomes.map(o => (
               <Clickable key={o.k} href={o.href} className="row-link flex items-center gap-3 border-b border-line-soft py-3.5 last:border-b-0">
                 <span className="h-2.5 w-2.5 flex-none rounded-[2px]" style={{ background: o.c }} />
-                <div className="flex flex-1 flex-col gap-[3px]"><span className="font-[550]">{o.label}</span><span className="text-sm text-muted">{o.desc}</span></div>
+                <div className="flex flex-1 flex-col gap-1"><span className="font-[550]">{o.label}</span><span className="text-sm text-muted">{o.desc}</span></div>
                 <span className="text-sm text-muted tabular-nums">{o.n}</span>
-                <span className="w-14 text-right font-[650] tabular-nums">{o.pct}</span>
+                <span className="w-14 text-right font-semibold tabular-nums">{o.pct}</span>
               </Clickable>
             ))}
           </div>
@@ -318,31 +313,31 @@ export function InsightsView() {
             </div>
             {st.heat.length ? st.heat.map(m => (
               <div key={m.model} className="grid grid-cols-[minmax(150px,1.9fr)_repeat(4,minmax(52px,1fr))_44px] items-center gap-1">
-                <Clickable href={m.href} className="flex min-w-0 flex-col gap-[3px] text-[oklch(0.3_0.03_293)] hover:text-accent">
+                <Clickable href={m.href} className="flex min-w-0 flex-col gap-1 text-[oklch(0.3_0.03_293)] hover:text-accent">
                   <span className="bui-trunc font-[550]">{m.model}</span>
                   <span className="bui-trunc text-sm text-muted">{m.sub}</span>
                 </Clickable>
                 {m.cells.map((c, i) => (
-                  <Clickable key={i} href={c.href} tip={c.tip} ariaLabel={c.tip} className="flex h-[50px] items-center justify-center rounded font-semibold tabular-nums hover:shadow-[inset_0_0_0_2px_oklch(0.4_0.19_293)]" style={{ background: c.bg, color: c.fg }}>
+                  <Clickable key={i} href={c.href} tip={c.tip} ariaLabel={c.tip} className="flex h-12 items-center justify-center rounded font-semibold tabular-nums hover:shadow-[inset_0_0_0_2px_oklch(0.4_0.19_293)]" style={{ background: c.bg, color: c.fg }}>
                     {c.n}
                   </Clickable>
                 ))}
-                <span className="text-right font-[650] tabular-nums">{m.total}</span>
+                <span className="text-right font-semibold tabular-nums">{m.total}</span>
               </div>
-            )) : <span className="py-6 text-muted">No open defects.</span>}
+            )) : <span className="py-6 text-muted">No open defects</span>}
             {st.heat.length ? (
               <div className="mt-2 grid grid-cols-[minmax(150px,1.9fr)_repeat(4,minmax(52px,1fr))_44px] items-center gap-1 border-t border-line pt-3">
-                <span className="flex flex-col gap-[3px]"><span className="font-[550]">Unique open defects</span><span className="text-sm text-muted">Each defect counted once</span></span>
+                <span className="flex flex-col gap-1"><span className="font-[550]">Unique open defects</span><span className="text-sm text-muted">Each defect counted once</span></span>
                 {st.heatUnique.cells.map((n, i) => <span key={i} className="text-center font-semibold tabular-nums">{n || '-'}</span>)}
-                <span className="text-right font-[650] tabular-nums">{st.heatUnique.total}</span>
+                <span className="text-right font-semibold tabular-nums">{st.heatUnique.total}</span>
               </div>
             ) : null}
           </div>
-          {st.heatUnique.multi ? <span className="text-sm text-muted">A defect that affects several lines is counted in each, so the rows add up to more than the unique total.</span> : null}
+          {st.heatUnique.multi ? <span className="text-sm text-muted">A defect that affects several lines is counted in each, so the rows add up to more than the unique total</span> : null}
         </Section>
 
         <Section title="Turnaround by change type" sub="Most common change types, median hours to first decision, dashed line is the 48h target">
-          <div className="flex flex-col gap-[18px]">
+          <div className="flex flex-col gap-5">
             {st.byType.map(t => (
               <Clickable key={t.type} href={t.href} className="row-link grid grid-cols-[140px_minmax(0,1fr)_56px] items-center gap-4 py-1">
                 <div className="flex items-center gap-2.5">
@@ -400,7 +395,7 @@ function SystemList({ graph }: { graph: Graph }) {
   const hub = graph.nodes.find(n => n.id === 'hub')!.data as unknown as SysData;
   const card = (d: SysData, hubCard = false) => (
     <div className={'flex flex-col gap-1.5 rounded-lg border px-4 py-3.5 ' + (hubCard ? 'border-[oklch(0.75_0.12_293)] bg-accent-wash' : 'border-line bg-white')}>
-      <span className="flex items-center gap-2.5 font-[650]">
+      <span className="flex items-center gap-2.5 font-semibold">
         {d.logo ? <img src={d.logo} alt="" className="block h-4 w-auto" /> : null}
         {d.name}
       </span>
@@ -412,7 +407,7 @@ function SystemList({ graph }: { graph: Graph }) {
   );
   const group = (i: number, items: typeof sys) => (
     <div className="flex flex-col gap-2.5">
-      <div className="flex flex-col gap-0.5"><span className="font-[650]">{labels[i]?.label}</span><span className="text-sm text-muted">{labels[i]?.note}</span></div>
+      <div className="flex flex-col gap-0.5"><span className="font-semibold">{labels[i]?.label}</span><span className="text-sm text-muted">{labels[i]?.note}</span></div>
       {items.map(n => <div key={n.id}>{card(n.data as unknown as SysData)}</div>)}
     </div>
   );
@@ -456,7 +451,7 @@ function ActiveList({ title, sub, rows, idW }: { title: string; sub: string; row
           <Clickable key={a.id} href={a.href} className="row-link grid items-center gap-4 border-b border-line-soft py-2.5 last:border-b-0" style={{ gridTemplateColumns: cols }}>
             {!compact ? <Thumb th={a.th} /> : null}
             <span className="flex items-center gap-2 font-mono text-sm whitespace-nowrap text-muted"><Icon name={a.icon} size={14} color={a.fg} />{a.id}</span>
-            <div className="flex min-w-0 flex-col gap-[3px]"><span className="bui-trunc font-[550]">{a.title}</span><span className="bui-trunc text-sm text-muted">{a.meta}</span></div>
+            <div className="flex min-w-0 flex-col gap-1"><span className="bui-trunc font-[550]">{a.title}</span><span className="bui-trunc text-sm text-muted">{a.meta}</span></div>
             <div title={a.sparkTip} className="flex items-end justify-end gap-3">
               {!compact ? (
                 <div aria-hidden className="flex h-6 w-24 items-end gap-0.5">
@@ -464,13 +459,13 @@ function ActiveList({ title, sub, rows, idW }: { title: string; sub: string; row
                 </div>
               ) : null}
               <div className="flex min-w-[52px] flex-col items-end leading-[1.15]">
-                <span className="text-lg font-bold tabular-nums">{a.n}</span>
+                <span className="text-lg font-semibold tabular-nums">{a.n}</span>
                 <span className="text-[13px] text-muted">{a.nL}</span>
               </div>
             </div>
             {!compact ? <PeopleStack people={a.people} more={a.more} moreTip={a.moreTip} label={a.peopleL} /> : null}
           </Clickable>
-        )) : <span className="py-6 text-muted">No activity in this period.</span>}
+        )) : <span className="py-6 text-muted">No activity in this period</span>}
       </div>
     </section>
   );

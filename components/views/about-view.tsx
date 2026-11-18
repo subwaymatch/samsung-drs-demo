@@ -13,7 +13,7 @@ export function AboutView() {
       <div className="flex flex-col gap-5">
         <DrsLogo width={96} label="Defects and Reviews System logo" />
         <div className="flex flex-col gap-1.5">
-          <h1 className="text-[32px] leading-[1.2] font-bold tracking-[-0.02em]">Defects and Reviews System</h1>
+          <h1 className="text-[32px] leading-[1.2] font-semibold tracking-[-0.02em]">Defects and Reviews System</h1>
           <p className="text-[15px] leading-[1.7] text-muted">Samsung Electronics, Printing Solutions Business, 2016-2017</p>
         </div>
       </div>
@@ -21,7 +21,7 @@ export function AboutView() {
           The video plays from /stream, which sends the parts of public/video/drs-showcase-v2.mp4 the player asks for, so it can seek. */}
       <figure className="m-0 flex flex-col gap-3">
         <video
-          className="block aspect-video w-full rounded-lg bg-[oklch(0.15_0.03_290)] shadow-[0_0_0_1px_oklch(0.45_0.05_293/0.12),0_24px_50px_-28px_oklch(0.3_0.12_293/0.5)]"
+          className="block aspect-video w-full rounded-lg bg-[oklch(0.15_0.03_290)] shadow-[0_0_0_1px_oklch(0.2_0.02_290/0.08),0_8px_24px_oklch(0.2_0.02_290/0.08)]"
           controls
           playsInline
           preload="metadata"
@@ -30,7 +30,7 @@ export function AboutView() {
         >
           <source src="/stream/drs-showcase-v2.mp4" type="video/mp4" />
         </video>
-        <figcaption className="text-sm text-muted">A one-minute tour of DRS, with music.</figcaption>
+        <figcaption className="text-sm text-muted">A one-minute tour of DRS, with music</figcaption>
       </figure>
       <section className="flex max-w-[680px] flex-col gap-4 border-t border-line pt-6 text-[17px] leading-[1.7] text-pretty text-ink-3">
         <p>This is a demo of an application I built at Samsung Electronics' printing division.</p>

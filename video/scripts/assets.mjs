@@ -18,6 +18,6 @@ copy(join(nm, 'pretendard/dist/web/variable/woff2/PretendardVariable.woff2'), jo
 for (const w of [400, 500, 600]) {
   copy(join(nm, `@fontsource/jetbrains-mono/files/jetbrains-mono-latin-${w}-normal.woff2`), join(pub, `fonts/JetBrainsMono-${w}.woff2`));
 }
-for (const dir of ['photos', 'products', 'logos', 'illustrations']) copy(join(app, dir), join(pub, dir));
+for (const dir of ['photos', 'products', 'logos']) copy(join(app, dir), join(pub, dir));
 copy(join(app, 'drs-logo.svg'), join(pub, 'drs-logo.svg'));
 console.log('Assets copied to public/');

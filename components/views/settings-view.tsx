@@ -30,17 +30,17 @@ export function SettingsView() {
 
   return (
     <div className="mx-auto flex max-w-[960px] flex-col gap-10">
-      <PageHeader title="Settings" sub="Preferences are saved in this browser." />
+      <PageHeader title="Settings" sub="Preferences are saved in this browser" />
       <section className="flex flex-col">
-        <h2 className="mb-2 text-base font-[650]">Preferences</h2>
-        <Row title="Code review diffs" sub="How file changes appear in code reviews.">
+        <h2 className="mb-2 text-base font-semibold">Preferences</h2>
+        <Row title="Code review diffs" sub="How file changes appear in code reviews">
           <div className="overflow-x-auto"><Segmented ariaLabel="Diff layout" items={DIFF_MODES} value={app.prefs.diff} onValueChange={v => setPrefs({ diff: v as 'sbs' | 'uni' })} /></div>
         </Row>
-        <Row title="Keyboard shortcuts" sub="Available on every page except while typing in a field.">
+        <Row title="Keyboard shortcuts" sub="Available on every page except while typing in a field">
           <div className="grid grid-cols-[auto_minmax(0,1fr)] items-center gap-x-4 gap-y-2.5 text-ink-3">
             {keys.map(([ks, label]) => (
               <span key={label} className="contents">
-                <span className="flex gap-1">{ks.map(k => <kbd key={k} className="kbd h-[22px] min-w-[22px] text-[13px]">{k}</kbd>)}</span>
+                <span className="flex gap-1">{ks.map(k => <kbd key={k} className="kbd h-6 min-w-6 text-[13px]">{k}</kbd>)}</span>
                 <span>{label}</span>
               </span>
             ))}
@@ -48,7 +48,7 @@ export function SettingsView() {
         </Row>
       </section>
       <section className="flex flex-col">
-        <h2 className="mb-2 text-base font-[650]">Demo</h2>
+        <h2 className="mb-2 text-base font-semibold">Demo</h2>
         <Row title="Signed in as" sub="Switch users to see each role's permissions. Code Review Team members can assign reviewers and approve changes.">
           <div className="flex w-full max-w-[420px] flex-col gap-2.5">
             <Combobox items={users} value={app.prefs.meId} onValueChange={v => { if (v) { setPrefs({ meId: v }); flash('Signed in as ' + UM[v].name); } }} placeholder="Switch user" ariaLabel="Signed in as" />

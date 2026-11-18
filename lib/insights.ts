@@ -6,9 +6,6 @@ import { firstDec, firstRes, isOpen, migOf, tgtEval } from './records';
 import { plural } from './text';
 import type { Data, Defect, Review, Severity } from './types';
 
-/** Generated spot illustrations for the KPI tiles. */
-const ART = '/illustrations/stats/';
-
 export const RANGES: { n: number; label: string; icon: string }[] = [
   { n: 7, label: '7 days', icon: 'calendar-days' },
   { n: 30, label: '30 days', icon: 'calendar-range' },
@@ -64,10 +61,10 @@ export function computeInsights(data: Data, range: number) {
     dc: (lowerBetter ? d <= 0 : d >= 0) ? GOOD_TXT : BAD_TXT
   });
   const kpis = [
-    { label: 'Median review turnaround', art: ART + 'median-review-turnaround.webp', value: medC.toFixed(1), unit: 'h', ...delta(medC - medP, 'h', true, 1), sub: `${Math.round(within)}% decided within the 48h target`, href: '/reviews?' + qs({ from: fromK, to: END }) },
-    { label: 'First-pass approval', art: ART + 'first-pass-approval.webp', value: fpC.toFixed(0), unit: '%', ...delta(fpC - fpP, ' pts', false, 1), sub: plural(cur.length, 'review decision'), href: '/reviews?' + qs({ outcome: 'approved', from: fromK, to: END }) },
-    { label: 'Median time to resolve', art: ART + 'median-time-to-resolve.webp', value: median(rC).toFixed(1), unit: 'days', ...delta(median(rC) - median(rP), ' days', true, 1), sub: `${plural(rC.length, 'defect')} resolved`, href: '/defects?' + qs({ by: 'resolved', from: fromK, to: END }) },
-    { label: 'Open defects', art: ART + 'open-defects.webp', value: String(openNow.length), unit: '', ...delta(openNow.length - openThen, '', true, 0, `since ${shortY(fromK)}`), sub: `${openNow.filter(d => d.sev === 'critical').length} critical`, href: '/defects?open=1' }
+    { label: 'Median review turnaround', value: medC.toFixed(1), unit: 'h', ...delta(medC - medP, 'h', true, 1), sub: `${Math.round(within)}% decided within the 48h target`, href: '/reviews?' + qs({ from: fromK, to: END }) },
+    { label: 'First-pass approval', value: fpC.toFixed(0), unit: '%', ...delta(fpC - fpP, ' pts', false, 1), sub: plural(cur.length, 'review decision'), href: '/reviews?' + qs({ outcome: 'approved', from: fromK, to: END }) },
+    { label: 'Median time to resolve', value: median(rC).toFixed(1), unit: 'days', ...delta(median(rC) - median(rP), ' days', true, 1), sub: `${plural(rC.length, 'defect')} resolved`, href: '/defects?' + qs({ by: 'resolved', from: fromK, to: END }) },
+    { label: 'Open defects', value: String(openNow.length), unit: '', ...delta(openNow.length - openThen, '', true, 0, `since ${shortY(fromK)}`), sub: `${openNow.filter(d => d.sev === 'critical').length} critical`, href: '/defects?open=1' }
   ];
 
   // Turnaround chart
@@ -237,7 +234,7 @@ export function computeInsights(data: Data, range: number) {
     tatSummary: `Median ${medC.toFixed(1)}h from submission to first decision over ${plural(cur.length, 'review decision')}; ${st48(tatV, tatN)} over the 48h target.`,
     periodL: `${shortY(fromK, addD(END, -1))} - ${short(addD(END, -1))}, ${addD(END, -1).slice(0, 4)}`,
     flow, flowTicks, flowGap: fwk.length <= 7 ? '20px' : fwk.length <= 13 ? '10px' : '4px',
-    flowSub: range <= 30 ? 'Daily count' : 'Weekly count, ending on the last day of data', flowNote: `${sr} reported and ${ssum} resolved in the last ${rangeL}.`,
+    flowSub: range <= 30 ? 'Daily count' : 'Weekly count, ending on the last day of data', flowNote: `${sr} reported and ${ssum} resolved in the last ${rangeL}`,
     outcomes, waffle, outcomeSub: `${plural(nOut, 'review')} submitted in the last ${rangeL}, by first decision or withdrawal`,
     heat, heatCols, heatUnique, byType, typeTarget: (48 / btMax) * 100 + '%', team, activeD, activeR,
     mig: { states, donut, total: String(D.length), sub: `All ${D.length} defects, by where their source of truth lives` }, byComp,

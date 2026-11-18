@@ -161,7 +161,7 @@ export function DefectsList() {
           );
         })}
       </ListTable>
-      {!rows.length ? <EmptyState icon="filter-x" title="No defects match these filters" text="Try a different status or scope, or remove a filter above." /> : null}
+      {!rows.length ? <EmptyState icon="filter-x" title="No defects match these filters" text="Try a different status or scope, or remove a filter above" /> : null}
       <Pagination pg={pg} onPage={p => { go({ page: p }); window.scrollTo(0, 0); }} />
       {sel.length ? (
         <BulkBar count={sel.length} onClear={() => setSel([])}>
@@ -183,8 +183,8 @@ export function DefectsList() {
 /** Actions for the selected rows, floating at the bottom so the list does not move. */
 export function BulkBar({ count, onClear, children }: { count: number; onClear: () => void; children: ReactNode }) {
   return (
-    <div role="toolbar" aria-label="Bulk edit" className="fixed bottom-5 left-1/2 z-40 flex w-max max-w-[calc(100vw-32px)] -translate-x-1/2 flex-wrap items-center gap-3 rounded-xl border border-line bg-white px-4 py-2.5 shadow-[0_12px_40px_-12px_oklch(0.3_0.08_293/0.35)]">
-      <span className="mr-1 font-[650] text-accent-ink">{count} selected</span>
+    <div role="toolbar" aria-label="Bulk edit" className="fixed bottom-5 left-1/2 z-40 flex w-max max-w-[calc(100vw-32px)] -translate-x-1/2 flex-wrap items-center gap-3 rounded-xl border border-line bg-white px-4 py-2.5 shadow-[0_8px_24px_oklch(0.2_0.02_290/0.12)]">
+      <span className="mr-1 font-semibold text-accent-ink">{count} selected</span>
       {children}
       <Button variant="ghost" size="sm" icon="x" onClick={onClear}>Clear</Button>
     </div>

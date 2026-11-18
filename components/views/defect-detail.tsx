@@ -88,7 +88,7 @@ export function DefectDetail({ id }: { id: string }) {
             <span className="flex items-center gap-2"><Icon name={SEV[d.sev].icon} color={SEV[d.sev].c} size={16} />{SEV[d.sev].l}</span>
             <span title={rec.mig.d}><StatusLabel l={rec.mig.l} fg={rec.mig.fg} icon={rec.mig.icon} /></span>
           </div>
-          <h1 lang={langOf(d.title)} className="text-2xl leading-[1.4] font-bold tracking-[-0.02em] text-pretty">{d.title}</h1>
+          <h1 lang={langOf(d.title)} className="text-2xl leading-[1.4] font-semibold tracking-[-0.02em] text-pretty">{d.title}</h1>
         </div>
         <div className="flex flex-wrap items-center gap-2.5">
           <Button
@@ -161,7 +161,7 @@ export function DefectDetail({ id }: { id: string }) {
 
           <section className="flex flex-col gap-4 border-t border-line pt-6">
             <div className="flex flex-col gap-1">
-              <h2 className="text-base font-[650]">Relationship map</h2>
+              <h2 className="text-base font-semibold">Relationship map</h2>
               <span className="text-sm leading-normal text-pretty text-muted">Related defects, code reviews and affected product lines. Click a card to open it; drag to pan.</span>
             </div>
             <div className="overflow-hidden rounded-md border border-[oklch(0.92_0.01_290)] bg-surface">
@@ -186,7 +186,7 @@ export function DefectDetail({ id }: { id: string }) {
 
           <section className="flex flex-col gap-3 border-t border-line pt-6">
             <div className="flex items-center justify-between gap-3">
-              <h2 className="text-base font-[650]">Linked code reviews</h2>
+              <h2 className="text-base font-semibold">Linked code reviews</h2>
               <Button variant="ghost" size="sm" icon="git-pull-request" onClick={() => navigate('/reviews/new?defect=' + d.id)}>Request code review</Button>
             </div>
             <div className="flex flex-col">
@@ -204,7 +204,7 @@ export function DefectDetail({ id }: { id: string }) {
           <section className="flex flex-col gap-3 border-t border-line pt-6">
             <div className="flex flex-wrap items-center justify-between gap-3">
               <div className="flex flex-col gap-1">
-                <h2 className="flex items-center gap-2.5 text-base font-[650]">
+                <h2 className="flex items-center gap-2.5 text-base font-semibold">
                   <img src="/logos/perforce.svg" alt="" className="block h-[18px] w-auto" />
                   Perforce changelists
                 </h2>
@@ -240,20 +240,20 @@ export function DefectDetail({ id }: { id: string }) {
                 <div key={c.cl} className="grid grid-cols-[96px_110px_minmax(0,1fr)_auto] items-center gap-3.5 border-b border-line-soft py-3.5 last:border-b-0">
                   <span className="font-mono text-sm">{c.cl}</span>
                   <StatusLabel l={c.status} fg={c.fg} icon={c.icon} size={14} className="gap-1.5" />
-                  <div className="flex min-w-0 flex-col gap-[3px]"><span className="bui-trunc">{c.desc}</span><span className="bui-trunc text-sm text-muted">{c.meta}</span></div>
+                  <div className="flex min-w-0 flex-col gap-1"><span className="bui-trunc">{c.desc}</span><span className="bui-trunc text-sm text-muted">{c.meta}</span></div>
                   <span className="text-sm whitespace-nowrap text-muted">{c.at}</span>
                 </div>
               ))}
             </div>
             {!derived.cls.length ? (
               isDone && d.resolution && d.resolution !== 'fixed'
-                ? <Note icon="git-commit" title="No changelists linked" text={`Resolved as ${RESOLUTION[d.resolution].toLowerCase()}, so no code change was needed.`} />
-                : <Note icon="git-commit" title={isDone ? 'No changelists linked' : 'No changelists linked yet'} text={`Fixes appear here once they are recorded on ${jobOf(d.id)} with p4 fix.`} />
+                ? <Note icon="git-commit" title="No changelists linked" text={`Resolved as ${RESOLUTION[d.resolution].toLowerCase()}, so no code change was needed`} />
+                : <Note icon="git-commit" title={isDone ? 'No changelists linked' : 'No changelists linked yet'} text={`Fixes appear here once they are recorded on ${jobOf(d.id)} with p4 fix`} />
             ) : null}
           </section>
 
-          <section className="flex flex-col gap-[22px] border-t border-line pt-6">
-            <h2 className="text-base font-[650]">Activity</h2>
+          <section className="flex flex-col gap-6 border-t border-line pt-6">
+            <h2 className="text-base font-semibold">Activity</h2>
             <ActivityFeed items={d.activity} />
             <Composer me={av(meId)} people={people} onPost={(t, att) => upd(x => ({ ...x, activity: [...x.activity, A('c', meId, nowStr(), t, null, att)] }))} />
           </section>
@@ -331,7 +331,7 @@ export function DefectDetail({ id }: { id: string }) {
           <Subscribers
             people={subPeople}
             count={subPeople.length + (subPeople.length === 1 ? ' person' : ' people')}
-            note={sub ? (auto ? 'You are subscribed because you are ' + (d.reporter === meId ? 'the reporter' : 'an assignee') + '.' : 'You get notified about every update.') : 'Subscribe to get notified about every update.'}
+            note={sub ? (auto ? 'You are subscribed because you are ' + (d.reporter === meId ? 'the reporter' : 'an assignee') + '.' : 'You get notified about every update') : 'Subscribe to get notified about every update'}
           />
         </aside>
       </div>
