@@ -88,7 +88,7 @@ export function Combobox({ items, value, onValueChange, placeholder, emptyText =
         ) : null}
         <BaseCombobox.Input className="bui-cb-input" placeholder={placeholder} id={inputId} aria-label={ariaLabel || placeholder} style={shortcut ? { minWidth: 0 } : undefined} {...formAria({ invalid, describedBy, required })} />
         {shortcut ? (
-          <span aria-hidden className="pointer-events-none flex flex-none gap-[3px]">
+          <span aria-hidden className="pointer-events-none flex flex-none gap-1">
             {shortcut.map(s => <kbd key={s} className="kbd">{s}</kbd>)}
           </span>
         ) : (

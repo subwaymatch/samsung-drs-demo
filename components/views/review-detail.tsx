@@ -103,7 +103,7 @@ export function ReviewDetail({ id }: { id: string }) {
             <span className="flex items-center gap-2"><Icon name={TYPE_ICON[r.type]} color="var(--color-muted)" size={16} />{r.type}</span>
             <span title={rec.mig.d}><StatusLabel l={rec.mig.l} fg={rec.mig.fg} icon={rec.mig.icon} /></span>
           </div>
-          <h1 lang={langOf(r.title)} className="text-2xl leading-[1.4] font-bold tracking-[-0.02em] text-pretty">{r.title}</h1>
+          <h1 lang={langOf(r.title)} className="text-2xl leading-[1.4] font-semibold tracking-[-0.02em] text-pretty">{r.title}</h1>
         </div>
         <div className="flex flex-wrap items-center gap-2.5">
           <Button
@@ -143,24 +143,24 @@ export function ReviewDetail({ id }: { id: string }) {
       {confirmDel ? <ConfirmDelete id={r.id} noun="review" onCancel={() => setConfirmDel(false)} onConfirm={() => { deleteReview(r.id); flash(r.id + ' deleted'); navigate('/reviews'); }} /> : null}
 
       {r.status === 'pending' && isCR ? (
-        <div className="flex flex-wrap items-center gap-5 border-l-[3px] border-accent-bar py-2 pl-[18px]">
+        <div className="flex flex-wrap items-center gap-5 border-l-[3px] border-accent-bar py-2 pl-5">
           <div className="flex flex-[1_1_300px] flex-col gap-1">
-            <span className="flex items-center gap-2 font-[650] text-accent-ink"><Icon name="user-plus" size={16} />This change needs reviewers</span>
+            <span className="flex items-center gap-2 font-semibold text-accent-ink"><Icon name="user-plus" size={16} />This change needs reviewers</span>
             <span className="text-ink-5">Assign one or more reviewers from the code review team. Every assigned reviewer must approve before the change is submitted.</span>
           </div>
           <div className="w-[260px] max-w-full"><Combobox items={addable} value={null} onValueChange={v => v && addReviewer(v)} placeholder="Add reviewer" leadIcon="user-plus" resetOnSelect /></div>
         </div>
       ) : null}
       {r.status === 'pending' && !isCR ? (
-        <div className="flex items-start gap-2 border-l-[3px] border-[oklch(0.88_0.01_290)] py-2 pl-[18px] text-ink-5">
+        <div className="flex items-start gap-2 border-l-[3px] border-[oklch(0.88_0.01_290)] py-2 pl-5 text-ink-5">
           <Icon name="clock" size={16} style={{ marginTop: 3 }} />
           <span>Waiting for the code review team to assign reviewers. Switch to a code review team member in <Link to="/settings">Settings</Link> to assign one.</span>
         </div>
       ) : null}
       {myRv && !myRv.dec && (r.status === 'in_review' || r.status === 'changes') ? (
-        <div className="flex flex-col gap-3.5 border-l-[3px] border-accent-bar py-2 pl-[18px]">
+        <div className="flex flex-col gap-3.5 border-l-[3px] border-accent-bar py-2 pl-5">
           <div className="flex flex-col gap-1">
-            <span className="font-[650] text-accent-ink">Review decision</span>
+            <span className="font-semibold text-accent-ink">Review decision</span>
             <span className="text-ink-5">
               {nRv > 1
                 ? `You are one of ${nRv} reviewers; ${nAp} of ${nRv} have approved. Every reviewer must approve before submit. A note is required to request modification or deny.`
@@ -177,9 +177,9 @@ export function ReviewDetail({ id }: { id: string }) {
         </div>
       ) : null}
       {wd.open ? (
-        <div className="flex flex-col gap-3 rounded-md border border-[oklch(0.9_0.012_290)] bg-[oklch(0.985_0.004_290)] px-5 py-[18px]">
+        <div className="flex flex-col gap-3 rounded-md border border-[oklch(0.9_0.012_290)] bg-[oklch(0.985_0.004_290)] px-5 py-4">
           <div className="flex flex-col gap-1">
-            <span className="font-[650]">Withdraw this request</span>
+            <span className="font-semibold">Withdraw this request</span>
             <span className="text-sm leading-normal text-pretty text-muted">Use this when plans change and the code won't be submitted, whatever the review result. It's counted as Withdrawn in Review outcomes.</span>
           </div>
           <Input value={wd.reason} onChange={v => setWd(w => ({ ...w, reason: v, err: '' }))} placeholder="Reason, e.g. feature dropped from the 2018 release" ariaLabel="Reason" />
@@ -204,9 +204,9 @@ export function ReviewDetail({ id }: { id: string }) {
         </div>
       ) : null}
       {banner.title ? (
-        <div className="flex flex-wrap items-center gap-5 border-l-[3px] py-2 pl-[18px]" style={{ borderLeftColor: banner.fg }}>
+        <div className="flex flex-wrap items-center gap-5 border-l-[3px] py-2 pl-5" style={{ borderLeftColor: banner.fg }}>
           <div className="flex flex-[1_1_300px] flex-col gap-1.5">
-            <span className="flex items-center gap-2 font-[650]" style={{ color: banner.fg }}><Icon name={banner.icon} size={16} />{banner.title}</span>
+            <span className="flex items-center gap-2 font-semibold" style={{ color: banner.fg }}><Icon name={banner.icon} size={16} />{banner.title}</span>
             <span className="leading-[1.6] text-ink-3">{banner.text}</span>
           </div>
           {r.status === 'changes' && isAuthor ? (
@@ -258,7 +258,7 @@ export function ReviewDetail({ id }: { id: string }) {
           <section className="flex flex-col gap-5 border-t border-line pt-6">
             <div className="flex flex-wrap items-center justify-between gap-3">
               <div className="flex flex-col gap-1">
-                <h2 className="text-base font-[650]">Changed files</h2>
+                <h2 className="text-base font-semibold">Changed files</h2>
                 <span className="text-sm text-muted">{r.files.length ? `${r.files.length} file${r.files.length > 1 ? 's' : ''}, +${add} -${del}, Click a line to comment` : 'Not synced from Helix Swarm yet'}</span>
               </div>
               {r.files.length ? <div className="max-w-full overflow-x-auto"><Segmented ariaLabel="Diff layout" items={DIFF_MODES} value={mode} onValueChange={v => setPrefs({ diff: v as 'sbs' | 'uni' })} /></div> : null}
@@ -283,7 +283,7 @@ export function ReviewDetail({ id }: { id: string }) {
                 <span className="flex h-10 w-10 flex-none items-center justify-center rounded-full bg-accent-soft"><Icon name="archive" size={20} color="oklch(0.5 0.17 293)" /></span>
                 <div className="flex min-w-0 flex-1 flex-col gap-3">
                   <div className="flex flex-col gap-1.5">
-                    <span className="font-[650]">Files haven't been fetched from Helix Swarm yet</span>
+                    <span className="font-semibold">Files haven't been fetched from Helix Swarm yet</span>
                     <span className="max-w-[560px] leading-[1.6] text-muted">New requests only store the shelved changelist number. The changed files are loaded from Swarm review {sw.id} (shelved CL {sw.shelved}) on the next sync.</span>
                   </div>
                   <div className="flex flex-wrap gap-2.5">
@@ -294,8 +294,8 @@ export function ReviewDetail({ id }: { id: string }) {
               </div>
             ) : null}
           </section>
-          <section className="flex flex-col gap-[22px] border-t border-line pt-6">
-            <h2 className="text-base font-[650]">Activity</h2>
+          <section className="flex flex-col gap-6 border-t border-line pt-6">
+            <h2 className="text-base font-semibold">Activity</h2>
             <ActivityFeed items={r.activity} />
             <Composer me={av(meId)} people={people} onPost={(t, att) => upd(x => ({ ...x, activity: [...x.activity, A('c', meId, nowStr(), t, null, att)] }))} />
           </section>
@@ -304,13 +304,13 @@ export function ReviewDetail({ id }: { id: string }) {
         <aside className="flex min-w-[260px] flex-[0_1_300px] flex-col gap-7 border-l border-line pl-8 max-[900px]:border-l-0 max-[900px]:pl-0">
           <div className="flex flex-col gap-1.5">
             <SideLabel icon="clock">Review turnaround</SideLabel>
-            <span className="text-[32px] leading-[1.1] font-bold tracking-[-0.02em] tabular-nums" style={{ color: tat.color }}>{tat.text}</span>
+            <span className="text-[32px] leading-[1.1] font-semibold tracking-[-0.02em] tabular-nums" style={{ color: tat.color }}>{tat.text}</span>
             <span className="text-sm leading-normal text-muted">{tat.note}</span>
           </div>
           <Subscribers
             people={subPeople}
             count={subPeople.length + (subPeople.length === 1 ? ' person' : ' people')}
-            note={sub ? (auto ? 'You are subscribed because you are ' + (isAuthor ? 'the author' : 'a reviewer') + '.' : 'You get notified about every update.') : 'Subscribe to get notified about every update.'}
+            note={sub ? (auto ? 'You are subscribed because you are ' + (isAuthor ? 'the author' : 'a reviewer') + '.' : 'You get notified about every update') : 'Subscribe to get notified about every update'}
           />
           <div className="flex flex-col gap-5 border-t border-line pt-6">
             <div className="flex flex-col gap-2.5">
@@ -327,7 +327,7 @@ export function ReviewDetail({ id }: { id: string }) {
                 return (
                   <div key={v.u} className="flex items-center gap-3">
                     <Person person={av(v.u)} size={32} />
-                    <div className="flex min-w-0 flex-1 flex-col gap-[3px]">
+                    <div className="flex min-w-0 flex-1 flex-col gap-1">
                       <span className="font-[550]">{UM[v.u].name}</span>
                       <span className="flex items-center gap-1.5 text-sm" style={{ color: s2.fg }}><Icon name={s2.icon} size={14} />{decLabel(v.dec)}</span>
                     </div>

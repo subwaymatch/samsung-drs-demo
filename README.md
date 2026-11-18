@@ -80,7 +80,7 @@ Workers static assets answer a Range request with the whole file, and a browser 
 
 ## Generated images
 
-The product shots in `public/products`, the staff portraits in `public/photos` and the Insights illustrations in `public/illustrations` are generated stand-ins, made with OpenAI's GPT Image 2.5 (`gpt-image-2.5-flare`) at `quality: "low"` on a transparent background and saved as small transparent WebP files sized for the thumbnails they fill. They stay as they are and do not need regenerating.
+The product shots in `public/products` and the staff portraits in `public/photos` are generated stand-ins, made with OpenAI's GPT Image 2.5 (`gpt-image-2.5-flare`) at `quality: "low"` on a transparent background and saved as small transparent WebP files sized for the thumbnails they fill. They stay as they are and do not need regenerating.
 
 Any new or replacement image is generated with GPT Image 2.6 (`gpt-image-2.6-flare`, or `gpt-image-2.6-sunburst`, the same release at the same price) at `quality: "low"` with `background: "transparent"`, and saved the same way. Three things to know about 2.6:
 

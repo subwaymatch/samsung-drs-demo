@@ -150,7 +150,7 @@ export function ReviewsList() {
           );
         })}
       </ListTable>
-      {!rows.length ? <EmptyState icon="filter-x" title="No code reviews match these filters" text="Try a different status or scope, or remove a filter above." /> : null}
+      {!rows.length ? <EmptyState icon="filter-x" title="No code reviews match these filters" text="Try a different status or scope, or remove a filter above" /> : null}
       <Pagination pg={pg} onPage={p => { go({ page: p }); window.scrollTo(0, 0); }} />
     </div>
   );

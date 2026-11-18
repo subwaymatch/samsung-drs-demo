@@ -83,7 +83,7 @@ function ReviewFormInner({ r, linkedDefect }: { r?: Review; linkedDefect: string
     <div className="mx-auto flex max-w-[760px] flex-col gap-8">
       <div className="flex flex-col gap-3.5">
         <div className="flex"><Link to={back} className="bui-btn bui-link"><Icon name="arrow-left" size={16} />{r ? r.id : 'Code reviews'}</Link></div>
-        <h1 className="text-2xl font-bold tracking-[-0.02em]">{heading}</h1>
+        <h1 className="text-2xl font-semibold tracking-[-0.02em]">{heading}</h1>
       </div>
       <div className="flex flex-col gap-6">
         <Field label="Title"><Input value={f.title} onChange={v => set('title', v)} placeholder="What does this change do?" ariaLabel="Title" /></Field>

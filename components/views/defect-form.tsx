@@ -183,13 +183,13 @@ function DefectFormInner({ d }: { d?: Defect }) {
     <div className="mx-auto flex max-w-[760px] flex-col gap-8">
       <div className="flex flex-col gap-3.5">
         <div className="flex"><Link to={back} className="bui-btn bui-link"><Icon name="arrow-left" size={16} />{d ? d.id : 'Defects'}</Link></div>
-        <h1 className="text-2xl font-bold tracking-[-0.02em]">{heading}</h1>
+        <h1 className="text-2xl font-semibold tracking-[-0.02em]">{heading}</h1>
       </div>
       <div className="flex flex-col gap-6">
         {restored && !isBlank(f) ? (
           <div className="flex flex-wrap items-center gap-3 rounded-md bg-accent-wash px-4 py-3">
             <Icon name="history" size={16} color="var(--color-accent-ink)" />
-            <span className="flex-1">Restored the report you had not sent yet.</span>
+            <span className="flex-1">Restored the report you had not sent yet</span>
             <Button variant="ghost" size="sm" icon="trash-2" onClick={discard}>Discard draft</Button>
           </div>
         ) : null}
@@ -204,18 +204,18 @@ function DefectFormInner({ d }: { d?: Defect }) {
             <Combobox inputId="df-comp" items={comps} value={f.comp} onValueChange={v => set('comp', v)} placeholder="Type to search" ariaLabel="Component" required invalid={!!errs.comp} describedBy={errs.comp ? 'df-comp-err' : undefined} />
           </Field>
         </div>
-        <Field label="Also affects" hint="Add a whole product line when the defect is in shared firmware, or pick individual models.">
+        <Field label="Also affects" hint="Add a whole product line when the defect is in shared firmware, or pick individual models">
           <MultiCombobox items={affItems} value={f.aff} onValueChange={v => set('aff', v)} placeholder="Search product lines and models" ariaLabel="Also affects" />
         </Field>
         <div className="flex flex-col gap-2">
           {dupes.length ? (
             <div className="mb-4 flex flex-col gap-1.5 border-l-[3px] border-[oklch(0.73_0.16_55)] py-1 pl-4">
-              <span className="flex items-center gap-2 font-[650]"><Icon name="copy" size={16} color="oklch(0.55 0.15 55)" />Possible duplicates on {f.model}</span>
+              <span className="flex items-center gap-2 font-semibold"><Icon name="copy" size={16} color="oklch(0.55 0.15 55)" />Possible duplicates on {f.model}</span>
               <span className="mb-1 text-sm text-muted">Check these before reporting. Each opens in a new tab so you keep this form.</span>
               {dupes.map(x => (
                 <a key={x.id} href={'/defects/' + x.id} target="_blank" rel="noreferrer" className="grid grid-cols-[96px_minmax(0,1fr)_auto] items-center gap-3.5 border-b border-line-soft py-2.5 text-inherit no-underline last:border-b-0 hover:text-accent-text hover:no-underline">
                   <span className="font-mono text-sm text-muted">{x.id}</span>
-                  <span className="flex min-w-0 flex-col gap-[3px]"><span className="bui-trunc">{x.title}</span><span className="text-sm text-muted">{x.comp}, reported {fFull(x.created)}</span></span>
+                  <span className="flex min-w-0 flex-col gap-1"><span className="bui-trunc">{x.title}</span><span className="text-sm text-muted">{x.comp}, reported {fFull(x.created)}</span></span>
                   <span className="flex items-center gap-1.5 font-[550] whitespace-nowrap" style={{ color: DST[x.status].fg }}><Icon name={DST[x.status].icon} size={14} />{DST[x.status].l}</span>
                 </a>
               ))}

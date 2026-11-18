@@ -100,7 +100,7 @@ export function GlobalSearch({ data, onPick, shortcut }: { data: Data | undefine
       <BaseCombobox.InputGroup className="bui-cb" style={{ flexWrap: 'nowrap', paddingRight: 8 }}>
         <span className="flex text-[oklch(0.5_0.12_293)]"><Icon name="search" size={15} /></span>
         <BaseCombobox.Input className="bui-cb-input" placeholder="Search" id="gsearch" aria-label="Search defects, code reviews and people" style={{ minWidth: 0 }} />
-        <span aria-hidden className="pointer-events-none flex flex-none gap-[3px]">
+        <span aria-hidden className="pointer-events-none flex flex-none gap-1">
           {shortcut.map(s => <kbd key={s} className="kbd">{s}</kbd>)}
         </span>
       </BaseCombobox.InputGroup>

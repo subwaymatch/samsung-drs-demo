@@ -9,7 +9,7 @@ export function PageHeader({ title, sub, action }: { title: ReactNode; sub?: Rea
   return (
     <div className="flex flex-wrap items-end justify-between gap-5">
       <div className="flex flex-col gap-1.5">
-        <h1 className="text-2xl font-bold tracking-[-0.02em]">{title}</h1>
+        <h1 className="text-2xl font-semibold tracking-[-0.02em]">{title}</h1>
         {sub ? <p className="leading-[1.7] text-muted">{sub}</p> : null}
       </div>
       {action}
@@ -20,7 +20,7 @@ export function PageHeader({ title, sub, action }: { title: ReactNode; sub?: Rea
 export function SectionTitle({ title, sub, right, small }: { title: ReactNode; sub?: ReactNode; right?: ReactNode; small?: boolean }) {
   const head = (
     <div className="flex min-w-0 flex-col gap-1">
-      {small ? <h3 className="text-sm font-semibold text-muted">{title}</h3> : <h2 className="text-base font-[650]">{title}</h2>}
+      {small ? <h3 className="text-sm font-semibold text-muted">{title}</h3> : <h2 className="text-base font-semibold">{title}</h2>}
       {sub ? <span className="text-sm leading-normal text-pretty text-muted">{sub}</span> : null}
     </div>
   );
@@ -46,7 +46,7 @@ export function Section({ title, sub, right, children, className = '', gap = 'ga
 /** Small tinted card for "nothing here yet" states inside a section. */
 export function Note({ icon, title, text, className = '' }: { icon: string; title: string; text?: ReactNode; className?: string }) {
   return (
-    <div className={'flex items-center gap-4 rounded-md bg-accent-wash px-5 py-[18px] ' + className}>
+    <div className={'flex items-center gap-4 rounded-md bg-accent-wash px-5 py-4 ' + className}>
       <span className="flex h-10 w-10 flex-none items-center justify-center rounded-full bg-accent-soft">
         <Icon name={icon} size={20} color="oklch(0.5 0.17 293)" />
       </span>
@@ -66,7 +66,7 @@ export function EmptyState({ icon, title, text }: { icon: string; title: string;
         <Icon name={icon} size={26} color="oklch(0.5 0.17 293)" />
       </span>
       <div className="flex max-w-[420px] flex-col gap-1">
-        <span className="text-base font-[650]">{title}</span>
+        <span className="text-base font-semibold">{title}</span>
         <span className="text-sm leading-normal text-pretty text-muted">{text}</span>
       </div>
     </div>
