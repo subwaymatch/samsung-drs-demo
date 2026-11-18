@@ -1,11 +1,8 @@
 /**
  * Isometric illustrations of the printing division's world, generated with GPT Image 2.6 at `quality: "low"` on a
- * transparent background (see "Generated images" in the README). Each comes in two variants with the same size:
- * `white`, the violet accents turned into warm greys (public/illustrations/<name>.webp), and `violet`, as generated
- * (public/illustrations/violet/<name>.webp). Trimmed to the drawing and at most 512px on the long side.
+ * transparent background (see "Generated images" in the README), their violet accents then turned into warm greys.
+ * Trimmed to the drawing and at most 512px on the long side, at public/illustrations/<name>.webp.
  */
-export type IllustrationVariant = 'white' | 'violet';
-
 export interface Illustration {
   name: string;
   width: number;
@@ -61,6 +58,5 @@ export const ILLUSTRATIONS: Illustration[] = LIST.map(([name, width, height, sub
 
 export const ILLUSTRATION: Record<string, Illustration> = Object.fromEntries(ILLUSTRATIONS.map(i => [i.name, i]));
 
-/** The file for an illustration, white by default. */
-export const illustrationSrc = (name: string, variant: IllustrationVariant = 'white') =>
-  '/illustrations/' + (variant === 'violet' ? 'violet/' : '') + name + '.webp';
+/** The file for an illustration. */
+export const illustrationSrc = (name: string) => '/illustrations/' + name + '.webp';
