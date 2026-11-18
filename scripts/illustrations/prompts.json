@@ -1,0 +1,186 @@
+{
+  "model": "gpt-image-2.6-sunburst",
+  "quality": "low",
+  "background": "transparent",
+  "output_format": "png",
+  "prompt": "Subject: <subject>. <common>\n<style>",
+  "common": "One object only, centered, no other props, no background scene, plenty of empty space around it. No insects, no animals, no people. No text, no letters, no numbers, no logos, no brand names, no frame. Isolated on a fully transparent background.",
+  "style": "Style: clean isometric 3D illustration at true isometric angles, simple rounded shapes, minimal detail, soft ambient shading and a subtle soft shadow beneath the object, like a modern tech landing-page illustration. Palette strictly limited to: white, light warm grey (#E9E8E4), mid grey (#B9B7B0), one violet (#7B61E6) used sparingly for accents, and near-black (#1B1B19) only for small details. No other colors.",
+  "illustrations": [
+    {
+      "name": "bell",
+      "size": "1024x1024",
+      "subject": "a notification bell with a small round badge on it"
+    },
+    {
+      "name": "board",
+      "size": "1024x1024",
+      "subject": "a printer's main circuit board with a large square processor chip, smaller chips and connectors"
+    },
+    {
+      "name": "box",
+      "size": "1024x1024",
+      "subject": "a closed cardboard shipping box taped shut"
+    },
+    {
+      "name": "calendar",
+      "size": "1024x1024",
+      "subject": "a desk calendar on a stand, the page showing a grid of days with one day marked"
+    },
+    {
+      "name": "chair",
+      "size": "1024x1536",
+      "subject": "an office chair on wheels"
+    },
+    {
+      "name": "clipboard",
+      "size": "1024x1024",
+      "subject": "a clipboard holding a checklist with check marks and one empty box"
+    },
+    {
+      "name": "comments",
+      "size": "1024x1024",
+      "subject": "two overlapping speech bubbles, one with three dots inside"
+    },
+    {
+      "name": "dashboard",
+      "size": "1024x1024",
+      "subject": "a computer monitor on a stand showing a simple bar chart and a line chart"
+    },
+    {
+      "name": "desk",
+      "size": "1536x1024",
+      "subject": "a developer's desk: a wide monitor showing a side-by-side code diff with highlighted lines, a keyboard and a mug"
+    },
+    {
+      "name": "envelope",
+      "size": "1024x1024",
+      "subject": "a closed paper envelope with a small notification dot on its corner"
+    },
+    {
+      "name": "gears",
+      "size": "1024x1024",
+      "subject": "two interlocking gears"
+    },
+    {
+      "name": "globe",
+      "size": "1024x1024",
+      "subject": "a small desk globe on a stand with two map pins, one in Korea and one in southern India"
+    },
+    {
+      "name": "headphones",
+      "size": "1024x1024",
+      "subject": "a pair of over-ear headphones"
+    },
+    {
+      "name": "hourglass",
+      "size": "1024x1024",
+      "subject": "an hourglass with sand running from the top bulb to the bottom"
+    },
+    {
+      "name": "jam",
+      "size": "1024x1024",
+      "subject": "a desktop laser printer with its rear cover open and a crumpled page caught in the rollers"
+    },
+    {
+      "name": "keycaps",
+      "size": "1024x1024",
+      "subject": "two large keyboard keycaps side by side, blank"
+    },
+    {
+      "name": "keycard",
+      "size": "1024x1536",
+      "subject": "an office door with a keycard reader on the wall beside it"
+    },
+    {
+      "name": "lanyard",
+      "size": "1024x1536",
+      "subject": "an employee ID card hanging from a lanyard, the card showing an empty photo box and blank lines"
+    },
+    {
+      "name": "laptop",
+      "size": "1024x1024",
+      "subject": "an open laptop showing a code editor with colored lines of code"
+    },
+    {
+      "name": "meeting",
+      "size": "1536x1024",
+      "subject": "a small conference table with four office chairs facing a wall screen that shows a simple chart"
+    },
+    {
+      "name": "mug",
+      "size": "1024x1024",
+      "subject": "a coffee mug with a little steam rising"
+    },
+    {
+      "name": "notes",
+      "size": "1024x1024",
+      "subject": "a small pad of sticky notes with one note peeled up"
+    },
+    {
+      "name": "padlock",
+      "size": "1024x1024",
+      "subject": "an open padlock with a key beside it"
+    },
+    {
+      "name": "paper",
+      "size": "1024x1024",
+      "subject": "a wrapped ream of printer paper with a few loose sheets fanned on top"
+    },
+    {
+      "name": "phone",
+      "size": "1024x1536",
+      "subject": "a smartphone standing upright with a notification card on its screen"
+    },
+    {
+      "name": "pie",
+      "size": "1024x1024",
+      "subject": "a three-dimensional pie chart with one slice pulled out"
+    },
+    {
+      "name": "printer",
+      "size": "1024x1024",
+      "subject": "a compact office laser multifunction printer with a document feeder on top and a small screen, a printed page coming out"
+    },
+    {
+      "name": "rack",
+      "size": "1024x1536",
+      "subject": "a single server rack with rack-mounted servers, small status lights and neatly bundled cables"
+    },
+    {
+      "name": "scanner",
+      "size": "1024x1024",
+      "subject": "a flatbed document scanner with its lid raised"
+    },
+    {
+      "name": "stapler",
+      "size": "1024x1024",
+      "subject": "an office stapler"
+    },
+    {
+      "name": "test-page",
+      "size": "1024x1024",
+      "subject": "a printed test page with rows of shaded bars and a faint vertical streak, a magnifying glass resting over the streak"
+    },
+    {
+      "name": "toner",
+      "size": "1024x1024",
+      "subject": "a laser printer toner cartridge, a long boxy cartridge with a handle and a roller along one side"
+    },
+    {
+      "name": "toolbox",
+      "size": "1024x1024",
+      "subject": "an open toolbox with a screwdriver and a wrench lying on its top tray"
+    },
+    {
+      "name": "truck",
+      "size": "1536x1024",
+      "subject": "a small box delivery truck"
+    },
+    {
+      "name": "warning",
+      "size": "1024x1024",
+      "subject": "a triangular warning sign with an exclamation mark"
+    }
+  ]
+}
