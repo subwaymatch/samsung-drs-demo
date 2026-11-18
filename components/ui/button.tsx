@@ -1,7 +1,5 @@
-'use client';
-
 import { Button as BaseButton } from '@base-ui/react/button';
-import NextLink from 'next/link';
+import { Link } from 'react-router';
 import type { CSSProperties, MouseEventHandler, ReactNode } from 'react';
 import { Icon } from './icon';
 
@@ -54,10 +52,10 @@ export function Button({ variant = 'secondary', size, icon, iconRight, iconOnly,
 export function LinkButton({ href, variant = 'secondary', size, icon, iconRight, iconOnly, title, children, className, style }: Common & { href: string }) {
   const is = size === 'sm' ? 14 : 16;
   return (
-    <NextLink href={href} className={cls(variant, size, iconOnly, className)} style={style} title={title} aria-label={iconOnly ? title : undefined}>
+    <Link to={href} className={cls(variant, size, iconOnly, className)} style={style} title={title} aria-label={iconOnly ? title : undefined}>
       {icon ? <Icon name={icon} size={is} /> : null}
       {children}
       {iconRight ? <Icon name={iconRight} size={is} /> : null}
-    </NextLink>
+    </Link>
   );
 }

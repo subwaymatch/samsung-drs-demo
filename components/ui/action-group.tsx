@@ -1,5 +1,3 @@
-'use client';
-
 import { Button as BaseButton } from '@base-ui/react/button';
 import { Menu } from '@base-ui/react/menu';
 import { Icon } from './icon';

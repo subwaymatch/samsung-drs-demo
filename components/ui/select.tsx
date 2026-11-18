@@ -1,5 +1,3 @@
-'use client';
-
 import { Select as BaseSelect } from '@base-ui/react/select';
 import type { Option } from '@/lib/types';
 import { Icon } from './icon';

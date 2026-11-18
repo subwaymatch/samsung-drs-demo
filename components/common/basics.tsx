@@ -1,6 +1,4 @@
-'use client';
-
-import NextLink from 'next/link';
+import { Link } from 'react-router';
 import type { CSSProperties, ReactNode } from 'react';
 import { Button } from '../ui/button';
 import { Icon } from '../ui/icon';
@@ -89,7 +87,6 @@ export function Thumb({ th, w = 56, h = 42, iconSize = 20, label }: { th: ThumbT
   return (
     <div title={th.hint} className={'grid flex-none place-items-center overflow-hidden rounded ' + (th.photo ? '' : 'bg-[oklch(0.975_0.01_293)]')} style={{ width: w, height: h }}>
       {th.photo ? (
-        // eslint-disable-next-line @next/next/no-img-element
         <img src={th.photo} alt="" loading="lazy" decoding="async" className="block h-full w-full object-contain p-[6%]" />
       ) : label ? (
         <div className="flex flex-col items-center gap-2 text-[oklch(0.62_0.06_293)]">
@@ -108,7 +105,6 @@ export function PhotoPlaceholder({ w, h, iconSize = 24, title, src }: { w: numbe
   return (
     <div title={title} className={'grid flex-none place-items-center overflow-hidden rounded ' + (src ? '' : 'bg-[oklch(0.965_0.015_293)]')} style={{ width: w, height: h }}>
       {src ? (
-        // eslint-disable-next-line @next/next/no-img-element
         <img src={w <= 96 ? smallPhoto(src) : src} alt="" loading="lazy" decoding="async" className="block h-full w-full object-cover object-top" />
       ) : (
         <Icon name="user" size={iconSize} color="oklch(0.68 0.07 293)" />
@@ -203,10 +199,10 @@ export function QuickFilters({ chips, clearHref, source = 'Filtered from Insight
       {chips.map(c => (
         <span key={c} className="inline-flex h-7 items-center rounded border border-[oklch(0.88_0.04_293)] px-2.5 whitespace-nowrap text-[oklch(0.3_0.04_293)]">{c}</span>
       ))}
-      <NextLink href={clearHref} className="bui-btn bui-ghost bui-sm">
+      <Link to={clearHref} className="bui-btn bui-ghost bui-sm">
         <Icon name="filter-x" size={14} />
         Clear filters
-      </NextLink>
+      </Link>
     </div>
   );
 }

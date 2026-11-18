@@ -1,6 +1,4 @@
-'use client';
-
-import NextLink from 'next/link';
+import { Link } from 'react-router';
 import { useState, type ReactNode } from 'react';
 import { DEC, RST } from '@/lib/constants';
 import { fAt } from '@/lib/dates';
@@ -34,7 +32,7 @@ export const SideLabel = ({ icon, children, right }: { icon: string; children: R
 export function Breadcrumb({ href, label, id }: { href: string; label: string; id: string }) {
   return (
     <div className="flex items-center gap-2.5 text-muted">
-      <NextLink href={href} className="bui-btn bui-link"><Icon name="arrow-left" size={16} />{label}</NextLink>
+      <Link to={href} className="bui-btn bui-link"><Icon name="arrow-left" size={16} />{label}</Link>
       <span>/</span>
       <span className="font-mono text-sm">{id}</span>
     </div>
@@ -50,7 +48,7 @@ export function PersonCard({ label, person, when }: { label: string; person: Per
         <PhotoPlaceholder w={56} h={70} src={person.photo} title={person.photo ? person.name : 'Photo placeholder'} />
         <div className="flex min-w-0 flex-col gap-1">
           <div className="flex flex-wrap items-baseline gap-2">
-            <NextLink href={person.href} lang={langOf(person.name)} className="text-[15px] font-[650] text-inherit">{person.name}</NextLink>
+            <Link to={person.href} lang={langOf(person.name)} className="text-[15px] font-[650] text-inherit">{person.name}</Link>
             {person.en !== person.name ? <span className="text-sm text-muted">{person.en}</span> : null}
           </div>
           <span>{person.title}, {person.teamName}</span>

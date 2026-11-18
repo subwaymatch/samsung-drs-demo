@@ -1,6 +1,4 @@
-'use client';
-
-import { useRouter } from 'next/navigation';
+import { useNavigate } from 'react-router';
 import { useMemo } from 'react';
 import { MODELS, TEAMS } from '@/lib/constants';
 import { fFull, TNOW } from '@/lib/dates';
@@ -29,7 +27,7 @@ function Bar({ w, c, h = 6 }: { w: string; c: string; h?: number }) {
 
 export function InsightsView() {
   const app = useApp();
-  const router = useRouter();
+  const navigate = useNavigate();
   const { ui, setUi, mainW } = useShell();
   const range = RANGES.some(r => r.n === ui.range) ? ui.range : 30;
   const data = app?.data;
@@ -85,8 +83,8 @@ export function InsightsView() {
                   tabIndex={0}
                   aria-label={p.tip}
                   className="focus-ring cursor-pointer hover:opacity-80"
-                  onClick={() => router.push(p.href)}
-                  onKeyDown={e => { if (e.key === 'Enter') router.push(p.href); }}
+                  onClick={() => navigate(p.href)}
+                  onKeyDown={e => { if (e.key === 'Enter') navigate(p.href); }}
                 >
                   <title>{p.tip}</title>
                 </path>
@@ -185,7 +183,6 @@ export function InsightsView() {
                   <span className="font-[550] text-muted">{k.unit}</span>
                 </div>
               </div>
-              {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src={k.art} alt="" width={64} height={64} decoding="async" className="block flex-none" />
             </div>
             <span className="text-sm font-semibold" style={{ color: k.dc }}>{k.delta}</span>

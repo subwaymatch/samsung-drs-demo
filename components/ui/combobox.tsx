@@ -1,5 +1,3 @@
-'use client';
-
 import { Combobox as BaseCombobox } from '@base-ui/react/combobox';
 import { useState } from 'react';
 import type { Option } from '@/lib/types';

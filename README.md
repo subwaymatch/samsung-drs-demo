@@ -22,11 +22,11 @@ Switch users in Settings to see each role's permissions: Code Review Team member
 
 ## Stack
 
-- [Vinext](https://github.com/cloudflare/vinext): the Next.js App Router API on Vite, with React 19
+- [Vite](https://vite.dev) and React 19, as a single-page app with [React Router](https://reactrouter.com)
 - [Base UI](https://base-ui.com) components, styled with Tailwind CSS v4
 - [Lucide](https://lucide.dev) icons
 - [React Flow](https://reactflow.dev) for the migration and relationship diagrams
-- Cloudflare Workers, through the Cloudflare Vite plugin and Wrangler
+- Cloudflare Workers static assets, through the Cloudflare Vite plugin and Wrangler, plus a small Worker for the video
 
 ## Mock data
 
@@ -39,7 +39,7 @@ The generator keeps the history consistent, and `pnpm test` checks it:
 - A defect is resolved only after its fix review is approved, and stays in progress while the fix is in review. Every resolved defect has a resolution; fixed ones show a review or a `p4 fix` changelist.
 - The adjustments use fixed values instead of the random stream, so record ids stay the same when templates change.
 
-The server renders only the page shell. Your edits are saved to `localStorage` on top of the generated data; Settings → Reset demo data discards them. Bump `SEED_VERSION` in `lib/seed/generate.ts` when the generator changes, so saved edits from an older seed are dropped.
+Everything renders in the browser. Your edits are saved to `localStorage` on top of the generated data; Settings → Reset demo data discards them. Bump `SEED_VERSION` in `lib/seed/generate.ts` when the generator changes, so saved edits from an older seed are dropped.
 
 The demo clock starts at 15 September 2017, 18:00 (`TNOW` in `lib/dates.ts`), whatever the visitor's time of day, and runs with the visit, so every visitor sees the same durations and new activity always sorts after the history.
 
@@ -49,7 +49,7 @@ Requires Node.js 22 or later and pnpm.
 
 ```sh
 pnpm install
-pnpm dev          # http://localhost:5173, running in the Workers runtime
+pnpm dev          # http://localhost:5173, with the /stream Worker in the Workers runtime
 pnpm typecheck
 pnpm test         # invariants over the generated data and the Insights numbers
 ```
@@ -57,18 +57,18 @@ pnpm test         # invariants over the generated data and the Insights numbers
 ## Build and deploy
 
 ```sh
-pnpm build        # outputs dist/client (static assets) and dist/server (Worker)
-pnpm start        # serves the production build locally with Wrangler
+pnpm build        # outputs dist/client (the app) and dist/samsung_drs_demo (the Worker)
+pnpm preview      # serves the production build locally in the Workers runtime
 pnpm run deploy   # builds and deploys to Cloudflare Workers
 ```
 
 `pnpm run deploy` needs a Cloudflare login (`pnpm wrangler login`) or `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID` in the environment. The Worker name is set in `wrangler.jsonc`.
 
-To deploy from Git with Workers Builds instead, connect the repository in the Cloudflare dashboard and use `pnpm build` as the build command and `npx wrangler deploy` as the deploy command. The build writes `.wrangler/deploy/config.json`, which points Wrangler at the generated `dist/server/wrangler.json`.
+To deploy from Git with Workers Builds instead, connect the repository in the Cloudflare dashboard and use `pnpm build` as the build command and `npx wrangler deploy` as the deploy command. The build writes `.wrangler/deploy/config.json`, which points Wrangler at the generated `dist/samsung_drs_demo/wrangler.json`.
 
-`wrangler.jsonc` has no `run_worker_first` rule. With one, the dev server also routes Vite's own modules to the Worker and `pnpm dev` serves 404s. Its `main` is `worker/index.ts`, which hands everything but `/stream/*` (see below) to the vinext app.
+The app is static files: `app/main.tsx` is the entry, `app/routes.tsx` lists the pages, and `index.html` holds the page head. `wrangler.jsonc` serves `index.html` for any URL that is not a file (`not_found_handling: "single-page-application"`), so a link straight to `/defects/D-17-0348` works and the router draws the page. Only `/stream/*` (see below) runs the Worker in `worker/index.ts`, through `run_worker_first`. Keep that rule to those paths: a catch-all rule also makes the dev server send Vite's own modules to the Worker and `pnpm dev` serves 404s.
 
-Link previews use `public/og-image.png` (a 1200x630 screenshot of Insights) and absolute URLs from `metadataBase` in `app/layout.tsx`; update it if the demo moves to another domain.
+Link previews use `public/og-image.png` (a 1200x630 screenshot of Insights) and the absolute image URLs in the Open Graph and Twitter tags in `index.html`; update them if the demo moves to another domain. Every page shares these tags. Each page sets its own tab title once the app loads.
 
 ## Showcase video
 
@@ -76,7 +76,7 @@ Link previews use `public/og-image.png` (a 1200x630 screenshot of Insights) and 
 
 The About page plays a copy of it from `public/video`, encoded to stay under the 25 MiB limit for a single Workers static asset. `public/_headers` lets browsers and Cloudflare cache those files for a year, so a new render gets a new version in its file name.
 
-Workers static assets answer a Range request with the whole file, and a browser can only seek a video with partial (206) responses. So the page plays it from `/stream/<file>` instead: `worker/index.ts` sends `/stream/*` to `worker/stream.ts` ahead of the vinext app, and that reads `public/video/<file>` from the assets binding and sends the bytes asked for. The binding gives no file sizes, so `vite.config.ts` records them at build time (`virtual:video-sizes`).
+Workers static assets answer a Range request with the whole file, and a browser can only seek a video with partial (206) responses. So the page plays it from `/stream/<file>` instead: `worker/index.ts` sends `/stream/*` to `worker/stream.ts`, which reads `public/video/<file>` from the assets binding and sends the bytes asked for. The binding gives no file sizes, so `vite.config.ts` records them at build time (`virtual:video-sizes`).
 
 ## Generated images
 

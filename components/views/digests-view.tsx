@@ -1,6 +1,4 @@
-'use client';
-
-import { useRouter } from 'next/navigation';
+import { useNavigate } from 'react-router';
 import { useMemo } from 'react';
 import { MUTED, SEV, SEVORD, UM, USERS } from '@/lib/constants';
 import { addD, lbl, TODAY } from '@/lib/dates';
@@ -23,7 +21,7 @@ const DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'].map((l, i)
 
 export function DigestsView({ kind: kindIn, date }: { kind?: string; date?: string }) {
   const app = useApp();
-  const router = useRouter();
+  const navigate = useNavigate();
   const kind: Kind = kindIn === 'weekly' ? 'weekly' : 'daily';
   const keys = keysOf(kind);
   const key = date && keys.includes(date) ? date : keys[keys.length - 1];
@@ -38,7 +36,7 @@ export function DigestsView({ kind: kindIn, date }: { kind?: string; date?: stri
   const cc = useMemo(() => USERS.filter(u => u.id !== meId).map(u => ({ ...personOption(u.id), sub: u.email })), [meId]);
   if (!app || !email || !ss) return <Loading />;
   const me = UM[meId];
-  const go = (k: string) => router.push(`/digests/${kind}/${k}`);
+  const go = (k: string) => navigate(`/digests/${kind}/${k}`);
   const set = (patch: Parameters<typeof setSummary>[1]) => setSummary(meId, patch);
   const sundayAfter = addD(TODAY, 7 - new Date(+TODAY.slice(0, 4), +TODAY.slice(5, 7) - 1, +TODAY.slice(8, 10)).getDay());
 
@@ -49,7 +47,7 @@ export function DigestsView({ kind: kindIn, date }: { kind?: string; date?: stri
         <div className="flex min-w-0 flex-[1_1_560px] flex-col gap-6">
           <div className="flex flex-wrap items-center gap-3">
             <div className="max-w-full overflow-x-auto">
-              <Segmented ariaLabel="Digest" items={[{ value: 'daily', label: 'Daily', icon: 'inbox' }, { value: 'weekly', label: 'Weekly', icon: 'calendar' }]} value={kind} onValueChange={v => router.push('/digests/' + v)} />
+              <Segmented ariaLabel="Digest" items={[{ value: 'daily', label: 'Daily', icon: 'inbox' }, { value: 'weekly', label: 'Weekly', icon: 'calendar' }]} value={kind} onValueChange={v => navigate('/digests/' + v)} />
             </div>
             <div className="ml-auto flex items-center gap-2">
               <Button variant="ghost" icon="chevron-left" iconOnly title="Older" onClick={() => i > 0 && go(keys[i - 1])} disabled={i <= 0} />

@@ -1,8 +1,6 @@
-'use client';
-
 import { Background, Controls, Handle, Position, ReactFlow, type Edge, type Node, type NodeProps } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
-import { useRouter } from 'next/navigation';
+import { useNavigate } from 'react-router';
 import { Fragment, useEffect, useMemo, useRef, useState } from 'react';
 import type { GraphEdge, GraphNode } from '@/lib/relations';
 import { Icon } from '../ui/icon';
@@ -66,7 +64,6 @@ function SysNode({ data }: NodeProps<Node<D>>) {
     >
       <Handles />
       <div className="flex items-center gap-2.5">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
         {data.logo ? <img src={s(data.logo)} alt="" className="block flex-none object-contain object-left" style={{ width: hub ? 30 : 28, height: hub ? 26 : 16 }} /> : null}
         <span className="font-[650]" style={{ fontSize: hub ? 16 : 14 }}>{s(data.name)}</span>
       </div>
@@ -108,7 +105,7 @@ const LABEL = { labelStyle: { fontSize: 13, fill: 'oklch(0.4 0.02 290)' }, label
 
 /** Relationship diagram. Columns spread out to use the available width; cards are clickable. */
 export function RelGraph({ nodes, edges, height = 540 }: { nodes: GraphNode[]; edges: GraphEdge[]; height?: number }) {
-  const router = useRouter();
+  const navigate = useNavigate();
   const ref = useRef<HTMLDivElement>(null);
   const [cw, setCw] = useState(0);
   useEffect(() => {
@@ -164,7 +161,7 @@ export function RelGraph({ nodes, edges, height = 540 }: { nodes: GraphNode[]; e
           maxZoom={1.6}
           onNodeClick={(_, n) => {
             const href = (n.data as D).href;
-            if (href) router.push(String(href));
+            if (href) navigate(String(href));
           }}
         >
           <Background gap={20} size={1} color="oklch(0.88 0.01 290)" />

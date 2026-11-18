@@ -1,5 +1,3 @@
-'use client';
-
 import { Fragment, useMemo, useState } from 'react';
 import { fAt } from '@/lib/dates';
 import { av } from '@/lib/people';

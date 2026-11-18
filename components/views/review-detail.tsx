@@ -1,7 +1,4 @@
-'use client';
-
-import NextLink from 'next/link';
-import { useRouter } from 'next/navigation';
+import { Link, useNavigate } from 'react-router';
 import { useMemo, useState } from 'react';
 import { MUTED, RST, TYPE_ICON, UM, USERS } from '@/lib/constants';
 import { setDraft } from '@/lib/drafts';
@@ -32,7 +29,7 @@ import { langOf } from '@/lib/text';
 
 export function ReviewDetail({ id }: { id: string }) {
   const app = useApp();
-  const router = useRouter();
+  const navigate = useNavigate();
   const { flash } = useShell();
   const [confirmDel, setConfirmDel] = useState(false);
   const [note, setNote] = useState('');
@@ -119,12 +116,12 @@ export function ReviewDetail({ id }: { id: string }) {
           </Button>
           {isAuthor || isCR ? (
             <ActionGroup
-              onPrimary={() => router.push(`/reviews/${r.id}/edit`)}
+              onPrimary={() => navigate(`/reviews/${r.id}/edit`)}
               items={[
                 r.status === 'denied' || r.status === 'withdrawn'
                   ? { icon: 'lock', label: 'Withdraw request', sub: r.status === 'withdrawn' ? 'Already withdrawn' : 'Already denied', disabled: true }
                   : { icon: 'archive', label: 'Withdraw request', sub: 'Close without submitting, whatever the review result', onClick: () => setWd({ open: true, reason: '', err: '' }) },
-                { icon: 'copy-plus', label: 'Clone with changes', sub: 'Open a new request prefilled from this one', onClick: () => { setDraft({ kind: 'review', cloneOf: r.id, title: r.title, type: r.type, branch: r.branch, linked: r.linked || null, desc: r.desc }); router.push('/reviews/new'); } },
+                { icon: 'copy-plus', label: 'Clone with changes', sub: 'Open a new request prefilled from this one', onClick: () => { setDraft({ kind: 'review', cloneOf: r.id, title: r.title, type: r.type, branch: r.branch, linked: r.linked || null, desc: r.desc }); navigate('/reviews/new'); } },
                 { icon: 'link-2', label: 'Copy link', onClick: () => { navigator.clipboard?.writeText(location.origin + '/reviews/' + r.id).catch(() => {}); flash('Link copied'); } },
                 { sep: true },
                 { icon: 'trash-2', label: 'Delete', danger: true, onClick: () => setConfirmDel(true) }
@@ -143,7 +140,7 @@ export function ReviewDetail({ id }: { id: string }) {
         />
       </div>
       <ProductPanel pm={rec.pm} />
-      {confirmDel ? <ConfirmDelete id={r.id} noun="review" onCancel={() => setConfirmDel(false)} onConfirm={() => { deleteReview(r.id); flash(r.id + ' deleted'); router.push('/reviews'); }} /> : null}
+      {confirmDel ? <ConfirmDelete id={r.id} noun="review" onCancel={() => setConfirmDel(false)} onConfirm={() => { deleteReview(r.id); flash(r.id + ' deleted'); navigate('/reviews'); }} /> : null}
 
       {r.status === 'pending' && isCR ? (
         <div className="flex flex-wrap items-center gap-5 border-l-[3px] border-accent-bar py-2 pl-[18px]">
@@ -157,7 +154,7 @@ export function ReviewDetail({ id }: { id: string }) {
       {r.status === 'pending' && !isCR ? (
         <div className="flex items-start gap-2 border-l-[3px] border-[oklch(0.88_0.01_290)] py-2 pl-[18px] text-ink-5">
           <Icon name="clock" size={16} style={{ marginTop: 3 }} />
-          <span>Waiting for the code review team to assign reviewers. Switch to a code review team member in <NextLink href="/settings">Settings</NextLink> to assign one.</span>
+          <span>Waiting for the code review team to assign reviewers. Switch to a code review team member in <Link to="/settings">Settings</Link> to assign one.</span>
         </div>
       ) : null}
       {myRv && !myRv.dec && (r.status === 'in_review' || r.status === 'changes') ? (
@@ -349,7 +346,7 @@ export function ReviewDetail({ id }: { id: string }) {
           <div className="grid grid-cols-[88px_minmax(0,1fr)] gap-x-4 gap-y-3.5 border-t border-line pt-6">
             <span className="text-muted">Stream</span><span className="font-mono text-sm break-all">{'//depot/printing/' + r.branch}</span>
             <span className="text-muted">Defect</span>
-            <span>{r.linked ? <NextLink href={'/defects/' + r.linked}>{r.linked}</NextLink> : <span className="text-faint">None</span>}</span>
+            <span>{r.linked ? <Link to={'/defects/' + r.linked}>{r.linked}</Link> : <span className="text-faint">None</span>}</span>
             <span className="text-muted">Submitted</span><span>{fFull(r.submitted)}</span>
             <span className="text-muted">Updated</span><span>{fAt(lastAt(r))}</span>
           </div>

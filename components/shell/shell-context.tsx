@@ -1,5 +1,3 @@
-'use client';
-
 import { createContext, useContext, useEffect, useRef } from 'react';
 
 export type SortState = { k: string; d: 1 | -1 };

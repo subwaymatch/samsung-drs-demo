@@ -1,7 +1,4 @@
-'use client';
-
-import NextLink from 'next/link';
-import { usePathname, useRouter } from 'next/navigation';
+import { Link, useLocation, useNavigate } from 'react-router';
 import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { flushSync } from 'react-dom';
 import { buildNotifs, isUnread, readOf } from '@/lib/notifications';
@@ -41,8 +38,8 @@ function useNarrow() {
 
 export function AppShell({ children }: { children: ReactNode }) {
   const app = useApp();
-  const router = useRouter();
-  const pathname = usePathname() || '/';
+  const navigate = useNavigate();
+  const { pathname } = useLocation();
   const narrow = useNarrow();
   const [ui, setUiState] = useState<UiState>(DEFAULT_UI);
   const [toast, setToast] = useState('');
@@ -121,11 +118,11 @@ export function AppShell({ children }: { children: ReactNode }) {
       }
       if (k === 'n' || k === 'N') {
         e.preventDefault();
-        router.push(pathname.startsWith('/reviews') ? '/reviews/new' : '/defects/new');
+        navigate(pathname.startsWith('/reviews') ? '/reviews/new' : '/defects/new');
         return;
       }
       if (k === '?') {
-        router.push('/settings');
+        navigate('/settings');
         return;
       }
       if ((k === 'j' || k === 'k') && rows.length) {
@@ -148,7 +145,7 @@ export function AppShell({ children }: { children: ReactNode }) {
     };
     document.addEventListener('keydown', onKey);
     return () => document.removeEventListener('keydown', onKey);
-  }, [focusSearch, pathname, router]);
+  }, [focusSearch, navigate, pathname]);
 
   // Keep the keyboard-highlighted row in view.
   useEffect(() => {
@@ -190,9 +187,9 @@ export function AppShell({ children }: { children: ReactNode }) {
           aria-label="Main navigation"
         >
           <div className="flex items-center gap-3 px-2">
-            <NextLink href="/" aria-label="Go to Insights" className="flex-none">
+            <Link to="/" aria-label="Go to Insights" className="flex-none">
               <DrsLogo width={34} label="DRS" />
-            </NextLink>
+            </Link>
             <span aria-hidden className="h-7 w-px flex-none bg-[oklch(0.9_0.01_290)]" />
             <div className="flex min-w-0 flex-col gap-1">
               <SamsungWordmark width={64} />
@@ -207,19 +204,19 @@ export function AppShell({ children }: { children: ReactNode }) {
             shortcut={[modKey, 'K']}
             onPick={href => {
               document.getElementById('gsearch')?.blur();
-              router.push(href);
+              navigate(href);
             }}
           />
           <nav className="flex flex-col gap-1">
             {NAV.map(n => (
-              <NextLink key={n.href} href={n.href} className={'bui-btn ' + (active(n.href) ? 'bui-navActive' : 'bui-nav')} aria-current={active(n.href) ? 'page' : undefined}>
+              <Link key={n.href} to={n.href} className={'bui-btn ' + (active(n.href) ? 'bui-navActive' : 'bui-nav')} aria-current={active(n.href) ? 'page' : undefined}>
                 <Icon name={n.icon} size={16} />
                 <span className="flex-1 text-left">{n.label}</span>
                 {n.href === '/notifications' && counts[n.href] ? (
                   // Center on the digits' cap height, not the font's line box. Proportional figures keep "1" from pushing "13" off-center.
                   <span className={'h-5 min-w-5 content-center rounded-[10px] px-1.5 text-center text-xs font-semibold [text-box:trim-both_cap_alphabetic] ' + (active(n.href) ? 'bg-accent text-white' : 'bg-accent-soft text-accent-ink')}>{counts[n.href]}</span>
                 ) : null}
-              </NextLink>
+              </Link>
             ))}
           </nav>
           <div className="flex-1" />
@@ -231,24 +228,24 @@ export function AppShell({ children }: { children: ReactNode }) {
                   <span className="bui-trunc font-semibold">{me.name}</span>
                   <span className="bui-trunc text-[13px] text-muted">{me.title}</span>
                 </div>
-                <Button variant="ghost" size="sm" icon="log-out" iconOnly title="Sign out" onClick={() => { router.push('/settings'); flash('Sign-out is disabled in this demo. Switch users here instead.'); }} />
+                <Button variant="ghost" size="sm" icon="log-out" iconOnly title="Sign out" onClick={() => { navigate('/settings'); flash('Sign-out is disabled in this demo. Switch users here instead.'); }} />
               </>
             ) : (
               <div className="h-8" />
             )}
           </div>
-          <NextLink href="/about" className="-mt-2 px-1 text-xs leading-normal text-muted no-underline hover:text-accent-ink hover:no-underline">
+          <Link to="/about" className="-mt-2 px-1 text-xs leading-normal text-muted no-underline hover:text-accent-ink hover:no-underline">
             Portfolio demo with mock data. Not affiliated with Samsung Electronics.
-          </NextLink>
+          </Link>
         </aside>
 
         <main ref={mainRef} className="min-w-0 flex-[1_1_auto]">
           <div className={'sticky top-0 z-40 h-14 items-center gap-3 border-b border-line bg-white px-4 ' + (topbar ? 'flex' : 'hidden max-[959px]:flex')}>
             <Button variant="ghost" icon={narrow ? 'menu' : 'panel-left-open'} iconOnly title="Open sidebar" onClick={() => (narrow ? setDrawer(true) : setSideOpen(true))} />
-            <NextLink href="/" aria-label="Go to Insights">
+            <Link to="/" aria-label="Go to Insights">
               <DrsLogo width={26} />
-            </NextLink>
-            <NextLink href="/about" className="rounded-full bg-accent-wash px-2.5 py-1 text-xs font-semibold text-accent-ink no-underline hover:no-underline">Portfolio demo</NextLink>
+            </Link>
+            <Link to="/about" className="rounded-full bg-accent-wash px-2.5 py-1 text-xs font-semibold text-accent-ink no-underline hover:no-underline">Portfolio demo</Link>
             <div className="ml-auto">
               <Button variant="ghost" icon="search" iconOnly title="Search everything" onClick={focusSearch} />
             </div>

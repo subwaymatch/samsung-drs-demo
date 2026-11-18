@@ -1,9 +1,5 @@
-'use client';
-
 // Client-side store. The mock data is generated deterministically in the
-// browser, and only the viewer's edits are saved to localStorage. On the server
-// the snapshot is null, so pages render a lightweight shell and the Worker never
-// generates data.
+// browser, and only the viewer's edits are saved to localStorage.
 
 import { useSyncExternalStore } from 'react';
 import { startClockAfter } from './dates';
@@ -95,7 +91,7 @@ const subscribe = (l: () => void) => {
 };
 const emit = () => listeners.forEach(l => l());
 
-/** The app state, or null while rendering on the server and during hydration. */
+/** The app state. It would be null when rendered outside the browser, which the app no longer does. */
 export function useApp(): AppState | null {
   return useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
 }

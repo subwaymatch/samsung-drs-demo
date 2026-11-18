@@ -22,6 +22,5 @@ export function DrsLogo({ width = 34, label }: { width?: number; label?: string 
 }
 
 export function SamsungWordmark({ width = 64 }: { width?: number }) {
-  // eslint-disable-next-line @next/next/no-img-element
   return <img src="/logos/samsung-wordmark.svg" alt="Samsung" width={width} style={{ width, height: 'auto', display: 'block', filter: 'brightness(0)' }} />;
 }

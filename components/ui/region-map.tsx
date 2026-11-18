@@ -1,5 +1,3 @@
-'use client';
-
 import { useMemo } from 'react';
 import { MAP_ROWS } from '@/lib/region-map';
 

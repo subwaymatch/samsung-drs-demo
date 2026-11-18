@@ -1,6 +1,8 @@
 import { readdirSync, statSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
 import { cloudflare } from '@cloudflare/vite-plugin';
-import vinext from 'vinext';
+import tailwindcss from '@tailwindcss/vite';
+import react from '@vitejs/plugin-react';
 import { defineConfig, type Plugin } from 'vite';
 
 /**
@@ -22,35 +24,10 @@ function videoSizes(): Plugin {
   };
 }
 
+// A single-page React app. The Cloudflare plugin builds the small Worker in
+// worker/ (it serves only /stream/*) and runs it in the dev server and in
+// `vite preview`, so both behave like the deployed site.
 export default defineConfig({
-  plugins: [
-    videoSizes(),
-    vinext(),
-    cloudflare({
-      viteEnvironment: {
-        name: 'rsc',
-        childEnvironments: ['ssr']
-      }
-    })
-  ],
-  // Pre-bundle client dependencies up front. Otherwise the dev server finds
-  // Base UI's per-component entry points one page at a time, re-optimizes, and
-  // the reloaded chunks can end up with a second copy of React.
-  optimizeDeps: {
-    include: [
-      '@base-ui/react/avatar',
-      '@base-ui/react/button',
-      '@base-ui/react/checkbox',
-      '@base-ui/react/combobox',
-      '@base-ui/react/input',
-      '@base-ui/react/menu',
-      '@base-ui/react/preview-card',
-      '@base-ui/react/select',
-      '@base-ui/react/switch',
-      '@base-ui/react/toggle',
-      '@base-ui/react/toggle-group',
-      '@xyflow/react',
-      'lucide-react'
-    ]
-  }
+  plugins: [react(), tailwindcss(), videoSizes(), cloudflare()],
+  resolve: { alias: { '@': fileURLToPath(new URL('.', import.meta.url)) } }
 });

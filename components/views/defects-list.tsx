@@ -1,6 +1,4 @@
-'use client';
-
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useNavigate, useSearchParams } from 'react-router';
 import { useCallback, useMemo, useState, type ReactNode } from 'react';
 import { DST, DST_KEYS, MIG, PS, SEV, SEVORD, UM } from '@/lib/constants';
 import { addD, fDate, nowStr, short, TNOW } from '@/lib/dates';
@@ -31,8 +29,8 @@ export const dStatusOptions = (): Option[] => DST_KEYS.map(k => ({ value: k, lab
 
 export function DefectsList() {
   const app = useApp();
-  const router = useRouter();
-  const sp = useSearchParams();
+  const navigate = useNavigate();
+  const [sp] = useSearchParams();
   const { ui, setUi, kIdx, setKIdx, contentW, flash } = useShell();
   const [ls, setLs] = useListState(
     { scope: ui.dScope, status: ui.dStatus, sort: ui.dSort },
@@ -95,7 +93,7 @@ export function DefectsList() {
   const pg = pagerOf(view ? view.all.length : 0, ls.page, PS);
   const rows = view ? view.all.slice((pg.p - 1) * PS, pg.p * PS) : [];
   const toggle = (id: string, v: boolean) => setSel(s => (v ? [...new Set([...s, id])] : s.filter(x => x !== id)));
-  useKeyRows(rows.map(d => ({ open: () => router.push('/defects/' + d.id), toggle: (v: boolean) => toggle(d.id, v), checked: sel.includes(d.id) })), () => setSel([]));
+  useKeyRows(rows.map(d => ({ open: () => navigate('/defects/' + d.id), toggle: (v: boolean) => toggle(d.id, v), checked: sel.includes(d.id) })), () => setSel([]));
   const engItems = useMemo(() => engineerOptions(), []);
   if (!view) return <Loading />;
 

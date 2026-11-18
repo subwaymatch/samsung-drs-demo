@@ -3,7 +3,7 @@ import { Icon } from '../ui/icon';
 
 const ROWS: [string, string, string][] = [
   ['Original stack', 'layers', 'React and Node.js, styled with Bootstrap and custom CSS. Synced with IBM Rational ClearQuest and ClearCase, Review Board, Perforce, Helix Swarm, Jira and Confluence.'],
-  ['This demo', 'app-window', 'Recreated with modern tools: Vinext (the Next.js API on Vite) with React, Base UI components, Lucide icons and React Flow for the migration and relationship diagrams. Served from Cloudflare Workers; the app runs in the browser, and your changes are saved locally.'],
+  ['This demo', 'app-window', 'Recreated with modern tools: React on Vite, with React Router, Base UI components, Lucide icons and React Flow for the migration and relationship diagrams. Served from Cloudflare Workers; the app runs in the browser, and your changes are saved locally.'],
   ['Mock data', 'database', 'January 2016 to September 2017: about 800 defects and 630 code reviews across 44 printer and copier models, 34 people in 8 teams and 3 migration waves. Generated deterministically, so every visitor starts from the same history.']
 ];
 
