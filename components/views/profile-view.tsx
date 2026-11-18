@@ -1,6 +1,4 @@
-'use client';
-
-import NextLink from 'next/link';
+import { Link } from 'react-router';
 import { useMemo } from 'react';
 import { DEC, DST, MUTED, ROLE, RST, SEV, TM, TYPE_ICON, UM } from '@/lib/constants';
 import { fAt } from '@/lib/dates';
@@ -44,7 +42,7 @@ export function ProfileView({ id }: { id: string }) {
   return (
     <div className="mx-auto flex max-w-[1200px] flex-col gap-8">
       <div className="flex items-center gap-2.5 text-muted">
-        <NextLink href="/teams" className="bui-btn bui-link"><Icon name="arrow-left" size={16} />Teams</NextLink><span>/</span><span>{u.name}</span>
+        <Link to="/teams" className="bui-btn bui-link"><Icon name="arrow-left" size={16} />Teams</Link><span>/</span><span>{u.name}</span>
       </div>
       <div className="flex flex-wrap items-start gap-8">
         <PhotoPlaceholder w={160} h={200} iconSize={48} src={u.photo} title={u.photo ? u.name : 'Photo placeholder'} />

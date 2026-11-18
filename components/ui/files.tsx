@@ -1,5 +1,3 @@
-'use client';
-
 import { useRef, type ChangeEvent } from 'react';
 import type { Attachment } from '@/lib/types';
 import { Button, type ButtonVariant } from './button';
@@ -59,7 +57,6 @@ export function Attachments({ items, onRemove }: { items: Attachment[]; onRemove
                   {a.url ? (
                     k === 'image' ? (
                       <a href={a.url} target="_blank" rel="noreferrer" className="block h-full w-full">
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img src={a.url} alt={a.name} className="block h-full w-full object-cover" />
                       </a>
                     ) : (

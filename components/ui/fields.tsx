@@ -1,5 +1,3 @@
-'use client';
-
 import { Input as BaseInput } from '@base-ui/react/input';
 import { useRef, useState, type KeyboardEvent } from 'react';
 import type { Option } from '@/lib/types';

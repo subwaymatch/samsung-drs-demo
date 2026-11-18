@@ -1,6 +1,4 @@
-'use client';
-
-import { useRouter } from 'next/navigation';
+import { useNavigate } from 'react-router';
 import { useEffect, useMemo, useState, type ReactNode } from 'react';
 import { TM, UM } from '@/lib/constants';
 import { userOptions } from '@/lib/people';
@@ -21,7 +19,7 @@ const Row = ({ title, sub, children }: { title: string; sub: string; children: R
 
 export function SettingsView() {
   const app = useApp();
-  const router = useRouter();
+  const navigate = useNavigate();
   const { flash } = useShell();
   const [mod, setMod] = useState('Ctrl');
   useEffect(() => setMod(/mac|iphone|ipad/i.test(navigator.platform || navigator.userAgent) ? '⌘' : 'Ctrl'), []);
@@ -59,7 +57,7 @@ export function SettingsView() {
         </Row>
         <Row title="Reset demo data" sub="Restores the original defects and code reviews. Your edits are discarded.">
           <div className="flex items-start">
-            <Button variant="secondary" icon="refresh-cw" onClick={() => { resetDemo(); router.push('/'); flash('Demo data reset'); }}>Reset demo data</Button>
+            <Button variant="secondary" icon="refresh-cw" onClick={() => { resetDemo(); navigate('/'); flash('Demo data reset'); }}>Reset demo data</Button>
           </div>
         </Row>
       </section>

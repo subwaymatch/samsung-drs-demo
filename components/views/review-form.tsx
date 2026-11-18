@@ -1,7 +1,4 @@
-'use client';
-
-import NextLink from 'next/link';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { Link, useNavigate, useSearchParams } from 'react-router';
 import { useMemo, useState } from 'react';
 import { SEV, TYPES, TYPE_ICON } from '@/lib/constants';
 import { takeDraft } from '@/lib/drafts';
@@ -32,7 +29,7 @@ interface Form {
 
 export function ReviewForm({ id }: { id?: string }) {
   const app = useApp();
-  const sp = useSearchParams();
+  const [sp] = useSearchParams();
   if (!app) return <Loading />;
   const r = id ? app.data.reviews.find(x => x.id === id) : undefined;
   if (id && !r) return <NotFoundView back={{ href: '/reviews', label: 'Code reviews' }} />;
@@ -41,7 +38,7 @@ export function ReviewForm({ id }: { id?: string }) {
 
 function ReviewFormInner({ r, linkedDefect }: { r?: Review; linkedDefect: string | null }) {
   const app = useApp()!;
-  const router = useRouter();
+  const navigate = useNavigate();
   const { flash } = useShell();
   const meId = app.prefs.meId;
   const [clone] = useState(() => (r ? null : takeDraft('review')));
@@ -73,11 +70,11 @@ function ReviewFormInner({ r, linkedDefect }: { r?: Review; linkedDefect: string
       const p = p4Of(rv);
       rv.activity = [A('e', meId, at, 'requested a code review'), A('e', meId, at, `shelved changelist ${p.shelved} and opened Helix Swarm review ${p.swId}`)];
       addReview(rv);
-      router.push('/reviews/' + newId);
+      navigate('/reviews/' + newId);
       flash(newId + ' sent to the code review team, Swarm review ' + p.swId);
     } else if (r) {
       updReview(r.id, x => ({ ...x, title: f.title.trim(), type: f.type, branch: f.branch.trim(), cl, linked: f.linked || '', desc: f.desc, attachments: f.attachments, activity: [...x.activity, A('e', meId, at, 'edited the request')] }));
-      router.push('/reviews/' + r.id);
+      navigate('/reviews/' + r.id);
       flash('Changes saved');
     }
   };
@@ -85,7 +82,7 @@ function ReviewFormInner({ r, linkedDefect }: { r?: Review; linkedDefect: string
   return (
     <div className="mx-auto flex max-w-[760px] flex-col gap-8">
       <div className="flex flex-col gap-3.5">
-        <div className="flex"><NextLink href={back} className="bui-btn bui-link"><Icon name="arrow-left" size={16} />{r ? r.id : 'Code reviews'}</NextLink></div>
+        <div className="flex"><Link to={back} className="bui-btn bui-link"><Icon name="arrow-left" size={16} />{r ? r.id : 'Code reviews'}</Link></div>
         <h1 className="text-2xl font-bold tracking-[-0.02em]">{heading}</h1>
       </div>
       <div className="flex flex-col gap-6">
@@ -103,7 +100,6 @@ function ReviewFormInner({ r, linkedDefect }: { r?: Review; linkedDefect: string
           <span className="text-sm font-semibold text-ink-4">Shelved changelist</span>
           <Input icon="git-commit" mono value={f.cl} onChange={v => set('cl', v)} placeholder="e.g. 1492310 (leave empty to shelve automatically)" ariaLabel="Shelved changelist" />
           <span className="mt-1 flex items-center gap-2 text-sm text-muted">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src="/logos/perforce.svg" alt="" className="block h-3.5 w-auto flex-none" />
             A Helix Swarm review is created from this shelved changelist when you send the request.
           </span>
@@ -118,7 +114,7 @@ function ReviewFormInner({ r, linkedDefect }: { r?: Review; linkedDefect: string
         {err ? <span className="border-l-[3px] border-danger-rule py-1 pl-3.5 text-danger" role="alert">{err}</span> : null}
       </div>
       <div className="flex justify-end gap-2.5 border-t border-line pt-6">
-        <Button variant="secondary" onClick={() => router.push(back)}>Cancel</Button>
+        <Button variant="secondary" onClick={() => navigate(back)}>Cancel</Button>
         <Button variant="primary" icon="check" onClick={save}>{mode === 'new' ? 'Send for review' : 'Save changes'}</Button>
       </div>
     </div>

@@ -1,5 +1,3 @@
-'use client';
-
 import { Checkbox as BaseCheckbox } from '@base-ui/react/checkbox';
 import { Switch as BaseSwitch } from '@base-ui/react/switch';
 import { Toggle } from '@base-ui/react/toggle';

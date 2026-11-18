@@ -1,6 +1,4 @@
-'use client';
-
-import { useRouter } from 'next/navigation';
+import { useNavigate } from 'react-router';
 import { useMemo, useState } from 'react';
 import { DST, RESOLUTION, RESOLUTION_KEYS, RST, SEV, UM, USERS } from '@/lib/constants';
 import { setDraft } from '@/lib/drafts';
@@ -34,7 +32,7 @@ import { langOf } from '@/lib/text';
 
 export function DefectDetail({ id }: { id: string }) {
   const app = useApp();
-  const router = useRouter();
+  const navigate = useNavigate();
   const { flash } = useShell();
   const [confirmDel, setConfirmDel] = useState(false);
   const [linkCl, setLinkCl] = useState(false);
@@ -102,15 +100,15 @@ export function DefectDetail({ id }: { id: string }) {
             {sub ? 'Subscribed' : 'Subscribe'}
           </Button>
           <ActionGroup
-            onPrimary={() => router.push(`/defects/${d.id}/edit`)}
+            onPrimary={() => navigate(`/defects/${d.id}/edit`)}
             items={[
               d.status === 'closed'
                 ? { icon: 'lock-open', label: 'Reopen', sub: 'Set status back to Open', onClick: () => { setStatus('open'); flash(d.id + ' reopened'); } }
                 : d.status === 'resolved'
                   ? { icon: 'lock', label: 'Verify and close', sub: 'Confirm the resolution and close', onClick: () => { setStatus('closed'); flash(d.id + ' closed, ClearQuest record closed'); } }
                   : { icon: 'circle-check', label: 'Resolve as fixed', sub: 'Set status to Resolved', onClick: () => setStatus('resolved', 'fixed') },
-              { icon: 'copy-plus', label: 'Clone with changes', sub: 'Open a new report prefilled from this one', onClick: () => { setDraft({ kind: 'defect', cloneOf: d.id, title: d.title, aff: affToVals(affOf(d)), model: d.model, comp: d.comp, sev: d.sev, status: 'open', fw: d.fw, desc: d.desc, steps: d.steps, assignees: [...d.assignees] }); router.push('/defects/new'); } },
-              { icon: 'git-pull-request', label: 'Request code review', sub: 'Start a review linked to this defect', onClick: () => router.push('/reviews/new?defect=' + d.id) },
+              { icon: 'copy-plus', label: 'Clone with changes', sub: 'Open a new report prefilled from this one', onClick: () => { setDraft({ kind: 'defect', cloneOf: d.id, title: d.title, aff: affToVals(affOf(d)), model: d.model, comp: d.comp, sev: d.sev, status: 'open', fw: d.fw, desc: d.desc, steps: d.steps, assignees: [...d.assignees] }); navigate('/defects/new'); } },
+              { icon: 'git-pull-request', label: 'Request code review', sub: 'Start a review linked to this defect', onClick: () => navigate('/reviews/new?defect=' + d.id) },
               { icon: 'link-2', label: 'Copy link', onClick: () => { navigator.clipboard?.writeText(location.origin + '/defects/' + d.id).catch(() => {}); flash('Link copied'); } },
               { sep: true },
               { icon: 'trash-2', label: 'Delete', danger: true, onClick: () => setConfirmDel(true) }
@@ -129,7 +127,7 @@ export function DefectDetail({ id }: { id: string }) {
       </div>
       <ProductPanel pm={pm} />
       {confirmDel ? (
-        <ConfirmDelete id={d.id} noun="defect" onCancel={() => setConfirmDel(false)} onConfirm={() => { deleteDefect(d.id); flash(d.id + ' deleted'); router.push('/defects'); }} />
+        <ConfirmDelete id={d.id} noun="defect" onCancel={() => setConfirmDel(false)} onConfirm={() => { deleteDefect(d.id); flash(d.id + ' deleted'); navigate('/defects'); }} />
       ) : null}
 
       <div className="flex flex-wrap items-start gap-10">
@@ -189,7 +187,7 @@ export function DefectDetail({ id }: { id: string }) {
           <section className="flex flex-col gap-3 border-t border-line pt-6">
             <div className="flex items-center justify-between gap-3">
               <h2 className="text-base font-[650]">Linked code reviews</h2>
-              <Button variant="ghost" size="sm" icon="git-pull-request" onClick={() => router.push('/reviews/new?defect=' + d.id)}>Request code review</Button>
+              <Button variant="ghost" size="sm" icon="git-pull-request" onClick={() => navigate('/reviews/new?defect=' + d.id)}>Request code review</Button>
             </div>
             <div className="flex flex-col">
               {derived.linked.map(r => (
@@ -207,7 +205,6 @@ export function DefectDetail({ id }: { id: string }) {
             <div className="flex flex-wrap items-center justify-between gap-3">
               <div className="flex flex-col gap-1">
                 <h2 className="flex items-center gap-2.5 text-base font-[650]">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img src="/logos/perforce.svg" alt="" className="block h-[18px] w-auto" />
                   Perforce changelists
                 </h2>

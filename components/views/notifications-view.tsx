@@ -1,6 +1,4 @@
-'use client';
-
-import { useRouter } from 'next/navigation';
+import { useNavigate } from 'react-router';
 import { useMemo, useState } from 'react';
 import { PS } from '@/lib/constants';
 import { fAt, nowStr } from '@/lib/dates';
@@ -18,7 +16,7 @@ import { Segmented } from '../ui/toggles';
 
 export function NotificationsView() {
   const app = useApp();
-  const router = useRouter();
+  const navigate = useNavigate();
   const { ui, setUi, kIdx, setKIdx, flash } = useShell();
   const [page, setPage] = useState(1);
   const data = app?.data, prefs = app?.prefs;
@@ -35,7 +33,7 @@ export function NotificationsView() {
   };
   const open = (n: (typeof nl)[number]) => {
     markRead(n);
-    router.push(n.href);
+    navigate(n.href);
   };
   useKeyRows(rows.map(n => ({ open: () => open(n) })));
   if (!app) return <Loading />;

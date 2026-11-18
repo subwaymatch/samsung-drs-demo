@@ -1,6 +1,4 @@
-'use client';
-
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useNavigate, useSearchParams } from 'react-router';
 import { useCallback, useMemo, type ReactNode } from 'react';
 import { DEC, PS, RST, RST_KEYS, TYPE_ICON, UM } from '@/lib/constants';
 import { fDate } from '@/lib/dates';
@@ -25,8 +23,8 @@ import { langOf } from '@/lib/text';
 
 export function ReviewsList() {
   const app = useApp();
-  const router = useRouter();
-  const sp = useSearchParams();
+  const navigate = useNavigate();
+  const [sp] = useSearchParams();
   const { ui, setUi, kIdx, setKIdx, contentW } = useShell();
   const [ls, setLs] = useListState(
     { scope: ui.rScope, status: ui.rStatus, sort: ui.rSort },
@@ -83,7 +81,7 @@ export function ReviewsList() {
 
   const pg = pagerOf(view ? view.all.length : 0, ls.page, PS);
   const rows = view ? view.all.slice((pg.p - 1) * PS, pg.p * PS) : [];
-  useKeyRows(rows.map(r => ({ open: () => router.push('/reviews/' + r.id) })));
+  useKeyRows(rows.map(r => ({ open: () => navigate('/reviews/' + r.id) })));
   if (!view || !data) return <Loading />;
 
   const cards = contentW > 0 && contentW < 640, compact = contentW > 0 && contentW < 1100;

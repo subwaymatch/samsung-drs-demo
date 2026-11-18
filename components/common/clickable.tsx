@@ -1,6 +1,4 @@
-'use client';
-
-import Link from 'next/link';
+import { Link } from 'react-router';
 import { useId, type CSSProperties, type KeyboardEvent, type ReactNode } from 'react';
 
 /**
@@ -30,8 +28,7 @@ export function Clickable({ href, onOpen, children, className = '', style, title
     return (
       <div id={id} data-krow={krow} className={'clk ' + (positioned ? '' : 'relative ') + className} style={style} {...tipProps}>
         <Link
-          href={href}
-          prefetch={false}
+          to={href}
           className="clk-link focus-ring"
           title={title}
           aria-label={ariaLabel}

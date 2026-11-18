@@ -6,8 +6,7 @@ import { copyRange, parseRange } from '../lib/byte-range';
  * Workers static assets send the whole file even for a Range request, and a
  * video player can only seek with partial (206) responses. The file stays a
  * static asset; this reads it from the assets binding and sends the bytes
- * asked for. It runs before the vinext app, which would pass a long response
- * through JavaScript chunk by chunk.
+ * asked for.
  */
 export async function serveStream(req: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
   if (req.method !== 'GET' && req.method !== 'HEAD') return new Response(null, { status: 405, headers: { Allow: 'GET, HEAD' } });

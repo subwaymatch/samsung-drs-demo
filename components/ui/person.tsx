@@ -1,8 +1,6 @@
-'use client';
-
 import { Avatar as BaseAvatar } from '@base-ui/react/avatar';
 import { PreviewCard } from '@base-ui/react/preview-card';
-import NextLink from 'next/link';
+import { Link } from 'react-router';
 import type { PersonView } from '@/lib/types';
 import { Icon } from './icon';
 import { langOf } from '@/lib/text';
@@ -26,7 +24,7 @@ export function Person({ person, size = 28, showName }: { person: PersonView; si
         className="bui-person"
         aria-label={person.name}
         onClick={e => e.stopPropagation()}
-        render={<NextLink href={person.href} />}
+        render={<Link to={person.href} />}
       >
         <Avatar person={person} size={size} />
         {showName ? <span lang={langOf(person.name)} className="bui-trunc font-[550]">{person.name}</span> : null}
@@ -49,9 +47,9 @@ export function Person({ person, size = 28, showName }: { person: PersonView; si
                 <span className="bui-trunc">{person.email}</span>
               </a>
             ) : null}
-            <NextLink href={person.href} className="flex items-center gap-1.5 border-t border-[oklch(0.94_0.008_290)] pt-3 font-[550]">
+            <Link to={person.href} className="flex items-center gap-1.5 border-t border-[oklch(0.94_0.008_290)] pt-3 font-[550]">
               View profile <Icon name="arrow-right" size={14} />
-            </NextLink>
+            </Link>
           </PreviewCard.Popup>
         </PreviewCard.Positioner>
       </PreviewCard.Portal>

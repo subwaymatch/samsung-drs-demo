@@ -19,12 +19,6 @@ interface ReadableStreamBYOBReader {
   readAtLeast?<T extends ArrayBufferView>(minBytes: number, view: T): Promise<ReadableStreamReadResult<T>>;
 }
 
-/** The vinext app (vinext/server/fetch-handler). */
-declare module 'virtual:vinext-worker-entry' {
-  const app: { fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> };
-  export default app;
-}
-
 /** File name to size in bytes for public/video, from vite.config.ts. */
 declare module 'virtual:video-sizes' {
   const sizes: Record<string, number>;

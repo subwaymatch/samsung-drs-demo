@@ -1,7 +1,4 @@
-'use client';
-
-import NextLink from 'next/link';
-import { useRouter } from 'next/navigation';
+import { Link, useNavigate } from 'react-router';
 import { useMemo, useState } from 'react';
 import { COMPS, DST, MM, UM } from '@/lib/constants';
 import { takeDraft } from '@/lib/drafts';
@@ -100,7 +97,7 @@ export function DefectForm({ id }: { id?: string }) {
 
 function DefectFormInner({ d }: { d?: Defect }) {
   const app = useApp()!;
-  const router = useRouter();
+  const navigate = useNavigate();
   const { flash } = useShell();
   const meId = app.prefs.meId;
   const [clone] = useState(() => (d ? null : takeDraft('defect')));
@@ -170,14 +167,14 @@ function DefectFormInner({ d }: { d?: Defect }) {
         id: newId, title: f.title.trim(), affects: affFromVals(f.aff, f.model), model: f.model!, comp: f.comp!, sev: f.sev, status: f.status,
         fw: f.fw.trim() || '-', reporter: meId, assignees: f.assignees, created: at, desc: f.desc.trim(), steps: f.steps.trim(), attachments: f.attachments, activity: act
       });
-      router.push('/defects/' + newId);
+      navigate('/defects/' + newId);
       flash(newId + ' reported, P4 job ' + jobOf(newId) + ' created');
     } else if (d) {
       updDefect(d.id, x => ({
         ...x, title: f.title.trim(), affects: affFromVals(f.aff, f.model), model: f.model!, comp: f.comp!, sev: f.sev, status: f.status, fw: f.fw,
         desc: f.desc, steps: f.steps, assignees: f.assignees, attachments: f.attachments, activity: [...x.activity, A('e', meId, at, 'edited the defect')]
       }));
-      router.push('/defects/' + d.id);
+      navigate('/defects/' + d.id);
       flash('Changes saved');
     }
   };
@@ -185,7 +182,7 @@ function DefectFormInner({ d }: { d?: Defect }) {
   return (
     <div className="mx-auto flex max-w-[760px] flex-col gap-8">
       <div className="flex flex-col gap-3.5">
-        <div className="flex"><NextLink href={back} className="bui-btn bui-link"><Icon name="arrow-left" size={16} />{d ? d.id : 'Defects'}</NextLink></div>
+        <div className="flex"><Link to={back} className="bui-btn bui-link"><Icon name="arrow-left" size={16} />{d ? d.id : 'Defects'}</Link></div>
         <h1 className="text-2xl font-bold tracking-[-0.02em]">{heading}</h1>
       </div>
       <div className="flex flex-col gap-6">
@@ -252,7 +249,7 @@ function DefectFormInner({ d }: { d?: Defect }) {
         </div>
       </div>
       <div className="flex justify-end gap-2.5 border-t border-line pt-6">
-        <Button variant="secondary" onClick={() => { if (keepDraft) saveDraft(null); router.push(back); }}>Cancel</Button>
+        <Button variant="secondary" onClick={() => { if (keepDraft) saveDraft(null); navigate(back); }}>Cancel</Button>
         <Button variant="primary" icon="check" onClick={save}>{mode === 'new' ? 'Report defect' : 'Save changes'}</Button>
       </div>
     </div>

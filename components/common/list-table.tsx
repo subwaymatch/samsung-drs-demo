@@ -1,7 +1,4 @@
-'use client';
-
-import NextLink from 'next/link';
-import { useSearchParams } from 'next/navigation';
+import { Link, useSearchParams } from 'react-router';
 import { useCallback, useEffect, useState, type CSSProperties, type ReactNode } from 'react';
 import type { SortState } from '../shell/shell-context';
 import { Icon } from '../ui/icon';
@@ -32,7 +29,7 @@ const sortFromParam = (v: string | null): SortState | null => (v ? { k: v.replac
  * updated with history.replaceState, so typing a search does not navigate.
  */
 export function useListState(defaults: Omit<ListState, 'q' | 'page'>, onChange?: (s: ListState) => void) {
-  const sp = useSearchParams();
+  const [sp] = useSearchParams();
   const [st, setSt] = useState<ListState>(() => ({
     scope: sp.get('scope') || defaults.scope,
     status: sp.get('status') || defaults.status,
@@ -167,8 +164,8 @@ export function Cell({ area, className = '', children }: { area?: string; classN
 /** The item's link, stretched over its whole row. Ctrl+click opens a new tab. */
 export function RowLink({ href, children }: { href: string; children: ReactNode }) {
   return (
-    <NextLink href={href} prefetch={false} className="row-stretch font-mono text-sm text-muted no-underline hover:no-underline">
+    <Link to={href} className="row-stretch font-mono text-sm text-muted no-underline hover:no-underline">
       {children}
-    </NextLink>
+    </Link>
   );
 }
