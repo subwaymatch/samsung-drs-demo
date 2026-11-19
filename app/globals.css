@@ -1,9 +1,13 @@
-@layer theme, base, components, utilities;
-@import "tailwindcss/theme.css" layer(theme);
+/*
+  Global styles: design tokens, the reset, base element styles and the shared
+  control classes (bui-*). Components style themselves with a CSS Module next
+  to their .tsx file. Those rules are not in a layer, so they take precedence
+  over everything here, whatever their specificity.
+*/
+@layer base, components;
 @import "./reset.css" layer(base);
-@import "tailwindcss/utilities.css" layer(utilities);
 
-@theme {
+:root {
   --font-sans: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
 
@@ -30,7 +34,6 @@
   --color-accent-bar: oklch(0.55 0.18 293);
   --color-danger: oklch(0.52 0.18 25);
   --color-danger-rule: oklch(0.6 0.18 25);
-  --color-good: oklch(0.46 0.12 155);
 }
 
 @layer base {

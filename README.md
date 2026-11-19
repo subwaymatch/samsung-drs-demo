@@ -23,10 +23,18 @@ Switch users in Settings to see each role's permissions: Code Review Team member
 ## Stack
 
 - [Vite](https://vite.dev) and React 19, as a single-page app with [React Router](https://reactrouter.com)
-- [Base UI](https://base-ui.com) components, styled with Tailwind CSS v4
+- [Base UI](https://base-ui.com) components, styled with plain CSS and CSS Modules
 - [Lucide](https://lucide.dev) icons
 - [React Flow](https://reactflow.dev) for the migration and relationship diagrams
 - Cloudflare Workers static assets, through the Cloudflare Vite plugin and Wrangler, plus a small Worker for the video
+
+## Styles
+
+Plain CSS, no framework:
+
+- `app/globals.css` holds the design tokens (`--color-*`, `--font-*` on `:root`), base element styles and the shared control classes (`bui-*` for buttons, inputs, popups and the like). It imports `app/reset.css`, a small reset.
+- Each component has a CSS Module next to it (`defect-detail.tsx` and `defect-detail.module.css`), imported last as `s` and used as `className={s.title}`. `cx` from `lib/cx.ts` combines classes: `cx(s.row, active && s.rowActive)`.
+- The reset and the `bui-*` classes sit in the `base` and `components` cascade layers. Module rules are unlayered, so a component's own styles always win over them, whatever their specificity.
 
 ## Mock data
 

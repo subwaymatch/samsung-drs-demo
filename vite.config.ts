@@ -1,7 +1,6 @@
 import { readdirSync, statSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { cloudflare } from '@cloudflare/vite-plugin';
-import tailwindcss from '@tailwindcss/vite';
 import react from '@vitejs/plugin-react';
 import { defineConfig, type Plugin } from 'vite';
 
@@ -28,6 +27,6 @@ function videoSizes(): Plugin {
 // worker/ (it serves only /stream/*) and runs it in the dev server and in
 // `vite preview`, so both behave like the deployed site.
 export default defineConfig({
-  plugins: [react(), tailwindcss(), videoSizes(), cloudflare()],
+  plugins: [react(), videoSizes(), cloudflare()],
   resolve: { alias: { '@': fileURLToPath(new URL('.', import.meta.url)) } }
 });
