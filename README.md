@@ -35,6 +35,7 @@ Plain CSS, no framework:
 - `app/globals.css` holds the design tokens (`--color-*`, `--font-*` on `:root`), base element styles and the shared control classes (`bui-*` for buttons, inputs, popups and the like). It imports `app/reset.css`, a small reset.
 - Each component has a CSS Module next to it (`defect-detail.tsx` and `defect-detail.module.css`), imported last as `s` and used as `className={s.title}`. `cx` from `lib/cx.ts` combines classes: `cx(s.row, active && s.rowActive)`.
 - The reset and the `bui-*` classes sit in the `base` and `components` cascade layers. Module rules are unlayered, so a component's own styles always win over them, whatever their specificity.
+- The build puts all the CSS into `index.html` as a `<style>` element (`inlineCss` in `vite.config.ts`), so Chrome DevTools can edit any rule even when it is opened after the page has loaded. With a linked stylesheet it has to fetch the file again, and when that fails the rules are read-only until a reload.
 
 ## Mock data
 
