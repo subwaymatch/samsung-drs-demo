@@ -7,6 +7,7 @@ import { Input } from '../ui/fields';
 import { Icon } from '../ui/icon';
 import { Select } from '../ui/select';
 import { langOf } from '@/lib/text';
+import s from './teams-view.module.css';
 
 export function TeamsView() {
   const { ui, setUi } = useShell();
@@ -17,35 +18,35 @@ export function TeamsView() {
   const sites = new Set(USERS.map(u => u.site)).size;
 
   return (
-    <div className="mx-auto flex max-w-[1200px] flex-col gap-8">
+    <div className={s.page}>
       <PageHeader
         title="Teams"
         sub={`${USERS.length} engineers across ${TEAMS.length} teams in ${sites} sites, Suwon and Bangalore`}
         action={
-          <div className="flex flex-wrap gap-3">
-            <div className="w-[240px] max-w-full"><Input icon="search" value={ui.teamQ} onChange={v => setUi({ teamQ: v })} placeholder="Search name, title, email" ariaLabel="Search people" /></div>
-            <div className="w-[300px] max-w-full"><Select ariaLabel="Team" items={filterItems} value={tf} onValueChange={v => setUi({ teamF: v })} /></div>
+          <div className={s.filters}>
+            <div className={s.search}><Input icon="search" value={ui.teamQ} onChange={v => setUi({ teamQ: v })} placeholder="Search name, title, email" ariaLabel="Search people" /></div>
+            <div className={s.teamSelect}><Select ariaLabel="Team" items={filterItems} value={tf} onValueChange={v => setUi({ teamF: v })} /></div>
           </div>
         }
       />
       {teams.map(t => (
-        <section key={t.k} className="flex flex-col gap-7 border-t border-line pt-7">
-          <div className="flex flex-wrap items-baseline justify-between gap-4">
-            <div className="flex flex-col gap-1"><h2 className="text-base font-semibold">{t.name}</h2><span className="text-muted">{t.desc}</span></div>
-            <span className="text-sm text-muted">{t.members.length + (t.members.length === 1 ? ' person' : ' people')}</span>
+        <section key={t.k} className={s.team}>
+          <div className={s.teamHead}>
+            <div className={s.teamHeading}><h2 className={s.teamName}>{t.name}</h2><span className={s.teamDesc}>{t.desc}</span></div>
+            <span className={s.teamCount}>{t.members.length + (t.members.length === 1 ? ' person' : ' people')}</span>
           </div>
-          <div className="grid gap-x-12 gap-y-9 [grid-template-columns:repeat(auto-fill,minmax(min(100%,360px),1fr))]">
+          <div className={s.members}>
             {t.members.map(u => (
-              <div key={u.id} className="flex items-start gap-5">
+              <div key={u.id} className={s.member}>
                 <PhotoPlaceholder w={96} h={120} iconSize={32} src={u.photo} title={u.photo ? u.name : 'Photo placeholder, photos/' + u.id + '.png'} />
-                <div className="flex min-w-0 flex-1 flex-col gap-1.5">
-                  <div className="flex flex-col gap-0.5">
-                    <Link to={'/teams/' + u.id} lang={langOf(u.name)} className="w-max text-base font-semibold text-inherit">{u.name}</Link>
-                    {u.en !== u.name ? <span className="text-sm text-muted">{u.en}</span> : null}
+                <div className={s.memberInfo}>
+                  <div className={s.memberNames}>
+                    <Link to={'/teams/' + u.id} lang={langOf(u.name)} className={s.memberName}>{u.name}</Link>
+                    {u.en !== u.name ? <span className={s.memberEn}>{u.en}</span> : null}
                   </div>
                   <span>{u.title}</span>
-                  <a href={'mailto:' + u.email} className="flex w-max max-w-full items-center gap-1.5 text-sm"><Icon name="mail" size={14} /><span className="truncate">{u.email}</span></a>
-                  <p className="mt-1.5 leading-[1.6] text-pretty text-ink-3">{u.intro}</p>
+                  <a href={'mailto:' + u.email} className={s.memberEmail}><Icon name="mail" size={14} /><span className={s.memberEmailText}>{u.email}</span></a>
+                  <p className={s.memberIntro}>{u.intro}</p>
                 </div>
               </div>
             ))}

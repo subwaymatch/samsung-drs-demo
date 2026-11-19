@@ -19,6 +19,8 @@ import { Person } from '../ui/person';
 import { Select } from '../ui/select';
 import { rangeChip } from './defects-list';
 import { langOf } from '@/lib/text';
+import { cx } from '@/lib/cx';
+import s from './reviews-list.module.css';
 
 
 export function ReviewsList() {
@@ -101,15 +103,15 @@ export function ReviewsList() {
   const go = (patch: Partial<ListState>) => { setLs(patch); setKIdx(-1); };
 
   return (
-    <div className="mx-auto flex max-w-[1200px] flex-col gap-7">
+    <div className={s.page}>
       <PageHeader title="Code reviews" sub="Every code change is reviewed by the code review team before it is submitted" action={<LinkButton href="/reviews/new" variant="primary" icon="git-pull-request">Request review</LinkButton>} />
       <ScopeTabs scopes={view.scopes} value={view.scope} onChange={k => go({ scope: k })} />
-      <div className="flex flex-wrap items-center gap-3">
-        <span className="text-muted">Status</span>
-        <div className="w-[260px] max-w-full max-sm:flex-1">
+      <div className={s.filters}>
+        <span className={s.filterLabel}>Status</span>
+        <div className={s.statusFilter}>
           <Select ariaLabel="Status" items={view.statuses} value={ls.status} onValueChange={v => go({ status: v })} />
         </div>
-        <div className="w-full sm:ml-auto sm:w-[260px]">
+        <div className={s.search}>
           <Input id="listsearch" icon="search" ariaLabel="Search code reviews" value={ls.q} onChange={v => setLs({ q: v })} placeholder="Search ID, title, branch" />
         </div>
       </div>
@@ -121,27 +123,27 @@ export function ReviewsList() {
             thumb: <Cell key="thumb"><Thumb th={thumbOf(rModelId(r, data.defects))} /></Cell>,
             id: <Cell key="id" area={cards ? 'id' : undefined}><RowLink href={'/reviews/' + r.id}>{r.id}</RowLink></Cell>,
             title: (
-              <Cell key="title" area={cards ? 'title' : undefined} className="flex min-w-0 flex-col gap-1">
-                <span lang={langOf(r.title)} className={cards ? 'line-clamp-2 font-[550]' : 'bui-trunc font-[550]'}>{r.title}</span>
-                <span className="bui-trunc font-mono text-sm text-muted">{'//depot/printing/' + r.branch}</span>
+              <Cell key="title" area={cards ? 'title' : undefined} className={s.titleCell}>
+                <span lang={langOf(r.title)} className={cx(s.title, cards ? s.titleClamp : 'bui-trunc')}>{r.title}</span>
+                <span className={cx('bui-trunc', s.branch)}>{'//depot/printing/' + r.branch}</span>
               </Cell>
             ),
-            type: <Cell key="type" className="flex items-center gap-2 whitespace-nowrap"><Icon name={TYPE_ICON[r.type]} color="var(--color-muted)" size={16} />{r.type}</Cell>,
-            author: <Cell key="author" area={cards ? 'au' : undefined} className="flex min-w-0 items-center gap-2.5"><Person person={author} size={26} /><span className="bui-trunc">{author.name}</span></Cell>,
+            type: <Cell key="type" className={s.typeCell}><Icon name={TYPE_ICON[r.type]} color="var(--color-muted)" size={16} />{r.type}</Cell>,
+            author: <Cell key="author" area={cards ? 'au' : undefined} className={s.peopleCell}><Person person={author} size={26} /><span className="bui-trunc">{author.name}</span></Cell>,
             rv: (
-              <Cell key="rv" className="flex min-w-0 items-center gap-2.5">
+              <Cell key="rv" className={s.peopleCell}>
                 {n ? (
                   <>
-                    <span className="flex flex-none gap-1">{r.reviewers.slice(0, 3).map(v => <Person key={v.u} person={av(v.u)} size={26} />)}</span>
+                    <span className={s.reviewerAvatars}>{r.reviewers.slice(0, 3).map(v => <Person key={v.u} person={av(v.u)} size={26} />)}</span>
                     <span className="bui-trunc">{n === 1 ? UM[r.reviewers[0].u].name : `${ap}/${n} approved`}</span>
                   </>
                 ) : (
-                  <span className="text-faint">Not assigned</span>
+                  <span className={s.unassigned}>Not assigned</span>
                 )}
               </Cell>
             ),
             status: <Cell key="status" area={cards ? 'st' : undefined}><StatusLabel {...RST[r.status]} /></Cell>,
-            updated: <Cell key="updated" area={cards ? 'upd' : undefined} className="text-right text-sm text-muted tabular-nums">{cards ? 'Updated ' : ''}{fDate(lastAt(r))}</Cell>
+            updated: <Cell key="updated" area={cards ? 'upd' : undefined} className={s.updated}>{cards ? 'Updated ' : ''}{fDate(lastAt(r))}</Cell>
           };
           return (
             <ListRow key={r.id} krow={i} template={template} areas={areas} style={i === kIdx ? KEY_ROW : { background: 'transparent' }}>

@@ -1,0 +1,89 @@
+.page {
+  margin-inline: auto;
+  display: flex;
+  max-width: 960px;
+  flex-direction: column;
+  gap: 40px;
+}
+.group {
+  display: flex;
+  flex-direction: column;
+}
+.groupTitle {
+  margin-bottom: 8px;
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 600;
+}
+
+/* Row: a setting's label beside its control */
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: 40px;
+  row-gap: 12px;
+  border-top: 1px solid var(--color-line);
+  padding: 24px 0;
+}
+.rowLabel {
+  display: flex;
+  max-width: 320px;
+  flex: 1 1 240px;
+  flex-direction: column;
+  gap: 4px;
+}
+.rowTitle {
+  font-weight: 600;
+}
+.rowSub {
+  font-size: 14px;
+  line-height: 1.5;
+  text-wrap: pretty;
+  color: var(--color-muted);
+}
+.rowControl {
+  display: flex;
+  min-width: 0;
+  flex: 1 1 320px;
+}
+
+/* Controls */
+.diffMode {
+  overflow-x: auto;
+}
+.shortcuts {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  column-gap: 16px;
+  row-gap: 10px;
+  color: var(--color-ink-3);
+}
+.shortcut {
+  display: contents;
+}
+.keys {
+  display: flex;
+  gap: 4px;
+}
+.key {
+  height: 24px;
+  min-width: 24px;
+  font-size: 13px;
+}
+.account {
+  display: flex;
+  width: 100%;
+  max-width: 420px;
+  flex-direction: column;
+  gap: 10px;
+}
+.accountMeta {
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--color-ink-5);
+}
+.reset {
+  display: flex;
+  align-items: flex-start;
+}

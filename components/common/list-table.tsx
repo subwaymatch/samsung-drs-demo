@@ -3,6 +3,8 @@ import { useCallback, useEffect, useState, type CSSProperties, type ReactNode } 
 import type { SortState } from '../shell/shell-context';
 import { Icon } from '../ui/icon';
 import { Select } from '../ui/select';
+import { cx } from '@/lib/cx';
+import s from './list-table.module.css';
 
 // ---- List state in the URL ----
 
@@ -92,12 +94,12 @@ export function ListTable({ label, cols, template, sort, onSort, cards, minWidth
   const ariaSort = (c: Col) => (!c.sort ? undefined : sort.k === c.sort ? (sort.d > 0 ? 'ascending' : 'descending') : 'none');
   const click = (k: string) => onSort(sort.k === k ? { k, d: (-sort.d) as 1 | -1 } : { k, d: k === 'updated' ? -1 : 1 });
   return (
-    <div className="flex flex-col gap-3">
+    <div className={s.table}>
       {cards ? (
-        <div className="flex items-center gap-3">
+        <div className={s.sortBar}>
           {lead}
-          <span className="ml-auto text-sm text-muted">Sort by</span>
-          <div className="min-w-0 flex-1 sm:max-w-[220px]">
+          <span className={s.sortLabel}>Sort by</span>
+          <div className={s.sortSelect}>
             <Select
               ariaLabel="Sort by"
               value={sortToParam(sort)}
@@ -111,20 +113,20 @@ export function ListTable({ label, cols, template, sort, onSort, cards, minWidth
           </div>
         </div>
       ) : null}
-      <div className={cards ? '' : '-mx-3 overflow-x-auto px-3'}>
+      <div className={cards ? undefined : s.scroller}>
         <div role="table" aria-label={label} style={cards ? undefined : { minWidth }}>
-          <div role="rowgroup" className={cards ? 'sr-only' : ''}>
-            <div role="row" className="grid items-center gap-5 border-b border-line py-3 text-sm font-semibold text-muted" style={{ gridTemplateColumns: template }}>
-              {lead !== undefined ? <div role="columnheader" className="flex items-center">{cards ? 'Select' : lead}</div> : null}
+          <div role="rowgroup" className={cards ? 'visually-hidden' : undefined}>
+            <div role="row" className={s.headRow} style={{ gridTemplateColumns: template }}>
+              {lead !== undefined ? <div role="columnheader" className={s.headLead}>{cards ? 'Select' : lead}</div> : null}
               {cols.map(c => (
-                <div key={c.key} role="columnheader" aria-sort={ariaSort(c)} className={c.align === 'end' ? 'flex justify-end' : 'flex'}>
+                <div key={c.key} role="columnheader" aria-sort={ariaSort(c)} className={cx(s.head, c.align === 'end' && s.headEnd)}>
                   {c.sort && !cards ? (
-                    <button type="button" onClick={() => click(c.sort!)} className="flex cursor-pointer items-center gap-1.5 border-0 bg-transparent p-0 text-left text-sm font-semibold text-muted select-none hover:text-ink-2">
+                    <button type="button" onClick={() => click(c.sort!)} className={s.sortButton}>
                       {c.label}
                       <Icon name={sort.k === c.sort ? (sort.d > 0 ? 'arrow-up' : 'arrow-down') : 'chevrons-up-down'} size={13} color={sort.k === c.sort ? 'var(--color-accent-text)' : 'oklch(0.75 0.01 290)'} />
                     </button>
                   ) : c.hidden ? (
-                    <span className="sr-only">{c.label}</span>
+                    <span className="visually-hidden">{c.label}</span>
                   ) : (
                     c.label
                   )}
@@ -132,7 +134,7 @@ export function ListTable({ label, cols, template, sort, onSort, cards, minWidth
               ))}
             </div>
           </div>
-          <div role="rowgroup" className="flex flex-col">{children}</div>
+          <div role="rowgroup" className={s.body}>{children}</div>
         </div>
       </div>
     </div>
@@ -145,7 +147,7 @@ export function ListRow({ krow, template, areas, style, children }: { krow: numb
     <div
       role="row"
       data-krow={krow}
-      className="clk row-link relative grid items-center gap-x-5 gap-y-1.5 border-b border-line-soft py-4 last:border-b-0"
+      className={cx('clk row-link', s.row)}
       style={{ gridTemplateColumns: template, gridTemplateAreas: areas, ...style }}
     >
       {children}
@@ -153,7 +155,7 @@ export function ListRow({ krow, template, areas, style, children }: { krow: numb
   );
 }
 
-export function Cell({ area, className = '', children }: { area?: string; className?: string; children?: ReactNode }) {
+export function Cell({ area, className, children }: { area?: string; className?: string; children?: ReactNode }) {
   return (
     <div role="cell" className={className} style={area ? { gridArea: area } : undefined}>
       {children}
@@ -164,7 +166,7 @@ export function Cell({ area, className = '', children }: { area?: string; classN
 /** The item's link, stretched over its whole row. Ctrl+click opens a new tab. */
 export function RowLink({ href, children }: { href: string; children: ReactNode }) {
   return (
-    <Link to={href} className="row-stretch font-mono text-sm text-muted no-underline hover:no-underline">
+    <Link to={href} className={cx('row-stretch', s.rowLink)}>
       {children}
     </Link>
   );

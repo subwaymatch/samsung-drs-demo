@@ -182,7 +182,8 @@ const sections = {
       frames: tstops.length + 3,
       titleBox: await titleInput.boundingBox(),
       modelBox: await model.boundingBox(),
-      dupes: await rect('Possible duplicates on PS-C3150FR', 'div.flex.flex-col.gap-1\\.5')
+      // The panel is the title's closest div (its class names are hashed CSS Module names).
+      dupes: await rect('Possible duplicates on PS-C3150FR', 'div')
     };
   },
 

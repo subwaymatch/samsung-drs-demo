@@ -1,0 +1,81 @@
+/* ReviewForm */
+.page {
+  margin-inline: auto;
+  display: flex;
+  max-width: 760px;
+  flex-direction: column;
+  gap: 32px;
+}
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+/* Keeps a single button at its own width */
+.buttonRow {
+  display: flex;
+}
+.title {
+  font-size: 24px;
+  line-height: 32px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+.fields {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+.fieldGrid {
+  display: grid;
+  gap: 20px;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.label {
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 600;
+  color: var(--color-ink-4);
+}
+.sub {
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--color-muted);
+}
+.swarmNote {
+  margin-top: 4px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--color-muted);
+}
+.swarmLogo {
+  display: block;
+  height: 14px;
+  width: auto;
+  flex: none;
+}
+.attachments {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.formError {
+  border-left: 3px solid var(--color-danger-rule);
+  padding: 4px 0 4px 14px;
+  color: var(--color-danger);
+}
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  border-top: 1px solid var(--color-line);
+  padding-top: 24px;
+}

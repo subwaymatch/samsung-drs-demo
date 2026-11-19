@@ -20,6 +20,8 @@ import { Icon } from '../ui/icon';
 import { Person } from '../ui/person';
 import { Select } from '../ui/select';
 import { Checkbox } from '../ui/toggles';
+import { cx } from '@/lib/cx';
+import s from './defects-list.module.css';
 
 export const rangeChip = (pre: string, f?: string | null, t?: string | null) =>
   !f ? `${pre} until ${short(addD(t || '', -1))}` : `${pre} ${short(f)} - ${t ? short(addD(t, -1)) : 'now'}`;
@@ -121,15 +123,15 @@ export function DefectsList() {
   };
 
   return (
-    <div className={'mx-auto flex max-w-[1200px] flex-col gap-7' + (sel.length ? ' pb-20' : '')}>
+    <div className={cx(s.page, sel.length > 0 && s.pageSelecting)}>
       <PageHeader title="Defects" sub="Issues reported against printer and copier models" action={<LinkButton href="/defects/new" variant="primary" icon="plus">Report defect</LinkButton>} />
       <ScopeTabs scopes={view.scopes} value={view.scope} onChange={k => go({ scope: k })} />
-      <div className="flex flex-wrap items-center gap-3">
-        <span className="text-muted">Status</span>
-        <div className="w-[260px] max-w-full max-sm:flex-1">
+      <div className={s.filters}>
+        <span className={s.filterLabel}>Status</span>
+        <div className={s.statusFilter}>
           <Select ariaLabel="Status" items={view.statuses} value={ls.status} onValueChange={v => go({ status: v })} />
         </div>
-        <div className="w-full sm:ml-auto sm:w-[260px]">
+        <div className={s.search}>
           <Input id="listsearch" icon="search" ariaLabel="Search defects" value={ls.q} onChange={v => setLs({ q: v })} placeholder="Search ID, title, model" />
         </div>
       </div>
@@ -141,22 +143,22 @@ export function DefectsList() {
           const meta = [affLabel(d), d.comp, c ? plural(c, 'comment') : '', n ? plural(n, 'attachment') : ''].filter(Boolean).join(', ');
           return (
             <ListRow key={d.id} krow={i} template={template} areas={areas} style={i === kIdx ? KEY_ROW : { background: ck ? 'oklch(0.982 0.012 293)' : 'transparent' }}>
-              <Cell area={cards ? 'ck' : undefined} className="flex items-center self-start pt-0.5 sm:self-center sm:pt-0">
+              <Cell area={cards ? 'ck' : undefined} className={s.checkCell}>
                 <Checkbox ariaLabel={'Select ' + d.id} checked={ck} onCheckedChange={v => toggle(d.id, v)} />
               </Cell>
               {!compact ? <Cell><Thumb th={thumbOf(d.model)} /></Cell> : null}
               <Cell area={cards ? 'id' : undefined}><RowLink href={'/defects/' + d.id}>{d.id}</RowLink></Cell>
-              <Cell area={cards ? 'title' : undefined} className="flex min-w-0 flex-col gap-1">
-                <span lang={langOf(d.title)} className={cards ? 'line-clamp-2 font-[550]' : 'bui-trunc font-[550]'}>{d.title}</span>
-                <span className="bui-trunc text-sm text-muted">{meta}</span>
+              <Cell area={cards ? 'title' : undefined} className={s.titleCell}>
+                <span lang={langOf(d.title)} className={cx(s.title, cards ? s.titleClamp : 'bui-trunc')}>{d.title}</span>
+                <span className={cx('bui-trunc', s.meta)}>{meta}</span>
               </Cell>
-              <Cell area={cards ? 'sev' : undefined} className="flex items-center gap-2 whitespace-nowrap"><Icon name={SEV[d.sev].icon} color={SEV[d.sev].c} size={16} />{SEV[d.sev].l}</Cell>
+              <Cell area={cards ? 'sev' : undefined} className={s.sevCell}><Icon name={SEV[d.sev].icon} color={SEV[d.sev].c} size={16} />{SEV[d.sev].l}</Cell>
               <Cell area={cards ? 'st' : undefined}><StatusLabel {...DST[d.status]} /></Cell>
-              <Cell area={cards ? 'as' : undefined} className="flex items-center gap-1">
+              <Cell area={cards ? 'as' : undefined} className={s.assignees}>
                 {d.assignees.slice(0, 3).map(u => <Person key={u} person={av(u)} size={cards ? 24 : 28} />)}
-                {!d.assignees.length ? <span className="text-sm text-faint">Unassigned</span> : null}
+                {!d.assignees.length ? <span className={s.unassigned}>Unassigned</span> : null}
               </Cell>
-              {!compact || cards ? <Cell area={cards ? 'upd' : undefined} className="text-right text-sm text-muted tabular-nums">{cards ? 'Updated ' : ''}{fDate(lastAt(d))}</Cell> : null}
+              {!compact || cards ? <Cell area={cards ? 'upd' : undefined} className={s.updated}>{cards ? 'Updated ' : ''}{fDate(lastAt(d))}</Cell> : null}
             </ListRow>
           );
         })}
@@ -165,13 +167,13 @@ export function DefectsList() {
       <Pagination pg={pg} onPage={p => { go({ page: p }); window.scrollTo(0, 0); }} />
       {sel.length ? (
         <BulkBar count={sel.length} onClear={() => setSel([])}>
-          <div className="w-[170px]">
+          <div className={s.bulkStatus}>
             <Select ariaLabel="Set status" items={dStatusOptions()} value={null} placeholder="Set status" onValueChange={v => bulk(setStatus(v as DefectStatus), n => `${plural(n, 'defect')} set to ${DST[v as DefectStatus].l}`)} />
           </div>
-          <div className="w-[160px]">
+          <div className={s.bulkSeverity}>
             <Select ariaLabel="Set severity" items={sevOptions()} value={null} placeholder="Set severity" onValueChange={v => bulk(x => (x.sev === v ? x : { ...x, sev: v as Severity, activity: [...x.activity, A('e', meId, at(), 'changed severity to ' + SEV[v as Severity].l)] }), n => `${plural(n, 'defect')} set to ${SEV[v as Severity].l}`)} />
           </div>
-          <div className="w-[200px]">
+          <div className={s.bulkAssignee}>
             <Combobox items={engItems} value={null} placeholder="Add assignee" leadIcon="user-plus" resetOnSelect onValueChange={v => { if (v) bulk(x => (x.assignees.includes(v) ? x : { ...x, assignees: [...x.assignees, v], activity: [...x.activity, A('e', meId, at(), 'assigned ' + UM[v].name)] }), n => `${UM[v].name} assigned to ${plural(n, 'defect')}`); }} />
           </div>
         </BulkBar>
@@ -183,8 +185,8 @@ export function DefectsList() {
 /** Actions for the selected rows, floating at the bottom so the list does not move. */
 export function BulkBar({ count, onClear, children }: { count: number; onClear: () => void; children: ReactNode }) {
   return (
-    <div role="toolbar" aria-label="Bulk edit" className="fixed bottom-5 left-1/2 z-40 flex w-max max-w-[calc(100vw-32px)] -translate-x-1/2 flex-wrap items-center gap-3 rounded-xl border border-line bg-white px-4 py-2.5 shadow-[0_8px_24px_oklch(0.2_0.02_290/0.12)]">
-      <span className="mr-1 font-semibold text-accent-ink">{count} selected</span>
+    <div role="toolbar" aria-label="Bulk edit" className={s.bulkBar}>
+      <span className={s.bulkCount}>{count} selected</span>
       {children}
       <Button variant="ghost" size="sm" icon="x" onClick={onClear}>Clear</Button>
     </div>

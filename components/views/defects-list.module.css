@@ -1,0 +1,128 @@
+/* DefectsList */
+.page {
+  margin-inline: auto;
+  display: flex;
+  max-width: 1200px;
+  flex-direction: column;
+  gap: 28px;
+}
+/* Room for the bulk bar while rows are selected */
+.pageSelecting {
+  padding-bottom: 80px;
+}
+
+/* Status filter and search */
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+}
+.filterLabel {
+  color: var(--color-muted);
+}
+.statusFilter {
+  width: 260px;
+  max-width: 100%;
+  @media (width < 640px) {
+    flex: 1;
+  }
+}
+.search {
+  width: 100%;
+  @media (width >= 640px) {
+    margin-left: auto;
+    width: 260px;
+  }
+}
+
+/* Rows */
+.checkCell {
+  display: flex;
+  align-items: center;
+  align-self: flex-start;
+  padding-top: 2px;
+  @media (width >= 640px) {
+    align-self: center;
+    padding-top: 0;
+  }
+}
+.titleCell {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 4px;
+}
+.title {
+  font-weight: 550;
+}
+.titleClamp {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+}
+.meta {
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--color-muted);
+}
+.sevCell {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+}
+.assignees {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.unassigned {
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--color-faint);
+}
+.updated {
+  text-align: right;
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--color-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Bulk edit controls */
+.bulkStatus {
+  width: 170px;
+}
+.bulkSeverity {
+  width: 160px;
+}
+.bulkAssignee {
+  width: 200px;
+}
+
+/* BulkBar */
+.bulkBar {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  z-index: 40;
+  display: flex;
+  width: max-content;
+  max-width: calc(100vw - 32px);
+  translate: -50% 0;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  border-radius: 12px;
+  border: 1px solid var(--color-line);
+  background-color: #fff;
+  padding: 10px 16px;
+  box-shadow: 0 8px 24px oklch(0.2 0.02 290 / 0.12);
+}
+.bulkCount {
+  margin-right: 4px;
+  font-weight: 600;
+  color: var(--color-accent-ink);
+}

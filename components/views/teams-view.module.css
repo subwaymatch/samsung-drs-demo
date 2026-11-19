@@ -1,0 +1,111 @@
+.page {
+  margin-inline: auto;
+  display: flex;
+  max-width: 1200px;
+  flex-direction: column;
+  gap: 32px;
+}
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.search {
+  width: 240px;
+  max-width: 100%;
+}
+.teamSelect {
+  width: 300px;
+  max-width: 100%;
+}
+
+/* A team */
+.team {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  border-top: 1px solid var(--color-line);
+  padding-top: 28px;
+}
+.teamHead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+}
+.teamHeading {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.teamName {
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 600;
+}
+.teamDesc {
+  color: var(--color-muted);
+}
+.teamCount {
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--color-muted);
+}
+.members {
+  display: grid;
+  column-gap: 48px;
+  row-gap: 36px;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 360px), 1fr));
+}
+
+/* A person */
+.member {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+}
+.memberInfo {
+  display: flex;
+  min-width: 0;
+  flex: 1;
+  flex-direction: column;
+  gap: 6px;
+}
+.memberNames {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.memberName {
+  width: max-content;
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 600;
+  color: inherit;
+}
+.memberEn {
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--color-muted);
+}
+.memberEmail {
+  display: flex;
+  width: max-content;
+  max-width: 100%;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  line-height: 20px;
+}
+.memberEmailText {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.memberIntro {
+  margin-top: 6px;
+  line-height: 1.6;
+  text-wrap: pretty;
+  color: var(--color-ink-3);
+}
