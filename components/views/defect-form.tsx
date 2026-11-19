@@ -19,6 +19,7 @@ import { Icon } from '../ui/icon';
 import { Segmented } from '../ui/toggles';
 import { dStatusOptions, sevOptions } from './defects-list';
 import { NotFoundView } from './not-found-view';
+import s from './defect-form.module.css';
 
 interface Form {
   title: string;
@@ -43,15 +44,15 @@ export const Field = ({ label, hint, htmlFor, required, error, children }: { lab
   const text = (
     <>
       {label}
-      {required ? <span className="font-normal text-muted"> (required)</span> : null}
+      {required ? <span className={s.required}> (required)</span> : null}
     </>
   );
-  const lbl = htmlFor ? <label htmlFor={htmlFor} className="text-sm font-semibold text-ink-4">{text}</label> : <span className="text-sm font-semibold text-ink-4">{text}</span>;
+  const lbl = htmlFor ? <label htmlFor={htmlFor} className={s.label}>{text}</label> : <span className={s.label}>{text}</span>;
   return (
-    <div className="flex flex-col gap-2">
-      {hint ? <div className="flex flex-col gap-0.5">{lbl}<span className="text-sm text-pretty text-muted">{hint}</span></div> : lbl}
+    <div className={s.field}>
+      {hint ? <div className={s.labelGroup}>{lbl}<span className={s.hint}>{hint}</span></div> : lbl}
       {children}
-      {error ? <span id={htmlFor + '-err'} className="flex items-center gap-1.5 text-sm text-danger"><Icon name="circle-alert" size={14} />{error}</span> : null}
+      {error ? <span id={htmlFor + '-err'} className={s.error}><Icon name="circle-alert" size={14} />{error}</span> : null}
     </div>
   );
 };
@@ -180,23 +181,23 @@ function DefectFormInner({ d }: { d?: Defect }) {
   };
 
   return (
-    <div className="mx-auto flex max-w-[760px] flex-col gap-8">
-      <div className="flex flex-col gap-3.5">
-        <div className="flex"><Link to={back} className="bui-btn bui-link"><Icon name="arrow-left" size={16} />{d ? d.id : 'Defects'}</Link></div>
-        <h1 className="text-2xl font-semibold tracking-[-0.02em]">{heading}</h1>
+    <div className={s.page}>
+      <div className={s.header}>
+        <div className={s.buttonRow}><Link to={back} className="bui-btn bui-link"><Icon name="arrow-left" size={16} />{d ? d.id : 'Defects'}</Link></div>
+        <h1 className={s.title}>{heading}</h1>
       </div>
-      <div className="flex flex-col gap-6">
+      <div className={s.fields}>
         {restored && !isBlank(f) ? (
-          <div className="flex flex-wrap items-center gap-3 rounded-md bg-accent-wash px-4 py-3">
+          <div className={s.draftNote}>
             <Icon name="history" size={16} color="var(--color-accent-ink)" />
-            <span className="flex-1">Restored the report you had not sent yet</span>
+            <span className={s.draftText}>Restored the report you had not sent yet</span>
             <Button variant="ghost" size="sm" icon="trash-2" onClick={discard}>Discard draft</Button>
           </div>
         ) : null}
         <Field label="Title" htmlFor="df-title" required error={errs.title}>
           <Input id="df-title" value={f.title} onChange={v => set('title', v)} placeholder="[모델명] 증상 요약 / Short summary of the issue" required invalid={!!errs.title} describedBy={errs.title ? 'df-title-err' : undefined} />
         </Field>
-        <div className="grid gap-5 [grid-template-columns:repeat(auto-fit,minmax(200px,1fr))]">
+        <div className={s.fieldGrid}>
           <Field label="Reported on" htmlFor="df-model" required error={errs.model}>
             <Combobox inputId="df-model" items={models} value={f.model} onValueChange={v => set('model', v)} placeholder="Type a model, e.g. PS-M4170FX" ariaLabel="Model" required invalid={!!errs.model} describedBy={errs.model ? 'df-model-err' : undefined} />
           </Field>
@@ -207,26 +208,26 @@ function DefectFormInner({ d }: { d?: Defect }) {
         <Field label="Also affects" hint="Add a whole product line when the defect is in shared firmware, or pick individual models">
           <MultiCombobox items={affItems} value={f.aff} onValueChange={v => set('aff', v)} placeholder="Search product lines and models" ariaLabel="Also affects" />
         </Field>
-        <div className="flex flex-col gap-2">
+        <div className={s.field}>
           {dupes.length ? (
-            <div className="mb-4 flex flex-col gap-1.5 border-l-[3px] border-[oklch(0.73_0.16_55)] py-1 pl-4">
-              <span className="flex items-center gap-2 font-semibold"><Icon name="copy" size={16} color="oklch(0.55 0.15 55)" />Possible duplicates on {f.model}</span>
-              <span className="mb-1 text-sm text-muted">Check these before reporting. Each opens in a new tab so you keep this form.</span>
+            <div className={s.dupes}>
+              <span className={s.dupesTitle}><Icon name="copy" size={16} color="oklch(0.55 0.15 55)" />Possible duplicates on {f.model}</span>
+              <span className={s.dupesHint}>Check these before reporting. Each opens in a new tab so you keep this form.</span>
               {dupes.map(x => (
-                <a key={x.id} href={'/defects/' + x.id} target="_blank" rel="noreferrer" className="grid grid-cols-[96px_minmax(0,1fr)_auto] items-center gap-3.5 border-b border-line-soft py-2.5 text-inherit no-underline last:border-b-0 hover:text-accent-text hover:no-underline">
-                  <span className="font-mono text-sm text-muted">{x.id}</span>
-                  <span className="flex min-w-0 flex-col gap-1"><span className="bui-trunc">{x.title}</span><span className="text-sm text-muted">{x.comp}, reported {fFull(x.created)}</span></span>
-                  <span className="flex items-center gap-1.5 font-[550] whitespace-nowrap" style={{ color: DST[x.status].fg }}><Icon name={DST[x.status].icon} size={14} />{DST[x.status].l}</span>
+                <a key={x.id} href={'/defects/' + x.id} target="_blank" rel="noreferrer" className={s.dupe}>
+                  <span className={s.dupeId}>{x.id}</span>
+                  <span className={s.dupeMain}><span className="bui-trunc">{x.title}</span><span className={s.sub}>{x.comp}, reported {fFull(x.created)}</span></span>
+                  <span className={s.dupeStatus} style={{ color: DST[x.status].fg }}><Icon name={DST[x.status].icon} size={14} />{DST[x.status].l}</span>
                 </a>
               ))}
             </div>
           ) : null}
-          <span className="text-sm font-semibold text-ink-4">Severity</span>
-          <div className="max-w-full overflow-x-auto"><Segmented ariaLabel="Severity" items={sevOptions()} value={f.sev} onValueChange={v => set('sev', v as Severity)} /></div>
+          <span className={s.label}>Severity</span>
+          <div className={s.segmentedScroll}><Segmented ariaLabel="Severity" items={sevOptions()} value={f.sev} onValueChange={v => set('sev', v as Severity)} /></div>
         </div>
         {/* A new report starts open or in progress; it is resolved later, from the defect page. */}
-        <Field label="Status"><div className="max-w-full overflow-x-auto"><Segmented ariaLabel="Status" items={mode === 'new' ? dStatusOptions().filter(o => o.value === 'open' || o.value === 'in_progress') : dStatusOptions()} value={f.status} onValueChange={v => set('status', v as DefectStatus)} /></div></Field>
-        <div className="grid gap-5 [grid-template-columns:repeat(auto-fit,minmax(200px,1fr))]">
+        <Field label="Status"><div className={s.segmentedScroll}><Segmented ariaLabel="Status" items={mode === 'new' ? dStatusOptions().filter(o => o.value === 'open' || o.value === 'in_progress') : dStatusOptions()} value={f.status} onValueChange={v => set('status', v as DefectStatus)} /></div></Field>
+        <div className={s.fieldGrid}>
           <Field label="Firmware / driver version"><Input mono value={f.fw} onChange={v => set('fw', v)} placeholder={f.model && MM[f.model] ? (MM[f.model].series === 'MultiXpress' ? 'V5.10.03.24' : MM[f.model].series === 'ProXpress' ? 'V4.00.03.24' : 'V3.00.03.24') : 'V4.00.03.24'} ariaLabel="Firmware version" /></Field>
         </div>
         <Field label="Description" htmlFor="df-desc" required error={errs.desc}>
@@ -234,21 +235,21 @@ function DefectFormInner({ d }: { d?: Defect }) {
         </Field>
         <Field label="Steps to reproduce"><Textarea value={f.steps} onChange={v => set('steps', v)} rows={4} placeholder="1. ..." ariaLabel="Steps to reproduce" /></Field>
         <Field label="Assignees"><MultiCombobox items={engItems} value={f.assignees} onValueChange={v => set('assignees', v)} placeholder="Type a name" ariaLabel="Assignees" /></Field>
-        <div className="flex flex-col gap-3">
-          <span className="text-sm font-semibold text-ink-4">Attachments</span>
-          <span className="text-sm text-muted">Screenshots, videos and log files</span>
+        <div className={s.attachments}>
+          <span className={s.label}>Attachments</span>
+          <span className={s.sub}>Screenshots, videos and log files</span>
           <Attachments items={f.attachments} onRemove={i => set('attachments', f.attachments.filter((_, j) => j !== i))} />
-          <div className="flex"><FileButton onFiles={list => set('attachments', [...f.attachments, ...list])}>Add files</FileButton></div>
+          <div className={s.buttonRow}><FileButton onFiles={list => set('attachments', [...f.attachments, ...list])}>Add files</FileButton></div>
         </div>
         <div role="alert">
           {tried && Object.keys(errs).length ? (
-            <span className="block border-l-[3px] border-danger-rule py-1 pl-3.5 text-danger">
+            <span className={s.formError}>
               {`Fill in ${listJoin(REQ.filter(r => errs[r.k]).map(r => r.label))} to ${mode === 'new' ? 'report this defect' : 'save'}.`}
             </span>
           ) : null}
         </div>
       </div>
-      <div className="flex justify-end gap-2.5 border-t border-line pt-6">
+      <div className={s.actions}>
         <Button variant="secondary" onClick={() => { if (keepDraft) saveDraft(null); navigate(back); }}>Cancel</Button>
         <Button variant="primary" icon="check" onClick={save}>{mode === 'new' ? 'Report defect' : 'Save changes'}</Button>
       </div>

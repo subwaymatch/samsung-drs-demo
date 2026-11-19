@@ -1,0 +1,168 @@
+/* Field */
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.labelGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.label {
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 600;
+  color: var(--color-ink-4);
+}
+.required {
+  font-weight: 400;
+  color: var(--color-muted);
+}
+.hint {
+  font-size: 14px;
+  line-height: 20px;
+  text-wrap: pretty;
+  color: var(--color-muted);
+}
+.error {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--color-danger);
+}
+
+/* DefectForm */
+.page {
+  margin-inline: auto;
+  display: flex;
+  max-width: 760px;
+  flex-direction: column;
+  gap: 32px;
+}
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+/* Keeps a single button at its own width */
+.buttonRow {
+  display: flex;
+}
+.title {
+  font-size: 24px;
+  line-height: 32px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+.fields {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+.draftNote {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  border-radius: 6px;
+  background-color: var(--color-accent-wash);
+  padding: 12px 16px;
+}
+.draftText {
+  flex: 1;
+}
+.fieldGrid {
+  display: grid;
+  gap: 20px;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+}
+.sub {
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--color-muted);
+}
+
+/* Possible duplicates */
+.dupes {
+  margin-bottom: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  border-left: 3px solid oklch(0.73 0.16 55);
+  padding: 4px 0 4px 16px;
+}
+.dupesTitle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+}
+.dupesHint {
+  margin-bottom: 4px;
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--color-muted);
+}
+.dupe {
+  display: grid;
+  grid-template-columns: 96px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 14px;
+  border-bottom: 1px solid var(--color-line-soft);
+  padding-block: 10px;
+  color: inherit;
+  text-decoration-line: none;
+}
+.dupe:last-child {
+  border-bottom-width: 0;
+}
+.dupe:hover {
+  color: var(--color-accent-text);
+  text-decoration-line: none;
+}
+.dupeId {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--color-muted);
+}
+.dupeMain {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 4px;
+}
+.dupeStatus {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 550;
+  white-space: nowrap;
+}
+
+/* Segmented controls scroll sideways on narrow screens */
+.segmentedScroll {
+  max-width: 100%;
+  overflow-x: auto;
+}
+.attachments {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.formError {
+  display: block;
+  border-left: 3px solid var(--color-danger-rule);
+  padding: 4px 0 4px 14px;
+  color: var(--color-danger);
+}
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  border-top: 1px solid var(--color-line);
+  padding-top: 24px;
+}

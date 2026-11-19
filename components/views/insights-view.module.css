@@ -1,0 +1,857 @@
+/* Shared row and text pieces */
+.sub {
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--color-muted);
+}
+.subNumber {
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--color-muted);
+  font-variant-numeric: tabular-nums;
+}
+.label {
+  font-weight: 550;
+}
+.labelBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.rowValue {
+  text-align: right;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+.numCell {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+.rowList {
+  display: flex;
+  flex-direction: column;
+}
+.empty {
+  padding: 24px 0;
+  color: var(--color-muted);
+}
+.legendItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.syncDot {
+  height: 6px;
+  width: 6px;
+  border-radius: 999px;
+  background: oklch(0.62 0.14 155);
+}
+.swatch {
+  height: 10px;
+  width: 10px;
+  border-radius: 2px;
+}
+.withinTarget {
+  background: oklch(0.62 0.14 155);
+}
+.overTarget {
+  background: oklch(0.78 0.14 75);
+}
+.reported {
+  background: oklch(0.55 0.17 293);
+}
+.resolved {
+  background: oklch(0.68 0.14 160);
+}
+
+/* Bar: a thin outlined progress bar */
+.bar {
+  flex: 1;
+  overflow: hidden;
+  border-radius: 1px;
+  border: 1px solid oklch(0.92 0.02 293);
+}
+.barFill {
+  display: block;
+  height: 100%;
+}
+.barCell,
+.reviewer {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.barPct {
+  width: 36px;
+  text-align: right;
+  font-size: 14px;
+  line-height: 20px;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Page and header */
+.page {
+  margin-inline: auto;
+  display: flex;
+  max-width: 1200px;
+  flex-direction: column;
+  gap: 40px;
+}
+.status {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  column-gap: 24px;
+  row-gap: 8px;
+  padding-bottom: 4px;
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--color-ink-5);
+}
+
+/* System diagram */
+.systems {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.graphFrame {
+  overflow: hidden;
+  border-block: 1px solid oklch(0.92 0.01 290);
+  background-color: var(--color-surface);
+}
+.graphLegend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--color-ink-5);
+}
+.syncLine {
+  width: 24px;
+  border-top: 1.5px dashed oklch(0.55 0.17 293);
+}
+
+/* Two sections side by side, stacking when narrow */
+.twoUp {
+  display: grid;
+  column-gap: 56px;
+  row-gap: 40px;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr));
+}
+
+/* Migration donut */
+.donut {
+  position: relative;
+  width: 100%;
+  max-width: 560px;
+  align-self: center;
+}
+.donutSvg {
+  display: block;
+  height: auto;
+  width: 100%;
+  overflow: visible;
+}
+.donutSlice {
+  cursor: pointer;
+}
+.donutSlice:hover {
+  opacity: 0.8;
+}
+.donutLabel {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  white-space: nowrap;
+}
+.donutLabel:hover {
+  color: var(--color-accent-text);
+}
+.donutLabelName,
+.sysGroupTitle {
+  font-weight: 600;
+}
+.donutCenter {
+  pointer-events: none;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  display: flex;
+  translate: -50% -50%;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+.donutTotal {
+  font-size: 28px;
+  line-height: 1;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Migration by component */
+.migLegend {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 14px;
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--color-ink-5);
+}
+.migLegendItem {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.migSwatch {
+  height: 8px;
+  width: 8px;
+  border-radius: 2px;
+}
+.compBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.compList {
+  position: relative;
+  overflow: hidden;
+}
+.compRows {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.compRow {
+  display: grid;
+  grid-template-columns: 150px minmax(0, 1fr) 32px;
+  align-items: center;
+  gap: 16px;
+}
+.compName {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 2px;
+}
+.compName:hover {
+  color: var(--color-accent);
+}
+.compBar {
+  display: flex;
+  height: 12px;
+  gap: 2px;
+}
+.compSeg {
+  border-radius: 1px;
+}
+.compSeg:hover {
+  opacity: 0.75;
+}
+.compFade {
+  pointer-events: none;
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 96px;
+  background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0), #fff 85%);
+}
+.compMore {
+  display: flex;
+  justify-content: center;
+}
+
+/* Reporting period bar */
+.periodBar {
+  position: sticky;
+  z-index: 30;
+  margin-top: -16px;
+  margin-bottom: -12px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  column-gap: 24px;
+  row-gap: 8px;
+  border-bottom: 1px solid var(--color-line);
+  background-color: #fff;
+}
+.periodShowing {
+  display: flex;
+  min-height: 48px;
+  align-items: center;
+  gap: 10px;
+  color: var(--color-muted);
+}
+.periodLabel {
+  font-weight: 600;
+  color: var(--color-ink);
+  font-variant-numeric: tabular-nums;
+}
+.periodTabs {
+  margin-bottom: -1px;
+  display: flex;
+  align-items: stretch;
+  gap: 24px;
+  align-self: stretch;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: none;
+  @media (width < 640px) {
+    padding-right: 24px;
+    mask-image: linear-gradient(to right, #000 calc(100% - 40px), transparent);
+  }
+}
+.periodTab {
+  display: flex;
+  min-height: 48px;
+  cursor: pointer;
+  align-items: center;
+  gap: 8px;
+  border: 0 solid;
+  border-bottom-width: 2px;
+  background-color: transparent;
+  padding: 0 2px;
+  font-size: 14px;
+  line-height: 20px;
+  white-space: nowrap;
+}
+
+/* KPIs */
+.kpis {
+  display: grid;
+  column-gap: 24px;
+  row-gap: 28px;
+}
+.kpi {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  border: 0 solid var(--color-accent-rule);
+  border-left-width: 2px;
+  padding: 2px 0 2px 20px;
+}
+.kpi:hover {
+  border-color: var(--color-accent-bar);
+}
+.kpiLabel {
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 600;
+  color: var(--color-ink-5);
+}
+.kpiValueRow {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+}
+.kpiValue {
+  font-size: 32px;
+  line-height: 1.1;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+}
+.kpiUnit {
+  font-weight: 550;
+  color: var(--color-muted);
+}
+.kpiDelta {
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 600;
+}
+
+/* Tables: severity targets and the code review team */
+.tableScroll {
+  overflow-x: auto;
+}
+.tgTable {
+  min-width: 720px;
+}
+.teamTable {
+  min-width: 640px;
+}
+.tgHead,
+.tgRow {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) 1fr 1.4fr 1fr 1.4fr 1fr;
+  gap: 20px;
+}
+.teamHead,
+.teamRow {
+  display: grid;
+  grid-template-columns: minmax(0, 1.6fr) 1fr 1fr 1.4fr 1fr;
+  gap: 20px;
+}
+.tgHead,
+.teamHead {
+  border-bottom: 1px solid var(--color-line);
+  padding: 12px 0;
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 600;
+  color: var(--color-muted);
+}
+.tgRow,
+.teamRow {
+  align-items: center;
+  border-bottom: 1px solid var(--color-line-soft);
+  padding: 16px 0;
+}
+.tgRow:last-child,
+.teamRow:last-child {
+  border-bottom-width: 0;
+}
+.numHead {
+  text-align: right;
+}
+.tgSeverity {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 550;
+}
+
+/* Bar charts: code review turnaround and defect flow */
+.tatLegend {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--color-ink-5);
+}
+.flowLegend {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--color-ink-5);
+}
+.tatChart {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.flowChart {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 10px;
+}
+.tatPlot {
+  position: relative;
+  margin-left: 36px;
+  height: 220px;
+}
+.flowPlot {
+  position: relative;
+  margin-left: 32px;
+  min-height: 240px;
+  flex: 1;
+}
+.gridLine {
+  position: absolute;
+  left: 0;
+  right: 0;
+  border-top: 1px solid oklch(0.94 0.006 290);
+}
+.tatTick {
+  position: absolute;
+  top: -8px;
+  left: -36px;
+  width: 28px;
+  text-align: right;
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--color-faint);
+  font-variant-numeric: tabular-nums;
+}
+.flowTick {
+  position: absolute;
+  top: -10px;
+  left: -32px;
+  width: 24px;
+  text-align: right;
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--color-muted);
+  font-variant-numeric: tabular-nums;
+}
+.bars {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: flex-end;
+}
+.tatBar {
+  min-width: 0;
+  flex: 1;
+  border-top-left-radius: 2px;
+  border-top-right-radius: 2px;
+}
+.tatBar:hover,
+.flowBar:hover {
+  opacity: 0.75;
+}
+.targetLine {
+  pointer-events: none;
+  position: absolute;
+  left: 0;
+  right: 0;
+  border-top: 1.5px dashed oklch(0.35 0.01 290);
+}
+.targetLabel {
+  position: absolute;
+  top: -20px;
+  right: 0;
+  background-color: #fff;
+  padding: 0 4px;
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 600;
+  color: oklch(0.3 0.01 290);
+}
+.tatAxis {
+  margin-left: 36px;
+  display: flex;
+}
+.flowAxis {
+  margin-left: 32px;
+  display: flex;
+}
+.tatAxisLabel {
+  display: flex;
+  min-width: 0;
+  flex: 1;
+  overflow: visible;
+  font-size: 14px;
+  line-height: 20px;
+  white-space: nowrap;
+  color: var(--color-muted);
+}
+.flowAxisLabel {
+  min-width: 0;
+  flex: 1;
+  overflow: visible;
+  font-size: 14px;
+  line-height: 20px;
+  white-space: nowrap;
+  color: var(--color-muted);
+}
+.flowPair {
+  display: flex;
+  height: 100%;
+  min-width: 0;
+  flex: 1;
+  align-items: flex-end;
+  gap: 2px;
+}
+.flowBar {
+  flex: 1;
+  border-top-left-radius: 2px;
+  border-top-right-radius: 2px;
+}
+.flowNote,
+.sysRole {
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--color-ink-5);
+}
+
+/* Review outcomes */
+.waffle {
+  display: grid;
+  grid-template-columns: repeat(20, minmax(0, 1fr));
+  gap: 4px;
+}
+.waffleCell {
+  aspect-ratio: 1 / 1;
+  border-radius: 2px;
+}
+.outcome {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border-bottom: 1px solid var(--color-line-soft);
+  padding: 14px 0;
+}
+.outcome:last-child {
+  border-bottom-width: 0;
+}
+.outcomeSwatch {
+  height: 10px;
+  width: 10px;
+  flex: none;
+  border-radius: 2px;
+}
+.outcomeText {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 4px;
+}
+.outcomePct {
+  width: 56px;
+  text-align: right;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Open defects by product line: a heat map */
+.heatLegend {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--color-ink-5);
+}
+.heatScale {
+  height: 8px;
+  width: 72px;
+  border-radius: 2px;
+  background-image: linear-gradient(90deg, oklch(0.95 0.04 293), oklch(0.5 0.19 293));
+}
+.heat {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  overflow-x: auto;
+}
+.heatHead,
+.heatRow,
+.heatFoot {
+  display: grid;
+  grid-template-columns: minmax(150px, 1.9fr) repeat(4, minmax(52px, 1fr)) 44px;
+  align-items: center;
+  gap: 4px;
+}
+.heatHead {
+  padding-bottom: 4px;
+}
+.heatFoot {
+  margin-top: 8px;
+  border-top: 1px solid var(--color-line);
+  padding-top: 12px;
+}
+.heatCol {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 600;
+  white-space: nowrap;
+  color: var(--color-ink-5);
+}
+.heatTotalHead {
+  text-align: right;
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 600;
+  color: var(--color-ink-5);
+}
+.heatModel {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 4px;
+  color: oklch(0.3 0.03 293);
+}
+.heatModel:hover {
+  color: var(--color-accent);
+}
+.heatCell {
+  display: flex;
+  height: 48px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+.heatCell:hover {
+  box-shadow: inset 0 0 0 2px oklch(0.4 0.19 293);
+}
+.heatFootLabel {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.heatFootCell {
+  text-align: center;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Turnaround by change type */
+.types {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.type {
+  display: grid;
+  grid-template-columns: 140px minmax(0, 1fr) 56px;
+  align-items: center;
+  gap: 16px;
+  padding: 4px 0;
+}
+.typeName {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.typeTrack {
+  position: relative;
+  height: 12px;
+}
+.typeFill {
+  height: 100%;
+  border-radius: 1px;
+}
+.typeTarget {
+  position: absolute;
+  top: -5px;
+  bottom: -5px;
+  border-left: 1.5px dashed oklch(0.35 0.01 290);
+}
+
+/* Most active defects and reviews */
+.activeLists {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 40px;
+}
+.active {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  border-top: 1px solid var(--color-line);
+  padding-top: 28px;
+}
+.activeRow {
+  display: grid;
+  align-items: center;
+  gap: 16px;
+  border-bottom: 1px solid var(--color-line-soft);
+  padding: 10px 0;
+}
+.activeRow:last-child {
+  border-bottom-width: 0;
+}
+.activeId {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: 14px;
+  line-height: 20px;
+  white-space: nowrap;
+  color: var(--color-muted);
+}
+.activeText {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 4px;
+}
+.activeCount {
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+  gap: 12px;
+}
+.spark {
+  display: flex;
+  height: 24px;
+  width: 96px;
+  align-items: flex-end;
+  gap: 2px;
+}
+.sparkBar {
+  min-width: 0;
+  flex: 1;
+  border-radius: 1px;
+}
+.activeN {
+  display: flex;
+  min-width: 52px;
+  flex-direction: column;
+  align-items: flex-end;
+  line-height: 1.15;
+}
+.activeNum {
+  font-size: 18px;
+  line-height: 28px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+.activeUnit {
+  font-size: 13px;
+  color: var(--color-muted);
+}
+
+/* SystemList: the diagram as a list, for phones */
+.sysList {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 20px 16px;
+}
+.sysGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.sysCard {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  border-radius: 8px;
+  border: 1px solid var(--color-line);
+  background-color: #fff;
+  padding: 14px 16px;
+}
+.sysCardHub {
+  border-color: oklch(0.75 0.12 293);
+  background-color: var(--color-accent-wash);
+}
+.sysName {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 600;
+}
+.sysLogo {
+  display: block;
+  height: 16px;
+  width: auto;
+}
+.sysMeta {
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 550;
+}
+.sysSync {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--color-muted);
+}
+.sysArrow {
+  display: flex;
+  justify-content: center;
+  color: oklch(0.55 0.17 293);
+}

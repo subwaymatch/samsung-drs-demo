@@ -80,7 +80,7 @@ export function Combobox({ items, value, onValueChange, placeholder, emptyText =
     >
       <BaseCombobox.InputGroup className={'bui-cb' + (dashed ? ' bui-cb-dashed' : '')} style={shortcut ? { flexWrap: 'nowrap', paddingRight: 8 } : undefined}>
         {leadIcon ? (
-          <span className="flex text-[oklch(0.5_0.12_293)]">
+          <span className="bui-cb-lead">
             <Icon name={leadIcon} size={15} />
           </span>
         ) : vObj ? (
@@ -88,7 +88,7 @@ export function Combobox({ items, value, onValueChange, placeholder, emptyText =
         ) : null}
         <BaseCombobox.Input className="bui-cb-input" placeholder={placeholder} id={inputId} aria-label={ariaLabel || placeholder} style={shortcut ? { minWidth: 0 } : undefined} {...formAria({ invalid, describedBy, required })} />
         {shortcut ? (
-          <span aria-hidden className="pointer-events-none flex flex-none gap-1">
+          <span aria-hidden className="bui-cb-keys">
             {shortcut.map(s => <kbd key={s} className="kbd">{s}</kbd>)}
           </span>
         ) : (

@@ -4,11 +4,13 @@ import { DEC, DST, MUTED, ROLE, RST, SEV, TM, TYPE_ICON, UM } from '@/lib/consta
 import { fAt } from '@/lib/dates';
 import { isActiveReview, isOpen } from '@/lib/records';
 import { useApp } from '@/lib/store';
+import { cx } from '@/lib/cx';
 import { Loading, Note, PhotoPlaceholder, StatusLabel } from '../common/basics';
 import { Clickable } from '../common/clickable';
 import { Icon } from '../ui/icon';
 import { NotFoundView } from './not-found-view';
 import { langOf } from '@/lib/text';
+import s from './profile-view.module.css';
 
 export function ProfileView({ id }: { id: string }) {
   const app = useApp();
@@ -40,72 +42,72 @@ export function ProfileView({ id }: { id: string }) {
   ].filter((x): x is { l: string; n: number } => !!x);
 
   return (
-    <div className="mx-auto flex max-w-[1200px] flex-col gap-8">
-      <div className="flex items-center gap-2.5 text-muted">
+    <div className={s.page}>
+      <div className={s.crumbs}>
         <Link to="/teams" className="bui-btn bui-link"><Icon name="arrow-left" size={16} />Teams</Link><span>/</span><span>{u.name}</span>
       </div>
-      <div className="flex flex-wrap items-start gap-8">
+      <div className={s.hero}>
         <PhotoPlaceholder w={160} h={200} iconSize={48} src={u.photo} title={u.photo ? u.name : 'Photo placeholder'} />
-        <div className="flex max-w-[680px] min-w-0 flex-[1_1_360px] flex-col gap-2.5">
-          <div className="flex flex-col gap-1">
-            <h1 lang={langOf(u.name)} className="text-2xl font-semibold tracking-[-0.02em]">{u.name}</h1>
-            {u.en !== u.name ? <span className="text-muted">{u.en}</span> : null}
+        <div className={s.info}>
+          <div className={s.names}>
+            <h1 lang={langOf(u.name)} className={s.name}>{u.name}</h1>
+            {u.en !== u.name ? <span className={s.meta}>{u.en}</span> : null}
           </div>
-          <span className="font-[550]">{u.title}</span>
-          <span className="text-muted">{TM[u.team].name}, {ROLE[u.role]}, {u.site}</span>
-          <a href={'mailto:' + u.email} className="flex w-max max-w-full items-center gap-2"><Icon name="mail" size={15} />{u.email}</a>
-          <p className="mt-2 leading-[1.7] text-pretty text-ink-3">{u.intro}</p>
+          <span className={s.jobTitle}>{u.title}</span>
+          <span className={s.meta}>{TM[u.team].name}, {ROLE[u.role]}, {u.site}</span>
+          <a href={'mailto:' + u.email} className={s.email}><Icon name="mail" size={15} />{u.email}</a>
+          <p className={s.intro}>{u.intro}</p>
           {stats.length ? (
-            <div className="mt-3 flex flex-wrap gap-6">
-              {stats.map(s => (
-                <div key={s.l} className="flex flex-col gap-1 border-l-2 border-accent-rule py-0.5 pl-4">
-                  <span className="text-sm font-semibold text-muted">{s.l}</span>
-                  <span className="text-xl font-semibold tabular-nums">{s.n}</span>
+            <div className={s.stats}>
+              {stats.map(st => (
+                <div key={st.l} className={s.stat}>
+                  <span className={s.statLabel}>{st.l}</span>
+                  <span className={s.statValue}>{st.n}</span>
                 </div>
               ))}
             </div>
           ) : null}
         </div>
       </div>
-      <div className="grid gap-x-14 gap-y-10 [grid-template-columns:repeat(auto-fit,minmax(min(100%,440px),1fr))]">
-        <section className="flex flex-col border-t border-line pt-6">
-          <h2 className="mb-2 text-base font-semibold">Open defects assigned ({v.openD.length})</h2>
+      <div className={s.lists}>
+        <section className={s.list}>
+          <h2 className={s.listTitle}>Open defects assigned ({v.openD.length})</h2>
           {v.openD.slice(0, 8).map(x => (
-            <Clickable key={x.id} href={'/defects/' + x.id} className="row-link grid grid-cols-[16px_92px_minmax(0,1fr)_auto] items-center gap-3 border-b border-line-soft py-3 last:border-b-0">
+            <Clickable key={x.id} href={'/defects/' + x.id} className={cx('row-link', s.row)}>
               <Icon name={SEV[x.sev].icon} size={16} color={SEV[x.sev].c} />
-              <span className="font-mono text-sm text-muted">{x.id}</span>
-              <div className="flex min-w-0 flex-col gap-1"><span className="bui-trunc font-[550]">{x.title}</span><span className="bui-trunc text-sm text-muted">{x.model}, {x.comp}</span></div>
-              <StatusLabel {...DST[x.status]} size={14} className="gap-1.5" />
+              <span className={s.rowId}>{x.id}</span>
+              <div className={s.rowText}><span className={cx('bui-trunc', s.rowTitle)}>{x.title}</span><span className={cx('bui-trunc', s.rowMeta)}>{x.model}, {x.comp}</span></div>
+              <StatusLabel {...DST[x.status]} size={14} />
             </Clickable>
           ))}
-          {!v.openD.length ? <span className="pt-2 text-muted">No open defects assigned</span> : null}
+          {!v.openD.length ? <span className={s.empty}>No open defects assigned</span> : null}
         </section>
-        <section className="flex flex-col border-t border-line pt-6">
-          <h2 className="mb-2 text-base font-semibold">Active code reviews ({v.revs.length})</h2>
+        <section className={s.list}>
+          <h2 className={s.listTitle}>Active code reviews ({v.revs.length})</h2>
           {v.revs.slice(0, 8).map(x => (
-            <Clickable key={x.id} href={'/reviews/' + x.id} className="row-link grid grid-cols-[16px_92px_minmax(0,1fr)_auto] items-center gap-3 border-b border-line-soft py-3 last:border-b-0">
+            <Clickable key={x.id} href={'/reviews/' + x.id} className={cx('row-link', s.row)}>
               <Icon name={TYPE_ICON[x.type]} size={16} color={MUTED} />
-              <span className="font-mono text-sm text-muted">{x.id}</span>
-              <div className="flex min-w-0 flex-col gap-1"><span className="bui-trunc font-[550]">{x.title}</span><span className="bui-trunc text-sm text-muted">{(x.author === id ? 'Author' : 'Reviewer') + ', ' + x.type}</span></div>
-              <StatusLabel {...RST[x.status]} size={14} className="gap-1.5" />
+              <span className={s.rowId}>{x.id}</span>
+              <div className={s.rowText}><span className={cx('bui-trunc', s.rowTitle)}>{x.title}</span><span className={cx('bui-trunc', s.rowMeta)}>{(x.author === id ? 'Author' : 'Reviewer') + ', ' + x.type}</span></div>
+              <StatusLabel {...RST[x.status]} size={14} />
             </Clickable>
           ))}
-          {!v.revs.length ? <span className="pt-2 text-muted">No active code reviews</span> : null}
+          {!v.revs.length ? <span className={s.empty}>No active code reviews</span> : null}
         </section>
       </div>
-      <section className="flex flex-col pt-2">
-        <h2 className="mb-2 text-base font-semibold">Recent activity</h2>
+      <section className={s.activity}>
+        <h2 className={s.listTitle}>Recent activity</h2>
         {v.acts.map(({ x, o, p }, i) => (
-          <Clickable key={o.id + i} href={p + o.id} className="row-link grid grid-cols-[92px_minmax(0,1fr)_auto] items-center gap-3.5 border-b border-line-soft py-3 last:border-b-0">
-            <span className="font-mono text-sm text-muted">{o.id}</span>
-            <div className="flex min-w-0 flex-col gap-1">
+          <Clickable key={o.id + i} href={p + o.id} className={cx('row-link', s.activityRow)}>
+            <span className={s.rowId}>{o.id}</span>
+            <div className={s.rowText}>
               <span className="bui-trunc">{x.t === 'e' ? x.x.charAt(0).toUpperCase() + x.x.slice(1) : x.t === 'd' && x.dec ? DEC[x.dec] : 'Commented' + (x.loc ? ' on ' + x.loc : '')}</span>
-              <span className="bui-trunc text-sm text-muted">{o.title}</span>
+              <span className={cx('bui-trunc', s.rowMeta)}>{o.title}</span>
             </div>
-            <span className="text-sm whitespace-nowrap text-muted">{fAt(x.at)}</span>
+            <span className={s.activityTime}>{fAt(x.at)}</span>
           </Clickable>
         ))}
-        {!v.acts.length ? <Note className="mt-2" icon="clock" title="No activity yet" text="Defects, code reviews and comments from this person will show here" /> : null}
+        {!v.acts.length ? <Note className={s.activityNote} icon="clock" title="No activity yet" text="Defects, code reviews and comments from this person will show here" /> : null}
       </section>
     </div>
   );

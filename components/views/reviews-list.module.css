@@ -1,0 +1,84 @@
+/* ReviewsList */
+.page {
+  margin-inline: auto;
+  display: flex;
+  max-width: 1200px;
+  flex-direction: column;
+  gap: 28px;
+}
+
+/* Status filter and search */
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+}
+.filterLabel {
+  color: var(--color-muted);
+}
+.statusFilter {
+  width: 260px;
+  max-width: 100%;
+  @media (width < 640px) {
+    flex: 1;
+  }
+}
+.search {
+  width: 100%;
+  @media (width >= 640px) {
+    margin-left: auto;
+    width: 260px;
+  }
+}
+
+/* Rows */
+.titleCell {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 4px;
+}
+.title {
+  font-weight: 550;
+}
+.titleClamp {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+}
+.branch {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--color-muted);
+}
+.typeCell {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+}
+/* Author and reviewers: avatars next to a name */
+.peopleCell {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 10px;
+}
+.reviewerAvatars {
+  display: flex;
+  flex: none;
+  gap: 4px;
+}
+.unassigned {
+  color: var(--color-faint);
+}
+.updated {
+  text-align: right;
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--color-muted);
+  font-variant-numeric: tabular-nums;
+}

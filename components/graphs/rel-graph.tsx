@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router';
 import { Fragment, useEffect, useMemo, useRef, useState } from 'react';
 import type { GraphEdge, GraphNode } from '@/lib/relations';
 import { Icon } from '../ui/icon';
+import s from './rel-graph.module.css';
 
 const hidden = { opacity: 0, width: 1, height: 1, minWidth: 0, minHeight: 0, border: 0, background: 'transparent' };
 const SIDES = ['Left', 'Right', 'Top', 'Bottom'] as const;
@@ -20,14 +21,14 @@ const Handles = () => (
 );
 
 type D = Record<string, unknown>;
-const s = (v: unknown) => (v == null ? '' : String(v));
+const str = (v: unknown) => (v == null ? '' : String(v));
 
 function CardNode({ data }: NodeProps<Node<D>>) {
   const c = !!data.center;
   return (
     <div
-      title={s(data.tip)}
-      className="flex flex-col gap-1 rounded-md px-3 py-2.5 text-ink"
+      title={str(data.tip)}
+      className={s.card}
       style={{
         width: Number(data.w) || 220,
         background: c ? 'oklch(0.975 0.018 293)' : '#fff',
@@ -37,12 +38,12 @@ function CardNode({ data }: NodeProps<Node<D>>) {
       }}
     >
       <Handles />
-      <div className="flex items-center justify-between gap-2">
-        <span className="rounded px-2 py-px text-[13px] font-semibold whitespace-nowrap" style={{ color: s(data.kc), background: s(data.kb) }}>{s(data.kind)}</span>
-        {data.status ? <span className="text-sm font-[550] whitespace-nowrap" style={{ color: s(data.sfg) }}>{s(data.status)}</span> : null}
+      <div className={s.cardHead}>
+        <span className={s.cardKind} style={{ color: str(data.kc), background: str(data.kb) }}>{str(data.kind)}</span>
+        {data.status ? <span className={s.cardStatus} style={{ color: str(data.sfg) }}>{str(data.status)}</span> : null}
       </div>
-      <span className="font-mono text-sm text-ink-5">{s(data.id)}</span>
-      {data.title ? <span className="line-clamp-2 text-sm leading-[1.4]">{s(data.title)}</span> : null}
+      <span className={s.cardId}>{str(data.id)}</span>
+      {data.title ? <span className={s.cardTitle}>{str(data.title)}</span> : null}
     </div>
   );
 }
@@ -52,7 +53,7 @@ function SysNode({ data }: NodeProps<Node<D>>) {
   const lines = (data.metaLines as { icon: string; text: string }[] | undefined) || [];
   return (
     <div
-      className="flex flex-col gap-1.5 rounded-lg text-ink"
+      className={s.sys}
       style={{
         width: Number(data.w) || 210,
         padding: hub ? '16px 18px' : '12px 14px',
@@ -63,16 +64,16 @@ function SysNode({ data }: NodeProps<Node<D>>) {
       }}
     >
       <Handles />
-      <div className="flex items-center gap-2.5">
-        {data.logo ? <img src={s(data.logo)} alt="" className="block flex-none object-contain object-left" style={{ width: hub ? 30 : 28, height: hub ? 26 : 16 }} /> : null}
-        <span className="font-semibold" style={{ fontSize: hub ? 16 : 14 }}>{s(data.name)}</span>
+      <div className={s.sysHead}>
+        {data.logo ? <img src={str(data.logo)} alt="" className={s.sysLogo} style={{ width: hub ? 30 : 28, height: hub ? 26 : 16 }} /> : null}
+        <span className={s.sysName} style={{ fontSize: hub ? 16 : 14 }}>{str(data.name)}</span>
       </div>
-      <span className="text-sm leading-[1.4] text-muted">{s(data.role)}</span>
-      {data.meta ? <span className="text-sm font-semibold tabular-nums" style={{ color: hub ? 'oklch(0.42 0.17 293)' : 'oklch(0.3 0.02 290)' }}>{s(data.meta)}</span> : null}
+      <span className={s.sysRole}>{str(data.role)}</span>
+      {data.meta ? <span className={s.sysMeta} style={{ color: hub ? 'oklch(0.42 0.17 293)' : 'oklch(0.3 0.02 290)' }}>{str(data.meta)}</span> : null}
       {lines.length ? (
-        <div className="my-1.5 flex flex-col gap-1.5">
+        <div className={s.sysMetaLines}>
           {lines.map(m => (
-            <span key={m.text} className="flex items-center gap-2 text-sm font-semibold text-accent-ink tabular-nums">
+            <span key={m.text} className={s.sysMetaLine}>
               <Icon name={m.icon} size={15} color="oklch(0.5 0.17 293)" />
               {m.text}
             </span>
@@ -80,9 +81,9 @@ function SysNode({ data }: NodeProps<Node<D>>) {
         </div>
       ) : null}
       {data.sync ? (
-        <span className="flex items-center gap-1.5 text-sm text-ink-5">
-          <span className="h-1.5 w-1.5 flex-none rounded-full bg-[oklch(0.62_0.14_155)]" />
-          {s(data.sync)}
+        <span className={s.sysSync}>
+          <span className={s.sysSyncDot} />
+          {str(data.sync)}
         </span>
       ) : null}
     </div>
@@ -91,9 +92,9 @@ function SysNode({ data }: NodeProps<Node<D>>) {
 
 function LabelNode({ data }: NodeProps<Node<D>>) {
   return (
-    <div className="flex flex-col gap-0.5" style={{ width: Number(data.w) || 210 }}>
-      <span className="text-sm font-semibold text-ink-2">{s(data.label)}</span>
-      {data.note ? <span className="text-sm text-muted">{s(data.note)}</span> : null}
+    <div className={s.label} style={{ width: Number(data.w) || 210 }}>
+      <span className={s.labelTitle}>{str(data.label)}</span>
+      {data.note ? <span className={s.labelNote}>{str(data.note)}</span> : null}
     </div>
   );
 }
@@ -139,7 +140,7 @@ export function RelGraph({ nodes, edges, height = 540 }: { nodes: GraphNode[]; e
     return { laid, rfEdges };
   }, [nodes, edges, cw]);
 
-  const sig = nodes.map(n => n.id + ':' + s(n.data.status) + ':' + s(n.data.meta)).join('|') + '#' + edges.length + '@' + cw;
+  const sig = nodes.map(n => n.id + ':' + str(n.data.status) + ':' + str(n.data.meta)).join('|') + '#' + edges.length + '@' + cw;
   // On phones, show the whole diagram (small) rather than a readable crop.
   const small = cw > 0 && cw < 600;
   return (
@@ -168,7 +169,7 @@ export function RelGraph({ nodes, edges, height = 540 }: { nodes: GraphNode[]; e
           <Controls showInteractive={false} position="bottom-right" />
         </ReactFlow>
       ) : (
-        <div className="flex h-full items-center justify-center text-sm text-muted">Loading map...</div>
+        <div className={s.loading}>Loading map...</div>
       )}
     </div>
   );

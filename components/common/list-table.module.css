@@ -1,0 +1,103 @@
+/* ListTable */
+.table {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Card layout: sort menu above the cards */
+.sortBar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.sortLabel {
+  margin-left: auto;
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--color-muted);
+}
+.sortSelect {
+  min-width: 0;
+  flex: 1;
+  @media (width >= 640px) {
+    max-width: 220px;
+  }
+}
+
+/* Table layout: scrolls sideways when narrower than its columns */
+.scroller {
+  margin-inline: -12px;
+  overflow-x: auto;
+  padding-inline: 12px;
+}
+
+.headRow {
+  display: grid;
+  align-items: center;
+  gap: 20px;
+  border-bottom: 1px solid var(--color-line);
+  padding-block: 12px;
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 600;
+  color: var(--color-muted);
+}
+.headLead {
+  display: flex;
+  align-items: center;
+}
+.head {
+  display: flex;
+}
+.headEnd {
+  justify-content: flex-end;
+}
+.sortButton {
+  display: flex;
+  cursor: pointer;
+  align-items: center;
+  gap: 6px;
+  border-width: 0;
+  background-color: transparent;
+  padding: 0;
+  text-align: left;
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 600;
+  color: var(--color-muted);
+  user-select: none;
+}
+.sortButton:hover {
+  color: var(--color-ink-2);
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+}
+
+/* ListRow */
+.row {
+  display: grid;
+  align-items: center;
+  column-gap: 20px;
+  row-gap: 6px;
+  border-bottom: 1px solid var(--color-line-soft);
+  padding-block: 16px;
+}
+.row:last-child {
+  border-bottom-width: 0;
+}
+
+/* RowLink */
+.rowLink {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--color-muted);
+  text-decoration-line: none;
+}
+.rowLink:hover {
+  text-decoration-line: none;
+}

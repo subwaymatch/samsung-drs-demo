@@ -11,6 +11,8 @@ import { Person } from '../ui/person';
 import { GlobalSearch } from './global-search';
 import { DrsLogo, SamsungWordmark } from './logo';
 import { DEFAULT_UI, ShellContext, type KeyRow, type Shell, type UiState } from './shell-context';
+import { cx } from '@/lib/cx';
+import s from './app-shell.module.css';
 
 const NAV = [
   { href: '/', label: 'Insights', icon: 'bar-chart-3' },
@@ -175,27 +177,22 @@ export function AppShell({ children }: { children: ReactNode }) {
 
   return (
     <ShellContext.Provider value={shell}>
-      <div className={'flex min-h-screen bg-white ' + (topbar ? '[--topbar-h:56px]' : '[--topbar-h:0px] max-[959px]:[--topbar-h:56px]')}>
-        {narrow && drawer ? <div className="fixed inset-0 z-[55] bg-[oklch(0.2_0.03_290/0.28)]" onClick={() => setDrawer(false)} /> : null}
+      <div className={cx(s.shell, topbar && s.shellWithTopbar)}>
+        {narrow && drawer ? <div className={s.scrim} onClick={() => setDrawer(false)} /> : null}
         <aside
-          className={
-            'top-0 left-0 z-[60] h-screen w-[248px] flex-[0_0_248px] flex-col gap-6 overflow-y-auto border-r border-line bg-white px-4 pt-6 pb-5 ' +
-            (narrow
-              ? drawer ? 'fixed flex shadow-[0_0_40px_oklch(0.2_0.03_290/0.18)]' : 'hidden'
-              : sideOpen ? 'sticky flex max-[959px]:hidden' : 'hidden')
-          }
+          className={cx(s.sidebar, narrow ? (drawer ? s.sidebarDrawer : s.sidebarHidden) : sideOpen ? s.sidebarDocked : s.sidebarHidden)}
           aria-label="Main navigation"
         >
-          <div className="flex items-center gap-3 px-2">
-            <Link to="/" aria-label="Go to Insights" className="flex-none">
+          <div className={s.brand}>
+            <Link to="/" aria-label="Go to Insights" className={s.brandLogo}>
               <DrsLogo width={34} label="DRS" />
             </Link>
-            <span aria-hidden className="h-7 w-px flex-none bg-[oklch(0.9_0.01_290)]" />
-            <div className="flex min-w-0 flex-col gap-1">
+            <span aria-hidden className={s.brandRule} />
+            <div className={s.brandText}>
               <SamsungWordmark width={64} />
-              <span className="text-xs leading-none whitespace-nowrap text-muted">Printing Solutions</span>
+              <span className={s.brandTagline}>Printing Solutions</span>
             </div>
-            <div className="ml-auto">
+            <div className={s.trailing}>
               <Button variant="ghost" size="sm" icon="panel-left-close" iconOnly title="Collapse sidebar" onClick={() => (narrow ? setDrawer(false) : setSideOpen(false))} />
             </div>
           </div>
@@ -207,54 +204,54 @@ export function AppShell({ children }: { children: ReactNode }) {
               navigate(href);
             }}
           />
-          <nav className="flex flex-col gap-1">
+          <nav className={s.nav}>
             {NAV.map(n => (
               <Link key={n.href} to={n.href} className={'bui-btn ' + (active(n.href) ? 'bui-navActive' : 'bui-nav')} aria-current={active(n.href) ? 'page' : undefined}>
                 <Icon name={n.icon} size={16} />
-                <span className="flex-1 text-left">{n.label}</span>
+                <span className={s.navLabel}>{n.label}</span>
                 {n.href === '/notifications' && counts[n.href] ? (
                   // Center on the digits' cap height, not the font's line box. Proportional figures keep "1" from pushing "13" off-center.
-                  <span className={'h-5 min-w-5 content-center rounded-[10px] px-1.5 text-center text-xs font-semibold [text-box:trim-both_cap_alphabetic] ' + (active(n.href) ? 'bg-accent text-white' : 'bg-accent-soft text-accent-ink')}>{counts[n.href]}</span>
+                  <span className={cx(s.navCount, active(n.href) && s.navCountActive)}>{counts[n.href]}</span>
                 ) : null}
               </Link>
             ))}
           </nav>
-          <div className="flex-1" />
-          <div className="flex min-w-0 items-center gap-2.5 border-t border-line px-1 pt-4">
+          <div className={s.spacer} />
+          <div className={s.account}>
             {app ? (
               <>
                 <Person person={me} size={32} />
-                <div className="flex min-w-0 flex-1 flex-col gap-0.5">
-                  <span className="bui-trunc font-semibold">{me.name}</span>
-                  <span className="bui-trunc text-[13px] text-muted">{me.title}</span>
+                <div className={s.accountText}>
+                  <span className={cx('bui-trunc', s.accountName)}>{me.name}</span>
+                  <span className={cx('bui-trunc', s.accountTitle)}>{me.title}</span>
                 </div>
                 <Button variant="ghost" size="sm" icon="log-out" iconOnly title="Sign out" onClick={() => { navigate('/settings'); flash('Sign-out is disabled in this demo. Switch users here instead.'); }} />
               </>
             ) : (
-              <div className="h-8" />
+              <div className={s.accountPlaceholder} />
             )}
           </div>
-          <Link to="/about" className="-mt-2 px-1 text-xs leading-normal text-muted no-underline hover:text-accent-ink hover:no-underline">
+          <Link to="/about" className={s.disclaimer}>
             Portfolio demo with mock data. Not affiliated with Samsung Electronics.
           </Link>
         </aside>
 
-        <main ref={mainRef} className="min-w-0 flex-[1_1_auto]">
-          <div className={'sticky top-0 z-40 h-14 items-center gap-3 border-b border-line bg-white px-4 ' + (topbar ? 'flex' : 'hidden max-[959px]:flex')}>
+        <main ref={mainRef} className={s.main}>
+          <div className={cx(s.topbar, topbar && s.topbarShown)}>
             <Button variant="ghost" icon={narrow ? 'menu' : 'panel-left-open'} iconOnly title="Open sidebar" onClick={() => (narrow ? setDrawer(true) : setSideOpen(true))} />
             <Link to="/" aria-label="Go to Insights">
               <DrsLogo width={26} />
             </Link>
-            <Link to="/about" className="rounded-full bg-accent-wash px-2.5 py-1 text-xs font-semibold text-accent-ink no-underline hover:no-underline">Portfolio demo</Link>
-            <div className="ml-auto">
+            <Link to="/about" className={s.demoBadge}>Portfolio demo</Link>
+            <div className={s.trailing}>
               <Button variant="ghost" icon="search" iconOnly title="Search everything" onClick={focusSearch} />
             </div>
           </div>
-          <div className="px-5 pt-6 pb-20 min-[960px]:px-12 min-[960px]:pt-9 min-[960px]:pb-24">{children}</div>
+          <div className={s.content}>{children}</div>
         </main>
 
         {toast ? (
-          <div role="status" className="fixed bottom-7 left-1/2 z-[70] max-w-[calc(100vw-32px)] -translate-x-1/2 rounded bg-[oklch(0.25_0.03_293)] px-5 py-3 text-white shadow-[0_8px_24px_oklch(0.2_0.05_290/0.25)]">
+          <div role="status" className={s.toast}>
             {toast}
           </div>
         ) : null}

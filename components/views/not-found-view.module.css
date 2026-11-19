@@ -1,0 +1,17 @@
+.page {
+  margin: 80px auto;
+  display: flex;
+  max-width: 760px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+}
+.title {
+  font-size: 24px;
+  line-height: 32px;
+  font-weight: 600;
+}
+.text {
+  line-height: 1.7;
+  color: var(--color-muted);
+}

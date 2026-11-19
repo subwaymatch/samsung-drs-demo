@@ -1,0 +1,135 @@
+/* Card node: a record (defect, review, ...) */
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  border-radius: 6px;
+  padding: 10px 12px;
+  color: var(--color-ink);
+}
+.cardHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+.cardKind {
+  border-radius: 4px;
+  padding: 1px 8px;
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.cardStatus {
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 550;
+  white-space: nowrap;
+}
+.cardId {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--color-ink-5);
+}
+.cardTitle {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+/* System node: a connected system, or the hub */
+.sys {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  border-radius: 8px;
+  color: var(--color-ink);
+}
+.sysHead {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.sysLogo {
+  display: block;
+  flex: none;
+  object-fit: contain;
+  object-position: left;
+}
+.sysName {
+  font-weight: 600;
+}
+.sysRole {
+  font-size: 14px;
+  line-height: 1.4;
+  color: var(--color-muted);
+}
+.sysMeta {
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+.sysMetaLines {
+  margin: 6px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.sysMetaLine {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 600;
+  color: var(--color-accent-ink);
+  font-variant-numeric: tabular-nums;
+}
+.sysSync {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--color-ink-5);
+}
+.sysSyncDot {
+  height: 6px;
+  width: 6px;
+  flex: none;
+  border-radius: 999px;
+  background-color: oklch(0.62 0.14 155);
+}
+
+/* Label node: a column heading */
+.label {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.labelTitle {
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 600;
+  color: var(--color-ink-2);
+}
+.labelNote {
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--color-muted);
+}
+
+.loading {
+  display: flex;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--color-muted);
+}

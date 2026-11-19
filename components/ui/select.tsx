@@ -2,6 +2,8 @@ import { Select as BaseSelect } from '@base-ui/react/select';
 import type { Option } from '@/lib/types';
 import { Icon } from './icon';
 import { Lead } from './lead';
+import { cx } from '@/lib/cx';
+import s from './select.module.css';
 
 export function Select({ value, onValueChange, items, placeholder = 'Select...', ariaLabel }: {
   value: string | null;
@@ -42,7 +44,7 @@ export function Select({ value, onValueChange, items, placeholder = 'Select...',
                   <BaseSelect.ItemText>{it.label}</BaseSelect.ItemText>
                   {it.sub ? <span className="bui-item-sub">{it.sub}</span> : null}
                 </span>
-                {it.count !== undefined && it.count !== '' ? <span className="bui-seg-count ml-3">{it.count}</span> : null}
+                {it.count !== undefined && it.count !== '' ? <span className={cx('bui-seg-count', s.count)}>{it.count}</span> : null}
                 <BaseSelect.ItemIndicator className="bui-item-ind">
                   <Icon name="check" size={14} />
                 </BaseSelect.ItemIndicator>

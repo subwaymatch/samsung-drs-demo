@@ -2,6 +2,8 @@ import { useRef, type ChangeEvent } from 'react';
 import type { Attachment } from '@/lib/types';
 import { Button, type ButtonVariant } from './button';
 import { Icon } from './icon';
+import { cx } from '@/lib/cx';
+import s from './files.module.css';
 
 /** Small images are kept as data URLs so they survive a reload; larger files only for this session. */
 const readFile = (f: File) =>
@@ -27,7 +29,7 @@ export function FileButton({ onFiles, children, size, variant = 'secondary' }: {
       <Button variant={variant} size={size} icon="paperclip" onClick={() => ref.current?.click()}>
         {children}
       </Button>
-      <input ref={ref} type="file" multiple accept="image/*,video/*,.txt,.log,.pdf,.zip,.csv,.bin,.dmp,.pcapng" className="hidden" onChange={pick} />
+      <input ref={ref} type="file" multiple accept="image/*,video/*,.txt,.log,.pdf,.zip,.csv,.bin,.dmp,.pcapng" className={s.input} onChange={pick} />
     </>
   );
 }
@@ -46,32 +48,32 @@ export function Attachments({ items, onRemove }: { items: Attachment[]; onRemove
       </button>
     ) : null;
   return (
-    <div className="flex flex-col gap-3">
+    <div className={s.attachments}>
       {media.length ? (
-        <div className="flex flex-wrap gap-4">
+        <div className={s.media}>
           {media.map(([a, i]) => {
             const k = kindOf(a);
             return (
-              <div key={i} className="flex w-[184px] flex-col gap-2">
-                <div className="h-[120px] w-[184px] overflow-hidden rounded border border-[oklch(0.92_0.01_290)]">
+              <div key={i} className={s.mediaItem}>
+                <div className={s.mediaFrame}>
                   {a.url ? (
                     k === 'image' ? (
-                      <a href={a.url} target="_blank" rel="noreferrer" className="block h-full w-full">
-                        <img src={a.url} alt={a.name} className="block h-full w-full object-cover" />
+                      <a href={a.url} target="_blank" rel="noreferrer" className={s.mediaFill}>
+                        <img src={a.url} alt={a.name} className={s.mediaImg} />
                       </a>
                     ) : (
-                      <video src={a.url} controls className="block h-full w-full bg-black object-cover" />
+                      <video src={a.url} controls className={s.mediaVideo} />
                     )
                   ) : (
-                    <div className="grid h-full w-full place-items-center bg-[oklch(0.985_0.006_293)] text-[oklch(0.6_0.08_293)]" title="Sample attachment (no file in this demo)">
+                    <div className={s.mediaEmpty} title="Sample attachment (no file in this demo)">
                       <Icon name={k === 'image' ? 'image' : 'play'} size={24} />
                     </div>
                   )}
                 </div>
-                <div className="flex min-w-0 items-center gap-1.5">
+                <div className={s.mediaCaption}>
                   <Icon name={k === 'image' ? 'image' : 'film'} size={14} color="var(--color-muted)" />
-                  <span className="bui-trunc min-w-0 flex-1" title={a.name}>{a.name}</span>
-                  <span className="whitespace-nowrap text-muted">{fmtSize(a.size)}</span>
+                  <span className={cx('bui-trunc', s.mediaName)} title={a.name}>{a.name}</span>
+                  <span className={s.size}>{fmtSize(a.size)}</span>
                   {rm(i)}
                 </div>
               </div>
@@ -80,14 +82,14 @@ export function Attachments({ items, onRemove }: { items: Attachment[]; onRemove
         </div>
       ) : null}
       {files.map(([a, i]) => (
-        <div key={i} className="flex min-w-0 items-center gap-2.5">
+        <div key={i} className={s.file}>
           <Icon name="file-text" size={16} color="var(--color-muted)" />
           {a.url ? (
-            <a href={a.url} download={a.name} className="bui-trunc min-w-0">{a.name}</a>
+            <a href={a.url} download={a.name} className={cx('bui-trunc', s.fileName)}>{a.name}</a>
           ) : (
-            <span className="bui-trunc min-w-0">{a.name}</span>
+            <span className={cx('bui-trunc', s.fileName)}>{a.name}</span>
           )}
-          <span className="whitespace-nowrap text-muted">{fmtSize(a.size)}</span>
+          <span className={s.size}>{fmtSize(a.size)}</span>
           {rm(i)}
         </div>
       ))}

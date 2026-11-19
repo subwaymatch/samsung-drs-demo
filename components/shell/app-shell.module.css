@@ -1,0 +1,210 @@
+/* Page frame: sidebar + main column. --topbar-h tells sticky page headers how far down to stick. */
+.shell {
+  --topbar-h: 0px;
+  display: flex;
+  min-height: 100vh;
+  background-color: #fff;
+  @media (width < 959px) {
+    --topbar-h: 56px;
+  }
+}
+.shellWithTopbar {
+  --topbar-h: 56px;
+}
+
+/* Mobile drawer backdrop */
+.scrim {
+  position: fixed;
+  inset: 0;
+  z-index: 55;
+  background-color: oklch(0.2 0.03 290 / 0.28);
+}
+
+/* Sidebar */
+.sidebar {
+  top: 0;
+  left: 0;
+  z-index: 60;
+  display: flex;
+  height: 100vh;
+  width: 248px;
+  flex: 0 0 248px;
+  flex-direction: column;
+  gap: 24px;
+  overflow-y: auto;
+  border-right: 1px solid var(--color-line);
+  background-color: #fff;
+  padding: 24px 16px 20px;
+}
+.sidebarDocked {
+  position: sticky;
+  @media (width < 959px) {
+    display: none;
+  }
+}
+.sidebarDrawer {
+  position: fixed;
+  box-shadow: 0 0 40px oklch(0.2 0.03 290 / 0.18);
+}
+.sidebarHidden {
+  display: none;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 8px;
+}
+.brandLogo {
+  flex: none;
+}
+.brandRule {
+  height: 28px;
+  width: 1px;
+  flex: none;
+  background-color: oklch(0.9 0.01 290);
+}
+.brandText {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 4px;
+}
+.brandTagline {
+  font-size: 12px;
+  line-height: 1;
+  white-space: nowrap;
+  color: var(--color-muted);
+}
+.trailing {
+  margin-left: auto;
+}
+
+.nav {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.navLabel {
+  flex: 1;
+  text-align: left;
+}
+/* Unread count. Centered on the digits' cap height, not the font's line box. */
+.navCount {
+  height: 20px;
+  min-width: 20px;
+  align-content: center;
+  border-radius: 10px;
+  background-color: var(--color-accent-soft);
+  padding: 0 6px;
+  text-align: center;
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 600;
+  color: var(--color-accent-ink);
+  text-box: trim-both cap alphabetic;
+}
+.navCountActive {
+  background-color: var(--color-accent);
+  color: #fff;
+}
+
+.spacer {
+  flex: 1;
+}
+
+.account {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 10px;
+  border-top: 1px solid var(--color-line);
+  padding: 16px 4px 0;
+}
+.accountText {
+  display: flex;
+  min-width: 0;
+  flex: 1;
+  flex-direction: column;
+  gap: 2px;
+}
+.accountName {
+  font-weight: 600;
+}
+.accountTitle {
+  font-size: 13px;
+  color: var(--color-muted);
+}
+.accountPlaceholder {
+  height: 32px;
+}
+
+.disclaimer {
+  margin-top: -8px;
+  padding: 0 4px;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--color-muted);
+  text-decoration-line: none;
+}
+.disclaimer:hover {
+  color: var(--color-accent-ink);
+}
+
+/* Main column */
+.main {
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
+/* Top bar: shown when the sidebar is collapsed, and always on narrow screens. */
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  display: none;
+  height: 56px;
+  align-items: center;
+  gap: 12px;
+  border-bottom: 1px solid var(--color-line);
+  background-color: #fff;
+  padding: 0 16px;
+  @media (width < 959px) {
+    display: flex;
+  }
+}
+.topbarShown {
+  display: flex;
+}
+.demoBadge {
+  border-radius: 999px;
+  background-color: var(--color-accent-wash);
+  padding: 4px 10px;
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 600;
+  color: var(--color-accent-ink);
+  text-decoration-line: none;
+}
+
+.content {
+  padding: 24px 20px 80px;
+  @media (width >= 960px) {
+    padding: 36px 48px 96px;
+  }
+}
+
+.toast {
+  position: fixed;
+  bottom: 28px;
+  left: 50%;
+  z-index: 70;
+  max-width: calc(100vw - 32px);
+  translate: -50% 0;
+  border-radius: 4px;
+  background-color: oklch(0.25 0.03 293);
+  padding: 12px 20px;
+  color: #fff;
+  box-shadow: 0 8px 24px oklch(0.2 0.05 290 / 0.25);
+}

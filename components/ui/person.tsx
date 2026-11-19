@@ -5,12 +5,14 @@ import type { PersonView } from '@/lib/types';
 import { Icon } from './icon';
 import { langOf } from '@/lib/text';
 import { smallPhoto } from '@/lib/people';
+import { cx } from '@/lib/cx';
+import s from './person.module.css';
 
 export function Avatar({ person, size = 28 }: { person: Pick<PersonView, 'ini' | 'bg' | 'fg' | 'name'> & { photo?: string }; size?: number }) {
   return (
     <BaseAvatar.Root className="bui-av" title={person.name} style={{ width: size, height: size, color: person.fg, fontSize: Math.round(size * 0.36) }}>
-      {person.photo ? <BaseAvatar.Image src={smallPhoto(person.photo)} alt="" className="h-full w-full object-cover object-[50%_15%]" /> : null}
-      <BaseAvatar.Fallback className="grid h-full w-full place-items-center" style={{ background: person.bg }}>{person.ini}</BaseAvatar.Fallback>
+      {person.photo ? <BaseAvatar.Image src={smallPhoto(person.photo)} alt="" className={s.avatarImg} /> : null}
+      <BaseAvatar.Fallback className={s.avatarFallback} style={{ background: person.bg }}>{person.ini}</BaseAvatar.Fallback>
     </BaseAvatar.Root>
   );
 }
@@ -27,27 +29,27 @@ export function Person({ person, size = 28, showName }: { person: PersonView; si
         render={<Link to={person.href} />}
       >
         <Avatar person={person} size={size} />
-        {showName ? <span lang={langOf(person.name)} className="bui-trunc font-[550]">{person.name}</span> : null}
+        {showName ? <span lang={langOf(person.name)} className={cx('bui-trunc', s.name)}>{person.name}</span> : null}
       </PreviewCard.Trigger>
       <PreviewCard.Portal>
         <PreviewCard.Positioner className="bui-positioner" sideOffset={8}>
           <PreviewCard.Popup className="bui-popup bui-pcard">
-            <div className="flex items-start gap-3.5">
+            <div className={s.cardHead}>
               <Avatar person={person} size={48} />
-              <div className="flex min-w-0 flex-col gap-1">
-                <span lang={langOf(person.name)} className="text-base font-semibold">{person.name}</span>
+              <div className={s.cardText}>
+                <span lang={langOf(person.name)} className={s.cardName}>{person.name}</span>
                 {person.en && person.en !== person.name ? <span className="bui-item-sub">{person.en}</span> : null}
                 <span>{person.title}</span>
                 <span className="bui-item-sub">{person.teamName}</span>
               </div>
             </div>
             {person.email ? (
-              <a href={'mailto:' + person.email} className="flex min-w-0 items-center gap-2">
+              <a href={'mailto:' + person.email} className={s.cardEmail}>
                 <Icon name="mail" size={14} />
                 <span className="bui-trunc">{person.email}</span>
               </a>
             ) : null}
-            <Link to={person.href} className="flex items-center gap-1.5 border-t border-[oklch(0.94_0.008_290)] pt-3 font-[550]">
+            <Link to={person.href} className={s.cardProfile}>
               View profile <Icon name="arrow-right" size={14} />
             </Link>
           </PreviewCard.Popup>
@@ -60,14 +62,14 @@ export function Person({ person, size = 28, showName }: { person: PersonView; si
 /** Overlapping avatars with a "+N" overflow chip. */
 export function PeopleStack({ people, more, moreTip, label }: { people: PersonView[]; more?: string; moreTip?: string; label?: string }) {
   return (
-    <div onClick={e => e.stopPropagation()} role="group" aria-label={label} title={label} className="flex items-center justify-end pl-1.5">
+    <div onClick={e => e.stopPropagation()} role="group" aria-label={label} title={label} className={s.stack}>
       {people.map(p => (
-        <span key={p.id} className="-ml-1.5 flex rounded-full bg-white shadow-[0_0_0_2px_#fff]">
+        <span key={p.id} className={s.stackItem}>
           <Person person={p} size={28} />
         </span>
       ))}
       {more ? (
-        <span title={moreTip} className="-ml-1.5 grid h-7 min-w-7 place-items-center rounded-[14px] bg-[oklch(0.95_0.012_290)] px-1.5 text-xs font-semibold text-ink-4 tabular-nums shadow-[0_0_0_2px_#fff]">
+        <span title={moreTip} className={s.stackMore}>
           {more}
         </span>
       ) : null}

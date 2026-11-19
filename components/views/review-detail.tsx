@@ -26,6 +26,7 @@ import { Segmented } from '../ui/toggles';
 import { linkRelated } from './defect-detail';
 import { NotFoundView } from './not-found-view';
 import { langOf } from '@/lib/text';
+import s from './review-detail.module.css';
 
 export function ReviewDetail({ id }: { id: string }) {
   const app = useApp();
@@ -88,24 +89,24 @@ export function ReviewDetail({ id }: { id: string }) {
   const fetchSwarm = () => {
     const empty = !r.files.length;
     if (empty) upd(x => { const files = genFiles(x, ld ? ld.comp : null); return { ...log(x, `fetched ${files.length} shelved files from Helix Swarm`), files }; });
-    setSynced(s => ({ ...s, swarm: 'just now' }));
+    setSynced(x => ({ ...x, swarm: 'just now' }));
     flash(empty ? 'Fetched shelved files from Helix Swarm' : 'Synced with Helix Swarm');
   };
   const add = r.files.reduce((a, f) => a + f.add, 0), del = r.files.reduce((a, f) => a + f.del, 0);
 
   return (
-    <div className="mx-auto flex max-w-[1200px] flex-col gap-7">
+    <div className={s.page}>
       <Breadcrumb href="/reviews" label="Code reviews" id={r.id} />
-      <div className="flex flex-wrap items-start justify-between gap-5">
-        <div className="flex min-w-0 flex-[1_1_520px] flex-col gap-3">
-          <div className="flex flex-wrap items-center gap-5">
+      <div className={s.header}>
+        <div className={s.headerMain}>
+          <div className={s.badges}>
             <StatusLabel {...st} weight={600} />
-            <span className="flex items-center gap-2"><Icon name={TYPE_ICON[r.type]} color="var(--color-muted)" size={16} />{r.type}</span>
+            <span className={s.type}><Icon name={TYPE_ICON[r.type]} color="var(--color-muted)" size={16} />{r.type}</span>
             <span title={rec.mig.d}><StatusLabel l={rec.mig.l} fg={rec.mig.fg} icon={rec.mig.icon} /></span>
           </div>
-          <h1 lang={langOf(r.title)} className="text-2xl leading-[1.4] font-semibold tracking-[-0.02em] text-pretty">{r.title}</h1>
+          <h1 lang={langOf(r.title)} className={s.title}>{r.title}</h1>
         </div>
-        <div className="flex flex-wrap items-center gap-2.5">
+        <div className={s.actions}>
           <Button
             variant={sub ? 'subOn' : 'secondary'}
             icon={sub ? 'bell-ring' : 'bell'}
@@ -131,7 +132,7 @@ export function ReviewDetail({ id }: { id: string }) {
         </div>
       </div>
 
-      <div className="grid items-start gap-x-14 gap-y-7 border-t border-line pt-5 [grid-template-columns:repeat(auto-fit,minmax(min(100%,440px),1fr))]">
+      <div className={s.overview}>
         <PersonCard label="Requested by" person={av(r.author)} when={'Requested ' + fFull(r.submitted)} />
         <AffectedProducts
           {...derived.aff}
@@ -143,33 +144,33 @@ export function ReviewDetail({ id }: { id: string }) {
       {confirmDel ? <ConfirmDelete id={r.id} noun="review" onCancel={() => setConfirmDel(false)} onConfirm={() => { deleteReview(r.id); flash(r.id + ' deleted'); navigate('/reviews'); }} /> : null}
 
       {r.status === 'pending' && isCR ? (
-        <div className="flex flex-wrap items-center gap-5 border-l-[3px] border-accent-bar py-2 pl-5">
-          <div className="flex flex-[1_1_300px] flex-col gap-1">
-            <span className="flex items-center gap-2 font-semibold text-accent-ink"><Icon name="user-plus" size={16} />This change needs reviewers</span>
-            <span className="text-ink-5">Assign one or more reviewers from the code review team. Every assigned reviewer must approve before the change is submitted.</span>
+        <div className={s.assignBanner}>
+          <div className={s.assignText}>
+            <span className={s.assignTitle}><Icon name="user-plus" size={16} />This change needs reviewers</span>
+            <span className={s.bannerNote}>Assign one or more reviewers from the code review team. Every assigned reviewer must approve before the change is submitted.</span>
           </div>
-          <div className="w-[260px] max-w-full"><Combobox items={addable} value={null} onValueChange={v => v && addReviewer(v)} placeholder="Add reviewer" leadIcon="user-plus" resetOnSelect /></div>
+          <div className={s.reviewerPicker}><Combobox items={addable} value={null} onValueChange={v => v && addReviewer(v)} placeholder="Add reviewer" leadIcon="user-plus" resetOnSelect /></div>
         </div>
       ) : null}
       {r.status === 'pending' && !isCR ? (
-        <div className="flex items-start gap-2 border-l-[3px] border-[oklch(0.88_0.01_290)] py-2 pl-5 text-ink-5">
+        <div className={s.waiting}>
           <Icon name="clock" size={16} style={{ marginTop: 3 }} />
           <span>Waiting for the code review team to assign reviewers. Switch to a code review team member in <Link to="/settings">Settings</Link> to assign one.</span>
         </div>
       ) : null}
       {myRv && !myRv.dec && (r.status === 'in_review' || r.status === 'changes') ? (
-        <div className="flex flex-col gap-3.5 border-l-[3px] border-accent-bar py-2 pl-5">
-          <div className="flex flex-col gap-1">
-            <span className="font-semibold text-accent-ink">Review decision</span>
-            <span className="text-ink-5">
+        <div className={s.decision}>
+          <div className={s.heading}>
+            <span className={s.decisionTitle}>Review decision</span>
+            <span className={s.bannerNote}>
               {nRv > 1
                 ? `You are one of ${nRv} reviewers; ${nAp} of ${nRv} have approved. Every reviewer must approve before submit. A note is required to request modification or deny.`
                 : 'You are the assigned reviewer. A note is required to request modification or deny.'}
             </span>
           </div>
           <Textarea value={note} onChange={v => { setNote(v); setNoteErr(''); }} rows={3} placeholder="Review note" ariaLabel="Review note" />
-          {noteErr ? <span className="text-danger" role="alert">{noteErr}</span> : null}
-          <div className="flex flex-wrap gap-2.5">
+          {noteErr ? <span className={s.error} role="alert">{noteErr}</span> : null}
+          <div className={s.buttons}>
             <Button variant="primary" icon="check" onClick={() => decide('approved')}>Approve</Button>
             <Button variant="secondary" icon="rotate-ccw" onClick={() => decide('changes')}>Request modification</Button>
             <Button variant="ghost" icon="ban" onClick={() => decide('denied')}>Deny</Button>
@@ -177,14 +178,14 @@ export function ReviewDetail({ id }: { id: string }) {
         </div>
       ) : null}
       {wd.open ? (
-        <div className="flex flex-col gap-3 rounded-md border border-[oklch(0.9_0.012_290)] bg-[oklch(0.985_0.004_290)] px-5 py-4">
-          <div className="flex flex-col gap-1">
-            <span className="font-semibold">Withdraw this request</span>
-            <span className="text-sm leading-normal text-pretty text-muted">Use this when plans change and the code won't be submitted, whatever the review result. It's counted as Withdrawn in Review outcomes.</span>
+        <div className={s.withdraw}>
+          <div className={s.heading}>
+            <span className={s.withdrawTitle}>Withdraw this request</span>
+            <span className={s.sub}>Use this when plans change and the code won't be submitted, whatever the review result. It's counted as Withdrawn in Review outcomes.</span>
           </div>
           <Input value={wd.reason} onChange={v => setWd(w => ({ ...w, reason: v, err: '' }))} placeholder="Reason, e.g. feature dropped from the 2018 release" ariaLabel="Reason" />
-          {wd.err ? <span className="text-danger" role="alert">{wd.err}</span> : null}
-          <div className="flex flex-wrap gap-2.5">
+          {wd.err ? <span className={s.error} role="alert">{wd.err}</span> : null}
+          <div className={s.buttons}>
             <Button
               variant="primary"
               icon="archive"
@@ -204,10 +205,10 @@ export function ReviewDetail({ id }: { id: string }) {
         </div>
       ) : null}
       {banner.title ? (
-        <div className="flex flex-wrap items-center gap-5 border-l-[3px] py-2 pl-5" style={{ borderLeftColor: banner.fg }}>
-          <div className="flex flex-[1_1_300px] flex-col gap-1.5">
-            <span className="flex items-center gap-2 font-semibold" style={{ color: banner.fg }}><Icon name={banner.icon} size={16} />{banner.title}</span>
-            <span className="leading-[1.6] text-ink-3">{banner.text}</span>
+        <div className={s.statusBanner} style={{ borderLeftColor: banner.fg }}>
+          <div className={s.statusText}>
+            <span className={s.statusTitle} style={{ color: banner.fg }}><Icon name={banner.icon} size={16} />{banner.title}</span>
+            <span className={s.statusNote}>{banner.text}</span>
           </div>
           {r.status === 'changes' && isAuthor ? (
             <Button
@@ -224,15 +225,15 @@ export function ReviewDetail({ id }: { id: string }) {
         </div>
       ) : null}
 
-      <div className="flex flex-wrap items-start gap-10">
-        <div className="flex min-w-0 flex-[1_1_560px] flex-col gap-9">
-          <section className="flex flex-col gap-2.5">
-            <h2 className="text-sm font-semibold text-muted">Summary of change</h2>
-            <p lang={langOf(r.desc)} className="leading-[1.75] whitespace-pre-wrap text-pretty">{r.desc}</p>
+      <div className={s.body}>
+        <div className={s.main}>
+          <section className={s.textSection}>
+            <h2 className={s.textHeading}>Summary of change</h2>
+            <p lang={langOf(r.desc)} className={s.description}>{r.desc}</p>
           </section>
           {r.attachments.length ? (
-            <section className="flex flex-col gap-3.5">
-              <h2 className="text-sm font-semibold text-muted">Attachments ({r.attachments.length})</h2>
+            <section className={s.attachments}>
+              <h2 className={s.textHeading}>Attachments ({r.attachments.length})</h2>
               <Attachments items={r.attachments} />
             </section>
           ) : null}
@@ -242,7 +243,7 @@ export function ReviewDetail({ id }: { id: string }) {
             legacy={rec.legacy}
             next={rec.next}
             synced={rec.synced}
-            onSync={() => { setSynced(s => ({ ...s, all: 'just now' })); flash('Synced with ClearQuest, ClearCase, Review Board, Swarm, Jira and Confluence'); }}
+            onSync={() => { setSynced(x => ({ ...x, all: 'just now' })); flash('Synced with ClearQuest, ClearCase, Review Board, Swarm, Jira and Confluence'); }}
             onOpen={x => flash(`Demo: this would open ${x.sys} ${x.id}`)}
           />
           <RelatedSection
@@ -255,13 +256,13 @@ export function ReviewDetail({ id }: { id: string }) {
             onLink={o => linkRelated(r.id, o, true, meId, flash, 'r')}
             onUnlink={o => linkRelated(r.id, o, false, meId, flash, 'r')}
           />
-          <section className="flex flex-col gap-5 border-t border-line pt-6">
-            <div className="flex flex-wrap items-center justify-between gap-3">
-              <div className="flex flex-col gap-1">
-                <h2 className="text-base font-semibold">Changed files</h2>
-                <span className="text-sm text-muted">{r.files.length ? `${r.files.length} file${r.files.length > 1 ? 's' : ''}, +${add} -${del}, Click a line to comment` : 'Not synced from Helix Swarm yet'}</span>
+          <section className={s.files}>
+            <div className={s.filesHead}>
+              <div className={s.heading}>
+                <h2 className={s.sectionTitle}>Changed files</h2>
+                <span className={s.meta}>{r.files.length ? `${r.files.length} file${r.files.length > 1 ? 's' : ''}, +${add} -${del}, Click a line to comment` : 'Not synced from Helix Swarm yet'}</span>
               </div>
-              {r.files.length ? <div className="max-w-full overflow-x-auto"><Segmented ariaLabel="Diff layout" items={DIFF_MODES} value={mode} onValueChange={v => setPrefs({ diff: v as 'sbs' | 'uni' })} /></div> : null}
+              {r.files.length ? <div className={s.diffMode}><Segmented ariaLabel="Diff layout" items={DIFF_MODES} value={mode} onValueChange={v => setPrefs({ diff: v as 'sbs' | 'uni' })} /></div> : null}
             </div>
             {r.files.map((f, fi) => (
               <DiffFile
@@ -279,14 +280,14 @@ export function ReviewDetail({ id }: { id: string }) {
               />
             ))}
             {!r.files.length ? (
-              <div className="flex items-start gap-4 rounded-md bg-accent-wash p-5">
-                <span className="flex h-10 w-10 flex-none items-center justify-center rounded-full bg-accent-soft"><Icon name="archive" size={20} color="oklch(0.5 0.17 293)" /></span>
-                <div className="flex min-w-0 flex-1 flex-col gap-3">
-                  <div className="flex flex-col gap-1.5">
-                    <span className="font-semibold">Files haven't been fetched from Helix Swarm yet</span>
-                    <span className="max-w-[560px] leading-[1.6] text-muted">New requests only store the shelved changelist number. The changed files are loaded from Swarm review {sw.id} (shelved CL {sw.shelved}) on the next sync.</span>
+              <div className={s.fetch}>
+                <span className={s.fetchIcon}><Icon name="archive" size={20} color="oklch(0.5 0.17 293)" /></span>
+                <div className={s.fetchMain}>
+                  <div className={s.fetchText}>
+                    <span className={s.fetchTitle}>Files haven't been fetched from Helix Swarm yet</span>
+                    <span className={s.fetchNote}>New requests only store the shelved changelist number. The changed files are loaded from Swarm review {sw.id} (shelved CL {sw.shelved}) on the next sync.</span>
                   </div>
-                  <div className="flex flex-wrap gap-2.5">
+                  <div className={s.buttons}>
                     <Button variant="primary" icon="refresh-cw" onClick={fetchSwarm}>Fetch from Swarm</Button>
                     <Button variant="secondary" icon="external-link" onClick={() => flash(`Demo: this would open Helix Swarm review ${p4Of(r).swId}`)}>Open in Swarm</Button>
                   </div>
@@ -294,42 +295,42 @@ export function ReviewDetail({ id }: { id: string }) {
               </div>
             ) : null}
           </section>
-          <section className="flex flex-col gap-6 border-t border-line pt-6">
-            <h2 className="text-base font-semibold">Activity</h2>
+          <section className={s.activity}>
+            <h2 className={s.sectionTitle}>Activity</h2>
             <ActivityFeed items={r.activity} />
             <Composer me={av(meId)} people={people} onPost={(t, att) => upd(x => ({ ...x, activity: [...x.activity, A('c', meId, nowStr(), t, null, att)] }))} />
           </section>
         </div>
 
-        <aside className="flex min-w-[260px] flex-[0_1_300px] flex-col gap-7 border-l border-line pl-8 max-[900px]:border-l-0 max-[900px]:pl-0">
-          <div className="flex flex-col gap-1.5">
+        <aside className={s.aside}>
+          <div className={s.turnaround}>
             <SideLabel icon="clock">Review turnaround</SideLabel>
-            <span className="text-[32px] leading-[1.1] font-semibold tracking-[-0.02em] tabular-nums" style={{ color: tat.color }}>{tat.text}</span>
-            <span className="text-sm leading-normal text-muted">{tat.note}</span>
+            <span className={s.turnaroundValue} style={{ color: tat.color }}>{tat.text}</span>
+            <span className={s.turnaroundNote}>{tat.note}</span>
           </div>
           <Subscribers
             people={subPeople}
             count={subPeople.length + (subPeople.length === 1 ? ' person' : ' people')}
             note={sub ? (auto ? 'You are subscribed because you are ' + (isAuthor ? 'the author' : 'a reviewer') + '.' : 'You get notified about every update') : 'Subscribe to get notified about every update'}
           />
-          <div className="flex flex-col gap-5 border-t border-line pt-6">
-            <div className="flex flex-col gap-2.5">
+          <div className={s.people}>
+            <div className={s.author}>
               <SideLabel icon="user">Author</SideLabel>
-              <span className="flex items-center gap-3">
+              <span className={s.person}>
                 <Person person={av(r.author)} size={32} />
-                <span className="flex flex-col gap-0.5"><span className="font-[550]">{UM[r.author].name}</span><span className="text-sm text-muted">{UM[r.author].title}</span></span>
+                <span className={s.authorText}><span className={s.personName}>{UM[r.author].name}</span><span className={s.meta}>{UM[r.author].title}</span></span>
               </span>
             </div>
-            <div className="flex flex-col gap-3.5">
+            <div className={s.reviewers}>
               <SideLabel icon="user-check" right={nRv ? `${nAp} of ${nRv} approved` : ''}>Reviewers</SideLabel>
               {r.reviewers.map(v => {
                 const s2 = v.dec ? RST[v.dec] : { fg: MUTED, icon: 'clock' };
                 return (
-                  <div key={v.u} className="flex items-center gap-3">
+                  <div key={v.u} className={s.person}>
                     <Person person={av(v.u)} size={32} />
-                    <div className="flex min-w-0 flex-1 flex-col gap-1">
-                      <span className="font-[550]">{UM[v.u].name}</span>
-                      <span className="flex items-center gap-1.5 text-sm" style={{ color: s2.fg }}><Icon name={s2.icon} size={14} />{decLabel(v.dec)}</span>
+                    <div className={s.reviewerText}>
+                      <span className={s.personName}>{UM[v.u].name}</span>
+                      <span className={s.reviewerDecision} style={{ color: s2.fg }}><Icon name={s2.icon} size={14} />{decLabel(v.dec)}</span>
                     </div>
                     {isCR && !v.dec && !final ? (
                       <Button variant="ghost" size="sm" icon="x" iconOnly title="Remove reviewer" onClick={() => upd(x => { const rv = x.reviewers.filter(y => y.u !== v.u); return { ...log(x, `removed ${UM[v.u].name} as reviewer`), reviewers: rv, status: computeStatus(rv) }; })} />
@@ -337,18 +338,18 @@ export function ReviewDetail({ id }: { id: string }) {
                   </div>
                 );
               })}
-              {!nRv ? <span className="text-faint">Not assigned yet</span> : null}
+              {!nRv ? <span className={s.none}>Not assigned yet</span> : null}
               {isCR && !final && r.status !== 'pending' && addable.length ? (
                 <Combobox items={addable} value={null} onValueChange={v => v && addReviewer(v)} placeholder="Add reviewer" leadIcon="user-plus" dashed resetOnSelect />
               ) : null}
             </div>
           </div>
-          <div className="grid grid-cols-[88px_minmax(0,1fr)] gap-x-4 gap-y-3.5 border-t border-line pt-6">
-            <span className="text-muted">Stream</span><span className="font-mono text-sm break-all">{'//depot/printing/' + r.branch}</span>
-            <span className="text-muted">Defect</span>
-            <span>{r.linked ? <Link to={'/defects/' + r.linked}>{r.linked}</Link> : <span className="text-faint">None</span>}</span>
-            <span className="text-muted">Submitted</span><span>{fFull(r.submitted)}</span>
-            <span className="text-muted">Updated</span><span>{fAt(lastAt(r))}</span>
+          <div className={s.facts}>
+            <span className={s.factLabel}>Stream</span><span className={s.stream}>{'//depot/printing/' + r.branch}</span>
+            <span className={s.factLabel}>Defect</span>
+            <span>{r.linked ? <Link to={'/defects/' + r.linked}>{r.linked}</Link> : <span className={s.none}>None</span>}</span>
+            <span className={s.factLabel}>Submitted</span><span>{fFull(r.submitted)}</span>
+            <span className={s.factLabel}>Updated</span><span>{fAt(lastAt(r))}</span>
           </div>
         </aside>
       </div>

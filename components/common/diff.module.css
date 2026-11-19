@@ -1,0 +1,145 @@
+/* Line comments and the comment form, shown under a diff line. */
+.comment,
+.compose {
+  border-block: 1px solid var(--color-line);
+  border-left: 3px solid oklch(0.6 0.16 293);
+  background-color: #fff;
+  padding: 12px 16px;
+  font-family: var(--font-sans);
+  font-size: 14px;
+  line-height: 20px;
+}
+.comment {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+.commentBody {
+  display: flex;
+  min-width: 0;
+  flex: 1;
+  flex-direction: column;
+  gap: 4px;
+}
+.commentHead {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+}
+.commentAuthor {
+  font-weight: 600;
+}
+.commentMeta {
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--color-muted);
+}
+.commentText {
+  line-height: 1.6;
+  white-space: pre-wrap;
+}
+.compose {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.composeActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+/* File */
+.file {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.fileHeader {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-mono);
+  font-size: 14px;
+  line-height: 20px;
+}
+.filePath {
+  min-width: 0;
+  flex: 1;
+}
+.commentCount {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--color-muted);
+}
+.added {
+  color: oklch(0.48 0.12 155);
+}
+.removed {
+  color: oklch(0.52 0.16 25);
+}
+
+/* Diff body */
+.diff {
+  overflow-x: auto;
+  border-radius: 4px;
+  border: 1px solid var(--color-line);
+  font-family: var(--font-mono);
+  font-size: 14px;
+  line-height: 1.75;
+}
+.sbs {
+  min-width: 760px;
+}
+.uni {
+  min-width: 640px;
+}
+.hunk {
+  background-color: oklch(0.975 0.015 293);
+  padding: 4px 12px;
+  color: oklch(0.5 0.1 293);
+}
+.sbsRow,
+.uniRow {
+  display: grid;
+  cursor: pointer;
+}
+.sbsRow {
+  grid-template-columns: 48px minmax(0, 1fr) 48px minmax(0, 1fr);
+}
+.uniRow {
+  grid-template-columns: 48px 48px 24px minmax(0, 1fr);
+}
+.sbsRow:hover,
+.uniRow:hover {
+  box-shadow: inset 0 0 0 1px oklch(0.78 0.1 293);
+}
+.lineNo {
+  padding-right: 10px;
+  text-align: right;
+  color: oklch(0.62 0.015 290);
+  user-select: none;
+}
+.sign {
+  text-align: center;
+  opacity: 0.7;
+  user-select: none;
+}
+.sbsOld,
+.sbsNew,
+.uniText {
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+.sbsOld {
+  border-right: 1px solid;
+  border-color: var(--color-line);
+  padding: 0 12px 0 4px;
+}
+.sbsNew {
+  padding: 0 12px 0 4px;
+}
+.uniText {
+  padding-right: 16px;
+}

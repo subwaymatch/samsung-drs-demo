@@ -1,4 +1,5 @@
 import { useId } from 'react';
+import s from './logo.module.css';
 
 const SHAPE = 'M44 1C51 1 57 2 61 6L86.2 43.5C87.2 45 87.3 47 86.6 48.5L76.5 71.5C75.6 73.5 73.6 74.5 71.6 73.9C53.5 66.5 34.5 66.5 16.4 73.9C14.4 74.5 12.4 73.5 11.5 71.5L1.4 48.5C0.7 47 0.8 45 1.8 43.5L27 6C31 2 37 1 44 1Z';
 
@@ -6,7 +7,7 @@ const SHAPE = 'M44 1C51 1 57 2 61 6L86.2 43.5C87.2 45 87.3 47 86.6 48.5L76.5 71.
 export function DrsLogo({ width = 34, label }: { width?: number; label?: string }) {
   const id = useId().replace(/:/g, '');
   return (
-    <svg viewBox="0 0 88 76" width={width} height={Math.round((width * 76) / 88)} role="img" aria-label={label || 'DRS'} className="block flex-none">
+    <svg viewBox="0 0 88 76" width={width} height={Math.round((width * 76) / 88)} role="img" aria-label={label || 'DRS'} className={s.logo}>
       <defs>
         <clipPath id={'drs' + id}>
           <path d={SHAPE} />

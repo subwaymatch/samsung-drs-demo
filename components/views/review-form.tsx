@@ -16,6 +16,7 @@ import { Icon } from '../ui/icon';
 import { Select } from '../ui/select';
 import { Field } from './defect-form';
 import { NotFoundView } from './not-found-view';
+import s from './review-form.module.css';
 
 interface Form {
   title: string;
@@ -80,40 +81,40 @@ function ReviewFormInner({ r, linkedDefect }: { r?: Review; linkedDefect: string
   };
 
   return (
-    <div className="mx-auto flex max-w-[760px] flex-col gap-8">
-      <div className="flex flex-col gap-3.5">
-        <div className="flex"><Link to={back} className="bui-btn bui-link"><Icon name="arrow-left" size={16} />{r ? r.id : 'Code reviews'}</Link></div>
-        <h1 className="text-2xl font-semibold tracking-[-0.02em]">{heading}</h1>
+    <div className={s.page}>
+      <div className={s.header}>
+        <div className={s.buttonRow}><Link to={back} className="bui-btn bui-link"><Icon name="arrow-left" size={16} />{r ? r.id : 'Code reviews'}</Link></div>
+        <h1 className={s.title}>{heading}</h1>
       </div>
-      <div className="flex flex-col gap-6">
+      <div className={s.fields}>
         <Field label="Title"><Input value={f.title} onChange={v => set('title', v)} placeholder="What does this change do?" ariaLabel="Title" /></Field>
-        <div className="grid gap-5 [grid-template-columns:repeat(auto-fit,minmax(220px,1fr))]">
+        <div className={s.fieldGrid}>
           <Field label="Change type"><Select ariaLabel="Change type" items={typeItems} value={f.type} onValueChange={v => set('type', v)} /></Field>
           <Field label="Linked defect"><Combobox items={defectItems} limit={40} value={f.linked} onValueChange={v => set('linked', v)} placeholder="Search by ID or title" ariaLabel="Linked defect" /></Field>
         </div>
-        <div className="flex flex-col gap-2">
-          <span className="text-sm font-semibold text-ink-4">Perforce stream</span>
+        <div className={s.field}>
+          <span className={s.label}>Perforce stream</span>
           <Input icon="git-branch" mono value={f.branch} onChange={v => set('branch', v)} placeholder="fw/model/short-description" ariaLabel="Perforce stream" />
-          <span className="text-sm text-muted">Mapped under //depot/printing/</span>
+          <span className={s.sub}>Mapped under //depot/printing/</span>
         </div>
-        <div className="flex flex-col gap-2">
-          <span className="text-sm font-semibold text-ink-4">Shelved changelist</span>
+        <div className={s.field}>
+          <span className={s.label}>Shelved changelist</span>
           <Input icon="git-commit" mono value={f.cl} onChange={v => set('cl', v)} placeholder="e.g. 1492310 (leave empty to shelve automatically)" ariaLabel="Shelved changelist" />
-          <span className="mt-1 flex items-center gap-2 text-sm text-muted">
-            <img src="/logos/perforce.svg" alt="" className="block h-3.5 w-auto flex-none" />
+          <span className={s.swarmNote}>
+            <img src="/logos/perforce.svg" alt="" className={s.swarmLogo} />
             A Helix Swarm review is created from this shelved changelist when you send the request.
           </span>
         </div>
         <Field label="Summary of change"><Textarea value={f.desc} onChange={v => set('desc', v)} rows={6} placeholder="What changed, why, and how it was tested" ariaLabel="Summary of change" /></Field>
-        <div className="flex flex-col gap-3">
-          <span className="text-sm font-semibold text-ink-4">Attachments</span>
-          <span className="text-sm text-muted">Test reports, screenshots, videos and logs</span>
+        <div className={s.attachments}>
+          <span className={s.label}>Attachments</span>
+          <span className={s.sub}>Test reports, screenshots, videos and logs</span>
           <Attachments items={f.attachments} onRemove={i => set('attachments', f.attachments.filter((_, j) => j !== i))} />
-          <div className="flex"><FileButton onFiles={list => set('attachments', [...f.attachments, ...list])}>Add files</FileButton></div>
+          <div className={s.buttonRow}><FileButton onFiles={list => set('attachments', [...f.attachments, ...list])}>Add files</FileButton></div>
         </div>
-        {err ? <span className="border-l-[3px] border-danger-rule py-1 pl-3.5 text-danger" role="alert">{err}</span> : null}
+        {err ? <span className={s.formError} role="alert">{err}</span> : null}
       </div>
-      <div className="flex justify-end gap-2.5 border-t border-line pt-6">
+      <div className={s.actions}>
         <Button variant="secondary" onClick={() => navigate(back)}>Cancel</Button>
         <Button variant="primary" icon="check" onClick={save}>{mode === 'new' ? 'Send for review' : 'Save changes'}</Button>
       </div>

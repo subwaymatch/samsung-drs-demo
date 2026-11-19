@@ -3,6 +3,8 @@ import { useRef, useState, type KeyboardEvent } from 'react';
 import type { Option } from '@/lib/types';
 import { Icon } from './icon';
 import { Lead } from './lead';
+import { cx } from '@/lib/cx';
+import s from './fields.module.css';
 
 /** Form validation state passed to an input. */
 export interface FieldAria {
@@ -36,8 +38,8 @@ export function Input({ value, onChange, placeholder, icon, mono, id, autoFocus,
   );
   if (!icon) return el;
   return (
-    <div className="relative w-full">
-      <span className="pointer-events-none absolute top-1/2 left-3 -translate-y-1/2 text-faint">
+    <div className={s.iconField}>
+      <span className={s.icon}>
         <Icon name={icon} size={15} />
       </span>
       {el}
@@ -101,7 +103,7 @@ export function MentionTextarea({ value, onChange, people, rows = 3, placeholder
     else if (e.key === 'Escape') { e.stopPropagation(); setM(null); }
   };
   return (
-    <div className="relative">
+    <div className={s.mentions}>
       <textarea
         ref={ref}
         rows={rows}
@@ -114,7 +116,7 @@ export function MentionTextarea({ value, onChange, people, rows = 3, placeholder
         onBlur={() => setTimeout(() => setM(null), 150)}
       />
       {list.length ? (
-        <div className="bui-popup absolute top-full left-0 z-[100] mt-1.5 w-[300px] min-w-0" role="listbox" style={{ maxWidth: '100%' }}>
+        <div className={cx('bui-popup', s.mentionPopup)} role="listbox" style={{ maxWidth: '100%' }}>
           {list.map((p, i) => (
             <div
               key={p.value}
