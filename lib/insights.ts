@@ -6,11 +6,11 @@ import { firstDec, firstRes, isOpen, migOf, tgtEval } from './records';
 import { plural } from './text';
 import type { Data, Defect, Review, Severity } from './types';
 
-export const RANGES: { n: number; label: string; icon: string }[] = [
-  { n: 7, label: '7 days', icon: 'calendar-days' },
-  { n: 30, label: '30 days', icon: 'calendar-range' },
-  { n: 90, label: '90 days', icon: 'calendar-clock' },
-  { n: 182, label: '6 months', icon: 'calendar' }
+export const RANGES: { n: number; label: string }[] = [
+  { n: 7, label: '7 days' },
+  { n: 30, label: '30 days' },
+  { n: 90, label: '90 days' },
+  { n: 182, label: '6 months' }
 ];
 
 /** Build a query string, skipping empty values. */

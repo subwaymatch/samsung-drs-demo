@@ -64,12 +64,12 @@
   background: oklch(0.68 0.14 160);
 }
 
-/* Bar: a thin outlined progress bar */
+/* Bar: a thin progress bar on a light track */
 .bar {
   flex: 1;
   overflow: hidden;
   border-radius: 1px;
-  border: 1px solid oklch(0.92 0.02 293);
+  background-color: var(--color-line-soft);
 }
 .barFill {
   display: block;
@@ -98,39 +98,17 @@
   gap: 40px;
 }
 .status {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  column-gap: 24px;
-  row-gap: 8px;
-  padding-bottom: 4px;
+  padding-bottom: 2px;
   font-size: 14px;
   line-height: 20px;
-  color: var(--color-ink-5);
+  color: var(--color-muted);
+  font-variant-numeric: tabular-nums;
 }
 
 /* System diagram */
 .systems {
   display: flex;
   flex-direction: column;
-  gap: 12px;
-}
-.graphFrame {
-  overflow: hidden;
-  border-block: 1px solid oklch(0.92 0.01 290);
-  background-color: var(--color-surface);
-}
-.graphLegend {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
-  font-size: 14px;
-  line-height: 20px;
-  color: var(--color-ink-5);
-}
-.syncLine {
-  width: 24px;
-  border-top: 1.5px dashed oklch(0.55 0.17 293);
 }
 
 /* Two sections side by side, stacking when narrow */
@@ -186,7 +164,7 @@
   gap: 2px;
 }
 .donutTotal {
-  font-size: 28px;
+  font-size: 32px;
   line-height: 1;
   font-weight: 600;
   font-variant-numeric: tabular-nums;
@@ -285,7 +263,7 @@
   display: flex;
   min-height: 48px;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   color: var(--color-muted);
 }
 .periodLabel {
@@ -332,12 +310,9 @@
   display: flex;
   flex-direction: column;
   gap: 8px;
-  border: 0 solid var(--color-accent-rule);
-  border-left-width: 2px;
-  padding: 2px 0 2px 20px;
 }
-.kpi:hover {
-  border-color: var(--color-accent-bar);
+.kpi:hover .kpiLabel {
+  color: var(--color-accent-text);
 }
 .kpiLabel {
   font-size: 14px;
@@ -559,8 +534,7 @@
   border-top-left-radius: 2px;
   border-top-right-radius: 2px;
 }
-.flowNote,
-.sysRole {
+.flowNote {
   font-size: 14px;
   line-height: 20px;
   color: var(--color-ink-5);
@@ -788,16 +762,14 @@
   min-width: 52px;
   flex-direction: column;
   align-items: flex-end;
-  line-height: 1.15;
+  font-size: 14px;
+  line-height: 20px;
 }
 .activeNum {
-  font-size: 18px;
-  line-height: 28px;
   font-weight: 600;
   font-variant-numeric: tabular-nums;
 }
 .activeUnit {
-  font-size: 13px;
   color: var(--color-muted);
 }
 
@@ -805,53 +777,50 @@
 .sysList {
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  padding: 20px 16px;
+  gap: 16px;
 }
 .sysGroup {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 16px;
 }
 .sysCard {
   display: flex;
   flex-direction: column;
-  gap: 6px;
-  border-radius: 8px;
-  border: 1px solid var(--color-line);
-  background-color: #fff;
-  padding: 14px 16px;
+  gap: 4px;
 }
 .sysCardHub {
-  border-color: oklch(0.75 0.12 293);
-  background-color: var(--color-accent-wash);
+  border-radius: 12px;
+  border: 1px solid var(--color-accent);
+  padding: 16px 20px;
 }
 .sysName {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   font-weight: 600;
 }
 .sysLogo {
   display: block;
   height: 16px;
-  width: auto;
+  width: 24px;
+  object-fit: contain;
+  object-position: left;
+}
+.sysRole {
+  color: var(--color-muted);
 }
 .sysMeta {
-  font-size: 14px;
-  line-height: 20px;
-  font-weight: 550;
+  font-variant-numeric: tabular-nums;
 }
 .sysSync {
   display: flex;
   align-items: center;
   gap: 8px;
-  font-size: 14px;
-  line-height: 20px;
   color: var(--color-muted);
 }
 .sysArrow {
   display: flex;
   justify-content: center;
-  color: oklch(0.55 0.17 293);
+  color: var(--color-placeholder);
 }

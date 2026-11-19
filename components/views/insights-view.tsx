@@ -28,7 +28,7 @@ function Bar({ w, c, h = 6 }: { w: string; c: string; h?: number }) {
 export function InsightsView() {
   const app = useApp();
   const navigate = useNavigate();
-  const { ui, setUi, mainW } = useShell();
+  const { ui, setUi, contentW } = useShell();
   const range = RANGES.some(r => r.n === ui.range) ? ui.range : 30;
   const data = app?.data;
   const st = useMemo(() => (data ? computeInsights(data, range) : null), [data, range]);
@@ -41,31 +41,11 @@ export function InsightsView() {
       <PageHeader
         title="Insights"
         sub={`${app.data.defects.length} defects and ${app.data.reviews.length} code reviews from ${TEAMS.length} teams across ${MODELS.length} printer and copier models`}
-        action={
-          <div className={s.status}>
-            <span className={s.legendItem}>
-              <Icon name="calendar-clock" size={16} color="var(--color-accent-ink)" />
-              Data through {fFull(TNOW)}, {TNOW.slice(11)}
-            </span>
-            <span className={s.legendItem}>
-              <span className={s.syncDot} />
-              All systems in sync
-            </span>
-          </div>
-        }
+        action={<span className={s.status}>Data through {fFull(TNOW)}, {TNOW.slice(11)}</span>}
       />
 
-      <section className={s.systems}>
-        <div
-          className={s.graphFrame}
-          style={mainW ? { width: mainW, marginLeft: `calc(50% - ${mainW / 2}px)` } : undefined}
-        >
-          {mainW > 0 && mainW < 640 ? <SystemList graph={graph} /> : <RelGraph nodes={graph.nodes} edges={graph.edges} height={680} />}
-        </div>
-        <div className={s.graphLegend}>
-          <span className={s.legendItem}><span className={s.syncDot} />Connected and in sync</span>
-          <span className={s.legendItem}><span className={s.syncLine} />Records synced through DRS</span>
-        </div>
+      <section className={s.systems} aria-label="Connected systems">
+        {contentW > 0 && contentW < 840 ? <SystemList graph={graph} /> : <RelGraph nodes={graph.nodes} edges={graph.edges} height={graph.height} plain />}
       </section>
 
       <div className={s.twoUp}>
@@ -147,7 +127,6 @@ export function InsightsView() {
 
       <div className={s.periodBar} style={{ top: 'var(--topbar-h, 0px)' }}>
         <div className={s.periodShowing}>
-          <Icon name="calendar" size={16} color="oklch(0.55 0.12 293)" />
           <span>Showing</span>
           <span className={s.periodLabel}>{st.periodL}</span>
         </div>
@@ -162,9 +141,8 @@ export function InsightsView() {
                 aria-selected={on}
                 onClick={() => setUi({ range: r.n })}
                 className={s.periodTab}
-                style={{ borderBottomColor: on ? 'var(--color-accent)' : 'transparent', color: on ? 'var(--color-accent-ink)' : 'var(--color-ink-5)', fontWeight: on ? 650 : 500 }}
+                style={{ borderBottomColor: on ? 'var(--color-accent)' : 'transparent', color: on ? 'var(--color-accent-ink)' : 'var(--color-ink-5)', fontWeight: on ? 600 : 500 }}
               >
-                <Icon name={r.icon} size={15} />
                 {r.label}
               </button>
             );
@@ -386,7 +364,7 @@ export function InsightsView() {
 }
 
 type Graph = ReturnType<typeof systemGraph>;
-type SysData = { name: string; role: string; logo?: string; sync?: string; meta?: string; href?: string; label?: string; note?: string; metaLines?: { icon: string; text: string }[] };
+type SysData = { name: string; role: string; logo?: string; sync?: string; meta?: string; href?: string; label?: string; note?: string };
 
 /** The seven-system diagram as a list, for phones: legacy systems, DRS, then the new systems. */
 function SystemList({ graph }: { graph: Graph }) {
@@ -401,7 +379,6 @@ function SystemList({ graph }: { graph: Graph }) {
       </span>
       <span className={s.sysRole}>{d.role}</span>
       {d.meta ? <span className={s.sysMeta}>{d.meta}</span> : null}
-      {d.metaLines ? <span className={s.sysMeta}>{d.metaLines.map(m => m.text).join(', ')}</span> : null}
       {d.sync ? <span className={s.sysSync}><span className={s.syncDot} />{d.sync}</span> : null}
     </div>
   );
