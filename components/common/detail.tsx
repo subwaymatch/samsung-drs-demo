@@ -285,7 +285,7 @@ export function ActivityFeed({ items }: { items: Activity[] }) {
             <div className="flex min-w-0 flex-1 flex-col gap-2 pt-1" style={isD && rs ? { borderLeft: '2px solid ' + rs.fg, paddingLeft: 16 } : undefined}>
               <div className="flex flex-wrap items-center gap-2.5">
                 <strong lang={langOf(who.name)} className="font-semibold">{who.name}</strong>
-                {isD && rs ? <StatusLabel l={DEC[a.dec!]} fg={rs.fg} icon={rs.icon} size={14} weight={600} className="gap-1.5" /> : null}
+                {isD && rs ? <StatusLabel l={DEC[a.dec!]} fg={rs.fg} icon={rs.icon} size={14} weight={600} /> : null}
                 <span className="text-sm text-muted">{fAt(a.at)}</span>
                 {a.loc ? <span className="flex items-center gap-1.5 font-mono text-sm text-muted"><Icon name="file-code" size={14} />{a.loc}</span> : null}
               </div>

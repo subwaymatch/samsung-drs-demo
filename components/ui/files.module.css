@@ -1,0 +1,81 @@
+.input {
+  display: none;
+}
+
+.attachments {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Images and videos: thumbnails with a caption */
+.media {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+.mediaItem {
+  display: flex;
+  width: 184px;
+  flex-direction: column;
+  gap: 8px;
+}
+.mediaFrame {
+  height: 120px;
+  width: 184px;
+  overflow: hidden;
+  border-radius: 4px;
+  border: 1px solid oklch(0.92 0.01 290);
+}
+.mediaFill {
+  display: block;
+  height: 100%;
+  width: 100%;
+}
+.mediaImg {
+  display: block;
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+}
+.mediaVideo {
+  display: block;
+  height: 100%;
+  width: 100%;
+  background: #000;
+  object-fit: cover;
+}
+.mediaEmpty {
+  display: grid;
+  height: 100%;
+  width: 100%;
+  place-items: center;
+  background: oklch(0.985 0.006 293);
+  color: oklch(0.6 0.08 293);
+}
+.mediaCaption {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 6px;
+}
+.mediaName {
+  min-width: 0;
+  flex: 1;
+}
+
+/* Other files: one per line */
+.file {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 10px;
+}
+.fileName {
+  min-width: 0;
+}
+
+.size {
+  white-space: nowrap;
+  color: var(--color-muted);
+}

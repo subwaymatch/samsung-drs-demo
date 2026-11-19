@@ -1,4 +1,7 @@
-@import "tailwindcss";
+@layer theme, base, components, utilities;
+@import "tailwindcss/theme.css" layer(theme);
+@import "./reset.css" layer(base);
+@import "tailwindcss/utilities.css" layer(utilities);
 
 @theme {
   --font-sans: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
@@ -256,6 +259,8 @@
   .bui-input[aria-invalid="true"],
   .bui-cb:has(.bui-cb-input[aria-invalid="true"]) { border-color: oklch(0.6 0.19 25); }
   .bui-cb-input { flex: 1; min-width: 80px; height: 28px; border: none; outline: none; background: transparent; font-family: inherit; font-size: 14px; color: var(--color-ink); padding: 0 2px; }
+  .bui-cb-lead { display: flex; color: oklch(0.5 0.12 293); }
+  .bui-cb-keys { display: flex; flex: none; gap: 4px; pointer-events: none; }
   .bui-cb-btn { display: flex; align-items: center; justify-content: center; width: 26px; height: 26px; border: none; background: none; border-radius: 3px; color: var(--color-faint); cursor: pointer; flex: none; }
   .bui-chips { display: contents; }
   .bui-chip { display: inline-flex; align-items: center; gap: 6px; height: 28px; padding: 0 4px 0 3px; border-radius: 3px; border: 1px solid oklch(0.88 0.04 293); font-size: 14px; color: oklch(0.3 0.04 293); outline: none; max-width: 100%; }
@@ -294,7 +299,7 @@
   .row-link:hover { color: var(--color-accent-text); }
 
   /* Clickable: a link stretched over the element, under the links and controls inside it. */
-  .clk { cursor: pointer; }
+  .clk { position: relative; cursor: pointer; }
   .clk-link { position: absolute; inset: 0; z-index: 0; border-radius: inherit; }
   .clk :where(a:not(.clk-link):not(.row-stretch), button, input, label, [role="checkbox"], [role="button"]) { position: relative; z-index: 1; }
   /* In list rows the item's own link (in its ID cell) is stretched over the row. */
@@ -332,6 +337,19 @@
   [data-tip][data-tip-align="end"]:focus-within::after { left: auto; right: 0; transform: none; }
 
   .hover-dim:hover { opacity: 0.75; }
+
+  /* Read by screen readers, not shown. */
+  .visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+    border-width: 0;
+  }
 }
 
 /* React Flow overrides */

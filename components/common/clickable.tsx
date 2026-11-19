@@ -1,5 +1,7 @@
 import { Link } from 'react-router';
 import { useId, type CSSProperties, type KeyboardEvent, type ReactNode } from 'react';
+import { cx } from '@/lib/cx';
+import s from './clickable.module.css';
 
 /**
  * A row, card or chart mark that opens a page. With an href it holds a real
@@ -7,9 +9,11 @@ import { useId, type CSSProperties, type KeyboardEvent, type ReactNode } from 'r
  * previews work, while links and controls inside it (avatars, checkboxes) sit
  * above the stretched link and keep working. The link is named by the element's
  * text unless ariaLabel is given. tip shows a tooltip on hover and focus.
- * Without an href, onOpen makes it a button.
+ * Without an href, onOpen makes it a button. The element is positioned
+ * (relative, from the global .clk class) so the stretched link can cover it;
+ * a className that positions it otherwise (absolute, sticky) takes precedence.
  */
-export function Clickable({ href, onOpen, children, className = '', style, title, krow, ariaLabel, tip, tipAlign }: {
+export function Clickable({ href, onOpen, children, className, style, title, krow, ariaLabel, tip, tipAlign }: {
   href?: string;
   onOpen?: () => void;
   children?: ReactNode;
@@ -24,9 +28,8 @@ export function Clickable({ href, onOpen, children, className = '', style, title
   const id = useId();
   const tipProps = tip ? { 'data-tip': tip, 'data-tip-align': tipAlign } : {};
   if (href) {
-    const positioned = /(^|\s)(absolute|fixed|sticky)(\s|$)/.test(className);
     return (
-      <div id={id} data-krow={krow} className={'clk ' + (positioned ? '' : 'relative ') + className} style={style} {...tipProps}>
+      <div id={id} data-krow={krow} className={cx('clk', className)} style={style} {...tipProps}>
         <Link
           to={href}
           className="clk-link focus-ring"
@@ -46,7 +49,7 @@ export function Clickable({ href, onOpen, children, className = '', style, title
       title={title}
       aria-label={ariaLabel}
       data-krow={krow}
-      className={(onOpen ? 'focus-ring cursor-pointer ' : '') + className}
+      className={cx(onOpen && 'focus-ring', onOpen && s.button, className)}
       style={style}
       onClick={onOpen}
       onKeyDown={onOpen ? (e: KeyboardEvent) => { if ((e.key === 'Enter' || e.key === ' ') && e.target === e.currentTarget) { e.preventDefault(); onOpen(); } } : undefined}

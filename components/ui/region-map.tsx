@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 import { MAP_ROWS } from '@/lib/region-map';
+import s from './region-map.module.css';
 
 const CODES: Record<string, string> = { Korea: 'k', Japan: 'j', China: 'c', SEA: 's', Americas: 'a', Europe: 'e', CIS: 'i', MEA: 'm' };
 /** Regions only a dot or two across; they get a ring so they stay visible. */
@@ -41,7 +42,7 @@ function draw(label: string) {
 export function RegionMap({ label }: { label: string }) {
   const { on, off, ring } = useMemo(() => draw(label), [label]);
   return (
-    <svg viewBox={`0 0 ${COLS} ${ROWS}`} className="block h-auto w-full max-w-[240px]" role="img" aria-label={'World map highlighting ' + label}>
+    <svg viewBox={`0 0 ${COLS} ${ROWS}`} className={s.map} role="img" aria-label={'World map highlighting ' + label}>
       <path d={off} fill="oklch(0.87 0.012 290)" />
       <path d={on} fill="var(--color-accent-bar)" />
       {ring ? <circle cx={ring.cx} cy={ring.cy} r={ring.r} fill="none" stroke="var(--color-accent-bar)" strokeWidth={0.3} opacity={0.6} /> : null}

@@ -1,0 +1,27 @@
+/* Input with a leading icon */
+.iconField {
+  position: relative;
+  width: 100%;
+}
+.icon {
+  pointer-events: none;
+  position: absolute;
+  top: 50%;
+  left: 12px;
+  translate: 0 -50%;
+  color: var(--color-faint);
+}
+
+/* Textarea with @mention suggestions */
+.mentions {
+  position: relative;
+}
+.mentionPopup {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 100;
+  margin-top: 6px;
+  width: 300px;
+  min-width: 0;
+}

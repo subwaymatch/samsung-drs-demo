@@ -1,0 +1,79 @@
+/* Avatar */
+.avatarImg {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+  object-position: 50% 15%;
+}
+.avatarFallback {
+  display: grid;
+  height: 100%;
+  width: 100%;
+  place-items: center;
+}
+
+/* Person: name next to the avatar, and the preview card */
+.name {
+  font-weight: 550;
+}
+.cardHead {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+}
+.cardText {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 4px;
+}
+.cardName {
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 600;
+}
+.cardEmail {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 8px;
+}
+.cardProfile {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  border-top: 1px solid oklch(0.94 0.008 290);
+  padding-top: 12px;
+  font-weight: 550;
+}
+
+/* PeopleStack: overlapping avatars, each with a white ring */
+.stack {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-left: 6px;
+}
+.stackItem {
+  margin-left: -6px;
+  display: flex;
+  border-radius: 999px;
+  background: #fff;
+  box-shadow: 0 0 0 2px #fff;
+}
+.stackMore {
+  margin-left: -6px;
+  display: grid;
+  height: 28px;
+  min-width: 28px;
+  place-items: center;
+  border-radius: 14px;
+  background: oklch(0.95 0.012 290);
+  padding: 0 6px;
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 600;
+  color: var(--color-ink-4);
+  font-variant-numeric: tabular-nums;
+  box-shadow: 0 0 0 2px #fff;
+}

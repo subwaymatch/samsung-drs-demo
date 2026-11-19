@@ -186,7 +186,7 @@ export function InsightsView() {
         ))}
       </div>
 
-      <Section title="Severity targets" sub={st.tgSub} gap="gap-3">
+      <Section title="Severity targets" sub={st.tgSub} gap={12}>
         <div className="overflow-x-auto">
           <div className="min-w-[720px]">
             <div className={'grid grid-cols-[minmax(0,1.1fr)_1fr_1.4fr_1fr_1.4fr_1fr] gap-5 border-b border-line ' + TH}>
@@ -209,7 +209,7 @@ export function InsightsView() {
       <Section
         title="Code review turnaround"
         sub={`Median hours from submission to first review decision, ${st.bucketL}`}
-        gap="gap-6"
+        gap={24}
         right={
           <div className="flex items-center gap-5 text-sm text-ink-5">
             <span className="flex items-center gap-2"><span className="h-2.5 w-2.5 rounded-[2px] bg-[oklch(0.62_0.14_155)]" />Within 48h target</span>
@@ -360,7 +360,7 @@ export function InsightsView() {
         <ActiveList title="Most active code reviews" sub="Comments, reviewer assignments and decisions in the selected period. Ties go to the most recently active." rows={st.activeR} idW={96} />
       </div>
 
-      <Section title="Code review team" sub="Reviewer workload and responsiveness in the selected period" gap="gap-3">
+      <Section title="Code review team" sub="Reviewer workload and responsiveness in the selected period" gap={12}>
         <div className="overflow-x-auto">
           <div className="min-w-[640px]">
             <div className={'grid grid-cols-[minmax(0,1.6fr)_1fr_1fr_1.4fr_1fr] gap-5 border-b border-line ' + TH}>

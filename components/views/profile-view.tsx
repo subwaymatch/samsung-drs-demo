@@ -75,7 +75,7 @@ export function ProfileView({ id }: { id: string }) {
               <Icon name={SEV[x.sev].icon} size={16} color={SEV[x.sev].c} />
               <span className="font-mono text-sm text-muted">{x.id}</span>
               <div className="flex min-w-0 flex-col gap-1"><span className="bui-trunc font-[550]">{x.title}</span><span className="bui-trunc text-sm text-muted">{x.model}, {x.comp}</span></div>
-              <StatusLabel {...DST[x.status]} size={14} className="gap-1.5" />
+              <StatusLabel {...DST[x.status]} size={14} />
             </Clickable>
           ))}
           {!v.openD.length ? <span className="pt-2 text-muted">No open defects assigned</span> : null}
@@ -87,7 +87,7 @@ export function ProfileView({ id }: { id: string }) {
               <Icon name={TYPE_ICON[x.type]} size={16} color={MUTED} />
               <span className="font-mono text-sm text-muted">{x.id}</span>
               <div className="flex min-w-0 flex-col gap-1"><span className="bui-trunc font-[550]">{x.title}</span><span className="bui-trunc text-sm text-muted">{(x.author === id ? 'Author' : 'Reviewer') + ', ' + x.type}</span></div>
-              <StatusLabel {...RST[x.status]} size={14} className="gap-1.5" />
+              <StatusLabel {...RST[x.status]} size={14} />
             </Clickable>
           ))}
           {!v.revs.length ? <span className="pt-2 text-muted">No active code reviews</span> : null}

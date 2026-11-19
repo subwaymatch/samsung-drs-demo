@@ -1,0 +1,13 @@
+.switchLabel {
+  align-items: center;
+}
+.switchText {
+  font-weight: 550;
+}
+
+.check {
+  margin-top: 1px;
+}
+.checkMark {
+  display: flex;
+}

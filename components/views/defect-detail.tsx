@@ -239,7 +239,7 @@ export function DefectDetail({ id }: { id: string }) {
               {derived.cls.map(c => (
                 <div key={c.cl} className="grid grid-cols-[96px_110px_minmax(0,1fr)_auto] items-center gap-3.5 border-b border-line-soft py-3.5 last:border-b-0">
                   <span className="font-mono text-sm">{c.cl}</span>
-                  <StatusLabel l={c.status} fg={c.fg} icon={c.icon} size={14} className="gap-1.5" />
+                  <StatusLabel l={c.status} fg={c.fg} icon={c.icon} size={14} />
                   <div className="flex min-w-0 flex-col gap-1"><span className="bui-trunc">{c.desc}</span><span className="bui-trunc text-sm text-muted">{c.meta}</span></div>
                   <span className="text-sm whitespace-nowrap text-muted">{c.at}</span>
                 </div>
@@ -264,11 +264,11 @@ export function DefectDetail({ id }: { id: string }) {
             <SideLabel icon="gauge">{tg.title}</SideLabel>
             <div className="flex flex-col gap-1">
               <span className="text-sm text-muted">First response within {tg.rl}</span>
-              <StatusLabel l={tg.r.text} fg={tg.r.fg} icon={tg.r.icon} weight={600} className="whitespace-normal" />
+              <StatusLabel l={tg.r.text} fg={tg.r.fg} icon={tg.r.icon} weight={600} />
             </div>
             <div className="flex flex-col gap-1">
               <span className="text-sm text-muted">Resolution within {tg.fl}</span>
-              <StatusLabel l={tg.f.text} fg={tg.f.fg} icon={tg.f.icon} weight={600} className="whitespace-normal" />
+              <StatusLabel l={tg.f.text} fg={tg.f.fg} icon={tg.f.icon} weight={600} />
               {tg.f.sub ? <span className="text-sm text-muted">{tg.f.sub}</span> : null}
             </div>
           </div>
