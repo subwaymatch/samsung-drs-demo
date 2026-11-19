@@ -1,0 +1,368 @@
+/* Shared text */
+.meta {
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--color-muted);
+}
+.sub {
+  font-size: 14px;
+  line-height: 1.5;
+  text-wrap: pretty;
+  color: var(--color-muted);
+}
+.sectionTitle {
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 600;
+}
+.error {
+  color: var(--color-danger);
+}
+.none {
+  color: var(--color-faint);
+}
+/* Title above a short description. */
+.heading {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+/* Page and header */
+.page {
+  margin-inline: auto;
+  display: flex;
+  max-width: 1200px;
+  flex-direction: column;
+  gap: 28px;
+}
+.header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+}
+.headerMain {
+  display: flex;
+  min-width: 0;
+  flex: 1 1 520px;
+  flex-direction: column;
+  gap: 12px;
+}
+.badges {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 20px;
+}
+.type {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.title {
+  font-size: 24px;
+  line-height: 1.4;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  text-wrap: pretty;
+}
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+.overview {
+  display: grid;
+  align-items: flex-start;
+  column-gap: 56px;
+  row-gap: 28px;
+  border-top: 1px solid var(--color-line);
+  padding-top: 20px;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 440px), 1fr));
+}
+
+/* Banners: reviewers needed, waiting, decision, status */
+.assignBanner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 20px;
+  border-left: 3px solid var(--color-accent-bar);
+  padding: 8px 0 8px 20px;
+}
+.assignText {
+  display: flex;
+  flex: 1 1 300px;
+  flex-direction: column;
+  gap: 4px;
+}
+.assignTitle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+  color: var(--color-accent-ink);
+}
+.bannerNote {
+  color: var(--color-ink-5);
+}
+.reviewerPicker {
+  width: 260px;
+  max-width: 100%;
+}
+.waiting {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  border-left: 3px solid oklch(0.88 0.01 290);
+  padding: 8px 0 8px 20px;
+  color: var(--color-ink-5);
+}
+.decision {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  border-left: 3px solid var(--color-accent-bar);
+  padding: 8px 0 8px 20px;
+}
+.decisionTitle {
+  font-weight: 600;
+  color: var(--color-accent-ink);
+}
+.withdraw {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  border-radius: 6px;
+  border: 1px solid oklch(0.9 0.012 290);
+  background-color: oklch(0.985 0.004 290);
+  padding: 16px 20px;
+}
+.withdrawTitle {
+  font-weight: 600;
+}
+/* The left border's color comes from the status, inline. */
+.statusBanner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 20px;
+  border-left: 3px solid;
+  padding: 8px 0 8px 20px;
+}
+.statusText {
+  display: flex;
+  flex: 1 1 300px;
+  flex-direction: column;
+  gap: 6px;
+}
+.statusTitle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+}
+.statusNote {
+  line-height: 1.6;
+  color: var(--color-ink-3);
+}
+
+/* Main column */
+.body {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 40px;
+}
+.main {
+  display: flex;
+  min-width: 0;
+  flex: 1 1 560px;
+  flex-direction: column;
+  gap: 36px;
+}
+.textSection {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.textHeading {
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 600;
+  color: var(--color-muted);
+}
+.description {
+  line-height: 1.75;
+  white-space: pre-wrap;
+  text-wrap: pretty;
+}
+.attachments {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.files {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  border-top: 1px solid var(--color-line);
+  padding-top: 24px;
+}
+.filesHead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.diffMode {
+  max-width: 100%;
+  overflow-x: auto;
+}
+.fetch {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  border-radius: 6px;
+  background-color: var(--color-accent-wash);
+  padding: 20px;
+}
+.fetchIcon {
+  display: flex;
+  height: 40px;
+  width: 40px;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  background-color: var(--color-accent-soft);
+}
+.fetchMain {
+  display: flex;
+  min-width: 0;
+  flex: 1;
+  flex-direction: column;
+  gap: 12px;
+}
+.fetchText {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.fetchTitle {
+  font-weight: 600;
+}
+.fetchNote {
+  max-width: 560px;
+  line-height: 1.6;
+  color: var(--color-muted);
+}
+.activity {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  border-top: 1px solid var(--color-line);
+  padding-top: 24px;
+}
+
+/* Sidebar */
+.aside {
+  display: flex;
+  min-width: 260px;
+  flex: 0 1 300px;
+  flex-direction: column;
+  gap: 28px;
+  border-left: 1px solid var(--color-line);
+  padding-left: 32px;
+  @media (width < 900px) {
+    border-left-width: 0;
+    padding-left: 0;
+  }
+}
+.turnaround {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.turnaroundValue {
+  font-size: 32px;
+  line-height: 1.1;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+}
+.turnaroundNote {
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--color-muted);
+}
+.people {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  border-top: 1px solid var(--color-line);
+  padding-top: 24px;
+}
+.author {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.person {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.authorText {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.personName {
+  font-weight: 550;
+}
+.reviewers {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.reviewerText {
+  display: flex;
+  min-width: 0;
+  flex: 1;
+  flex-direction: column;
+  gap: 4px;
+}
+.reviewerDecision {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  line-height: 20px;
+}
+.facts {
+  display: grid;
+  grid-template-columns: 88px minmax(0, 1fr);
+  column-gap: 16px;
+  row-gap: 14px;
+  border-top: 1px solid var(--color-line);
+  padding-top: 24px;
+}
+.factLabel {
+  color: var(--color-muted);
+}
+.stream {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  line-height: 20px;
+  word-break: break-all;
+}

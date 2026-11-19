@@ -29,6 +29,8 @@ import { Select } from '../ui/select';
 import { sevOptions } from './defects-list';
 import { NotFoundView } from './not-found-view';
 import { langOf } from '@/lib/text';
+import { cx } from '@/lib/cx';
+import s from './defect-detail.module.css';
 
 export function DefectDetail({ id }: { id: string }) {
   const app = useApp();
@@ -79,18 +81,18 @@ export function DefectDetail({ id }: { id: string }) {
   const pm = modelInfo(d.model, d.fw);
 
   return (
-    <div className="mx-auto flex max-w-[1200px] flex-col gap-7">
+    <div className={s.page}>
       <Breadcrumb href="/defects" label="Defects" id={d.id} />
-      <div className="flex flex-wrap items-start justify-between gap-5">
-        <div className="flex min-w-0 flex-[1_1_520px] flex-col gap-3">
-          <div className="flex flex-wrap items-center gap-5">
+      <div className={s.header}>
+        <div className={s.headerMain}>
+          <div className={s.badges}>
             <StatusLabel {...DST[d.status]} weight={600} />
-            <span className="flex items-center gap-2"><Icon name={SEV[d.sev].icon} color={SEV[d.sev].c} size={16} />{SEV[d.sev].l}</span>
+            <span className={s.iconLabel}><Icon name={SEV[d.sev].icon} color={SEV[d.sev].c} size={16} />{SEV[d.sev].l}</span>
             <span title={rec.mig.d}><StatusLabel l={rec.mig.l} fg={rec.mig.fg} icon={rec.mig.icon} /></span>
           </div>
-          <h1 lang={langOf(d.title)} className="text-2xl leading-[1.4] font-semibold tracking-[-0.02em] text-pretty">{d.title}</h1>
+          <h1 lang={langOf(d.title)} className={s.title}>{d.title}</h1>
         </div>
-        <div className="flex flex-wrap items-center gap-2.5">
+        <div className={s.actions}>
           <Button
             variant={sub ? 'subOn' : 'secondary'}
             icon={sub ? 'bell-ring' : 'bell'}
@@ -117,7 +119,7 @@ export function DefectDetail({ id }: { id: string }) {
         </div>
       </div>
 
-      <div className="grid items-start gap-x-14 gap-y-7 border-t border-line pt-5 [grid-template-columns:repeat(auto-fit,minmax(min(100%,440px),1fr))]">
+      <div className={s.overview}>
         <PersonCard label="Reported by" person={reporter} when={'Reported ' + fFull(d.created)} />
         <AffectedProducts
           {...derived.aff}
@@ -130,21 +132,21 @@ export function DefectDetail({ id }: { id: string }) {
         <ConfirmDelete id={d.id} noun="defect" onCancel={() => setConfirmDel(false)} onConfirm={() => { deleteDefect(d.id); flash(d.id + ' deleted'); navigate('/defects'); }} />
       ) : null}
 
-      <div className="flex flex-wrap items-start gap-10">
-        <div className="flex min-w-0 flex-[1_1_560px] flex-col gap-9">
-          <section className="flex flex-col gap-2.5">
-            <h2 className="text-sm font-semibold text-muted">Description</h2>
-            <p lang={langOf(d.desc)} className="leading-[1.75] whitespace-pre-wrap text-pretty">{d.desc}</p>
+      <div className={s.body}>
+        <div className={s.main}>
+          <section className={s.textSection}>
+            <h2 className={s.textHeading}>Description</h2>
+            <p lang={langOf(d.desc)} className={s.description}>{d.desc}</p>
           </section>
           {d.steps ? (
-            <section className="flex flex-col gap-2.5">
-              <h2 className="text-sm font-semibold text-muted">Steps to reproduce</h2>
-              <p lang={langOf(d.steps)} className="border-l-2 border-accent-rule py-0.5 pl-4 leading-[1.8] whitespace-pre-wrap">{d.steps}</p>
+            <section className={s.textSection}>
+              <h2 className={s.textHeading}>Steps to reproduce</h2>
+              <p lang={langOf(d.steps)} className={s.steps}>{d.steps}</p>
             </section>
           ) : null}
           {d.attachments.length ? (
-            <section className="flex flex-col gap-3.5">
-              <h2 className="text-sm font-semibold text-muted">Attachments ({d.attachments.length})</h2>
+            <section className={s.attachments}>
+              <h2 className={s.textHeading}>Attachments ({d.attachments.length})</h2>
               <Attachments items={d.attachments} />
             </section>
           ) : null}
@@ -159,17 +161,17 @@ export function DefectDetail({ id }: { id: string }) {
             onOpen={x => flash(`Demo: this would open ${x.sys} ${x.id}`)}
           />
 
-          <section className="flex flex-col gap-4 border-t border-line pt-6">
-            <div className="flex flex-col gap-1">
-              <h2 className="text-base font-semibold">Relationship map</h2>
-              <span className="text-sm leading-normal text-pretty text-muted">Related defects, code reviews and affected product lines. Click a card to open it; drag to pan.</span>
+          <section className={s.mapSection}>
+            <div className={s.heading}>
+              <h2 className={s.sectionTitle}>Relationship map</h2>
+              <span className={s.mapSub}>Related defects, code reviews and affected product lines. Click a card to open it; drag to pan.</span>
             </div>
-            <div className="overflow-hidden rounded-md border border-[oklch(0.92_0.01_290)] bg-surface">
+            <div className={s.graph}>
               <RelGraph nodes={derived.graph.nodes} edges={derived.graph.edges} height={540} />
             </div>
-            <div className="flex flex-wrap gap-5 text-sm text-ink-5">
-              <span className="flex items-center gap-2"><span className="w-6 border-t-[1.5px] border-solid border-[oklch(0.55_0.17_293)]" />Linked</span>
-              <span className="flex items-center gap-2"><span className="w-6 border-t-[1.5px] border-dashed border-[oklch(0.7_0.05_290)]" />Suggested or indirect</span>
+            <div className={s.legend}>
+              <span className={s.iconLabel}><span className={s.lineLinked} />Linked</span>
+              <span className={s.iconLabel}><span className={s.lineSuggested} />Suggested or indirect</span>
             </div>
           </section>
 
@@ -184,16 +186,16 @@ export function DefectDetail({ id }: { id: string }) {
             onUnlink={o => linkRelated(d.id, o, false, meId, flash)}
           />
 
-          <section className="flex flex-col gap-3 border-t border-line pt-6">
-            <div className="flex items-center justify-between gap-3">
-              <h2 className="text-base font-semibold">Linked code reviews</h2>
+          <section className={s.section}>
+            <div className={s.reviewsHead}>
+              <h2 className={s.sectionTitle}>Linked code reviews</h2>
               <Button variant="ghost" size="sm" icon="git-pull-request" onClick={() => navigate('/reviews/new?defect=' + d.id)}>Request code review</Button>
             </div>
-            <div className="flex flex-col">
+            <div className={s.list}>
               {derived.linked.map(r => (
-                <Clickable key={r.id} href={'/reviews/' + r.id} className="row-link flex items-center gap-3.5 border-b border-line-soft py-3.5 last:border-b-0">
-                  <span className="font-mono text-sm text-muted">{r.id}</span>
-                  <span className="bui-trunc min-w-0 flex-1">{r.title}</span>
+                <Clickable key={r.id} href={'/reviews/' + r.id} className={cx('row-link', s.reviewRow)}>
+                  <span className={s.reviewId}>{r.id}</span>
+                  <span className={cx('bui-trunc', s.rowTitle)}>{r.title}</span>
                   <StatusLabel {...RST[r.status]} />
                 </Clickable>
               ))}
@@ -201,21 +203,21 @@ export function DefectDetail({ id }: { id: string }) {
             {!derived.linked.length ? <Note icon="git-pull-request" title="No code review linked yet" text="Request a code review when a fix is ready. Its Helix Swarm status will show here." /> : null}
           </section>
 
-          <section className="flex flex-col gap-3 border-t border-line pt-6">
-            <div className="flex flex-wrap items-center justify-between gap-3">
-              <div className="flex flex-col gap-1">
-                <h2 className="flex items-center gap-2.5 text-base font-semibold">
-                  <img src="/logos/perforce.svg" alt="" className="block h-[18px] w-auto" />
+          <section className={s.section}>
+            <div className={s.changelistsHead}>
+              <div className={s.heading}>
+                <h2 className={s.p4Title}>
+                  <img src="/logos/perforce.svg" alt="" className={s.p4Logo} />
                   Perforce changelists
                 </h2>
-                <span className="text-sm text-muted">Fixes recorded on P4 job <span className="font-mono">{jobOf(d.id)}</span></span>
+                <span className={s.meta}>Fixes recorded on P4 job <span className={s.jobId}>{jobOf(d.id)}</span></span>
               </div>
               <Button variant="ghost" size="sm" icon="link" onClick={() => { setLinkCl(o => !o); setClInput(''); setClErr(''); }}>Link changelist</Button>
             </div>
             {linkCl ? (
               <>
-                <div className="flex flex-wrap items-start gap-2.5 pt-1 pb-2">
-                  <div className="flex-[1_1_220px]"><Input icon="git-commit" mono value={clInput} onChange={v => { setClInput(v); setClErr(''); }} placeholder="Changelist number, e.g. 1492310" ariaLabel="Changelist number" /></div>
+                <div className={s.changelistForm}>
+                  <div className={s.changelistField}><Input icon="git-commit" mono value={clInput} onChange={v => { setClInput(v); setClErr(''); }} placeholder="Changelist number, e.g. 1492310" ariaLabel="Changelist number" /></div>
                   <Button
                     variant="primary"
                     icon="check"
@@ -232,16 +234,16 @@ export function DefectDetail({ id }: { id: string }) {
                   </Button>
                   <Button variant="secondary" onClick={() => setLinkCl(false)}>Cancel</Button>
                 </div>
-                {clErr ? <span className="text-danger">{clErr}</span> : null}
+                {clErr ? <span className={s.error}>{clErr}</span> : null}
               </>
             ) : null}
-            <div className="flex flex-col">
+            <div className={s.list}>
               {derived.cls.map(c => (
-                <div key={c.cl} className="grid grid-cols-[96px_110px_minmax(0,1fr)_auto] items-center gap-3.5 border-b border-line-soft py-3.5 last:border-b-0">
-                  <span className="font-mono text-sm">{c.cl}</span>
+                <div key={c.cl} className={s.changelist}>
+                  <span className={s.code}>{c.cl}</span>
                   <StatusLabel l={c.status} fg={c.fg} icon={c.icon} size={14} />
-                  <div className="flex min-w-0 flex-col gap-1"><span className="bui-trunc">{c.desc}</span><span className="bui-trunc text-sm text-muted">{c.meta}</span></div>
-                  <span className="text-sm whitespace-nowrap text-muted">{c.at}</span>
+                  <div className={s.changelistText}><span className="bui-trunc">{c.desc}</span><span className={cx('bui-trunc', s.meta)}>{c.meta}</span></div>
+                  <span className={s.changelistTime}>{c.at}</span>
                 </div>
               ))}
             </div>
@@ -252,33 +254,33 @@ export function DefectDetail({ id }: { id: string }) {
             ) : null}
           </section>
 
-          <section className="flex flex-col gap-6 border-t border-line pt-6">
-            <h2 className="text-base font-semibold">Activity</h2>
+          <section className={s.activity}>
+            <h2 className={s.sectionTitle}>Activity</h2>
             <ActivityFeed items={d.activity} />
             <Composer me={av(meId)} people={people} onPost={(t, att) => upd(x => ({ ...x, activity: [...x.activity, A('c', meId, nowStr(), t, null, att)] }))} />
           </section>
         </div>
 
-        <aside className="flex min-w-[260px] flex-[0_1_300px] flex-col gap-7 border-l border-line pl-8 max-[900px]:border-l-0 max-[900px]:pl-0">
-          <div className="flex flex-col gap-4">
+        <aside className={s.aside}>
+          <div className={s.targets}>
             <SideLabel icon="gauge">{tg.title}</SideLabel>
-            <div className="flex flex-col gap-1">
-              <span className="text-sm text-muted">First response within {tg.rl}</span>
+            <div className={s.target}>
+              <span className={s.meta}>First response within {tg.rl}</span>
               <StatusLabel l={tg.r.text} fg={tg.r.fg} icon={tg.r.icon} weight={600} />
             </div>
-            <div className="flex flex-col gap-1">
-              <span className="text-sm text-muted">Resolution within {tg.fl}</span>
+            <div className={s.target}>
+              <span className={s.meta}>Resolution within {tg.fl}</span>
               <StatusLabel l={tg.f.text} fg={tg.f.fg} icon={tg.f.icon} weight={600} />
-              {tg.f.sub ? <span className="text-sm text-muted">{tg.f.sub}</span> : null}
+              {tg.f.sub ? <span className={s.meta}>{tg.f.sub}</span> : null}
             </div>
           </div>
-          <div className="flex flex-col gap-3 border-t border-line pt-6">
+          <div className={s.section}>
             <SideLabel icon="circle-dot">Status</SideLabel>
-            <div className="flex flex-wrap items-baseline gap-x-2.5 gap-y-1">
+            <div className={s.statusLine}>
               <StatusLabel {...DST[d.status]} weight={600} />
-              {isDone && d.resolution ? <span className="text-sm text-muted">{RESOLUTION[d.resolution]}</span> : null}
+              {isDone && d.resolution ? <span className={s.meta}>{RESOLUTION[d.resolution]}</span> : null}
             </div>
-            <div className="flex flex-wrap gap-2">
+            <div className={s.statusActions}>
               {d.status === 'open' ? <Button variant="secondary" size="sm" icon="circle-dot" onClick={() => setStatus('in_progress')}>Start work</Button> : null}
               {d.status === 'in_progress' ? <Button variant="secondary" size="sm" icon="circle" onClick={() => setStatus('open')}>Stop work</Button> : null}
               {d.status === 'resolved' ? <Button variant="secondary" size="sm" icon="lock" onClick={() => setStatus('closed')}>Verify and close</Button> : null}
@@ -288,26 +290,26 @@ export function DefectDetail({ id }: { id: string }) {
               <Select ariaLabel="Resolve as" placeholder="Resolve as..." value={null} items={RESOLUTION_KEYS.map(k => ({ value: k, label: RESOLUTION[k], icon: 'circle-check', color: DST.resolved.fg }))} onValueChange={v => setStatus('resolved', v as Resolution)} />
             ) : null}
           </div>
-          <div className="flex flex-col gap-2">
+          <div className={s.severity}>
             <SideLabel icon="flag">Severity</SideLabel>
             <Select ariaLabel="Severity" items={sevOptions()} value={d.sev} onValueChange={v => { if (v !== d.sev) upd(x => ({ ...log(x, 'changed severity to ' + SEV[v as Severity].l), sev: v as Severity })); }} />
           </div>
-          <div className="flex flex-col gap-3.5">
+          <div className={s.assignees}>
             <SideLabel icon="users">Assignees</SideLabel>
             {d.assignees.map(u => {
               const p = av(u);
               return (
-                <div key={u} className="flex items-center gap-3">
+                <div key={u} className={s.assignee}>
                   <Person person={p} size={32} />
-                  <div className="flex min-w-0 flex-1 flex-col gap-0.5"><span className="font-[550]">{p.name}</span><span className="text-sm text-muted">{p.title}</span></div>
+                  <div className={s.assigneeText}><span className={s.assigneeName}>{p.name}</span><span className={s.meta}>{p.title}</span></div>
                   <Button variant="ghost" size="sm" icon="x" iconOnly title="Remove assignee" onClick={() => upd(x => ({ ...log(x, 'unassigned ' + UM[u].name), assignees: x.assignees.filter(y => y !== u) }))} />
                 </div>
               );
             })}
             {!d.assignees.length ? (
-              <div className="flex items-center gap-2.5 rounded-md bg-accent-wash px-3 py-2.5">
-                <span className="flex h-7 w-7 flex-none items-center justify-center rounded-full bg-accent-soft"><Icon name="user-plus" size={16} color="oklch(0.5 0.17 293)" /></span>
-                <span className="font-[550] text-ink-4">No one assigned yet</span>
+              <div className={s.unassigned}>
+                <span className={s.unassignedIcon}><Icon name="user-plus" size={16} color="oklch(0.5 0.17 293)" /></span>
+                <span className={s.unassignedText}>No one assigned yet</span>
               </div>
             ) : null}
             <Combobox
@@ -320,13 +322,13 @@ export function DefectDetail({ id }: { id: string }) {
               resetOnSelect
             />
           </div>
-          <div className="grid grid-cols-[88px_minmax(0,1fr)] gap-x-4 gap-y-3.5 border-t border-line pt-6">
-            <span className="text-muted">Model</span><span className="font-[550]">{d.model}</span>
-            <span className="text-muted">Component</span><span>{d.comp}</span>
-            <span className="text-muted">Firmware</span><span className="font-mono text-sm">{d.fw}</span>
-            <span className="text-muted">Reporter</span><span>{reporter.name}</span>
-            <span className="text-muted">Created</span><span>{fFull(d.created)}</span>
-            <span className="text-muted">Updated</span><span>{fAt(lastAt(d))}</span>
+          <div className={s.facts}>
+            <span className={s.factLabel}>Model</span><span className={s.model}>{d.model}</span>
+            <span className={s.factLabel}>Component</span><span>{d.comp}</span>
+            <span className={s.factLabel}>Firmware</span><span className={s.code}>{d.fw}</span>
+            <span className={s.factLabel}>Reporter</span><span>{reporter.name}</span>
+            <span className={s.factLabel}>Created</span><span>{fFull(d.created)}</span>
+            <span className={s.factLabel}>Updated</span><span>{fAt(lastAt(d))}</span>
           </div>
           <Subscribers
             people={subPeople}
