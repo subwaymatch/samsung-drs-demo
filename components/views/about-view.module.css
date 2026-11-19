@@ -1,0 +1,101 @@
+.page {
+  margin-inline: auto;
+  display: flex;
+  max-width: 960px;
+  flex-direction: column;
+  gap: 40px;
+}
+.intro {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.heading {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.title {
+  font-size: 32px;
+  line-height: 1.2;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+.subtitle {
+  font-size: 15px;
+  line-height: 1.7;
+  color: var(--color-muted);
+}
+
+/* Showcase video */
+.figure {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.video {
+  display: block;
+  aspect-ratio: 16 / 9;
+  width: 100%;
+  border-radius: 8px;
+  background-color: oklch(0.15 0.03 290);
+  box-shadow: 0 0 0 1px oklch(0.2 0.02 290 / 0.08), 0 8px 24px oklch(0.2 0.02 290 / 0.08);
+}
+.caption {
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--color-muted);
+}
+
+/* About the demo */
+.story {
+  display: flex;
+  max-width: 680px;
+  flex-direction: column;
+  gap: 16px;
+  border-top: 1px solid var(--color-line);
+  padding-top: 24px;
+  font-size: 17px;
+  line-height: 1.7;
+  text-wrap: pretty;
+  color: var(--color-ink-3);
+}
+.disclaimer {
+  font-size: 15px;
+  color: var(--color-muted);
+}
+
+/* Stack, demo and data rows */
+.facts {
+  display: flex;
+  max-width: 680px;
+  flex-direction: column;
+  font-size: 15px;
+}
+.fact {
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: 40px;
+  row-gap: 8px;
+  border-top: 1px solid var(--color-line);
+  padding: 20px 0;
+}
+.factLast {
+  border-bottom: 1px solid var(--color-line);
+}
+.factKey {
+  display: flex;
+  flex: 0 0 160px;
+  align-items: center;
+  gap: 10px;
+  align-self: flex-start;
+  font-weight: 600;
+}
+.factValue {
+  min-width: 0;
+  flex: 1 1 280px;
+  line-height: 1.6;
+  text-wrap: pretty;
+  color: var(--color-ink-3);
+}
