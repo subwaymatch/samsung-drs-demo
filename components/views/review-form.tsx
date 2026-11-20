@@ -33,7 +33,7 @@ export function ReviewForm({ id }: { id?: string }) {
   const [sp] = useSearchParams();
   if (!app) return <Loading />;
   const r = id ? app.data.reviews.find(x => x.id === id) : undefined;
-  if (id && !r) return <NotFoundView back={{ href: '/reviews', label: 'Code reviews' }} />;
+  if (id && !r) return <NotFoundView back={{ href: '/reviews', label: 'Code Reviews' }} />;
   return <ReviewFormInner key={id || 'new'} r={r} linkedDefect={sp.get('defect')} />;
 }
 
@@ -55,7 +55,7 @@ function ReviewFormInner({ r, linkedDefect }: { r?: Review; linkedDefect: string
   const typeItems = useMemo(() => TYPES.map(t => ({ value: t, label: t, icon: TYPE_ICON[t], color: 'oklch(0.5 0.12 293)' })), []);
   const defectItems = useMemo(() => app.data.defects.map(x => ({ value: x.id, label: x.id + ', ' + x.title, icon: SEV[x.sev].icon, color: SEV[x.sev].c })), [app.data.defects]);
   const mode = r ? 'edit' : 'new';
-  const heading = clone ? 'Clone ' + clone.cloneOf : r ? 'Edit ' + r.id : 'Request a code review';
+  const heading = clone ? 'Clone ' + clone.cloneOf : r ? 'Edit ' + r.id : 'Request a Code Review';
   const back = r ? '/reviews/' + r.id : '/reviews';
 
   const save = () => {
@@ -83,7 +83,7 @@ function ReviewFormInner({ r, linkedDefect }: { r?: Review; linkedDefect: string
   return (
     <div className={s.page}>
       <div className={s.header}>
-        <div className={s.buttonRow}><Link to={back} className="bui-btn bui-link"><Icon name="arrow-left" size={16} />{r ? r.id : 'Code reviews'}</Link></div>
+        <div className={s.buttonRow}><Link to={back} className="bui-btn bui-link"><Icon name="arrow-left" size={16} />{r ? r.id : 'Code Reviews'}</Link></div>
         <h1 className={s.title}>{heading}</h1>
       </div>
       <div className={s.fields}>

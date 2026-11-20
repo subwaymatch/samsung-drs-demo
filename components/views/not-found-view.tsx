@@ -7,13 +7,13 @@ import s from './not-found-view.module.css';
 export function NotFoundView({ text = 'This item may have been deleted', back = { href: '/', label: 'Insights' } }: { text?: string; back?: { href: string; label: string } }) {
   // Record pages are titled with the id from the URL; say what happened instead.
   useEffect(() => {
-    document.title = 'Not found - DRS';
+    document.title = 'Not Found - DRS';
   }, []);
   return (
     <div className={s.page}>
       {/* A printer with a page caught in its rollers: this division's own way for a page to go missing */}
       <Illustration name="jam" height={160} className={s.art} />
-      <h1 className={s.title}>Not found</h1>
+      <h1 className={s.title}>Not Found</h1>
       <p className={s.text}>{text}</p>
       <LinkButton href={back.href} variant="secondary" icon="arrow-left">Back to {back.label}</LinkButton>
     </div>

@@ -49,7 +49,7 @@ export function ReviewDetail({ id }: { id: string }) {
   const people = useMemo(() => USERS.filter(u => u.id !== meId).map(u => personOption(u.id)), [meId]);
 
   if (!app) return <Loading />;
-  if (!r || !derived || !prefs || !data) return <NotFoundView text={`There is no code review ${id}. It may have been deleted.`} back={{ href: '/reviews', label: 'Code reviews' }} />;
+  if (!r || !derived || !prefs || !data) return <NotFoundView text={`There is no code review ${id}. It may have been deleted.`} back={{ href: '/reviews', label: 'Code Reviews' }} />;
 
   const me = UM[meId], isCR = me.role === 'cr', isAuthor = r.author === meId;
   const myRv = r.reviewers.find(v => v.u === meId);
@@ -96,7 +96,7 @@ export function ReviewDetail({ id }: { id: string }) {
 
   return (
     <div className={s.page}>
-      <Breadcrumb href="/reviews" label="Code reviews" id={r.id} />
+      <Breadcrumb href="/reviews" label="Code Reviews" id={r.id} />
       <div className={s.header}>
         <div className={s.headerMain}>
           <div className={s.badges}>

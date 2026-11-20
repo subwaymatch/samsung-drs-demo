@@ -34,7 +34,7 @@ function Page({ title, children }: { title: string | ((p: Params) => string); ch
 
 const personTitle = (id: string) => {
   const u = UM[id];
-  return u ? (u.en !== u.name ? `${u.name} (${u.en})` : u.name) : 'Not found';
+  return u ? (u.en !== u.name ? `${u.name} (${u.en})` : u.name) : 'Not Found';
 };
 
 export function AppRoutes() {
@@ -46,18 +46,18 @@ export function AppRoutes() {
       <Route path="/" element={<Page title="Insights"><InsightsView /></Page>} />
 
       <Route path="/defects" element={<Page title="Defects"><DefectsList /></Page>} />
-      <Route path="/defects/new" element={<Page title="Report a defect"><DefectForm /></Page>} />
+      <Route path="/defects/new" element={<Page title="Report a Defect"><DefectForm /></Page>} />
       <Route path="/defects/:id" element={<Page title={p => p.id}>{p => <DefectDetail id={p.id} />}</Page>} />
       <Route path="/defects/:id/edit" element={<Page title={p => 'Edit ' + p.id}>{p => <DefectForm id={p.id} />}</Page>} />
 
-      <Route path="/reviews" element={<Page title="Code reviews"><ReviewsList /></Page>} />
-      <Route path="/reviews/new" element={<Page title="Request a code review"><ReviewForm /></Page>} />
+      <Route path="/reviews" element={<Page title="Code Reviews"><ReviewsList /></Page>} />
+      <Route path="/reviews/new" element={<Page title="Request a Code Review"><ReviewForm /></Page>} />
       <Route path="/reviews/:id" element={<Page title={p => p.id}>{p => <ReviewDetail id={p.id} />}</Page>} />
       <Route path="/reviews/:id/edit" element={<Page title={p => 'Edit ' + p.id}>{p => <ReviewForm id={p.id} />}</Page>} />
 
-      <Route path="/digests" element={<Page title="Email digests"><DigestsView /></Page>} />
-      <Route path="/digests/:kind" element={<Page title="Email digests">{p => <DigestsView kind={p.kind} />}</Page>} />
-      <Route path="/digests/:kind/:date" element={<Page title="Email digests">{p => <DigestsView kind={p.kind} date={p.date} />}</Page>} />
+      <Route path="/digests" element={<Page title="Email Digests"><DigestsView /></Page>} />
+      <Route path="/digests/:kind" element={<Page title="Email Digests">{p => <DigestsView kind={p.kind} />}</Page>} />
+      <Route path="/digests/:kind/:date" element={<Page title="Email Digests">{p => <DigestsView kind={p.kind} date={p.date} />}</Page>} />
 
       <Route path="/teams" element={<Page title="Teams"><TeamsView /></Page>} />
       <Route path="/teams/:id" element={<Page title={p => personTitle(p.id)}>{p => <ProfileView id={p.id} />}</Page>} />
