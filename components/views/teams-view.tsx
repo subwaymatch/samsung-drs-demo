@@ -53,7 +53,7 @@ export function TeamsView() {
           </div>
         </section>
       ))}
-      {!teams.length ? <EmptyState icon="users" title="No people match this search" text="Check the spelling, or search by team or role instead" /> : null}
+      {!teams.length ? <EmptyState art="lanyard" title="No people match this search" text="Check the spelling, or search by team or role instead" /> : null}
     </div>
   );
 }

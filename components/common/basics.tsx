@@ -5,6 +5,7 @@ import { Icon } from '../ui/icon';
 import { smallPhoto } from '@/lib/people';
 import type { Thumb as ThumbT } from '@/lib/products';
 import { cx } from '@/lib/cx';
+import { ILLUSTRATION, illustrationSrc } from '@/lib/illustrations';
 import s from './basics.module.css';
 
 export function PageHeader({ title, sub, action }: { title: ReactNode; sub?: ReactNode; action?: ReactNode }) {
@@ -61,12 +62,21 @@ export function Note({ icon, title, text, className }: { icon: string; title: st
 }
 
 /** Large centered empty state for lists. */
-export function EmptyState({ icon, title, text }: { icon: string; title: string; text: string }) {
+/**
+ * One of the isometric illustrations (lib/illustrations.ts), `height` px tall. Decorative: the text next to it
+ * says what it means, so it has no alt text. Its width comes from the file's proportions, so nothing shifts as it loads.
+ */
+export function Illustration({ name, height, className }: { name: string; height: number; className?: string }) {
+  const it = ILLUSTRATION[name];
+  if (!it) return null;
+  return <img src={illustrationSrc(name)} alt="" width={Math.round((it.width / it.height) * height)} height={height} className={cx(s.illustration, className)} />;
+}
+
+/** Large centered empty state for lists, led by an illustration. */
+export function EmptyState({ art, title, text }: { art: string; title: string; text: string }) {
   return (
     <div className={s.empty}>
-      <span className={s.emptyIcon}>
-        <Icon name={icon} size={26} color="oklch(0.5 0.17 293)" />
-      </span>
+      <Illustration name={art} height={136} />
       <div className={s.emptyText}>
         <span className={s.emptyTitle}>{title}</span>
         <span className={s.sub}>{text}</span>

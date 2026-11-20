@@ -82,7 +82,7 @@ export function NotificationsView() {
             </Clickable>
           );
         })}
-        {!fl.length ? <EmptyState icon="bell" title="You're all caught up" text="Mentions, assignments and review decisions will show up here" /> : null}
+        {!fl.length ? <EmptyState art="mug" title="You're all caught up" text="Mentions, assignments and review decisions will show up here" /> : null}
       </div>
       <Pagination pg={pg} onPage={p => { setPage(p); setKIdx(-1); window.scrollTo(0, 0); }} />
     </div>

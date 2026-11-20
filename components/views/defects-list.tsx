@@ -163,7 +163,7 @@ export function DefectsList() {
           );
         })}
       </ListTable>
-      {!rows.length ? <EmptyState icon="filter-x" title="No defects match these filters" text="Try a different status or scope, or remove a filter above" /> : null}
+      {!rows.length ? <EmptyState art="test-page" title="No defects match these filters" text="Try a different status or scope, or remove a filter above" /> : null}
       <Pagination pg={pg} onPage={p => { go({ page: p }); window.scrollTo(0, 0); }} />
       {sel.length ? (
         <BulkBar count={sel.length} onClear={() => setSel([])}>

@@ -1,11 +1,12 @@
+import { Illustration } from '../common/basics';
 import { DrsLogo } from '../shell/logo';
-import { Icon } from '../ui/icon';
 import s from './about-view.module.css';
 
+/** Label, illustration and text for each fact. */
 const ROWS: [string, string, string][] = [
-  ['Original stack', 'layers', 'React and Node.js, styled with Bootstrap and custom CSS. Synced with IBM Rational ClearQuest and ClearCase, Review Board, Perforce, Helix Swarm, Jira and Confluence.'],
-  ['This demo', 'app-window', 'Recreated with modern tools: React on Vite, with React Router, Base UI components, Lucide icons and React Flow for the migration and relationship diagrams. Served from Cloudflare Workers; the app runs in the browser, and your changes are saved locally.'],
-  ['Mock data', 'database', 'January 2016 to September 2017: about 800 defects and 630 code reviews across 44 printer and copier models, 34 people in 8 teams and 3 migration waves. Generated deterministically, so every visitor starts from the same history.']
+  ['Original stack', 'rack', 'React and Node.js, styled with Bootstrap and custom CSS. Synced with IBM Rational ClearQuest and ClearCase, Review Board, Perforce, Helix Swarm, Jira and Confluence.'],
+  ['This demo', 'laptop', 'Recreated with modern tools: React on Vite, with React Router, Base UI components, Lucide icons and React Flow for the migration and relationship diagrams. Served from Cloudflare Workers; the app runs in the browser, and your changes are saved locally.'],
+  ['Mock data', 'paper', 'January 2016 to September 2017: about 800 defects and 630 code reviews across 44 printer and copier models, 34 people in 8 teams and 3 migration waves. Generated deterministically, so every visitor starts from the same history.']
 ];
 
 export function AboutView() {
@@ -41,13 +42,13 @@ export function AboutView() {
         <p className={s.disclaimer}>This demo is not affiliated with or endorsed by Samsung Electronics. Samsung is a trademark of its owner.</p>
       </section>
       <section className={s.facts}>
-        {ROWS.map(([k, icon, v]) => (
+        {ROWS.map(([k, art, v]) => (
           <div key={k} className={s.fact}>
-            <span className={s.factKey}>
-              <Icon name={icon} size={16} color="var(--color-accent-ink)" />
-              {k}
-            </span>
-            <span className={s.factValue}>{v}</span>
+            <span className={s.factArt}><Illustration name={art} height={72} /></span>
+            <div className={s.factBody}>
+              <span className={s.factKey}>{k}</span>
+              <span className={s.factValue}>{v}</span>
+            </div>
           </div>
         ))}
       </section>

@@ -6,6 +6,9 @@
   align-items: flex-start;
   gap: 16px;
 }
+.art {
+  margin-bottom: 16px;
+}
 .title {
   font-size: 28px;
   line-height: 36px;
