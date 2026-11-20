@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router';
-import { useMemo } from 'react';
+import { useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { fFull, TNOW } from '@/lib/dates';
 import { computeInsights, RANGES } from '@/lib/insights';
 import { useApp } from '@/lib/store';
@@ -41,41 +41,7 @@ export function InsightsView() {
 
       <div className={s.twoUp}>
         <Section title="Defects by migration state" sub={st.mig.sub}>
-          <div className={s.donut}>
-            <svg viewBox="0 0 520 280" role="img" aria-label="Defects by migration state" className={s.donutSvg}>
-              {st.mig.donut.map(p => (
-                <path
-                  key={p.label}
-                  d={p.d}
-                  fill={p.c}
-                  stroke="#fff"
-                  strokeWidth={2}
-                  role="link"
-                  tabIndex={0}
-                  aria-label={p.tip}
-                  className={s.donutSlice}
-                  // A press opens the slice's defects without focusing it, so no focus ring lingers after a click
-                  onMouseDown={e => e.preventDefault()}
-                  onClick={() => navigate(p.href)}
-                  onKeyDown={e => { if (e.key === 'Enter') navigate(p.href); }}
-                >
-                  <title>{p.tip}</title>
-                </path>
-              ))}
-              {st.mig.donut.map(p => <polyline key={'l' + p.label} points={p.lp} fill="none" stroke="oklch(0.62 0.02 290)" strokeWidth={1} />)}
-              {st.mig.donut.map(p => <circle key={'c' + p.label} cx={p.dx} cy={p.dy} r={3} fill="oklch(0.45 0.02 290)" />)}
-            </svg>
-            {st.mig.donut.map(p => (
-              <Clickable key={'t' + p.label} href={p.href} className={s.donutLabel} style={{ left: p.lx, top: p.ly, transform: p.tr, textAlign: p.ta }}>
-                <span className={s.donutLabelName}>{p.label}</span>
-                <span className={s.subNumber}>{p.val}</span>
-              </Clickable>
-            ))}
-            <div className={s.donutCenter}>
-              <span className={s.donutTotal}>{st.mig.total}</span>
-              <span className={s.sub}>defects</span>
-            </div>
-          </div>
+          <MigrationDonut mig={st.mig} />
         </Section>
 
         <Section
@@ -353,6 +319,73 @@ export function InsightsView() {
           </div>
         </div>
       </Section>
+    </div>
+  );
+}
+
+type Mig = ReturnType<typeof computeInsights>['mig'];
+
+/**
+ * The migration donut with its callouts. The callouts on the left are set against their leader lines, so how far
+ * the leftmost one starts from the edge depends on its text and the chart's width. The chart is shifted by that much,
+ * measured after layout and again on resize, so the leftmost callout lines up with the section heading.
+ */
+function MigrationDonut({ mig }: { mig: Mig }) {
+  const navigate = useNavigate();
+  const ref = useRef<HTMLDivElement>(null);
+  const [shift, setShift] = useState(0);
+  useLayoutEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const measure = () => {
+      const labels = el.getElementsByClassName(s.donutLabel);
+      if (!labels.length) return;
+      // Both move with the chart, so the offset does not depend on the current shift.
+      const left = Math.min(...[...labels].map(l => l.getBoundingClientRect().left)) - el.getBoundingClientRect().left;
+      setShift(p => (Math.abs(p - left) < 0.5 ? p : left));
+    };
+    measure();
+    document.fonts?.ready.then(measure);
+    if (typeof ResizeObserver === 'undefined') return;
+    const ro = new ResizeObserver(measure);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, [mig]);
+  return (
+    <div ref={ref} className={s.donut} style={{ translate: `${-shift}px 0` }}>
+      <svg viewBox="0 0 520 280" role="img" aria-label="Defects by migration state" className={s.donutSvg}>
+        {mig.donut.map(p => (
+          <path
+            key={p.label}
+            d={p.d}
+            fill={p.c}
+            stroke="#fff"
+            strokeWidth={2}
+            role="link"
+            tabIndex={0}
+            aria-label={p.tip}
+            className={s.donutSlice}
+            // A press opens the slice's defects without focusing it, so no focus ring lingers after a click
+            onMouseDown={e => e.preventDefault()}
+            onClick={() => navigate(p.href)}
+            onKeyDown={e => { if (e.key === 'Enter') navigate(p.href); }}
+          >
+            <title>{p.tip}</title>
+          </path>
+        ))}
+        {mig.donut.map(p => <polyline key={'l' + p.label} points={p.lp} fill="none" stroke="oklch(0.62 0.02 290)" strokeWidth={1} />)}
+        {mig.donut.map(p => <circle key={'c' + p.label} cx={p.dx} cy={p.dy} r={3} fill="oklch(0.45 0.02 290)" />)}
+      </svg>
+      {mig.donut.map(p => (
+        <Clickable key={'t' + p.label} href={p.href} className={s.donutLabel} style={{ left: p.lx, top: p.ly, transform: p.tr, textAlign: p.ta }}>
+          <span className={s.donutLabelName}>{p.label}</span>
+          <span className={s.subNumber}>{p.val}</span>
+        </Clickable>
+      ))}
+      <div className={s.donutCenter}>
+        <span className={s.donutTotal}>{mig.total}</span>
+        <span className={s.sub}>defects</span>
+      </div>
     </div>
   );
 }

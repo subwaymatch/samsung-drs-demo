@@ -113,12 +113,13 @@
 }
 
 /* Migration donut */
+/* Starts at the section's left edge; MigrationDonut shifts it so the leftmost callout lines up with the heading */
 .donut {
   container-type: inline-size;
   position: relative;
   width: 100%;
   max-width: 560px;
-  align-self: center;
+  align-self: flex-start;
 }
 .donutSvg {
   display: block;
@@ -168,6 +169,7 @@
   font-size: 24px;
   line-height: 1;
   font-weight: 600;
+  letter-spacing: -0.06em;
   font-variant-numeric: tabular-nums;
   @container (width < 440px) {
     font-size: 16px;
@@ -271,10 +273,11 @@
   gap: 8px;
   color: var(--color-muted);
 }
+/* A date range, not a column of figures: proportional digits, tracked in a little */
 .periodLabel {
   font-weight: 600;
+  letter-spacing: -0.01em;
   color: var(--color-ink);
-  font-variant-numeric: tabular-nums;
 }
 .periodTabs {
   margin-bottom: -1px;
@@ -341,14 +344,19 @@
   letter-spacing: -0.02em;
   font-variant-numeric: tabular-nums;
 }
+/* The unit takes the figure's color */
 .kpiUnit {
   font-weight: 550;
-  color: var(--color-muted);
+  color: var(--color-ink);
 }
 .kpiDelta {
   font-size: 14px;
   line-height: 20px;
-  font-weight: 600;
+  font-weight: 400;
+}
+/* The change and its context read as one pair */
+.kpiDelta + .sub {
+  margin-top: -6px;
 }
 
 /* Tables: severity targets and the code review team */
