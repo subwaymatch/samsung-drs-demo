@@ -35,7 +35,7 @@ export function SectionTitle({ title, sub, right, small }: { title: ReactNode; s
   );
 }
 
-/** A top-ruled section, used throughout the dashboards and detail pages. gap is the space between its children in px (default 20). */
+/** A titled section. Sections are set apart by the space around them, not by rules. gap is the space between its children in px (default 20). */
 export function Section({ title, sub, right, children, className, gap }: { title?: ReactNode; sub?: ReactNode; right?: ReactNode; children: ReactNode; className?: string; gap?: number }) {
   return (
     <section className={cx(s.section, className)} style={gap === undefined ? undefined : { gap }}>

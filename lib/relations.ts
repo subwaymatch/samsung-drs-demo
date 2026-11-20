@@ -137,7 +137,8 @@ export function systemGraph(data: Data) {
     id: 'hub', type: 'sys', position: { x: -5, y: BODY + span / 2 + NAME_Y - HUB_H / 2 },
     data: { hub: true, w: W, name: 'DRS', logo: '/drs-logo.svg', role: 'Links each defect and code review across all seven systems', meta: `${D.length} defects, ${R.length} code reviews`, sync: 'All systems connected' }
   });
-  return { nodes: N, edges: E, height: BODY + span + 128 };
+  // The last row is at most 112px tall (a role on two lines).
+  return { nodes: N, edges: E, height: BODY + span + 112 };
 }
 
 /** Relationship map for one defect: related defects, code reviews and product lines. */

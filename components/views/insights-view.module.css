@@ -90,12 +90,18 @@
 }
 
 /* Page and header */
+/* Sections are separated by space alone: --section-gap between them (64px,
+   48px on phones), 20 to 24px inside. */
 .page {
+  --section-gap: 64px;
   margin-inline: auto;
   display: flex;
   max-width: 1200px;
   flex-direction: column;
-  gap: 40px;
+  gap: var(--section-gap);
+  @media (width < 640px) {
+    --section-gap: 48px;
+  }
 }
 .status {
   padding-bottom: 2px;
@@ -105,8 +111,9 @@
   font-variant-numeric: tabular-nums;
 }
 
-/* System diagram */
+/* System diagram: it leads the page, so it sits closer to the header (40px) */
 .systems {
+  margin-top: calc(40px - var(--section-gap));
   display: flex;
   flex-direction: column;
 }
@@ -114,8 +121,8 @@
 /* Two sections side by side, stacking when narrow */
 .twoUp {
   display: grid;
-  column-gap: 56px;
-  row-gap: 40px;
+  column-gap: 64px;
+  row-gap: var(--section-gap);
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr));
 }
 
@@ -245,11 +252,12 @@
 }
 
 /* Reporting period bar */
+/* Sticky above everything it filters. Its bottom rule is the one rule kept
+   between sections: content scrolls underneath it. 32px down to the KPIs. */
 .periodBar {
   position: sticky;
   z-index: 30;
-  margin-top: -16px;
-  margin-bottom: -12px;
+  margin-bottom: calc(32px - var(--section-gap));
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -704,14 +712,12 @@
 .activeLists {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  gap: 40px;
+  gap: var(--section-gap);
 }
 .active {
   display: flex;
   flex-direction: column;
   gap: 12px;
-  border-top: 1px solid var(--color-line);
-  padding-top: 28px;
 }
 .activeRow {
   display: grid;
