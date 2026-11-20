@@ -104,7 +104,7 @@ export function ReviewsList() {
 
   return (
     <div className={s.page}>
-      <PageHeader title="Code reviews" sub="Every code change is reviewed by the code review team before it is submitted" action={<LinkButton href="/reviews/new" variant="primary" icon="git-pull-request">Request review</LinkButton>} />
+      <PageHeader title="Code Reviews" action={<LinkButton href="/reviews/new" variant="primary" icon="git-pull-request">Request review</LinkButton>} />
       <ScopeTabs scopes={view.scopes} value={view.scope} onChange={k => go({ scope: k })} />
       <div className={s.filters}>
         <span className={s.filterLabel}>Status</span>

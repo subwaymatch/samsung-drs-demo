@@ -8,15 +8,13 @@ import { cx } from '@/lib/cx';
 import { ILLUSTRATION, illustrationSrc } from '@/lib/illustrations';
 import s from './basics.module.css';
 
-export function PageHeader({ title, sub, action }: { title: ReactNode; sub?: ReactNode; action?: ReactNode }) {
+/** The page's title in Title Case, with its actions (a button, filters, a status line) on the right. */
+export function PageHeader({ title, action }: { title: ReactNode; action?: ReactNode }) {
   return (
-    <div className={s.pageHeader}>
-      <div className={s.pageHeading}>
-        <h1 className={s.pageTitle}>{title}</h1>
-        {sub ? <p className={s.pageSub}>{sub}</p> : null}
-      </div>
+    <header className={s.pageHeader}>
+      <h1 className={s.pageTitle}>{title}</h1>
       {action}
-    </div>
+    </header>
   );
 }
 

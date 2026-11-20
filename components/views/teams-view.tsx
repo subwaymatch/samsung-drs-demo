@@ -15,13 +15,11 @@ export function TeamsView() {
   const match = (u: (typeof USERS)[number]) => !tq || (u.name + ' ' + u.en + ' ' + u.title + ' ' + u.email + ' ' + u.site).toLowerCase().includes(tq);
   const teams = TEAMS.filter(t => tf === 'all' || t.k === tf).map(t => ({ ...t, members: USERS.filter(u => u.team === t.k && match(u)) })).filter(t => t.members.length);
   const filterItems: Option[] = [{ value: 'all', label: 'All teams', icon: 'users', color: MUTED }, ...TEAMS.map(t => ({ value: t.k, label: t.name, sub: USERS.filter(u => u.team === t.k).length + ' people' }))];
-  const sites = new Set(USERS.map(u => u.site)).size;
 
   return (
     <div className={s.page}>
       <PageHeader
         title="Teams"
-        sub={`${USERS.length} engineers across ${TEAMS.length} teams in ${sites} sites, Suwon and Bangalore`}
         action={
           <div className={s.filters}>
             <div className={s.search}><Input icon="search" value={ui.teamQ} onChange={v => setUi({ teamQ: v })} placeholder="Search name, title, email" ariaLabel="Search people" /></div>

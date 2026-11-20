@@ -17,8 +17,8 @@ import s from './app-shell.module.css';
 const NAV = [
   { href: '/', label: 'Insights', icon: 'bar-chart-3' },
   { href: '/defects', label: 'Defects', icon: 'bug' },
-  { href: '/reviews', label: 'Code reviews', icon: 'git-pull-request' },
-  { href: '/digests', label: 'Email digests', icon: 'mail' },
+  { href: '/reviews', label: 'Code Reviews', icon: 'git-pull-request' },
+  { href: '/digests', label: 'Email Digests', icon: 'mail' },
   { href: '/teams', label: 'Teams', icon: 'users' },
   { href: '/notifications', label: 'Notifications', icon: 'bell' },
   { href: '/settings', label: 'Settings', icon: 'settings' },

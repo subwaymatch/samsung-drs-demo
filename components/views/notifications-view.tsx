@@ -44,7 +44,6 @@ export function NotificationsView() {
     <div className={s.page}>
       <PageHeader
         title="Notifications"
-        sub={unread ? unread + ' unread' : 'All caught up'}
         action={unread ? (
           <Button variant="secondary" icon="check-check" onClick={() => { setRead(meId, { all: nl.length && nl[0].at > nowStr() ? nl[0].at : nowStr(), ids: [] }); flash('All notifications marked as read'); }}>
             Mark all as read

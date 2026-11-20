@@ -44,7 +44,7 @@ export function DigestsView({ kind: kindIn, date }: { kind?: string; date?: stri
 
   return (
     <div className={s.page}>
-      <PageHeader title="Email digests" sub="Automated daily and weekly emails summarizing defects and code reviews" />
+      <PageHeader title="Email Digests" />
       <div className={s.layout}>
         <div className={s.preview}>
           <div className={s.toolbar}>

@@ -1,6 +1,5 @@
 import { useNavigate } from 'react-router';
 import { useMemo } from 'react';
-import { MODELS, TEAMS } from '@/lib/constants';
 import { fFull, TNOW } from '@/lib/dates';
 import { computeInsights, RANGES } from '@/lib/insights';
 import { useApp } from '@/lib/store';
@@ -37,7 +36,6 @@ export function InsightsView() {
     <div className={s.page}>
       <PageHeader
         title="Insights"
-        sub={`${app.data.defects.length} defects and ${app.data.reviews.length} code reviews from ${TEAMS.length} teams across ${MODELS.length} printer and copier models`}
         action={<span className={s.status}>Data through {fFull(TNOW)}, {TNOW.slice(11)}</span>}
       />
 

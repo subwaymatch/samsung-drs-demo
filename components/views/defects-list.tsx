@@ -124,7 +124,7 @@ export function DefectsList() {
 
   return (
     <div className={cx(s.page, sel.length > 0 && s.pageSelecting)}>
-      <PageHeader title="Defects" sub="Issues reported against printer and copier models" action={<LinkButton href="/defects/new" variant="primary" icon="plus">Report defect</LinkButton>} />
+      <PageHeader title="Defects" action={<LinkButton href="/defects/new" variant="primary" icon="plus">Report defect</LinkButton>} />
       <ScopeTabs scopes={view.scopes} value={view.scope} onChange={k => go({ scope: k })} />
       <div className={s.filters}>
         <span className={s.filterLabel}>Status</span>

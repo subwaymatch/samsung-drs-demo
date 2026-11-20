@@ -32,7 +32,7 @@ export function SettingsView() {
 
   return (
     <div className={s.page}>
-      <PageHeader title="Settings" sub="Preferences are saved in this browser" />
+      <PageHeader title="Settings" />
       <section className={s.group}>
         <h2 className={s.groupTitle}>Preferences</h2>
         <Row title="Code review diffs" sub="How file changes appear in code reviews">
