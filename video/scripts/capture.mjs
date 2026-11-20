@@ -92,10 +92,6 @@ const sections = {
     await shot('insights-full', { fullPage: true });
     layout.insights = {
       height: await pageHeight(),
-      graph: await page.evaluate(() => {
-        const r = document.querySelector('.react-flow').getBoundingClientRect();
-        return { x: Math.round(r.x), y: Math.round(r.y + scrollY), w: Math.round(r.width), h: Math.round(r.height) };
-      }),
       range: await span('Showing', '6 months'),
       stats: await span('Median review turnaround', 'Open defects'),
       severity: await rect('Severity targets', 'section'),

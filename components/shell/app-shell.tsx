@@ -17,8 +17,8 @@ import s from './app-shell.module.css';
 const NAV = [
   { href: '/', label: 'Insights', icon: 'bar-chart-3' },
   { href: '/defects', label: 'Defects', icon: 'bug' },
-  { href: '/reviews', label: 'Code reviews', icon: 'git-pull-request' },
-  { href: '/digests', label: 'Email digests', icon: 'mail' },
+  { href: '/reviews', label: 'Code Reviews', icon: 'git-pull-request' },
+  { href: '/digests', label: 'Email Digests', icon: 'mail' },
   { href: '/teams', label: 'Teams', icon: 'users' },
   { href: '/notifications', label: 'Notifications', icon: 'bell' },
   { href: '/settings', label: 'Settings', icon: 'settings' },
@@ -184,14 +184,14 @@ export function AppShell({ children }: { children: ReactNode }) {
           aria-label="Main navigation"
         >
           <div className={s.brand}>
-            <Link to="/" aria-label="Go to Insights" className={s.brandLogo}>
+            {/* The mark and the wordmark are one link home */}
+            <Link to="/" aria-label="DRS, Samsung Printing Solutions: go to Insights" className={cx('focus-ring', s.brandLink)}>
               <DrsLogo width={34} label="DRS" />
+              <span className={s.brandText}>
+                <SamsungWordmark width={64} />
+                <span className={s.brandTagline}>Printing Solutions</span>
+              </span>
             </Link>
-            <span aria-hidden className={s.brandRule} />
-            <div className={s.brandText}>
-              <SamsungWordmark width={64} />
-              <span className={s.brandTagline}>Printing Solutions</span>
-            </div>
             <div className={s.trailing}>
               <Button variant="ghost" size="sm" icon="panel-left-close" iconOnly title="Collapse sidebar" onClick={() => (narrow ? setDrawer(false) : setSideOpen(false))} />
             </div>
@@ -239,10 +239,12 @@ export function AppShell({ children }: { children: ReactNode }) {
         <main ref={mainRef} className={s.main}>
           <div className={cx(s.topbar, topbar && s.topbarShown)}>
             <Button variant="ghost" icon={narrow ? 'menu' : 'panel-left-open'} iconOnly title="Open sidebar" onClick={() => (narrow ? setDrawer(true) : setSideOpen(true))} />
-            <Link to="/" aria-label="Go to Insights">
+            {/* The same brand as the sidebar, laid out in one line */}
+            <Link to="/" aria-label="DRS, Samsung Printing Solutions: go to Insights" className={cx('focus-ring', s.brandLink, s.brandLinkRow)}>
               <DrsLogo width={26} />
+              <SamsungWordmark width={56} />
+              <span className={s.brandTagline}>Printing Solutions</span>
             </Link>
-            <Link to="/about" className={s.demoBadge}>Portfolio demo</Link>
             <div className={s.trailing}>
               <Button variant="ghost" icon="search" iconOnly title="Search everything" onClick={focusSearch} />
             </div>

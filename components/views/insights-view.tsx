@@ -1,13 +1,10 @@
 import { useNavigate } from 'react-router';
-import { useMemo } from 'react';
-import { MODELS, TEAMS } from '@/lib/constants';
+import { useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { fFull, TNOW } from '@/lib/dates';
 import { computeInsights, RANGES } from '@/lib/insights';
-import { systemGraph } from '@/lib/relations';
 import { useApp } from '@/lib/store';
-import { Loading, PageHeader, Section, SectionTitle, Thumb } from '../common/basics';
+import { Illustration, Loading, PageHeader, Section, SectionTitle, Thumb } from '../common/basics';
 import { Clickable } from '../common/clickable';
-import { RelGraph } from '../graphs/rel-graph';
 import { useShell } from '../shell/shell-context';
 import { Button } from '../ui/button';
 import { Icon } from '../ui/icon';
@@ -28,81 +25,23 @@ function Bar({ w, c, h = 6 }: { w: string; c: string; h?: number }) {
 export function InsightsView() {
   const app = useApp();
   const navigate = useNavigate();
-  const { ui, setUi, mainW } = useShell();
+  const { ui, setUi } = useShell();
   const range = RANGES.some(r => r.n === ui.range) ? ui.range : 30;
   const data = app?.data;
   const st = useMemo(() => (data ? computeInsights(data, range) : null), [data, range]);
-  const graph = useMemo(() => (data ? systemGraph(data) : null), [data]);
-  if (!app || !st || !graph) return <Loading />;
+  if (!app || !st) return <Loading />;
   const compMore = st.byComp.length > 6, compOpen = ui.compOpen;
 
   return (
     <div className={s.page}>
       <PageHeader
         title="Insights"
-        sub={`${app.data.defects.length} defects and ${app.data.reviews.length} code reviews from ${TEAMS.length} teams across ${MODELS.length} printer and copier models`}
-        action={
-          <div className={s.status}>
-            <span className={s.legendItem}>
-              <Icon name="calendar-clock" size={16} color="var(--color-accent-ink)" />
-              Data through {fFull(TNOW)}, {TNOW.slice(11)}
-            </span>
-            <span className={s.legendItem}>
-              <span className={s.syncDot} />
-              All systems in sync
-            </span>
-          </div>
-        }
+        action={<span className={s.status}>Data through {fFull(TNOW)}, {TNOW.slice(11)}</span>}
       />
-
-      <section className={s.systems}>
-        <div
-          className={s.graphFrame}
-          style={mainW ? { width: mainW, marginLeft: `calc(50% - ${mainW / 2}px)` } : undefined}
-        >
-          {mainW > 0 && mainW < 640 ? <SystemList graph={graph} /> : <RelGraph nodes={graph.nodes} edges={graph.edges} height={680} />}
-        </div>
-        <div className={s.graphLegend}>
-          <span className={s.legendItem}><span className={s.syncDot} />Connected and in sync</span>
-          <span className={s.legendItem}><span className={s.syncLine} />Records synced through DRS</span>
-        </div>
-      </section>
 
       <div className={s.twoUp}>
         <Section title="Defects by migration state" sub={st.mig.sub}>
-          <div className={s.donut}>
-            <svg viewBox="0 0 520 280" role="img" aria-label="Defects by migration state" className={s.donutSvg}>
-              {st.mig.donut.map(p => (
-                <path
-                  key={p.label}
-                  d={p.d}
-                  fill={p.c}
-                  stroke="#fff"
-                  strokeWidth={2}
-                  role="link"
-                  tabIndex={0}
-                  aria-label={p.tip}
-                  className={cx('focus-ring', s.donutSlice)}
-                  onClick={() => navigate(p.href)}
-                  onKeyDown={e => { if (e.key === 'Enter') navigate(p.href); }}
-                >
-                  <title>{p.tip}</title>
-                </path>
-              ))}
-              {st.mig.donut.map(p => <polyline key={'l' + p.label} points={p.lp} fill="none" stroke="oklch(0.62 0.02 290)" strokeWidth={1} />)}
-              {st.mig.donut.map(p => <circle key={'c' + p.label} cx={p.dx} cy={p.dy} r={3} fill="oklch(0.45 0.02 290)" />)}
-            </svg>
-            {st.mig.donut.map(p => (
-              <Clickable key={'t' + p.label} href={p.href} className={s.donutLabel} style={{ left: p.lx, top: p.ly, transform: p.tr, textAlign: p.ta }}>
-                <span className={s.donutLabelName}>{p.label}</span>
-                <span className={s.subNumber}>{p.val}</span>
-              </Clickable>
-            ))}
-            <div className={s.donutCenter}>
-              <span className={s.donutTotal}>{st.mig.total}</span>
-              <span className={s.sub}>defects</span>
-            </div>
-          </div>
+          <MigrationDonut mig={st.mig} />
         </Section>
 
         <Section
@@ -147,7 +86,6 @@ export function InsightsView() {
 
       <div className={s.periodBar} style={{ top: 'var(--topbar-h, 0px)' }}>
         <div className={s.periodShowing}>
-          <Icon name="calendar" size={16} color="oklch(0.55 0.12 293)" />
           <span>Showing</span>
           <span className={s.periodLabel}>{st.periodL}</span>
         </div>
@@ -162,9 +100,8 @@ export function InsightsView() {
                 aria-selected={on}
                 onClick={() => setUi({ range: r.n })}
                 className={s.periodTab}
-                style={{ borderBottomColor: on ? 'var(--color-accent)' : 'transparent', color: on ? 'var(--color-accent-ink)' : 'var(--color-ink-5)', fontWeight: on ? 650 : 500 }}
+                style={{ borderBottomColor: on ? 'var(--color-accent)' : 'transparent', color: on ? 'var(--color-accent-ink)' : 'var(--color-ink-5)', fontWeight: on ? 600 : 500 }}
               >
-                <Icon name={r.icon} size={15} />
                 {r.label}
               </button>
             );
@@ -175,6 +112,7 @@ export function InsightsView() {
       <div className={s.kpis} style={KPI_GRID}>
         {st.kpis.map(k => (
           <Clickable key={k.label} href={k.href} className={s.kpi}>
+            <Illustration name={k.art} height={72} className={s.kpiArt} />
             <span className={s.kpiLabel}>{k.label}</span>
             <div className={s.kpiValueRow}>
               <span className={s.kpiValue}>{k.value}</span>
@@ -385,40 +323,69 @@ export function InsightsView() {
   );
 }
 
-type Graph = ReturnType<typeof systemGraph>;
-type SysData = { name: string; role: string; logo?: string; sync?: string; meta?: string; href?: string; label?: string; note?: string; metaLines?: { icon: string; text: string }[] };
+type Mig = ReturnType<typeof computeInsights>['mig'];
 
-/** The seven-system diagram as a list, for phones: legacy systems, DRS, then the new systems. */
-function SystemList({ graph }: { graph: Graph }) {
-  const sys = graph.nodes.filter(n => n.type === 'sys' && n.id !== 'hub');
-  const labels = graph.nodes.filter(n => n.type === 'label').map(n => n.data as unknown as SysData);
-  const hub = graph.nodes.find(n => n.id === 'hub')!.data as unknown as SysData;
-  const card = (d: SysData, hubCard = false) => (
-    <div className={cx(s.sysCard, hubCard && s.sysCardHub)}>
-      <span className={s.sysName}>
-        {d.logo ? <img src={d.logo} alt="" className={s.sysLogo} /> : null}
-        {d.name}
-      </span>
-      <span className={s.sysRole}>{d.role}</span>
-      {d.meta ? <span className={s.sysMeta}>{d.meta}</span> : null}
-      {d.metaLines ? <span className={s.sysMeta}>{d.metaLines.map(m => m.text).join(', ')}</span> : null}
-      {d.sync ? <span className={s.sysSync}><span className={s.syncDot} />{d.sync}</span> : null}
-    </div>
-  );
-  const group = (i: number, items: typeof sys) => (
-    <div className={s.sysGroup}>
-      <div className={s.labelBlock}><span className={s.sysGroupTitle}>{labels[i]?.label}</span><span className={s.sub}>{labels[i]?.note}</span></div>
-      {items.map(n => <div key={n.id}>{card(n.data as unknown as SysData)}</div>)}
-    </div>
-  );
-  const arrow = <div aria-hidden className={s.sysArrow}><Icon name="arrow-down" size={18} /></div>;
+/**
+ * The migration donut with its callouts. The callouts on the left are set against their leader lines, so how far
+ * the leftmost one starts from the edge depends on its text and the chart's width. The chart is shifted by that much,
+ * measured after layout and again on resize, so the leftmost callout lines up with the section heading.
+ */
+function MigrationDonut({ mig }: { mig: Mig }) {
+  const navigate = useNavigate();
+  const ref = useRef<HTMLDivElement>(null);
+  const [shift, setShift] = useState(0);
+  useLayoutEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const measure = () => {
+      const labels = el.getElementsByClassName(s.donutLabel);
+      if (!labels.length) return;
+      // Both move with the chart, so the offset does not depend on the current shift.
+      const left = Math.min(...[...labels].map(l => l.getBoundingClientRect().left)) - el.getBoundingClientRect().left;
+      setShift(p => (Math.abs(p - left) < 0.5 ? p : left));
+    };
+    measure();
+    document.fonts?.ready.then(measure);
+    if (typeof ResizeObserver === 'undefined') return;
+    const ro = new ResizeObserver(measure);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, [mig]);
   return (
-    <div className={s.sysList}>
-      {group(0, sys.filter(n => n.position.x < 0))}
-      {arrow}
-      {card(hub, true)}
-      {arrow}
-      {group(1, sys.filter(n => n.position.x > 0))}
+    <div ref={ref} className={s.donut} style={{ translate: `${-shift}px 0` }}>
+      <svg viewBox="0 0 520 280" role="img" aria-label="Defects by migration state" className={s.donutSvg}>
+        {mig.donut.map(p => (
+          <path
+            key={p.label}
+            d={p.d}
+            fill={p.c}
+            stroke="#fff"
+            strokeWidth={2}
+            role="link"
+            tabIndex={0}
+            aria-label={p.tip}
+            className={s.donutSlice}
+            // A press opens the slice's defects without focusing it, so no focus ring lingers after a click
+            onMouseDown={e => e.preventDefault()}
+            onClick={() => navigate(p.href)}
+            onKeyDown={e => { if (e.key === 'Enter') navigate(p.href); }}
+          >
+            <title>{p.tip}</title>
+          </path>
+        ))}
+        {mig.donut.map(p => <polyline key={'l' + p.label} points={p.lp} fill="none" stroke="oklch(0.62 0.02 290)" strokeWidth={1} />)}
+        {mig.donut.map(p => <circle key={'c' + p.label} cx={p.dx} cy={p.dy} r={3} fill="oklch(0.45 0.02 290)" />)}
+      </svg>
+      {mig.donut.map(p => (
+        <Clickable key={'t' + p.label} href={p.href} className={s.donutLabel} style={{ left: p.lx, top: p.ly, transform: p.tr, textAlign: p.ta }}>
+          <span className={s.donutLabelName}>{p.label}</span>
+          <span className={s.subNumber}>{p.val}</span>
+        </Clickable>
+      ))}
+      <div className={s.donutCenter}>
+        <span className={s.donutTotal}>{mig.total}</span>
+        <span className={s.sub}>defects</span>
+      </div>
     </div>
   );
 }

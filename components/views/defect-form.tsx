@@ -141,7 +141,7 @@ function DefectFormInner({ d }: { d?: Defect }) {
   }, [app.data.defects, f.model, f.title, d]);
 
   const mode = d ? 'edit' : 'new';
-  const heading = clone ? 'Clone ' + clone.cloneOf : d ? 'Edit ' + d.id : 'Report a defect';
+  const heading = clone ? 'Clone ' + clone.cloneOf : d ? 'Edit ' + d.id : 'Report a Defect';
   const back = d ? '/defects/' + d.id : '/defects';
 
   const save = () => {

@@ -53,17 +53,25 @@
 .brand {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 8px;
   padding: 0 8px;
 }
-.brandLogo {
-  flex: none;
+/* The mark, the Samsung wordmark and "Printing Solutions": one link home */
+.brandLink {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 14px;
+  border-radius: 6px;
+  color: inherit;
+  text-decoration-line: none;
 }
-.brandRule {
-  height: 28px;
-  width: 1px;
-  flex: none;
-  background-color: oklch(0.9 0.01 290);
+/* In the top bar: everything on one line */
+.brandLinkRow {
+  gap: 8px;
+  & > :first-child {
+    margin-right: 2px;
+  }
 }
 .brandText {
   display: flex;
@@ -119,7 +127,6 @@
   min-width: 0;
   align-items: center;
   gap: 10px;
-  border-top: 1px solid var(--color-line);
   padding: 16px 4px 0;
 }
 .accountText {
@@ -176,16 +183,6 @@
 }
 .topbarShown {
   display: flex;
-}
-.demoBadge {
-  border-radius: 999px;
-  background-color: var(--color-accent-wash);
-  padding: 4px 10px;
-  font-size: 12px;
-  line-height: 16px;
-  font-weight: 600;
-  color: var(--color-accent-ink);
-  text-decoration-line: none;
 }
 
 .content {

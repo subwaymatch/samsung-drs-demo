@@ -124,7 +124,7 @@ export function DefectsList() {
 
   return (
     <div className={cx(s.page, sel.length > 0 && s.pageSelecting)}>
-      <PageHeader title="Defects" sub="Issues reported against printer and copier models" action={<LinkButton href="/defects/new" variant="primary" icon="plus">Report defect</LinkButton>} />
+      <PageHeader title="Defects" action={<LinkButton href="/defects/new" variant="primary" icon="plus">Report defect</LinkButton>} />
       <ScopeTabs scopes={view.scopes} value={view.scope} onChange={k => go({ scope: k })} />
       <div className={s.filters}>
         <span className={s.filterLabel}>Status</span>
@@ -163,7 +163,7 @@ export function DefectsList() {
           );
         })}
       </ListTable>
-      {!rows.length ? <EmptyState icon="filter-x" title="No defects match these filters" text="Try a different status or scope, or remove a filter above" /> : null}
+      {!rows.length ? <EmptyState art="test-page" title="No defects match these filters" text="Try a different status or scope, or remove a filter above" /> : null}
       <Pagination pg={pg} onPage={p => { go({ page: p }); window.scrollTo(0, 0); }} />
       {sel.length ? (
         <BulkBar count={sel.length} onClear={() => setSel([])}>

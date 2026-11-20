@@ -41,62 +41,61 @@
   line-height: 1.4;
 }
 
-/* System node: a connected system, or the hub */
+/* System node: a connected system as plain text, or the outlined hub */
 .sys {
   display: flex;
   flex-direction: column;
-  gap: 6px;
-  border-radius: 8px;
+  gap: 4px;
+  font-size: 14px;
+  line-height: 20px;
   color: var(--color-ink);
 }
-.sysHead {
+.sysHub {
+  border-radius: 12px;
+  border: 1px solid var(--color-accent);
+  background-color: #fff;
+  padding: 16px 20px;
+}
+.sysLink {
+  cursor: pointer;
+}
+/* A left-hand column: text set against the side that faces the hub */
+.toEnd {
+  align-items: flex-end;
+  text-align: right;
+}
+.toEnd .sysLogo {
+  object-position: right;
+}
+.sysName {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
+  font-weight: 600;
+}
+.sysLink:hover .sysName {
+  color: var(--color-accent-text);
 }
 .sysLogo {
   display: block;
+  height: 16px;
+  width: 24px;
   flex: none;
   object-fit: contain;
   object-position: left;
 }
-.sysName {
-  font-weight: 600;
-}
 .sysRole {
-  font-size: 14px;
-  line-height: 1.4;
+  text-wrap: pretty;
   color: var(--color-muted);
 }
 .sysMeta {
-  font-size: 14px;
-  line-height: 20px;
-  font-weight: 600;
-  font-variant-numeric: tabular-nums;
-}
-.sysMetaLines {
-  margin: 6px 0;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-.sysMetaLine {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 14px;
-  line-height: 20px;
-  font-weight: 600;
-  color: var(--color-accent-ink);
   font-variant-numeric: tabular-nums;
 }
 .sysSync {
   display: flex;
   align-items: center;
-  gap: 6px;
-  font-size: 14px;
-  line-height: 20px;
-  color: var(--color-ink-5);
+  gap: 8px;
+  color: var(--color-muted);
 }
 .sysSyncDot {
   height: 6px;
@@ -116,7 +115,7 @@
   font-size: 14px;
   line-height: 20px;
   font-weight: 600;
-  color: var(--color-ink-2);
+  color: var(--color-ink);
 }
 .labelNote {
   font-size: 14px;
@@ -132,4 +131,12 @@
   font-size: 14px;
   line-height: 20px;
   color: var(--color-muted);
+}
+
+/* Plain variant: the diagram sits on the page, with nothing behind it. */
+.plain :global(.react-flow__node) {
+  cursor: default;
+}
+.plain :global(.react-flow__edge) {
+  pointer-events: none;
 }

@@ -40,12 +40,6 @@
   align-items: center;
   gap: 8px;
 }
-.syncDot {
-  height: 6px;
-  width: 6px;
-  border-radius: 999px;
-  background: oklch(0.62 0.14 155);
-}
 .swatch {
   height: 10px;
   width: 10px;
@@ -64,12 +58,12 @@
   background: oklch(0.68 0.14 160);
 }
 
-/* Bar: a thin outlined progress bar */
+/* Bar: a thin progress bar on a light track */
 .bar {
   flex: 1;
   overflow: hidden;
   border-radius: 1px;
-  border: 1px solid oklch(0.92 0.02 293);
+  background-color: var(--color-line-soft);
 }
 .barFill {
   display: block;
@@ -90,63 +84,42 @@
 }
 
 /* Page and header */
+/* Sections are separated by space alone: --section-gap between them (64px,
+   48px on phones), 20 to 24px inside. */
 .page {
+  --section-gap: 64px;
   margin-inline: auto;
   display: flex;
   max-width: 1200px;
   flex-direction: column;
-  gap: 40px;
+  gap: var(--section-gap);
+  @media (width < 640px) {
+    --section-gap: 48px;
+  }
 }
 .status {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  column-gap: 24px;
-  row-gap: 8px;
-  padding-bottom: 4px;
   font-size: 14px;
   line-height: 20px;
-  color: var(--color-ink-5);
-}
-
-/* System diagram */
-.systems {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-.graphFrame {
-  overflow: hidden;
-  border-block: 1px solid oklch(0.92 0.01 290);
-  background-color: var(--color-surface);
-}
-.graphLegend {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
-  font-size: 14px;
-  line-height: 20px;
-  color: var(--color-ink-5);
-}
-.syncLine {
-  width: 24px;
-  border-top: 1.5px dashed oklch(0.55 0.17 293);
+  color: var(--color-muted);
+  font-variant-numeric: tabular-nums;
 }
 
 /* Two sections side by side, stacking when narrow */
 .twoUp {
   display: grid;
-  column-gap: 56px;
-  row-gap: 40px;
+  column-gap: 64px;
+  row-gap: var(--section-gap);
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr));
 }
 
 /* Migration donut */
+/* Starts at the section's left edge; MigrationDonut shifts it so the leftmost callout lines up with the heading */
 .donut {
+  container-type: inline-size;
   position: relative;
   width: 100%;
   max-width: 560px;
-  align-self: center;
+  align-self: flex-start;
 }
 .donutSvg {
   display: block;
@@ -156,6 +129,12 @@
 }
 .donutSlice {
   cursor: pointer;
+  outline: none;
+}
+/* Keyboard focus follows the slice's own shape instead of a box around it */
+.donutSlice:focus-visible {
+  stroke: var(--color-ink);
+  stroke-width: 2px;
 }
 .donutSlice:hover {
   opacity: 0.8;
@@ -170,8 +149,7 @@
 .donutLabel:hover {
   color: var(--color-accent-text);
 }
-.donutLabelName,
-.sysGroupTitle {
+.donutLabelName {
   font-weight: 600;
 }
 .donutCenter {
@@ -185,11 +163,17 @@
   align-items: center;
   gap: 2px;
 }
+/* The donut scales with its column but the text does not, so a narrow donut
+   (on phones its hole is about 75px across) takes the smaller size. */
 .donutTotal {
-  font-size: 28px;
+  font-size: 24px;
   line-height: 1;
   font-weight: 600;
+  letter-spacing: -0.06em;
   font-variant-numeric: tabular-nums;
+  @container (width < 440px) {
+    font-size: 16px;
+  }
 }
 
 /* Migration by component */
@@ -267,11 +251,12 @@
 }
 
 /* Reporting period bar */
+/* Sticky above everything it filters. Its bottom rule is the one rule kept
+   between sections: content scrolls underneath it. 32px down to the KPIs. */
 .periodBar {
   position: sticky;
   z-index: 30;
-  margin-top: -16px;
-  margin-bottom: -12px;
+  margin-bottom: calc(32px - var(--section-gap));
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -285,13 +270,14 @@
   display: flex;
   min-height: 48px;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   color: var(--color-muted);
 }
+/* A date range, not a column of figures: proportional digits, tracked in a little */
 .periodLabel {
   font-weight: 600;
+  letter-spacing: -0.01em;
   color: var(--color-ink);
-  font-variant-numeric: tabular-nums;
 }
 .periodTabs {
   margin-bottom: -1px;
@@ -332,12 +318,13 @@
   display: flex;
   flex-direction: column;
   gap: 8px;
-  border: 0 solid var(--color-accent-rule);
-  border-left-width: 2px;
-  padding: 2px 0 2px 20px;
 }
-.kpi:hover {
-  border-color: var(--color-accent-bar);
+.kpi:hover .kpiLabel {
+  color: var(--color-accent-text);
+}
+/* An object for what each figure measures: time, approvals, fixes, open defects */
+.kpiArt {
+  margin-bottom: 8px;
 }
 .kpiLabel {
   font-size: 14px;
@@ -357,14 +344,19 @@
   letter-spacing: -0.02em;
   font-variant-numeric: tabular-nums;
 }
+/* The unit takes the figure's color */
 .kpiUnit {
   font-weight: 550;
-  color: var(--color-muted);
+  color: var(--color-ink);
 }
 .kpiDelta {
   font-size: 14px;
   line-height: 20px;
-  font-weight: 600;
+  font-weight: 400;
+}
+/* The change and its context read as one pair */
+.kpiDelta + .sub {
+  margin-top: -6px;
 }
 
 /* Tables: severity targets and the code review team */
@@ -559,8 +551,7 @@
   border-top-left-radius: 2px;
   border-top-right-radius: 2px;
 }
-.flowNote,
-.sysRole {
+.flowNote {
   font-size: 14px;
   line-height: 20px;
   color: var(--color-ink-5);
@@ -730,14 +721,12 @@
 .activeLists {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  gap: 40px;
+  gap: var(--section-gap);
 }
 .active {
   display: flex;
   flex-direction: column;
   gap: 12px;
-  border-top: 1px solid var(--color-line);
-  padding-top: 28px;
 }
 .activeRow {
   display: grid;
@@ -788,70 +777,13 @@
   min-width: 52px;
   flex-direction: column;
   align-items: flex-end;
-  line-height: 1.15;
+  font-size: 14px;
+  line-height: 20px;
 }
 .activeNum {
-  font-size: 18px;
-  line-height: 28px;
   font-weight: 600;
   font-variant-numeric: tabular-nums;
 }
 .activeUnit {
-  font-size: 13px;
   color: var(--color-muted);
-}
-
-/* SystemList: the diagram as a list, for phones */
-.sysList {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  padding: 20px 16px;
-}
-.sysGroup {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-.sysCard {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  border-radius: 8px;
-  border: 1px solid var(--color-line);
-  background-color: #fff;
-  padding: 14px 16px;
-}
-.sysCardHub {
-  border-color: oklch(0.75 0.12 293);
-  background-color: var(--color-accent-wash);
-}
-.sysName {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-weight: 600;
-}
-.sysLogo {
-  display: block;
-  height: 16px;
-  width: auto;
-}
-.sysMeta {
-  font-size: 14px;
-  line-height: 20px;
-  font-weight: 550;
-}
-.sysSync {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 14px;
-  line-height: 20px;
-  color: var(--color-muted);
-}
-.sysArrow {
-  display: flex;
-  justify-content: center;
-  color: oklch(0.55 0.17 293);
 }

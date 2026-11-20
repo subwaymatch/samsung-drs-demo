@@ -2,21 +2,27 @@ import { Background, Controls, Handle, Position, ReactFlow, type Edge, type Node
 import '@xyflow/react/dist/style.css';
 import { useNavigate } from 'react-router';
 import { Fragment, useEffect, useMemo, useRef, useState } from 'react';
+import { cx } from '@/lib/cx';
 import type { GraphEdge, GraphNode } from '@/lib/relations';
-import { Icon } from '../ui/icon';
 import s from './rel-graph.module.css';
 
 const hidden = { opacity: 0, width: 1, height: 1, minWidth: 0, minHeight: 0, border: 0, background: 'transparent' };
 const SIDES = ['Left', 'Right', 'Top', 'Bottom'] as const;
-/** Invisible handles on every side, so edges can attach wherever the layout needs. Unwrapped, so they stay out of the card's flex gap. */
-const Handles = () => (
+/**
+ * Invisible handles on every side, so edges can attach wherever the layout needs. Unwrapped, so they stay out of the card's flex gap.
+ * `y` moves the left and right handles from the middle to that many px from the top, and 8px out, so a line stops short of the text.
+ */
+const Handles = ({ y }: { y?: number }) => (
   <>
-    {SIDES.map(p => (
-      <Fragment key={p}>
-        <Handle id={'s' + p} type="source" position={Position[p]} style={hidden} isConnectable={false} />
-        <Handle id={'t' + p} type="target" position={Position[p]} style={hidden} isConnectable={false} />
-      </Fragment>
-    ))}
+    {SIDES.map(p => {
+      const style = y !== undefined && (p === 'Left' || p === 'Right') ? { ...hidden, top: y, [p === 'Left' ? 'left' : 'right']: -8 } : hidden;
+      return (
+        <Fragment key={p}>
+          <Handle id={'s' + p} type="source" position={Position[p]} style={style} isConnectable={false} />
+          <Handle id={'t' + p} type="target" position={Position[p]} style={style} isConnectable={false} />
+        </Fragment>
+      );
+    })}
   </>
 );
 
@@ -48,38 +54,23 @@ function CardNode({ data }: NodeProps<Node<D>>) {
   );
 }
 
+/**
+ * A connected system, as plain text: no box, so the lines carry the structure.
+ * Only the hub (DRS) gets an outline. Every line is 14px; weight and color set
+ * the hierarchy. `side: 'start'` right-aligns a left-hand column, so text on
+ * both sides faces the hub and each edge meets the text it belongs to.
+ */
 function SysNode({ data }: NodeProps<Node<D>>) {
   const hub = !!data.hub;
-  const lines = (data.metaLines as { icon: string; text: string }[] | undefined) || [];
   return (
-    <div
-      className={s.sys}
-      style={{
-        width: Number(data.w) || 210,
-        padding: hub ? '16px 18px' : '12px 14px',
-        background: hub ? 'oklch(0.975 0.018 293)' : '#fff',
-        border: hub ? '2px solid oklch(0.55 0.19 293)' : '1px solid oklch(0.88 0.012 290)',
-        cursor: data.href ? 'pointer' : 'default',
-        boxShadow: hub ? '0 6px 20px oklch(0.5 0.12 293 / 0.16)' : '0 1px 2px oklch(0.3 0.02 290 / 0.06)'
-      }}
-    >
-      <Handles />
-      <div className={s.sysHead}>
-        {data.logo ? <img src={str(data.logo)} alt="" className={s.sysLogo} style={{ width: hub ? 30 : 28, height: hub ? 26 : 16 }} /> : null}
-        <span className={s.sysName} style={{ fontSize: hub ? 16 : 14 }}>{str(data.name)}</span>
-      </div>
+    <div className={cx(s.sys, hub && s.sysHub, data.side === 'start' && s.toEnd, !!data.href && s.sysLink)} style={{ width: Number(data.w) || 240 }}>
+      <Handles y={data.nameY === undefined ? undefined : Number(data.nameY)} />
+      <span className={s.sysName}>
+        {data.logo ? <img src={str(data.logo)} alt="" className={s.sysLogo} /> : null}
+        {str(data.name)}
+      </span>
       <span className={s.sysRole}>{str(data.role)}</span>
-      {data.meta ? <span className={s.sysMeta} style={{ color: hub ? 'oklch(0.42 0.17 293)' : 'oklch(0.3 0.02 290)' }}>{str(data.meta)}</span> : null}
-      {lines.length ? (
-        <div className={s.sysMetaLines}>
-          {lines.map(m => (
-            <span key={m.text} className={s.sysMetaLine}>
-              <Icon name={m.icon} size={15} color="oklch(0.5 0.17 293)" />
-              {m.text}
-            </span>
-          ))}
-        </div>
-      ) : null}
+      {data.meta ? <span className={s.sysMeta}>{str(data.meta)}</span> : null}
       {data.sync ? (
         <span className={s.sysSync}>
           <span className={s.sysSyncDot} />
@@ -92,7 +83,7 @@ function SysNode({ data }: NodeProps<Node<D>>) {
 
 function LabelNode({ data }: NodeProps<Node<D>>) {
   return (
-    <div className={s.label} style={{ width: Number(data.w) || 210 }}>
+    <div className={cx(s.label, data.side === 'start' && s.toEnd)} style={{ width: Number(data.w) || 210 }}>
       <span className={s.labelTitle}>{str(data.label)}</span>
       {data.note ? <span className={s.labelNote}>{str(data.note)}</span> : null}
     </div>
@@ -103,9 +94,19 @@ const nodeTypes = { card: CardNode, sys: SysNode, label: LabelNode };
 const SOLID = { stroke: 'oklch(0.55 0.17 293)', strokeWidth: 1.5 };
 const DASHED = { stroke: 'oklch(0.7 0.05 290)', strokeWidth: 1.5, strokeDasharray: '5 4' };
 const LABEL = { labelStyle: { fontSize: 13, fill: 'oklch(0.4 0.02 290)' }, labelBgPadding: [6, 3] as [number, number], labelBgBorderRadius: 4, labelBgStyle: { fill: '#fff' } };
+/** The plain variant: hairline edges and labels in the page's own 14px muted text. */
+const PLAIN_EDGE = { stroke: 'oklch(0.8 0.04 293)', strokeWidth: 1.25 };
+const PLAIN_LABEL = { labelStyle: { fontSize: 14, fill: 'var(--color-muted)' }, labelBgPadding: [8, 2] as [number, number], labelBgStyle: { fill: '#fff' } };
 
-/** Relationship diagram. Columns spread out to use the available width; cards are clickable. */
-export function RelGraph({ nodes, edges, height = 540 }: { nodes: GraphNode[]; edges: GraphEdge[]; height?: number }) {
+/**
+ * Relationship diagram. Columns spread out to use the available width; cards are clickable.
+ *
+ * `plain` draws a fixed diagram for the page itself rather than a map to explore:
+ * no grid, controls, panning or zoom. The outer columns line up with the edges
+ * of the container, and below `minWidth` the whole diagram scales down to fit.
+ * `height` is then the diagram's own height at full size.
+ */
+export function RelGraph({ nodes, edges, height = 540, plain = false, minWidth = 1000 }: { nodes: GraphNode[]; edges: GraphEdge[]; height?: number; plain?: boolean; minWidth?: number }) {
   const navigate = useNavigate();
   const ref = useRef<HTMLDivElement>(null);
   const [cw, setCw] = useState(0);
@@ -113,60 +114,75 @@ export function RelGraph({ nodes, edges, height = 540 }: { nodes: GraphNode[]; e
     const el = ref.current;
     if (!el || typeof ResizeObserver === 'undefined') return;
     const ro = new ResizeObserver(([e]) => {
-      const w = Math.round(e.contentRect.width / 8) * 8;
+      const w = Math.round(e.contentRect.width / (plain ? 1 : 8)) * (plain ? 1 : 8);
       setCw(p => (p === w ? p : w));
     });
     ro.observe(el);
     return () => ro.disconnect();
-  }, []);
+  }, [plain]);
 
-  const { laid, rfEdges } = useMemo(() => {
+  const { laid, rfEdges, zoom } = useMemo(() => {
     const PAD = 32, wOf = (n: GraphNode) => n.data.w || 210;
-    let laid: GraphNode[] = nodes;
+    let laid: GraphNode[] = nodes, zoom = 1;
     if (cw && nodes.length > 1) {
       const l = nodes.reduce((a, n) => (n.position.x < a.position.x ? n : a));
       const r = nodes.reduce((a, n) => (n.position.x + wOf(n) > a.position.x + wOf(a) ? n : a));
       const cl = l.position.x + wOf(l) / 2, cr = r.position.x + wOf(r) / 2;
-      const k = cr > cl ? Math.min(2.4, Math.max(1, (cw - 2 * PAD - wOf(l) / 2 - wOf(r) / 2) / (cr - cl))) : 1;
-      if (k > 1) laid = nodes.map(n => {
-        const c = n.position.x + wOf(n) / 2;
-        return { ...n, position: { x: cl + (c - cl) * k - wOf(n) / 2, y: n.position.y } };
-      });
+      if (plain) {
+        // Lay out at a width of at least minWidth, then zoom out to the container.
+        const lw = Math.max(cw, minWidth), tl = wOf(l) / 2, tr = lw - wOf(r) / 2;
+        const k = cr > cl ? (tr - tl) / (cr - cl) : 1, y0 = Math.min(...nodes.map(n => n.position.y));
+        zoom = cw / lw;
+        laid = nodes.map(n => ({ ...n, draggable: false, position: { x: tl + (n.position.x + wOf(n) / 2 - cl) * k - wOf(n) / 2, y: n.position.y - y0 } }));
+      } else {
+        const k = cr > cl ? Math.min(2.4, Math.max(1, (cw - 2 * PAD - wOf(l) / 2 - wOf(r) / 2) / (cr - cl))) : 1;
+        if (k > 1) laid = nodes.map(n => {
+          const c = n.position.x + wOf(n) / 2;
+          return { ...n, position: { x: cl + (c - cl) * k - wOf(n) / 2, y: n.position.y } };
+        });
+      }
     }
     const rfEdges: Edge[] = edges.map(e => ({
       id: e.id, source: e.source, target: e.target, sourceHandle: e.sourceHandle, targetHandle: e.targetHandle, animated: e.animated,
-      label: e.label, style: e.dashed ? DASHED : SOLID, ...(e.label ? LABEL : {})
+      label: e.label,
+      style: plain ? PLAIN_EDGE : e.dashed ? DASHED : SOLID,
+      ...(e.label ? (plain ? PLAIN_LABEL : LABEL) : {})
     }));
-    return { laid, rfEdges };
-  }, [nodes, edges, cw]);
+    return { laid, rfEdges, zoom };
+  }, [nodes, edges, cw, plain, minWidth]);
 
   const sig = nodes.map(n => n.id + ':' + str(n.data.status) + ':' + str(n.data.meta)).join('|') + '#' + edges.length + '@' + cw;
   // On phones, show the whole diagram (small) rather than a readable crop.
   const small = cw > 0 && cw < 600;
+  const h = plain ? (cw ? Math.round(height * zoom) : height) : small ? Math.min(height, 460) : height;
+  const view = plain
+    ? { defaultViewport: { x: 0, y: 0, zoom }, minZoom: zoom, maxZoom: zoom, panOnDrag: false, zoomOnPinch: false, zoomOnDoubleClick: false, nodesDraggable: false }
+    : { fitView: true, fitViewOptions: { padding: Math.min(0.1, 24 / cw), minZoom: small ? 0.2 : 0.5, maxZoom: 1 }, minZoom: 0.2, maxZoom: 1.6 };
   return (
-    <div ref={ref} style={{ height: small ? Math.min(height, 460) : height, width: '100%' }}>
+    <div ref={ref} className={cx(plain && s.plain)} style={{ height: h, width: '100%' }}>
       {cw ? (
         <ReactFlow
           key={sig}
           defaultNodes={laid as Node[]}
           defaultEdges={rfEdges}
           nodeTypes={nodeTypes}
-          fitView
-          fitViewOptions={{ padding: Math.min(0.1, 24 / cw), minZoom: small ? 0.2 : 0.5, maxZoom: 1 }}
+          {...view}
           nodesConnectable={false}
           elementsSelectable={false}
-          attributionPosition="bottom-left"
+          attributionPosition={plain ? 'bottom-right' : 'bottom-left'}
           zoomOnScroll={false}
           preventScrolling={false}
-          minZoom={0.2}
-          maxZoom={1.6}
           onNodeClick={(_, n) => {
             const href = (n.data as D).href;
             if (href) navigate(String(href));
           }}
         >
-          <Background gap={20} size={1} color="oklch(0.88 0.01 290)" />
-          <Controls showInteractive={false} position="bottom-right" />
+          {plain ? null : (
+            <>
+              <Background gap={20} size={1} color="oklch(0.88 0.01 290)" />
+              <Controls showInteractive={false} position="bottom-right" />
+            </>
+          )}
         </ReactFlow>
       ) : (
         <div className={s.loading}>Loading map...</div>

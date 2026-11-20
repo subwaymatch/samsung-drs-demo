@@ -1,4 +1,4 @@
-import { COMPS, MIG, MIGORD, MUTED, BAD, RST, SEV, SEVORD, TGT, TYPES, TYPE_ICON, UM, USERS, WAVE } from './constants';
+import { COMPS, MIG, MIGORD, MUTED, BAD, GOOD, RST, SEV, SEVORD, TGT, TYPES, TYPE_ICON, UM, USERS, WAVE } from './constants';
 import { addD, D0, dayIdx, ED, END, hrs, lbl, median, short, shortY, TNOW } from './dates';
 import { av } from './people';
 import { affLines, LINES, LINFO, rModelId, thumbOf } from './products';
@@ -6,18 +6,18 @@ import { firstDec, firstRes, isOpen, migOf, tgtEval } from './records';
 import { plural } from './text';
 import type { Data, Defect, Review, Severity } from './types';
 
-export const RANGES: { n: number; label: string; icon: string }[] = [
-  { n: 7, label: '7 days', icon: 'calendar-days' },
-  { n: 30, label: '30 days', icon: 'calendar-range' },
-  { n: 90, label: '90 days', icon: 'calendar-clock' },
-  { n: 182, label: '6 months', icon: 'calendar' }
+export const RANGES: { n: number; label: string }[] = [
+  { n: 7, label: '7 days' },
+  { n: 30, label: '30 days' },
+  { n: 90, label: '90 days' },
+  { n: 182, label: '6 months' }
 ];
 
 /** Build a query string, skipping empty values. */
 export const qs = (o: Record<string, string | number | null | undefined>) =>
   Object.entries(o).filter(([, v]) => v != null && v !== '').map(([k, v]) => k + '=' + encodeURIComponent(String(v))).join('&');
 
-const GREEN = 'oklch(0.62 0.14 155)', AMBER_BAR = 'oklch(0.78 0.14 75)', GOOD_TXT = 'oklch(0.48 0.12 155)', BAD_TXT = 'oklch(0.52 0.17 25)';
+const GREEN = GOOD, AMBER_BAR = 'oklch(0.78 0.14 75)';
 const tone = (p: number | null) => (p == null ? 'oklch(0.88 0.01 290)' : p >= 80 ? GREEN : p >= 50 ? AMBER_BAR : 'oklch(0.6 0.19 25)');
 
 interface Bucket { s: number; e: number }
@@ -58,13 +58,14 @@ export function computeInsights(data: Data, range: number) {
   const per = `vs previous ${rangeL}`;
   const delta = (d: number, unit: string, lowerBetter: boolean, dec: number, p?: string) => ({
     delta: `${d > 0 ? '+' : d < 0 ? '-' : ''}${Math.abs(d).toFixed(dec)}${unit} ${p || per}`,
-    dc: (lowerBetter ? d <= 0 : d >= 0) ? GOOD_TXT : BAD_TXT
+    dc: (lowerBetter ? d <= 0 : d >= 0) ? GOOD : BAD
   });
   const kpis = [
-    { label: 'Median review turnaround', value: medC.toFixed(1), unit: 'h', ...delta(medC - medP, 'h', true, 1), sub: `${Math.round(within)}% decided within the 48h target`, href: '/reviews?' + qs({ from: fromK, to: END }) },
-    { label: 'First-pass approval', value: fpC.toFixed(0), unit: '%', ...delta(fpC - fpP, ' pts', false, 1), sub: plural(cur.length, 'review decision'), href: '/reviews?' + qs({ outcome: 'approved', from: fromK, to: END }) },
-    { label: 'Median time to resolve', value: median(rC).toFixed(1), unit: 'days', ...delta(median(rC) - median(rP), ' days', true, 1), sub: `${plural(rC.length, 'defect')} resolved`, href: '/defects?' + qs({ by: 'resolved', from: fromK, to: END }) },
-    { label: 'Open defects', value: String(openNow.length), unit: '', ...delta(openNow.length - openThen, '', true, 0, `since ${shortY(fromK)}`), sub: `${openNow.filter(d => d.sev === 'critical').length} critical`, href: '/defects?open=1' }
+    // art: the illustration above each figure (public/illustrations)
+    { label: 'Median review turnaround', art: 'hourglass', value: medC.toFixed(1), unit: 'h', ...delta(medC - medP, 'h', true, 1), sub: `${Math.round(within)}% decided within the 48h target`, href: '/reviews?' + qs({ from: fromK, to: END }) },
+    { label: 'First-pass approval', art: 'clipboard', value: fpC.toFixed(0), unit: '%', ...delta(fpC - fpP, ' pts', false, 1), sub: plural(cur.length, 'review decision'), href: '/reviews?' + qs({ outcome: 'approved', from: fromK, to: END }) },
+    { label: 'Median time to resolve', art: 'toolbox', value: median(rC).toFixed(1), unit: 'days', ...delta(median(rC) - median(rP), ' days', true, 1), sub: `${plural(rC.length, 'defect')} resolved`, href: '/defects?' + qs({ by: 'resolved', from: fromK, to: END }) },
+    { label: 'Open defects', art: 'jam', value: String(openNow.length), unit: '', ...delta(openNow.length - openThen, '', true, 0, `since ${shortY(fromK)}`), sub: `${openNow.filter(d => d.sev === 'critical').length} critical`, href: '/defects?open=1' }
   ];
 
   // Turnaround chart
@@ -109,7 +110,7 @@ export function computeInsights(data: Data, range: number) {
   const ocDef = [
     { k: 'approved', label: 'Approved on first review', desc: 'Submitted without changes', c: GREEN },
     { k: 'changes', label: 'Modification requested', desc: 'Returned to the author for changes', c: 'oklch(0.8 0.13 75)' },
-    { k: 'denied', label: 'Denied', desc: 'Change rejected by the review team', c: 'oklch(0.58 0.2 25)' },
+    { k: 'denied', label: 'Denied', desc: 'Change rejected by the review team', c: BAD },
     { k: 'withdrawn', label: 'Withdrawn', desc: 'Closed without submitting, e.g. plans changed and the code is no longer needed', c: 'oklch(0.66 0.02 290)' }
   ];
   const outcomes = ocDef.map(o => ({ ...o, n: oc[o.k], pct: ((oc[o.k] / tot) * 100).toFixed(1) + '%', href: '/reviews?' + qs({ outcome: o.k, from: fromK, to: END }) }));

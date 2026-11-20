@@ -8,7 +8,7 @@ import { modelOptions } from '@/lib/products';
 import { setSummary, summaryOf, useApp } from '@/lib/store';
 import { cx } from '@/lib/cx';
 import type { Severity } from '@/lib/types';
-import { Loading, Note, PageHeader } from '../common/basics';
+import { EmptyState, Loading, PageHeader } from '../common/basics';
 import { Clickable } from '../common/clickable';
 import { SideLabel } from '../common/detail';
 import { Button, LinkButton } from '../ui/button';
@@ -44,7 +44,7 @@ export function DigestsView({ kind: kindIn, date }: { kind?: string; date?: stri
 
   return (
     <div className={s.page}>
-      <PageHeader title="Email digests" sub="Automated daily and weekly emails summarizing defects and code reviews" />
+      <PageHeader title="Email Digests" />
       <div className={s.layout}>
         <div className={s.preview}>
           <div className={s.toolbar}>
@@ -94,14 +94,14 @@ export function DigestsView({ kind: kindIn, date }: { kind?: string; date?: stri
                 {sec.count > 8 ? <div className={s.more}><LinkButton href={sec.moreHref} variant="link" size="sm">{sec.more}</LinkButton></div> : null}
               </section>
             ))}
-            {!email.sections.length ? <Note icon="inbox" title="No activity in this period" text="Nothing matched your summary settings. Try a longer period or include more people." /> : null}
+            {!email.sections.length ? <EmptyState art="calendar" title="No activity in this period" text="Nothing matched your summary settings. Try a longer period or include more people." /> : null}
             <p className={s.footer}>{email.footer}</p>
           </article>
         </div>
 
         <aside className={s.settings}>
           <div className={s.settingsHead}>
-            <h2 className={s.heading}>Email settings</h2>
+            <h2 className={s.sideTitle}>Email settings</h2>
             <span className={s.settingsSub}>Changes save automatically. The email preview uses your current filters.</span>
           </div>
           <section className={s.delivery}>
