@@ -1,9 +1,13 @@
+/* Wide enough for the system diagram; text keeps to a reading width */
 .page {
   margin-inline: auto;
   display: flex;
-  max-width: 960px;
+  max-width: 1200px;
   flex-direction: column;
-  gap: 40px;
+  gap: 64px;
+  @media (width < 640px) {
+    gap: 48px;
+  }
 }
 .intro {
   display: flex;
@@ -48,61 +52,58 @@
   color: var(--color-muted);
 }
 
-/* About the demo */
-.story {
-  display: flex;
-  max-width: 680px;
-  flex-direction: column;
-  gap: 16px;
-  padding-top: 24px;
+/* Lead paragraph under the title */
+.lead {
+  max-width: 720px;
   font-size: 17px;
   line-height: 1.7;
   text-wrap: pretty;
   color: var(--color-ink-3);
 }
-.disclaimer {
-  font-size: 15px;
-  color: var(--color-muted);
-}
 
-/* Stack, demo and data rows */
-.facts {
+/* How the move works: four points, each led by an illustration */
+.how {
   display: flex;
-  max-width: 680px;
   flex-direction: column;
-  font-size: 15px;
+  gap: 32px;
 }
-/* Each fact is led by an illustration of its subject */
-.fact {
-  display: grid;
-  grid-template-columns: 96px minmax(0, 1fr);
-  align-items: start;
-  column-gap: 24px;
-  padding: 20px 0;
-  @media (width < 640px) {
-    grid-template-columns: 56px minmax(0, 1fr);
-    column-gap: 16px;
-  }
-}
-.factArt {
-  display: flex;
-  justify-content: center;
-  & img {
-    max-width: 100%;
-    height: auto;
-  }
-}
-.factBody {
-  display: flex;
-  min-width: 0;
-  flex-direction: column;
-  gap: 4px;
-}
-.factKey {
+.sectionTitle {
+  font-size: 18px;
+  line-height: 24px;
   font-weight: 600;
 }
-.factValue {
+.steps {
+  display: grid;
+  column-gap: 64px;
+  row-gap: 48px;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 400px), 1fr));
+}
+.step {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 20px;
+}
+.stepText {
+  display: flex;
+  max-width: 520px;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 15px;
   line-height: 1.6;
   text-wrap: pretty;
   color: var(--color-ink-3);
+}
+.stepTitle {
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 600;
+  color: var(--color-ink);
+}
+
+.disclaimer {
+  max-width: 720px;
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--color-muted);
 }

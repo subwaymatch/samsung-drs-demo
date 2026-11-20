@@ -1,24 +1,67 @@
 import { Illustration } from '../common/basics';
+import { SystemMap } from '../graphs/system-map';
 import { DrsLogo } from '../shell/logo';
 import s from './about-view.module.css';
 
-/** Label, illustration and text for each fact. */
-const ROWS: [string, string, string][] = [
-  ['Original stack', 'rack', 'React and Node.js, styled with Bootstrap and custom CSS. Synced with IBM Rational ClearQuest and ClearCase, Review Board, Perforce, Helix Swarm, Jira and Confluence.'],
-  ['This demo', 'laptop', 'Recreated with modern tools: React on Vite, with React Router, Base UI components, Lucide icons and React Flow for the migration and relationship diagrams. Served from Cloudflare Workers; the app runs in the browser, and your changes are saved locally.'],
-  ['Mock data', 'paper', 'January 2016 to September 2017: about 800 defects and 630 code reviews across 44 printer and copier models, 34 people in 8 teams and 3 migration waves. Generated deterministically, so every visitor starts from the same history.']
+/**
+ * How the move from IBM Rational and Review Board to Perforce and Atlassian works, each point led by an
+ * illustration. The facts match the generated data: waves and cutovers in WAVE and WAVE_CUTOVER, the three
+ * migration states in MIG (lib/constants.ts), and the ClearCase and Review Board rules in lib/records.ts and lib/views.ts.
+ */
+const STEPS: { art: string; title: string; text: string }[] = [
+  {
+    art: 'truck',
+    title: 'Components move in waves',
+    text: 'Each component moves on its wave’s cutover date. SyncThru Web UI, Print Driver and Mobile Print went first, in November 2016. Panel UI, Network / Wi-Fi, Fax, Power / Sleep and Security followed in April 2017, and Print Engine and the remaining components move in December 2017.'
+  },
+  {
+    art: 'padlock',
+    title: 'One system leads each defect',
+    text: 'A defect lives only in ClearQuest until its component moves. While it is mirrored, ClearQuest still leads and DRS keeps a Jira copy in sync. Once it has migrated, Jira leads and the ClearQuest record becomes read-only.'
+  },
+  {
+    art: 'box',
+    title: 'History comes along',
+    text: 'At each cutover, the wave’s ClearCase stream is frozen and its history imported into Perforce. A stream that is still in use is imported every hour. Review Board reviews are mirrored to Helix Swarm, and their comments and Ship It votes are imported when the team moves.'
+  },
+  {
+    art: 'gears',
+    title: 'Every record stays linked',
+    text: 'Each defect has a Perforce job, and fixes are recorded on it with p4 fix. Root-cause pages and test reports live in Confluence. Every defect and code review page lists its record in each system, and Sync now refreshes them all.'
+  }
 ];
 
 export function AboutView() {
   return (
     <div className={s.page}>
-      <div className={s.intro}>
+      <header className={s.intro}>
         <DrsLogo width={96} label="Defects and Reviews System logo" />
         <div className={s.heading}>
           <h1 className={s.title}>Defects and Reviews System</h1>
           <p className={s.subtitle}>Samsung Electronics, Printing Solutions Business, 2016-2017</p>
         </div>
-      </div>
+        <p className={s.lead}>
+          The printing division is moving its firmware teams from IBM Rational and Review Board to Perforce and Atlassian in three waves, from November 2016 to December 2017. DRS keeps every defect and code review whole through the move: it links each record across all seven systems, keeps them in sync, and shows which system leads.
+        </p>
+      </header>
+
+      <SystemMap />
+
+      <section className={s.how} aria-labelledby="how-title">
+        <h2 id="how-title" className={s.sectionTitle}>How the move works</h2>
+        <div className={s.steps}>
+          {STEPS.map(st => (
+            <div key={st.title} className={s.step}>
+              <Illustration name={st.art} height={96} />
+              <div className={s.stepText}>
+                <h3 className={s.stepTitle}>{st.title}</h3>
+                <p>{st.text}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
       {/* Rendered by `pnpm render:web` in video/. Bump the version in both file names when it changes, since public/_headers caches them for a year.
           The video plays from /stream, which sends the parts of public/video/drs-showcase-v2.mp4 the player asks for, so it can seek. */}
       <figure className={s.figure}>
@@ -34,24 +77,10 @@ export function AboutView() {
         </video>
         <figcaption className={s.caption}>A one-minute tour of DRS, with music</figcaption>
       </figure>
-      <section className={s.story}>
-        <p>This is a demo of an application I built at Samsung Electronics' printing division.</p>
-        <p>DRS tracks defects and code reviews for printer and copier firmware, measures them against severity targets, and keeps records linked across IBM Rational, Review Board, Perforce, Helix Swarm, Jira and Confluence.</p>
-        <p>Defects, code reviews, people, email addresses and engineering specs are mock data. Printer model numbers are made up, and the product photos are generated stand-ins. Samsung and its product line names appear only for context.</p>
-        <p>Some of the original libraries have been deprecated and are no longer available, so they have been replaced with newer ones.</p>
-        <p className={s.disclaimer}>This demo is not affiliated with or endorsed by Samsung Electronics. Samsung is a trademark of its owner.</p>
-      </section>
-      <section className={s.facts}>
-        {ROWS.map(([k, art, v]) => (
-          <div key={k} className={s.fact}>
-            <span className={s.factArt}><Illustration name={art} height={72} /></span>
-            <div className={s.factBody}>
-              <span className={s.factKey}>{k}</span>
-              <span className={s.factValue}>{v}</span>
-            </div>
-          </div>
-        ))}
-      </section>
+
+      <p className={s.disclaimer}>
+        Defects, code reviews, people, email addresses and engineering specs are mock data. Printer model numbers are made up, and the product photos are generated stand-ins. This demo is not affiliated with or endorsed by Samsung Electronics. Samsung is a trademark of its owner.
+      </p>
     </div>
   );
 }

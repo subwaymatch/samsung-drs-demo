@@ -3,11 +3,9 @@ import { useMemo } from 'react';
 import { MODELS, TEAMS } from '@/lib/constants';
 import { fFull, TNOW } from '@/lib/dates';
 import { computeInsights, RANGES } from '@/lib/insights';
-import { systemGraph } from '@/lib/relations';
 import { useApp } from '@/lib/store';
-import { Loading, PageHeader, Section, SectionTitle, Thumb } from '../common/basics';
+import { Illustration, Loading, PageHeader, Section, SectionTitle, Thumb } from '../common/basics';
 import { Clickable } from '../common/clickable';
-import { RelGraph } from '../graphs/rel-graph';
 import { useShell } from '../shell/shell-context';
 import { Button } from '../ui/button';
 import { Icon } from '../ui/icon';
@@ -28,12 +26,11 @@ function Bar({ w, c, h = 6 }: { w: string; c: string; h?: number }) {
 export function InsightsView() {
   const app = useApp();
   const navigate = useNavigate();
-  const { ui, setUi, contentW } = useShell();
+  const { ui, setUi } = useShell();
   const range = RANGES.some(r => r.n === ui.range) ? ui.range : 30;
   const data = app?.data;
   const st = useMemo(() => (data ? computeInsights(data, range) : null), [data, range]);
-  const graph = useMemo(() => (data ? systemGraph(data) : null), [data]);
-  if (!app || !st || !graph) return <Loading />;
+  if (!app || !st) return <Loading />;
   const compMore = st.byComp.length > 6, compOpen = ui.compOpen;
 
   return (
@@ -43,10 +40,6 @@ export function InsightsView() {
         sub={`${app.data.defects.length} defects and ${app.data.reviews.length} code reviews from ${TEAMS.length} teams across ${MODELS.length} printer and copier models`}
         action={<span className={s.status}>Data through {fFull(TNOW)}, {TNOW.slice(11)}</span>}
       />
-
-      <section className={s.systems} aria-label="Connected systems">
-        {contentW > 0 && contentW < 840 ? <SystemList graph={graph} /> : <RelGraph nodes={graph.nodes} edges={graph.edges} height={graph.height} plain />}
-      </section>
 
       <div className={s.twoUp}>
         <Section title="Defects by migration state" sub={st.mig.sub}>
@@ -153,6 +146,7 @@ export function InsightsView() {
       <div className={s.kpis} style={KPI_GRID}>
         {st.kpis.map(k => (
           <Clickable key={k.label} href={k.href} className={s.kpi}>
+            <Illustration name={k.art} height={72} className={s.kpiArt} />
             <span className={s.kpiLabel}>{k.label}</span>
             <div className={s.kpiValueRow}>
               <span className={s.kpiValue}>{k.value}</span>
@@ -359,43 +353,6 @@ export function InsightsView() {
           </div>
         </div>
       </Section>
-    </div>
-  );
-}
-
-type Graph = ReturnType<typeof systemGraph>;
-type SysData = { name: string; role: string; logo?: string; sync?: string; meta?: string; href?: string; label?: string; note?: string };
-
-/** The seven-system diagram as a list, for phones: legacy systems, DRS, then the new systems. */
-function SystemList({ graph }: { graph: Graph }) {
-  const sys = graph.nodes.filter(n => n.type === 'sys' && n.id !== 'hub');
-  const labels = graph.nodes.filter(n => n.type === 'label').map(n => n.data as unknown as SysData);
-  const hub = graph.nodes.find(n => n.id === 'hub')!.data as unknown as SysData;
-  const card = (d: SysData, hubCard = false) => (
-    <div className={cx(s.sysCard, hubCard && s.sysCardHub)}>
-      <span className={s.sysName}>
-        {d.logo ? <img src={d.logo} alt="" className={s.sysLogo} /> : null}
-        {d.name}
-      </span>
-      <span className={s.sysRole}>{d.role}</span>
-      {d.meta ? <span className={s.sysMeta}>{d.meta}</span> : null}
-      {d.sync ? <span className={s.sysSync}><span className={s.syncDot} />{d.sync}</span> : null}
-    </div>
-  );
-  const group = (i: number, items: typeof sys) => (
-    <div className={s.sysGroup}>
-      <div className={s.labelBlock}><span className={s.sysGroupTitle}>{labels[i]?.label}</span><span className={s.sub}>{labels[i]?.note}</span></div>
-      {items.map(n => <div key={n.id}>{card(n.data as unknown as SysData)}</div>)}
-    </div>
-  );
-  const arrow = <div aria-hidden className={s.sysArrow}><Icon name="arrow-down" size={18} /></div>;
-  return (
-    <div className={s.sysList}>
-      {group(0, sys.filter(n => n.position.x < 0))}
-      {arrow}
-      {card(hub, true)}
-      {arrow}
-      {group(1, sys.filter(n => n.position.x > 0))}
     </div>
   );
 }

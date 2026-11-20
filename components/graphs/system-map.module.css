@@ -1,0 +1,77 @@
+.map {
+  display: flex;
+  flex-direction: column;
+}
+/* Holds the diagram's place while the data loads */
+.placeholder {
+  min-height: 600px;
+}
+
+/* SystemList: the diagram as a list, for phones */
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  font-size: 14px;
+  line-height: 20px;
+}
+.group {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.groupHead {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.groupTitle {
+  font-weight: 600;
+}
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.cardHub {
+  border-radius: 12px;
+  border: 1px solid var(--color-accent);
+  padding: 16px 20px;
+}
+.name {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+}
+.logo {
+  display: block;
+  height: 16px;
+  width: 24px;
+  object-fit: contain;
+  object-position: left;
+}
+.role {
+  color: var(--color-muted);
+}
+.meta {
+  font-variant-numeric: tabular-nums;
+}
+.sync {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--color-muted);
+}
+.syncDot {
+  height: 6px;
+  width: 6px;
+  flex: none;
+  border-radius: 999px;
+  background: oklch(0.62 0.14 155);
+}
+.arrow {
+  display: flex;
+  justify-content: center;
+  color: var(--color-placeholder);
+}

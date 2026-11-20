@@ -40,12 +40,6 @@
   align-items: center;
   gap: 8px;
 }
-.syncDot {
-  height: 6px;
-  width: 6px;
-  border-radius: 999px;
-  background: oklch(0.62 0.14 155);
-}
 .swatch {
   height: 10px;
   width: 10px;
@@ -111,13 +105,6 @@
   font-variant-numeric: tabular-nums;
 }
 
-/* System diagram: it leads the page, so it sits closer to the header (40px) */
-.systems {
-  margin-top: calc(40px - var(--section-gap));
-  display: flex;
-  flex-direction: column;
-}
-
 /* Two sections side by side, stacking when narrow */
 .twoUp {
   display: grid;
@@ -156,8 +143,7 @@
 .donutLabel:hover {
   color: var(--color-accent-text);
 }
-.donutLabelName,
-.sysGroupTitle {
+.donutLabelName {
   font-weight: 600;
 }
 .donutCenter {
@@ -327,6 +313,10 @@
 }
 .kpi:hover .kpiLabel {
   color: var(--color-accent-text);
+}
+/* An object for what each figure measures: time, approvals, fixes, open defects */
+.kpiArt {
+  margin-bottom: 8px;
 }
 .kpiLabel {
   font-size: 14px;
@@ -783,56 +773,4 @@
 }
 .activeUnit {
   color: var(--color-muted);
-}
-
-/* SystemList: the diagram as a list, for phones */
-.sysList {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-.sysGroup {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-.sysCard {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-.sysCardHub {
-  border-radius: 12px;
-  border: 1px solid var(--color-accent);
-  padding: 16px 20px;
-}
-.sysName {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-weight: 600;
-}
-.sysLogo {
-  display: block;
-  height: 16px;
-  width: 24px;
-  object-fit: contain;
-  object-position: left;
-}
-.sysRole {
-  color: var(--color-muted);
-}
-.sysMeta {
-  font-variant-numeric: tabular-nums;
-}
-.sysSync {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  color: var(--color-muted);
-}
-.sysArrow {
-  display: flex;
-  justify-content: center;
-  color: var(--color-placeholder);
 }

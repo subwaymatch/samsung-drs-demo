@@ -14,7 +14,8 @@ Defects, reviews, people, email addresses and engineering specs are mock data. M
 | Report a defect / request a review (with duplicate detection) | `/defects/new`, `/reviews/new` |
 | Daily and weekly summary emails, with an archive back to January 2016 | `/digests` |
 | Teams and profiles | `/teams`, `/teams/[id]` |
-| Notifications, settings, about | `/notifications`, `/settings`, `/about` |
+| Notifications, settings | `/notifications`, `/settings` |
+| About: the seven-system diagram and how the move from IBM Rational and Review Board to Perforce and Atlassian works | `/about` |
 
 Keyboard shortcuts: <kbd>Ctrl</kbd>/<kbd>⌘</kbd>+<kbd>K</kbd> search, <kbd>/</kbd> filter, <kbd>N</kbd> new, <kbd>J</kbd>/<kbd>K</kbd> move, <kbd>Enter</kbd> open, <kbd>X</kbd> select, <kbd>?</kbd> settings.
 
@@ -97,7 +98,7 @@ Any new or replacement image is generated with GPT Image 2.6 (`gpt-image-2.6-fla
 - At `low` it is 664 image output tokens at 1536x1024 or 1024x1536 and 824 at 1024x1024, about $0.02-0.025 an image at $30 per 1M (2.5 used 158 and 196).
 - A subject comes back at alpha 254, not 255, so count 250 and above as opaque when checking a cut-out.
 
-The 35 isometric illustrations in `public/illustrations` were made with `gpt-image-2.6-sunburst` at `quality: "low"` on a transparent background. The prompt asks for violet accents, which are then turned into warm greys, so the illustrations are white throughout: `python3 scripts/illustrations/degrey.py IN.png OUT.png` (Pillow and NumPy) does that to a generated image. Each is trimmed to its drawing and at most 512px on the long side. `lib/illustrations.ts` lists them with their sizes and subjects, and `illustrationSrc(name)` gives a file. Their prompts are in `scripts/illustrations/prompts.json`. The interface uses them only where a picture helps and the data doesn't fill the page: the empty states (`EmptyState` in `components/common/basics.tsx` takes one by name), the Not found page and the facts on About. `<Illustration name height>` sizes one from its proportions, so nothing shifts as it loads.
+The 35 isometric illustrations in `public/illustrations` were made with `gpt-image-2.6-sunburst` at `quality: "low"` on a transparent background. The prompt asks for violet accents, which are then turned into warm greys, so the illustrations are white throughout: `python3 scripts/illustrations/degrey.py IN.png OUT.png` (Pillow and NumPy) does that to a generated image. Each is trimmed to its drawing and at most 512px on the long side. `lib/illustrations.ts` lists them with their sizes and subjects, and `illustrationSrc(name)` gives a file. Their prompts are in `scripts/illustrations/prompts.json`. The interface uses them where a picture helps: the four headline figures on Insights, the empty states (`EmptyState` in `components/common/basics.tsx` takes one by name), the Not found page and the points on About that explain the migration. `<Illustration name height>` sizes one from its proportions, so nothing shifts as it loads.
 
 ## Credits
 
