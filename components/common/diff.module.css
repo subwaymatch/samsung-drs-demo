@@ -74,10 +74,10 @@
   color: var(--color-muted);
 }
 .added {
-  color: oklch(0.48 0.12 155);
+  color: var(--color-good);
 }
 .removed {
-  color: oklch(0.52 0.16 25);
+  color: var(--color-danger);
 }
 
 /* Diff body */

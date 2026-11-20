@@ -104,8 +104,16 @@ export const TYPE_ICON: Record<string, string> = {
   Localization: 'languages', 'Build / CI': 'hammer', Test: 'flask-conical', Documentation: 'book-open', Other: 'ellipsis'
 };
 
+/**
+ * The one green and one red for text and icons that say good or bad: statuses, changes against the previous period,
+ * targets met or missed. GOOD is the green the charts use. Fills (chart bars, solid buttons, diff lines) keep their own.
+ * The CSS has the same pair as --color-good and --color-danger (app/globals.css).
+ */
+export const GOOD = 'oklch(0.62 0.14 155)';
+export const BAD = 'oklch(0.58 0.2 25)';
+
 export const SEV: Record<Severity, { l: string; c: string; cb: string; icon: string }> = {
-  critical: { l: 'Critical', c: 'oklch(0.55 0.2 25)', cb: 'oklch(0.6 0.2 25)', icon: 'chevrons-up' },
+  critical: { l: 'Critical', c: BAD, cb: 'oklch(0.6 0.2 25)', icon: 'chevrons-up' },
   major: { l: 'Major', c: 'oklch(0.6 0.15 50)', cb: 'oklch(0.73 0.16 55)', icon: 'chevron-up' },
   minor: { l: 'Minor', c: 'oklch(0.6 0.12 90)', cb: 'oklch(0.86 0.14 95)', icon: 'minus' },
   trivial: { l: 'Trivial', c: 'oklch(0.58 0.02 260)', cb: 'oklch(0.83 0.01 260)', icon: 'chevron-down' }
@@ -115,7 +123,7 @@ export const SEVORD: Severity[] = ['trivial', 'minor', 'major', 'critical'];
 export const DST: Record<DefectStatus, { l: string; fg: string; icon: string }> = {
   open: { l: 'Open', fg: 'oklch(0.48 0.18 293)', icon: 'circle' },
   in_progress: { l: 'In progress', fg: 'oklch(0.48 0.14 250)', icon: 'circle-dot' },
-  resolved: { l: 'Resolved', fg: 'oklch(0.48 0.12 155)', icon: 'circle-check' },
+  resolved: { l: 'Resolved', fg: GOOD, icon: 'circle-check' },
   closed: { l: 'Closed', fg: 'oklch(0.48 0.01 290)', icon: 'lock' }
 };
 export const DST_KEYS = Object.keys(DST) as DefectStatus[];
@@ -126,16 +134,14 @@ export const RST: Record<ReviewStatus, { l: string; fg: string; icon: string }> 
   pending: { l: 'Awaiting reviewer', fg: 'oklch(0.45 0.02 290)', icon: 'clock' },
   in_review: { l: 'In review', fg: 'oklch(0.48 0.18 293)', icon: 'eye' },
   changes: { l: 'Modification requested', fg: 'oklch(0.52 0.12 60)', icon: 'rotate-ccw' },
-  approved: { l: 'Approved', fg: 'oklch(0.46 0.12 155)', icon: 'circle-check' },
-  denied: { l: 'Denied', fg: 'oklch(0.52 0.18 25)', icon: 'ban' },
+  approved: { l: 'Approved', fg: GOOD, icon: 'circle-check' },
+  denied: { l: 'Denied', fg: BAD, icon: 'ban' },
   withdrawn: { l: 'Withdrawn', fg: 'oklch(0.48 0.01 290)', icon: 'archive' }
 };
 export const RST_KEYS = Object.keys(RST) as ReviewStatus[];
 export const DEC: Record<string, string> = { approved: 'Approved', changes: 'Requested modification', denied: 'Denied', withdrawn: 'Withdrawn' };
 
 export const MUTED = 'oklch(0.5 0.02 290)';
-export const GOOD = 'oklch(0.46 0.12 155)';
-export const BAD = 'oklch(0.52 0.18 25)';
 export const AMBER = 'oklch(0.55 0.13 65)';
 export const ACCENT = 'oklch(0.5 0.19 293)';
 export const ACCENT_INK = 'oklch(0.45 0.17 293)';

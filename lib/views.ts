@@ -1,4 +1,4 @@
-import { AMBER, CQ_PRI, CQ_STATE, DEC, GOOD, JIRA_ST, LOGO, MIG, MUTED, RST, SEV, UM, WAVE, WAVE_CUTOVER_DAY } from './constants';
+import { AMBER, BAD, CQ_PRI, CQ_STATE, DEC, GOOD, JIRA_ST, LOGO, MIG, MUTED, RST, SEV, UM, WAVE, WAVE_CUTOVER_DAY } from './constants';
 import { fDate, fDur, hrs, nowStr } from './dates';
 import { affOf, modelInfo, rModelId } from './products';
 import { ccOf, cqOf, cqOfReview, crNum, jiraOf, jobOf, migOf, migW, p4Of, rbOf, tgtEval } from './records';
@@ -65,7 +65,7 @@ const crNumOfDefect = (d: Defect) => {
 };
 
 export function defectTargets(d: Defect) {
-  const ev = tgtEval(d, nowStr()), RED = 'oklch(0.52 0.18 25)', PUR = 'oklch(0.45 0.17 293)';
+  const ev = tgtEval(d, nowStr()), RED = BAD, PUR = 'oklch(0.45 0.17 293)';
   const r = ev.r.done
     ? ev.r.met ? { text: 'Responded in ' + fDur(ev.r.h), icon: 'circle-check', fg: GOOD } : { text: `Responded in ${fDur(ev.r.h)}, ${fDur(ev.r.h - ev.t.r)} late`, icon: 'circle-x', fg: RED }
     : ev.r.late ? { text: `No response, ${fDur(ev.r.h - ev.t.r)} overdue`, icon: 'triangle-alert', fg: RED } : { text: `${fDur(ev.t.r - ev.r.h)} left to respond`, icon: 'clock', fg: ev.t.r - ev.r.h < ev.t.r * 0.25 ? AMBER : PUR };
@@ -79,7 +79,7 @@ export function defectTargets(d: Defect) {
 const SWARM: Record<string, [string, string, string]> = {
   pending: ['Needs review', 'eye', 'oklch(0.48 0.18 293)'], in_review: ['Needs review', 'eye', 'oklch(0.48 0.18 293)'],
   changes: ['Needs revision', 'rotate-ccw', 'oklch(0.52 0.12 60)'], approved: ['Approved, committed', 'git-commit', GOOD],
-  denied: ['Rejected', 'ban', 'oklch(0.52 0.18 25)'], withdrawn: ['Archived, not submitted', 'archive', 'oklch(0.48 0.01 290)']
+  denied: ['Rejected', 'ban', BAD], withdrawn: ['Archived, not submitted', 'archive', 'oklch(0.48 0.01 290)']
 };
 
 export function reviewModel(r: Review, D: Defect[]) {
