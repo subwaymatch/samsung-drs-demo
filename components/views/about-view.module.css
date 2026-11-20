@@ -23,18 +23,28 @@
   color: var(--color-ink-3);
 }
 
-/* How the move works: four short points in a row (two, then one, on narrower screens) */
+/* How the move works: one point per row, the illustration beside its text */
 .steps {
-  display: grid;
-  column-gap: 40px;
-  row-gap: 40px;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
+  display: flex;
+  max-width: 640px;
+  flex-direction: column;
+  gap: 32px;
 }
 .step {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 16px;
+  display: grid;
+  grid-template-columns: 96px minmax(0, 1fr);
+  align-items: center;
+  column-gap: 24px;
+  @media (width < 640px) {
+    grid-template-columns: 64px minmax(0, 1fr);
+    column-gap: 16px;
+  }
+  /* Illustrations differ in width; each is centered in the same column */
+  & > img {
+    justify-self: center;
+    max-width: 100%;
+    height: auto;
+  }
 }
 .stepText {
   display: flex;
