@@ -1,6 +1,5 @@
-import { Illustration } from '../common/basics';
+import { Illustration, PageHeader, Section } from '../common/basics';
 import { SystemMap } from '../graphs/system-map';
-import { DrsLogo } from '../shell/logo';
 import s from './about-view.module.css';
 
 /**
@@ -34,21 +33,16 @@ const STEPS: { art: string; title: string; text: string }[] = [
 export function AboutView() {
   return (
     <div className={s.page}>
-      <header className={s.intro}>
-        <DrsLogo width={96} label="Defects and Reviews System logo" />
-        <div className={s.heading}>
-          <h1 className={s.title}>Defects and Reviews System</h1>
-          <p className={s.subtitle}>Samsung Electronics, Printing Solutions Business, 2016-2017</p>
-        </div>
+      <PageHeader title="About" />
+
+      <Section title="Defects and Reviews System" sub="Samsung Electronics, Printing Solutions Business, 2016-2017" gap={32}>
         <p className={s.lead}>
-          The printing division is moving its firmware teams from IBM Rational and Review Board to Perforce and Atlassian in three waves, from November 2016 to December 2017. DRS keeps every defect and code review whole through the move: it links each record across all seven systems, keeps them in sync, and shows which system leads.
+          The printing division is moving its firmware teams from IBM Rational and Review Board to Perforce and Atlassian. DRS keeps every defect and code review whole through the move: it links each record across all seven systems, keeps them in sync, and shows which system leads.
         </p>
-      </header>
+        <SystemMap />
+      </Section>
 
-      <SystemMap />
-
-      <section className={s.how} aria-labelledby="how-title">
-        <h2 id="how-title" className={s.sectionTitle}>How the move works</h2>
+      <Section title="How the move works" sub="Components, records and their history, from the legacy systems to the new ones" gap={32}>
         <div className={s.steps}>
           {STEPS.map(st => (
             <div key={st.title} className={s.step}>
@@ -60,11 +54,11 @@ export function AboutView() {
             </div>
           ))}
         </div>
-      </section>
+      </Section>
 
-      {/* Rendered by `pnpm render:web` in video/. Bump the version in both file names when it changes, since public/_headers caches them for a year.
-          The video plays from /stream, which sends the parts of public/video/drs-showcase-v2.mp4 the player asks for, so it can seek. */}
-      <figure className={s.figure}>
+      <Section title="Video tour" sub="A one-minute tour of DRS, with music">
+        {/* Rendered by `pnpm render:web` in video/. Bump the version in both file names when it changes, since public/_headers caches them for a year.
+            The video plays from /stream, which sends the parts of public/video/drs-showcase-v2.mp4 the player asks for, so it can seek. */}
         <video
           className={s.video}
           controls
@@ -75,8 +69,7 @@ export function AboutView() {
         >
           <source src="/stream/drs-showcase-v2.mp4" type="video/mp4" />
         </video>
-        <figcaption className={s.caption}>A one-minute tour of DRS, with music</figcaption>
-      </figure>
+      </Section>
 
       <p className={s.disclaimer}>
         Defects, code reviews, people, email addresses and engineering specs are mock data. Printer model numbers are made up, and the product photos are generated stand-ins. This demo is not affiliated with or endorsed by Samsung Electronics. Samsung is a trademark of its owner.

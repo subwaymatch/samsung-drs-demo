@@ -174,7 +174,8 @@ export const LOGO: Record<string, string> = {
   Confluence: '/logos/confluence.svg',
   'Perforce P4': '/logos/perforce.svg',
   'Helix Swarm': '/logos/perforce.svg',
-  'Review Board': '/logos/reviewboard.png'
+  // Just the mark; the name is always written next to it
+  'Review Board': '/logos/reviewboard-mark.png'
 };
 
 export const SYSG = [

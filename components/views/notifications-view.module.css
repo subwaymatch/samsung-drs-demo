@@ -14,23 +14,17 @@
   flex-direction: column;
 }
 
-/* A notification */
+/* A notification. Flush with the page edges; unread ones keep the darker text. */
 .item {
   display: grid;
-  grid-template-columns: 8px 32px minmax(0, 1fr) auto;
+  grid-template-columns: 32px minmax(0, 1fr) auto;
   align-items: flex-start;
-  gap: 14px;
+  gap: 16px;
   border-bottom: 1px solid var(--color-line-soft);
-  padding: 16px 12px 16px 8px;
+  padding: 16px 0;
 }
 .item:last-child {
   border-bottom-width: 0;
-}
-.dot {
-  margin-top: 12px;
-  height: 8px;
-  width: 8px;
-  border-radius: 999px;
 }
 .body {
   display: flex;
@@ -38,14 +32,26 @@
   flex-direction: column;
   gap: 4px;
 }
+/* Name, verb and id read as one sentence, with ordinary word spaces between them */
 .headline {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 8px;
+  line-height: 20px;
 }
 .actor {
   font-weight: 600;
+}
+.title {
+  font-weight: 600;
+}
+/* Read: the same text a step lighter */
+.read .actor,
+.read .title {
+  color: var(--color-ink-4);
+}
+.read .title {
+  font-weight: 400;
+}
+.read .itemId {
+  color: var(--color-ink-5);
 }
 .verb {
   color: var(--color-ink-4);

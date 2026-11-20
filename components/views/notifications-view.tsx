@@ -67,14 +67,17 @@ export function NotificationsView() {
               href={n.href}
               onOpen={() => markRead(n)}
               krow={i}
-              className={cx('row-link', s.item)}
-              style={i === kIdx ? KEY_ROW : { background: un ? 'oklch(0.985 0.012 293)' : 'transparent' }}
+              className={cx('row-link', s.item, !un && s.read)}
+              style={i === kIdx ? KEY_ROW : undefined}
             >
-              <span className={s.dot} style={{ background: un ? 'oklch(0.55 0.19 293)' : 'transparent' }} aria-label={un ? 'Unread' : undefined} />
               <Person person={who} size={32} />
               <div className={s.body}>
-                <span className={s.headline}><strong className={s.actor}>{who.name}</strong><span className={s.verb}>{n.verb}</span><span className={s.itemId}>{n.itemId}</span></span>
-                <span className="bui-trunc" style={{ fontWeight: un ? 600 : 400 }}>{n.title}</span>
+                {/* Unread items are told apart by their darker text; this says so to screen readers */}
+                <span className={s.headline}>
+                  {un ? <span className="visually-hidden">Unread: </span> : null}
+                  <strong className={s.actor}>{who.name}</strong> <span className={s.verb}>{n.verb}</span> <span className={s.itemId}>{n.itemId}</span>
+                </span>
+                <span className={cx('bui-trunc', s.title)}>{n.title}</span>
                 {n.text ? <span className={s.excerpt}>{n.text}</span> : null}
               </div>
               <span className={s.time}><Icon name={n.icon} size={14} />{fAt(n.at)}</span>

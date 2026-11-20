@@ -1,77 +1,26 @@
-/* Wide enough for the system diagram; text keeps to a reading width */
+/* About uses the same hierarchy as the other pages: the 70px page title,
+   18px section titles with a muted line under them, 16px point titles and
+   14px text. Wide enough for the system diagram; prose keeps a reading width. */
 .page {
+  --section-gap: 64px;
   margin-inline: auto;
   display: flex;
   max-width: 1200px;
   flex-direction: column;
-  gap: 64px;
+  gap: var(--section-gap);
   @media (width < 640px) {
-    gap: 48px;
+    --section-gap: 48px;
   }
 }
-.intro {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-.heading {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-.title {
-  font-size: 32px;
-  line-height: 1.2;
-  font-weight: 600;
-  letter-spacing: -0.02em;
-}
-.subtitle {
-  font-size: 15px;
-  line-height: 1.7;
-  color: var(--color-muted);
-}
-
-/* Showcase video */
-.figure {
-  margin: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-.video {
-  display: block;
-  aspect-ratio: 16 / 9;
-  width: 100%;
-  border-radius: 8px;
-  background-color: oklch(0.15 0.03 290);
-  box-shadow: 0 0 0 1px oklch(0.2 0.02 290 / 0.08), 0 8px 24px oklch(0.2 0.02 290 / 0.08);
-}
-.caption {
-  font-size: 14px;
-  line-height: 20px;
-  color: var(--color-muted);
-}
-
-/* Lead paragraph under the title */
 .lead {
   max-width: 720px;
-  font-size: 17px;
+  font-size: 14px;
   line-height: 1.7;
   text-wrap: pretty;
   color: var(--color-ink-3);
 }
 
 /* How the move works: four points, each led by an illustration */
-.how {
-  display: flex;
-  flex-direction: column;
-  gap: 32px;
-}
-.sectionTitle {
-  font-size: 18px;
-  line-height: 24px;
-  font-weight: 600;
-}
 .steps {
   display: grid;
   column-gap: 64px;
@@ -89,8 +38,8 @@
   max-width: 520px;
   flex-direction: column;
   gap: 8px;
-  font-size: 15px;
-  line-height: 1.6;
+  font-size: 14px;
+  line-height: 1.7;
   text-wrap: pretty;
   color: var(--color-ink-3);
 }
@@ -101,9 +50,19 @@
   color: var(--color-ink);
 }
 
+/* Showcase video */
+.video {
+  display: block;
+  aspect-ratio: 16 / 9;
+  width: 100%;
+  border-radius: 8px;
+  background-color: oklch(0.15 0.03 290);
+  box-shadow: 0 0 0 1px oklch(0.2 0.02 290 / 0.08), 0 8px 24px oklch(0.2 0.02 290 / 0.08);
+}
+
 .disclaimer {
   max-width: 720px;
   font-size: 14px;
-  line-height: 1.6;
+  line-height: 1.7;
   color: var(--color-muted);
 }

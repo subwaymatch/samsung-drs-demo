@@ -128,6 +128,12 @@
 }
 .donutSlice {
   cursor: pointer;
+  outline: none;
+}
+/* Keyboard focus follows the slice's own shape instead of a box around it */
+.donutSlice:focus-visible {
+  stroke: var(--color-ink);
+  stroke-width: 2px;
 }
 .donutSlice:hover {
   opacity: 0.8;

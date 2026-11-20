@@ -53,7 +53,9 @@ export function InsightsView() {
                   role="link"
                   tabIndex={0}
                   aria-label={p.tip}
-                  className={cx('focus-ring', s.donutSlice)}
+                  className={s.donutSlice}
+                  // A press opens the slice's defects without focusing it, so no focus ring lingers after a click
+                  onMouseDown={e => e.preventDefault()}
                   onClick={() => navigate(p.href)}
                   onKeyDown={e => { if (e.key === 'Enter') navigate(p.href); }}
                 >
