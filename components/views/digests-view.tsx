@@ -101,7 +101,7 @@ export function DigestsView({ kind: kindIn, date }: { kind?: string; date?: stri
 
         <aside className={s.settings}>
           <div className={s.settingsHead}>
-            <h2 className={s.heading}>Email settings</h2>
+            <h2 className={s.sideTitle}>Email settings</h2>
             <span className={s.settingsSub}>Changes save automatically. The email preview uses your current filters.</span>
           </div>
           <section className={s.delivery}>

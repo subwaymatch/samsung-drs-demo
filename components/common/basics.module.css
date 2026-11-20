@@ -12,8 +12,8 @@
   gap: 6px;
 }
 .pageTitle {
-  font-size: 24px;
-  line-height: 32px;
+  font-size: 28px;
+  line-height: 36px;
   font-weight: 600;
   letter-spacing: -0.02em;
 }
@@ -36,7 +36,7 @@
   color: var(--color-muted);
 }
 .title {
-  font-size: 16px;
+  font-size: 18px;
   line-height: 24px;
   font-weight: 600;
 }
@@ -244,8 +244,7 @@
   flex-wrap: wrap;
   align-items: center;
   gap: 10px;
-  border-left: 3px solid var(--color-accent-bar);
-  padding: 6px 0 6px 16px;
+  padding: 6px 0;
 }
 .quickSource {
   font-weight: 600;

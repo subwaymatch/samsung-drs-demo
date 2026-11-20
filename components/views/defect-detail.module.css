@@ -5,7 +5,7 @@
   color: var(--color-muted);
 }
 .sectionTitle {
-  font-size: 16px;
+  font-size: 18px;
   line-height: 24px;
   font-weight: 600;
 }
@@ -27,12 +27,11 @@
   align-items: center;
   gap: 8px;
 }
-/* A top-ruled block in the main column or the sidebar. */
+/* A block in the main column or the sidebar, set apart by the space above it. */
 .section {
   display: flex;
   flex-direction: column;
   gap: 12px;
-  border-top: 1px solid var(--color-line);
   padding-top: 24px;
 }
 /* Title above a short description. */
@@ -79,11 +78,16 @@
   gap: 20px;
 }
 .title {
-  font-size: 24px;
-  line-height: 1.4;
+  font-size: 28px;
+  line-height: 36px;
   font-weight: 600;
   letter-spacing: -0.02em;
   text-wrap: pretty;
+  /* Record titles run long: one size down on phones */
+  @media (width < 640px) {
+    font-size: 24px;
+    line-height: 32px;
+  }
 }
 .actions {
   display: flex;
@@ -96,7 +100,6 @@
   align-items: flex-start;
   column-gap: 56px;
   row-gap: 28px;
-  border-top: 1px solid var(--color-line);
   padding-top: 20px;
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 440px), 1fr));
 }
@@ -132,8 +135,6 @@
   text-wrap: pretty;
 }
 .steps {
-  border-left: 2px solid var(--color-accent-rule);
-  padding: 2px 0 2px 16px;
   line-height: 1.8;
   white-space: pre-wrap;
 }
@@ -148,7 +149,6 @@
   display: flex;
   flex-direction: column;
   gap: 16px;
-  border-top: 1px solid var(--color-line);
   padding-top: 24px;
 }
 .mapSub {
@@ -216,7 +216,7 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  font-size: 16px;
+  font-size: 18px;
   line-height: 24px;
   font-weight: 600;
 }
@@ -263,7 +263,6 @@
   display: flex;
   flex-direction: column;
   gap: 24px;
-  border-top: 1px solid var(--color-line);
   padding-top: 24px;
 }
 
@@ -274,10 +273,8 @@
   flex: 0 1 300px;
   flex-direction: column;
   gap: 28px;
-  border-left: 1px solid var(--color-line);
   padding-left: 32px;
   @media (width < 900px) {
-    border-left-width: 0;
     padding-left: 0;
   }
 }
@@ -355,7 +352,6 @@
   grid-template-columns: 88px minmax(0, 1fr);
   column-gap: 16px;
   row-gap: 14px;
-  border-top: 1px solid var(--color-line);
   padding-top: 24px;
 }
 .factLabel {

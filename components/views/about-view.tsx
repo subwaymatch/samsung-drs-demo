@@ -1,6 +1,5 @@
 import { DrsLogo } from '../shell/logo';
 import { Icon } from '../ui/icon';
-import { cx } from '@/lib/cx';
 import s from './about-view.module.css';
 
 const ROWS: [string, string, string][] = [
@@ -42,8 +41,8 @@ export function AboutView() {
         <p className={s.disclaimer}>This demo is not affiliated with or endorsed by Samsung Electronics. Samsung is a trademark of its owner.</p>
       </section>
       <section className={s.facts}>
-        {ROWS.map(([k, icon, v], i) => (
-          <div key={k} className={cx(s.fact, i === ROWS.length - 1 && s.factLast)}>
+        {ROWS.map(([k, icon, v]) => (
+          <div key={k} className={s.fact}>
             <span className={s.factKey}>
               <Icon name={icon} size={16} color="var(--color-accent-ink)" />
               {k}

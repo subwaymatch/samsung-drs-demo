@@ -68,7 +68,7 @@ export function AffectedProducts({ chips, addItems, sub, onAdd, onRemove }: { ch
   return (
     <section className={s.affected}>
       <div className={s.heading}>
-        <h2 className={s.title}>Affected products</h2>
+        <h2 className={s.label}>Affected products</h2>
         <span className={s.meta}>{sub}</span>
       </div>
       <div className={s.chips}>
@@ -119,7 +119,7 @@ export function ProductPanel({ pm }: { pm: ModelInfo }) {
       <Thumb th={thumbOf(pm.id)} w={168} h={120} iconSize={32} label />
       <div className={s.productMain}>
         <div className={s.productHead}>
-          <span className={s.title}>Samsung {pm.series} {pm.id}</span>
+          <span className={s.productName}>Samsung {pm.series} {pm.id}</span>
           <span className={s.productKind}>{pm.kind}</span>
         </div>
         <div className={s.specs}>
