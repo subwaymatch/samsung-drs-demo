@@ -20,13 +20,15 @@ interface Common {
 const cls = (variant: ButtonVariant, size?: 'sm', iconOnly?: boolean, extra?: string) =>
   ['bui-btn', 'bui-' + variant, size === 'sm' ? 'bui-sm' : '', iconOnly ? 'bui-icon-only' : '', extra || ''].filter(Boolean).join(' ');
 
-export function Button({ variant = 'secondary', size, icon, iconRight, iconOnly, title, children, className, style, onClick, disabled, type = 'button', ariaExpanded, ariaControls }: Common & {
+export function Button({ variant = 'secondary', size, icon, iconRight, iconOnly, title, children, className, style, onClick, disabled, type = 'button', ariaExpanded, ariaControls, ariaBusy }: Common & {
   onClick?: MouseEventHandler<HTMLButtonElement>;
   disabled?: boolean;
   type?: 'button' | 'submit';
   /** For buttons that show or hide a region. */
   ariaExpanded?: boolean;
   ariaControls?: string;
+  /** For buttons whose action is still running. */
+  ariaBusy?: boolean;
 }) {
   const is = size === 'sm' ? 14 : 16;
   return (
@@ -40,6 +42,7 @@ export function Button({ variant = 'secondary', size, icon, iconRight, iconOnly,
       aria-label={iconOnly ? title : undefined}
       aria-expanded={ariaExpanded}
       aria-controls={ariaControls}
+      aria-busy={ariaBusy || undefined}
     >
       {icon ? <Icon name={icon} size={is} /> : null}
       {children}

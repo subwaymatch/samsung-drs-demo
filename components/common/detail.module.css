@@ -333,11 +333,35 @@
 }
 .masterBadge {
   border-radius: 4px;
-  background-color: oklch(0.96 0.03 293);
+  background-color: oklch(0.96 0.004 290);
   padding: 1px 8px;
   font-size: 13px;
   font-weight: 550;
-  color: var(--color-accent-ink);
+  color: var(--color-ink-4);
+}
+/* Record IDs in each system: neutral, so the records read as reference, not calls to action */
+.recordLink {
+  color: var(--color-ink-4);
+}
+.recordLink svg {
+  color: var(--color-faint);
+}
+.recordLink:hover,
+.recordLink:hover svg {
+  color: var(--color-ink);
+}
+/* Sync now, while syncing */
+@keyframes spin {
+  to {
+    rotate: 360deg;
+  }
+}
+.spin {
+  animation: spin 0.9s linear infinite;
+  /* The label already says Syncing… */
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+  }
 }
 .recordMeta {
   font-size: 14px;
