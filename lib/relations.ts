@@ -134,7 +134,7 @@ export function systemGraph(data: Data) {
   });
   N.push({
     id: 'hub', type: 'sys', position: { x: -5, y: span / 2 + NAME_Y - HUB_H / 2 },
-    data: { hub: true, w: W, name: 'Defects and Reviews System', role: 'Links each defect and code review across all seven systems', meta: `${D.length} defects, ${R.length} code reviews`, sync: 'All systems connected' }
+    data: { hub: true, w: W, name: 'Defects and Reviews System', logo: '/drs-logo-neutral.svg', role: 'Links each defect and code review across all seven systems', meta: `${D.length} defects, ${R.length} code reviews`, sync: 'All systems connected' }
   });
   // The last row is at most 92px tall (a role on two lines).
   return { nodes: N, edges: E, height: span + 92 };
