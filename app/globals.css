@@ -24,6 +24,8 @@
   --color-line-input: oklch(0.9 0.01 290);
   --color-surface: oklch(0.99 0.004 290);
   --color-accent: oklch(0.5 0.19 293);
+  /* One quiet focus ring for every control: a thin violet line, kept off the edge */
+  --focus-ring: 1.5px solid oklch(0.62 0.15 293);
   --color-accent-hover: oklch(0.44 0.19 293);
   --color-accent-ink: oklch(0.42 0.17 293);
   --color-accent-text: oklch(0.45 0.17 293);
@@ -57,6 +59,14 @@
     text-rendering: optimizeLegibility;
     /* Pretendard ligates "0x21" into "0×21"; hex codes and part numbers must stay literal. */
     font-variant-ligatures: none;
+  }
+  /* Every focusable control shows the app's focus ring for keyboard focus,
+     never the browser's default black outline. :where keeps this at the lowest
+     specificity, so a component's own focus style still wins. */
+  :where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
+    outline: var(--focus-ring);
+    outline-offset: 2px;
+    border-radius: 4px;
   }
   a {
     color: var(--color-accent);
@@ -110,7 +120,7 @@
   .bui-seg-item:focus-visible,
   .bui-trigger:focus-visible,
   .focus-ring:focus-visible {
-    outline: 2px solid oklch(0.6 0.16 293);
+    outline: var(--focus-ring);
     outline-offset: 2px;
   }
   .bui-btn[data-disabled],
@@ -295,7 +305,7 @@
 
   .bui-switch { position: relative; display: inline-flex; align-items: center; width: 34px; height: 20px; padding: 2px; border: none; border-radius: 999px; background: oklch(0.86 0.01 290); cursor: pointer; transition: background 0.15s; flex: none; outline: none; }
   .bui-switch:focus-visible,
-  .bui-check:focus-visible { outline: 2px solid oklch(0.6 0.16 293); outline-offset: 2px; }
+  .bui-check:focus-visible { outline: var(--focus-ring); outline-offset: 2px; }
   .bui-switch[data-checked] { background: var(--color-accent); }
   .bui-switch-thumb { display: block; width: 16px; height: 16px; border-radius: 50%; background: #fff; box-shadow: 0 1px 2px oklch(0.2 0.02 290 / 0.3); transition: transform 0.15s; }
   .bui-switch[data-checked] .bui-switch-thumb { transform: translateX(14px); }
@@ -306,7 +316,7 @@
 
   .bui-person { display: inline-flex; align-items: center; gap: 10px; min-width: 0; color: inherit; text-decoration: none; border-radius: 50%; outline: none; }
   .bui-person:hover { color: inherit; text-decoration: none; }
-  .bui-person:focus-visible { outline: 2px solid oklch(0.6 0.16 293); outline-offset: 2px; }
+  .bui-person:focus-visible { outline: var(--focus-ring); outline-offset: 2px; }
   .bui-pcard { width: 300px; min-width: 0; padding: 20px; display: flex; flex-direction: column; gap: 14px; }
   .bui-av { display: inline-grid; place-items: center; border-radius: 50%; font-weight: 600; flex: none; overflow: hidden; user-select: none; line-height: 1; }
 
@@ -323,7 +333,7 @@
   /* In list rows the item's own link (in its ID cell) is stretched over the row. */
   .row-stretch::after { content: ""; position: absolute; inset: 0; z-index: 0; }
   .row-stretch:focus-visible { outline: none; }
-  .clk:has(.row-stretch:focus-visible) { outline: 2px solid oklch(0.6 0.16 293); outline-offset: 2px; border-radius: 4px; }
+  .clk:has(.row-stretch:focus-visible) { outline: var(--focus-ring); outline-offset: 2px; border-radius: 4px; }
 
   /* Tooltips for chart marks and cells: data-tip on the element. */
   [data-tip] { position: relative; }
