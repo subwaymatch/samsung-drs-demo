@@ -165,8 +165,10 @@
   border-bottom: 1px solid var(--color-line);
   background-color: #fff;
   padding: 0 16px;
+  /* Narrow screens (the phone and tablet header): no line under the bar */
   @media (width < 959px) {
     display: flex;
+    border-bottom-color: transparent;
   }
 }
 .topbarShown {
