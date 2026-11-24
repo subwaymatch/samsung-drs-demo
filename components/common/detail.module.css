@@ -79,7 +79,6 @@
   color: var(--color-muted);
 }
 .crumbId {
-  font-variant-numeric: tabular-nums;
   font-size: 14px;
   line-height: 20px;
 }
@@ -405,7 +404,6 @@
   gap: 14px;
 }
 .relatedId {
-  font-variant-numeric: tabular-nums;
   font-size: 14px;
   line-height: 20px;
   white-space: nowrap;

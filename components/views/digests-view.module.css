@@ -134,7 +134,6 @@
   border-bottom-width: 0;
 }
 .itemId {
-  font-variant-numeric: tabular-nums;
   font-size: 14px;
   line-height: 20px;
   color: var(--color-muted);

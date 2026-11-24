@@ -738,7 +738,6 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  font-variant-numeric: tabular-nums;
   font-size: 14px;
   line-height: 20px;
   white-space: nowrap;
