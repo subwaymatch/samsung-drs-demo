@@ -261,6 +261,11 @@
   column-gap: 24px;
   row-gap: 8px;
   background-color: #fff;
+  /* Phones: only the tabs stick. The bar steps out of the layout so the date
+     line scrolls away with the header and the tabs stick on their own. */
+  @media (width < 640px) {
+    display: contents;
+  }
 }
 .periodShowing {
   display: flex;
@@ -268,6 +273,11 @@
   align-items: center;
   gap: 8px;
   color: var(--color-muted);
+  @media (width < 640px) {
+    min-height: 0;
+    /* Close up the page's section gap: the date sits just above the tabs */
+    margin-bottom: calc(4px - var(--section-gap));
+  }
 }
 /* A date range, not a column of figures: proportional digits, tracked in a little */
 .periodLabel {
@@ -283,9 +293,18 @@
   overflow-x: auto;
   overflow-y: hidden;
   scrollbar-width: none;
+  /* Phones: a single 40px sticky row, the four tabs spread across it */
   @media (width < 640px) {
-    padding-right: 24px;
-    mask-image: linear-gradient(to right, #000 calc(100% - 40px), transparent);
+    position: sticky;
+    top: var(--topbar-h, 0px);
+    z-index: 30;
+    margin-bottom: calc(24px - var(--section-gap));
+    justify-content: space-between;
+    gap: 12px;
+    background-color: #fff;
+    & .periodTab {
+      min-height: 40px;
+    }
   }
 }
 .periodTab {

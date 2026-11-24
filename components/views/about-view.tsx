@@ -53,7 +53,7 @@ export function AboutView() {
       </video>
 
       <p className={s.disclaimer}>
-        Defects, code reviews, people, email addresses and engineering specs are mock data. Printer model numbers are made up, and the product photos are generated stand-ins.
+        Defects, code reviews, product model numbers, people, email addresses and engineering specs are mock data. Product and people photos are generated stand-ins.
       </p>
     </div>
   );

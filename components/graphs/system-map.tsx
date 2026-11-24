@@ -1,5 +1,4 @@
 import { useMemo } from 'react';
-import { SYSG } from '@/lib/constants';
 import { systemGraph } from '@/lib/relations';
 import { useApp } from '@/lib/store';
 import { cx } from '@/lib/cx';
@@ -43,20 +42,19 @@ function SystemList({ graph }: { graph: Graph }) {
       {d.sync ? <span className={s.sync}><span className={s.syncDot} />{d.sync}</span> : null}
     </div>
   );
-  const group = (i: number, items: typeof sys) => (
+  const group = (items: typeof sys) => (
     <div className={s.group}>
-      <div className={s.groupHead}><span className={s.groupTitle}>{SYSG[i].label}</span><span className={s.role}>{SYSG[i].note}</span></div>
       {items.map(n => <div key={n.id}>{card(n.data as unknown as SysData)}</div>)}
     </div>
   );
   const arrow = <div aria-hidden className={s.arrow}><Icon name="arrow-down" size={18} /></div>;
   return (
     <div className={s.list}>
-      {group(0, sys.filter(n => n.position.x < 0))}
+      {group(sys.filter(n => n.position.x < 0))}
       {arrow}
       {card(hub, true)}
       {arrow}
-      {group(1, sys.filter(n => n.position.x > 0))}
+      {group(sys.filter(n => n.position.x > 0))}
     </div>
   );
 }
