@@ -1,4 +1,5 @@
 import { useMemo } from 'react';
+import { SYSG } from '@/lib/constants';
 import { systemGraph } from '@/lib/relations';
 import { useApp } from '@/lib/store';
 import { cx } from '@/lib/cx';
@@ -8,7 +9,7 @@ import { RelGraph } from './rel-graph';
 import s from './system-map.module.css';
 
 type Graph = ReturnType<typeof systemGraph>;
-type SysData = { name: string; role: string; logo?: string; sync?: string; meta?: string; href?: string; label?: string; note?: string };
+type SysData = { name: string; role: string; logo?: string; sync?: string; meta?: string; href?: string };
 
 /**
  * The seven systems DRS links: the legacy ones on the left, the new ones on the right, DRS between them.
@@ -30,7 +31,6 @@ export function SystemMap() {
 /** The seven-system diagram as a list, for phones: legacy systems, DRS, then the new systems. */
 function SystemList({ graph }: { graph: Graph }) {
   const sys = graph.nodes.filter(n => n.type === 'sys' && n.id !== 'hub');
-  const labels = graph.nodes.filter(n => n.type === 'label').map(n => n.data as unknown as SysData);
   const hub = graph.nodes.find(n => n.id === 'hub')!.data as unknown as SysData;
   const card = (d: SysData, hubCard = false) => (
     <div className={cx(s.card, hubCard && s.cardHub)}>
@@ -45,7 +45,7 @@ function SystemList({ graph }: { graph: Graph }) {
   );
   const group = (i: number, items: typeof sys) => (
     <div className={s.group}>
-      <div className={s.groupHead}><span className={s.groupTitle}>{labels[i]?.label}</span><span className={s.role}>{labels[i]?.note}</span></div>
+      <div className={s.groupHead}><span className={s.groupTitle}>{SYSG[i].label}</span><span className={s.role}>{SYSG[i].note}</span></div>
       {items.map(n => <div key={n.id}>{card(n.data as unknown as SysData)}</div>)}
     </div>
   );

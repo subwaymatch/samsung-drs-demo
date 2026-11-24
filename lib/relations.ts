@@ -115,30 +115,29 @@ export function systemGraph(data: Data) {
     Confluence: { meta: 'Root-cause and test pages' }
   };
   const LBL: Record<string, string> = { 'Rational ClearQuest': 'Defects', 'Rational ClearCase': 'UCM history', 'Review Board': 'Reviews', Jira: 'Issues', 'Perforce P4': 'Jobs, CLs', 'Helix Swarm': 'Reviews', Confluence: 'Pages' };
-  // Column headings share the top row. Both columns span the same height below
-  // them, so the first and last systems on each side line up, and the middle
-  // legacy system lines up with DRS. Edges attach at each system's name line
-  // (NAME_Y from its top). HUB_H is the hub's rough rendered height, used only
-  // to center it on that middle line.
-  const W = 256, STEP = 140, BODY = 104, NAME_Y = 10, HUB_H = 146, N: GraphNode[] = [], E: GraphEdge[] = [];
+  // Both columns span the same height, so the first and last systems on each
+  // side line up, and the middle legacy system lines up with DRS. Edges attach
+  // at each system's name line (NAME_Y from its top). HUB_H is the hub's rough
+  // rendered height, used only to center it on that middle line. `meta` shows
+  // only in the stacked list on narrow screens, not in the diagram.
+  const W = 256, STEP = 116, NAME_Y = 10, HUB_H = 122, N: GraphNode[] = [], E: GraphEdge[] = [];
   const rows = Math.max(...SYSG.map(g => g.items.length)), span = (rows - 1) * STEP;
   SYSG.forEach((g, gi) => {
     const x = gi === 0 ? -350 : 340, side = gi === 0 ? 'start' : 'end', step = g.items.length > 1 ? span / (g.items.length - 1) : 0;
-    N.push({ id: 'lbl' + gi, type: 'label', position: { x, y: 0 }, draggable: false, selectable: false, data: { w: W, side, label: g.label, note: g.note } });
     g.items.forEach((s, i) => {
       const id = 'sys:' + s.name;
-      N.push({ id, type: 'sys', position: { x, y: BODY + i * step }, data: { w: W, side, nameY: NAME_Y, name: s.name, role: s.role, logo: s.logo, sync: 'Synced ' + s.ago + ' ago', ...(meta[s.name] || {}) } });
+      N.push({ id, type: 'sys', position: { x, y: i * step }, data: { w: W, side, nameY: NAME_Y, name: s.name, role: s.role, logo: s.logo, sync: 'Synced ' + s.ago + ' ago', ...(meta[s.name] || {}) } });
       E.push(gi === 0
         ? { id: 'e' + id, source: id, target: 'hub', sourceHandle: 'sRight', targetHandle: 'tLeft', label: LBL[s.name] }
         : { id: 'e' + id, source: 'hub', target: id, sourceHandle: 'sRight', targetHandle: 'tLeft', label: LBL[s.name] });
     });
   });
   N.push({
-    id: 'hub', type: 'sys', position: { x: -5, y: BODY + span / 2 + NAME_Y - HUB_H / 2 },
+    id: 'hub', type: 'sys', position: { x: -5, y: span / 2 + NAME_Y - HUB_H / 2 },
     data: { hub: true, w: W, name: 'DRS', logo: '/drs-logo.svg', role: 'Links each defect and code review across all seven systems', meta: `${D.length} defects, ${R.length} code reviews`, sync: 'All systems connected' }
   });
-  // The last row is at most 112px tall (a role on two lines).
-  return { nodes: N, edges: E, height: BODY + span + 112 };
+  // The last row is at most 88px tall (a role on two lines).
+  return { nodes: N, edges: E, height: span + 88 };
 }
 
 /** Relationship map for one defect: related defects, code reviews and product lines. */

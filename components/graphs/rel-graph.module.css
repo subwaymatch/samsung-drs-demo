@@ -88,9 +88,6 @@
   text-wrap: pretty;
   color: var(--color-muted);
 }
-.sysMeta {
-  font-variant-numeric: tabular-nums;
-}
 .sysSync {
   display: flex;
   align-items: center;
@@ -106,23 +103,6 @@
 }
 
 /* Label node: a column heading */
-.label {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-.labelTitle {
-  font-size: 14px;
-  line-height: 20px;
-  font-weight: 600;
-  color: var(--color-ink);
-}
-.labelNote {
-  font-size: 14px;
-  line-height: 20px;
-  color: var(--color-muted);
-}
-
 .loading {
   display: flex;
   height: 100%;

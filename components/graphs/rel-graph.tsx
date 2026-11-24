@@ -70,7 +70,6 @@ function SysNode({ data }: NodeProps<Node<D>>) {
         {str(data.name)}
       </span>
       <span className={s.sysRole}>{str(data.role)}</span>
-      {data.meta ? <span className={s.sysMeta}>{str(data.meta)}</span> : null}
       {data.sync ? (
         <span className={s.sysSync}>
           <span className={s.sysSyncDot} />
@@ -81,16 +80,7 @@ function SysNode({ data }: NodeProps<Node<D>>) {
   );
 }
 
-function LabelNode({ data }: NodeProps<Node<D>>) {
-  return (
-    <div className={cx(s.label, data.side === 'start' && s.toEnd)} style={{ width: Number(data.w) || 210 }}>
-      <span className={s.labelTitle}>{str(data.label)}</span>
-      {data.note ? <span className={s.labelNote}>{str(data.note)}</span> : null}
-    </div>
-  );
-}
-
-const nodeTypes = { card: CardNode, sys: SysNode, label: LabelNode };
+const nodeTypes = { card: CardNode, sys: SysNode };
 const SOLID = { stroke: 'oklch(0.55 0.17 293)', strokeWidth: 1.5 };
 const DASHED = { stroke: 'oklch(0.7 0.05 290)', strokeWidth: 1.5, strokeDasharray: '5 4' };
 const LABEL = { labelStyle: { fontSize: 13, fill: 'oklch(0.4 0.02 290)' }, labelBgPadding: [6, 3] as [number, number], labelBgBorderRadius: 4, labelBgStyle: { fill: '#fff' } };

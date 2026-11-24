@@ -1,6 +1,6 @@
 /* About uses the same hierarchy as the other pages: the 70px page title,
    18px section titles with a muted line under them, 16px point titles and
-   14px text. Wide enough for the system diagram; prose keeps a reading width. */
+   14px text, with a 16px lead. Wide enough for the system diagram; prose keeps a reading width. */
 .page {
   --section-gap: 64px;
   margin-inline: auto;
@@ -17,8 +17,8 @@
   margin-top: calc(8px - var(--section-gap));
   margin-bottom: 16px;
   max-width: 720px;
-  font-size: 14px;
-  line-height: 1.7;
+  font-size: 16px;
+  line-height: 1.6;
   text-wrap: pretty;
   color: var(--color-ink-3);
 }
@@ -74,7 +74,7 @@
 
 .disclaimer {
   max-width: 720px;
-  font-size: 14px;
-  line-height: 1.7;
+  font-size: 16px;
+  line-height: 1.6;
   color: var(--color-muted);
 }
