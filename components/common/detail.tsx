@@ -76,8 +76,7 @@ export function AffectedProducts({ chips, addItems, sub, onAdd, onRemove }: { ch
           <span
             key={c.key}
             title={c.tip}
-            className={s.chip}
-            style={{ borderColor: c.primary ? 'oklch(0.86 0.06 293)' : 'oklch(0.9 0.012 290)', background: c.primary ? 'oklch(0.96 0.03 293)' : '#fff' }}
+            className={cx(s.chip, c.primary && s.chipPrimary)}
           >
             <Icon name={c.icon} size={15} color="oklch(0.5 0.12 293)" />
             <span className={s.chipLabel}>{c.label}</span>
@@ -164,10 +163,9 @@ export function ConfirmDelete({ id, noun, onCancel, onConfirm }: { id: string; n
   );
 }
 
-function RecordColumn({ title, items, onOpen }: { title: string; items: SysRecord[]; onOpen: (x: SysRecord) => void }) {
+function RecordColumn({ items, onOpen }: { items: SysRecord[]; onOpen: (x: SysRecord) => void }) {
   return (
     <div className={s.recordColumn}>
-      <span className={s.recordColumnTitle}>{title}</span>
       {items.map(x => (
         <div key={x.sys} className={s.record}>
           <div className={s.labelRow}>
@@ -194,7 +192,7 @@ function RecordColumn({ title, items, onOpen }: { title: string; items: SysRecor
 /** How long "Sync now" shows its in-progress state before reporting the result. */
 const SYNC_MS = 1200;
 
-export function RecordsAcrossSystems({ sub, legacyTitle, legacy, next, synced, onSync, onOpen }: { sub: string; legacyTitle: string; legacy: SysRecord[]; next: SysRecord[]; synced: string; onSync: () => void; onOpen: (x: SysRecord) => void }) {
+export function RecordsAcrossSystems({ sub, legacy, next, synced, onSync, onOpen }: { sub: string; legacy: SysRecord[]; next: SysRecord[]; synced: string; onSync: () => void; onOpen: (x: SysRecord) => void }) {
   const [syncing, setSyncing] = useState(false);
   const timer = useRef<ReturnType<typeof setTimeout>>(undefined);
   useEffect(() => () => clearTimeout(timer.current), []);
@@ -217,8 +215,8 @@ export function RecordsAcrossSystems({ sub, legacyTitle, legacy, next, synced, o
         </Button>
       </div>
       <div className={s.recordGrid}>
-        <RecordColumn title={legacyTitle} items={legacy} onOpen={onOpen} />
-        <RecordColumn title="New, Perforce and Atlassian" items={next} onOpen={onOpen} />
+        <RecordColumn items={legacy} onOpen={onOpen} />
+        <RecordColumn items={next} onOpen={onOpen} />
       </div>
       <span className={s.meta} role="status">{syncing ? 'Syncing with every system…' : synced}</span>
     </section>

@@ -152,9 +152,18 @@
   align-items: center;
   gap: 8px;
   border-radius: 6px;
-  border: 1px solid;
+  border: 1px solid oklch(0.9 0.012 290);
+  background-color: #fff;
   padding-right: 8px;
   padding-left: 12px;
+}
+/* The model the defect was reported on: a tinted fill, no outline */
+.chipPrimary {
+  border-color: transparent;
+  background-color: oklch(0.96 0.03 293);
+}
+.chipPrimary .chipSub {
+  color: var(--color-accent-text);
 }
 .chipLabel {
   font-weight: 550;
@@ -288,22 +297,15 @@
   padding-top: 24px;
 }
 .recordGrid {
+  container-type: inline-size;
   display: grid;
   column-gap: 32px;
-  row-gap: 8px;
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
 }
 .recordColumn {
   display: flex;
   min-width: 0;
   flex-direction: column;
-}
-.recordColumnTitle {
-  padding-bottom: 10px;
-  font-size: 14px;
-  line-height: 20px;
-  font-weight: 600;
-  color: var(--color-ink-5);
 }
 .record {
   display: flex;
@@ -315,6 +317,12 @@
 }
 .record:last-child {
   border-bottom-width: 0;
+}
+/* One column (two need 2 x 260px + 32px): the legacy and new records read as one list */
+@container (width < 552px) {
+  .recordColumn:first-child .record:last-child {
+    border-bottom-width: 1px;
+  }
 }
 .recordSystem {
   display: flex;

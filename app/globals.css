@@ -124,8 +124,9 @@
   .bui-primary:hover { background: var(--color-accent-hover); color: #fff; }
   .bui-secondary { border-color: var(--color-line-input); background: #fff; }
   .bui-secondary:hover { border-color: oklch(0.78 0.06 293); color: var(--color-ink); }
-  .bui-subOn { border-color: oklch(0.85 0.06 293); background: oklch(0.97 0.02 293); color: var(--color-accent-ink); }
-  .bui-subOn:hover { border-color: oklch(0.75 0.1 293); color: var(--color-accent-ink); }
+  /* Subscribed: no box, the ringing bell and label say it */
+  .bui-subOn { color: var(--color-ink); }
+  .bui-subOn:hover { color: var(--color-accent-ink); }
   .bui-ghost { color: var(--color-ink-4); }
   .bui-ghost:hover { color: var(--color-accent-ink); }
   .bui-danger { border-color: var(--color-line-input); background: #fff; color: var(--color-danger); }
@@ -247,7 +248,7 @@
   .bui-group { display: inline-flex; align-items: stretch; }
   .bui-group .bui-btn.bui-g-l { border-top-right-radius: 0; border-bottom-right-radius: 0; }
   .bui-group .bui-btn.bui-g-r { border-top-left-radius: 0; border-bottom-left-radius: 0; margin-left: -1px; padding: 0 10px; }
-  .bui-group .bui-btn.bui-g-r[data-popup-open] { border-color: oklch(0.78 0.08 293); background: oklch(0.97 0.015 293); }
+  .bui-group .bui-btn.bui-g-r[data-popup-open] { color: var(--color-accent-ink); }
   .bui-menu-danger { color: var(--color-danger); }
   .bui-menu-danger[data-highlighted] { background: oklch(0.97 0.02 25); }
   .bui-menu-sep { height: 1px; background: var(--color-line); margin: 6px 4px; }
