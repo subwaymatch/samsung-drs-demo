@@ -23,43 +23,70 @@
   color: var(--color-ink-3);
 }
 
-/* How the move works: one point per row, the illustration beside its text */
+/* How the move works: the same shape as the KPI row on Insights. Four columns,
+   then two below 900px and one below 440px (never three and one), each point a
+   small lightened illustration over its title and text. */
+/* The list wraps the grid so the grid's own width can be queried below */
+.stepsWrap {
+  container-type: inline-size;
+}
 .steps {
-  display: flex;
-  max-width: 640px;
-  flex-direction: column;
-  gap: 32px;
+  --gap: 32px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(clamp(calc((100% - 3 * var(--gap)) / 4), (900px - 100%) * 999, clamp(calc((100% - var(--gap)) / 2), (440px - 100%) * 999, 100%)), 1fr));
+  gap: 36px var(--gap);
+  list-style: none;
+  padding: 0;
 }
 .step {
-  display: grid;
-  grid-template-columns: 96px minmax(0, 1fr);
-  align-items: center;
-  column-gap: 24px;
-  @media (width < 640px) {
-    grid-template-columns: 64px minmax(0, 1fr);
-    column-gap: 16px;
-  }
-  /* Illustrations differ in width; each is centered in the same column */
-  & > img {
-    justify-self: center;
-    max-width: 100%;
-    height: auto;
-  }
-}
-.stepText {
   display: flex;
+  min-width: 0;
   flex-direction: column;
-  gap: 4px;
-  font-size: 14px;
-  line-height: 1.7;
-  text-wrap: pretty;
-  color: var(--color-ink-3);
+  gap: 6px;
+}
+.stepArt {
+  margin-bottom: 10px;
+  filter: brightness(1.22) contrast(0.8);
 }
 .stepTitle {
   font-size: 16px;
   line-height: 24px;
   font-weight: 600;
   color: var(--color-ink);
+}
+.stepText {
+  max-width: 34ch;
+  font-size: 14px;
+  line-height: 1.6;
+  text-wrap: pretty;
+  color: var(--color-ink-5);
+}
+/* One column (phones): the illustration sits beside its text instead of above it */
+@container (width < 440px) {
+  .steps {
+    row-gap: 28px;
+  }
+  .step {
+    display: grid;
+    grid-template-columns: 56px minmax(0, 1fr);
+    grid-template-areas: 'art title' 'art text';
+    align-content: start;
+    column-gap: 16px;
+    row-gap: 4px;
+  }
+  .stepArt {
+    grid-area: art;
+    justify-self: center;
+    margin-bottom: 0;
+    max-width: 100%;
+    height: auto;
+  }
+  .stepTitle {
+    grid-area: title;
+  }
+  .stepText {
+    grid-area: text;
+  }
 }
 
 /* Showcase video */

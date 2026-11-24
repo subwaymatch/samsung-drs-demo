@@ -3,9 +3,10 @@ import { SystemMap } from '../graphs/system-map';
 import s from './about-view.module.css';
 
 /**
- * How the move from IBM Rational and Review Board to Perforce and Atlassian works, one short point each, led by an
- * illustration. The facts match the generated data: waves and cutovers in WAVE and WAVE_CUTOVER, the three migration
- * states in MIG (lib/constants.ts), and the ClearCase and Review Board rules in lib/records.ts and lib/views.ts.
+ * How the move from IBM Rational and Review Board to Perforce and Atlassian works, one short point each under a
+ * small illustration, laid out like the KPI row on Insights. The facts match the generated data: waves and cutovers
+ * in WAVE and WAVE_CUTOVER, the three migration states in MIG (lib/constants.ts), and the ClearCase and Review Board
+ * rules in lib/records.ts and lib/views.ts.
  */
 const STEPS: { art: string; title: string; text: string }[] = [
   { art: 'truck', title: 'Components move in waves', text: 'Each component moves on its wave’s cutover date, from November 2016 to December 2017.' },
@@ -19,22 +20,22 @@ export function AboutView() {
     <div className={s.page}>
       <PageHeader title="About" />
       <p className={s.lead}>
-        DRS keeps every defect and code review whole through the move: it links each record across all seven systems, keeps them in sync, and shows which system leads.
+        The Defects and Reviews System keeps every defect and code review whole through the move: it links each record across all seven systems, keeps them in sync, and shows which system leads.
       </p>
 
       <SystemMap />
 
-      <Section title="How the move works" gap={32}>
-        <div className={s.steps}>
-          {STEPS.map(st => (
-            <div key={st.title} className={s.step}>
-              <Illustration name={st.art} height={80} />
-              <div className={s.stepText}>
+      <Section title="How the move works" gap={28}>
+        <div className={s.stepsWrap}>
+          <ol className={s.steps}>
+            {STEPS.map(st => (
+              <li key={st.title} className={s.step}>
+                <Illustration name={st.art} height={48} className={s.stepArt} />
                 <h3 className={s.stepTitle}>{st.title}</h3>
-                <p>{st.text}</p>
-              </div>
-            </div>
-          ))}
+                <p className={s.stepText}>{st.text}</p>
+              </li>
+            ))}
+          </ol>
         </div>
       </Section>
 
