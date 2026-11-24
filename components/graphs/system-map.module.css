@@ -11,14 +11,14 @@
 .list {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 24px;
   font-size: 14px;
   line-height: 20px;
 }
 .group {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 28px;
 }
 .card {
   display: flex;
@@ -36,12 +36,15 @@
   gap: 8px;
   font-weight: 600;
 }
+/* Each mark at its own width (a square icon is 16px, a wordmark up to 24px),
+   so the gap to the name is always 8px, as in the desktop diagram */
 .logo {
   display: block;
+  flex: none;
   height: 16px;
-  width: 24px;
+  width: auto;
+  max-width: 24px;
   object-fit: contain;
-  object-position: left;
 }
 .role {
   color: var(--color-muted);
