@@ -11,6 +11,11 @@
   translate: 0 -50%;
   color: var(--color-faint);
 }
+/* Search fields have no side borders, so the icon sits on the content edge */
+.iconFlush {
+  composes: icon;
+  left: 0;
+}
 
 /* Textarea with @mention suggestions */
 .mentions {

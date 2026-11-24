@@ -30,7 +30,7 @@ export function Input({ value, onChange, placeholder, icon, mono, id, autoFocus,
       autoFocus={autoFocus}
       aria-label={ariaLabel}
       {...formAria({ invalid, describedBy, required })}
-      className={'bui-input' + (mono ? ' bui-mono' : '') + (icon ? ' bui-with-icon' : '')}
+      className={'bui-input' + (mono ? ' bui-mono' : '') + (icon ? ' bui-with-icon' : '') + (icon === 'search' ? ' bui-search' : '')}
       value={value ?? ''}
       placeholder={placeholder}
       onValueChange={v => onChange(String(v ?? ''))}
@@ -39,7 +39,7 @@ export function Input({ value, onChange, placeholder, icon, mono, id, autoFocus,
   if (!icon) return el;
   return (
     <div className={s.iconField}>
-      <span className={s.icon}>
+      <span className={icon === 'search' ? s.iconFlush : s.icon}>
         <Icon name={icon} size={15} />
       </span>
       {el}

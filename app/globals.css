@@ -167,6 +167,13 @@
   .bui-textarea { height: auto; padding: 10px 12px; line-height: 1.6; resize: vertical; display: block; }
   .bui-mono { font-family: var(--font-mono); font-size: 14px; font-variant-ligatures: none; }
   .bui-with-icon { padding-left: 36px; }
+  /* Search fields: an underline only, with the icon flush to the content edge */
+  .bui-input.bui-search,
+  .bui-cb.bui-search { border-width: 0 0 1px; border-radius: 0; background: transparent; }
+  .bui-input.bui-search { padding-left: 24px; }
+  .bui-cb.bui-search { padding-inline: 0; }
+  .bui-input.bui-search:focus,
+  .bui-cb.bui-search:focus-within { box-shadow: 0 1px 0 oklch(0.6 0.15 293); }
 
   .bui-trigger {
     display: flex;

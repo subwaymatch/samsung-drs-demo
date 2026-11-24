@@ -324,7 +324,7 @@
 .kpiArt {
   margin-bottom: 4px;
   /* Lift the mid grays toward white for a lighter, cleaner object */
-  filter: brightness(1.12) contrast(0.88);
+  filter: brightness(1.22) contrast(0.8);
 }
 .kpiLabel {
   font-size: 14px;
