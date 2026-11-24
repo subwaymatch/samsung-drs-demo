@@ -286,6 +286,9 @@
   .bui-seg-item { display: inline-flex; align-items: center; gap: 8px; height: 30px; padding: 0; border: none; border-radius: 3px; background: transparent; font-family: inherit; font-size: 14px; font-weight: 550; color: var(--color-muted); cursor: pointer; white-space: nowrap; outline: none; }
   .bui-seg-item:hover { color: var(--color-ink); }
   .bui-seg-item[data-pressed] { color: var(--color-accent-ink); }
+  .bui-seg-neutral .bui-seg-item { color: var(--color-ink); opacity: 0.6; transition: opacity 0.12s; }
+  .bui-seg-neutral .bui-seg-item:hover { opacity: 0.85; }
+  .bui-seg-neutral .bui-seg-item[data-pressed] { color: var(--color-ink); opacity: 1; }
   .bui-seg-count { font-size: 13px; opacity: 0.7; font-variant-numeric: tabular-nums; }
 
   .bui-switch { position: relative; display: inline-flex; align-items: center; width: 34px; height: 20px; padding: 2px; border: none; border-radius: 999px; background: oklch(0.86 0.01 290); cursor: pointer; transition: background 0.15s; flex: none; outline: none; }
