@@ -274,10 +274,11 @@
   .bui-chip-x { display: flex; align-items: center; justify-content: center; width: 20px; height: 20px; border: none; border-radius: 3px; background: none; color: oklch(0.5 0.03 293); cursor: pointer; padding: 0; }
   .bui-chip-x:hover { color: var(--color-accent-ink); }
 
-  .bui-seg { display: inline-flex; gap: 4px; padding: 2px; border: 1px solid oklch(0.92 0.01 290); border-radius: 4px; flex-wrap: nowrap; }
-  .bui-seg-item { display: inline-flex; align-items: center; gap: 8px; height: 30px; padding: 0 12px; border: none; border-radius: 3px; background: transparent; font-family: inherit; font-size: 14px; font-weight: 550; color: var(--color-ink-4); cursor: pointer; white-space: nowrap; outline: none; }
+  /* No box or fill: the chosen option is told apart by color alone, like the period tabs on Insights */
+  .bui-seg { display: inline-flex; gap: 20px; flex-wrap: nowrap; }
+  .bui-seg-item { display: inline-flex; align-items: center; gap: 8px; height: 30px; padding: 0; border: none; border-radius: 3px; background: transparent; font-family: inherit; font-size: 14px; font-weight: 550; color: var(--color-muted); cursor: pointer; white-space: nowrap; outline: none; }
   .bui-seg-item:hover { color: var(--color-ink); }
-  .bui-seg-item[data-pressed] { background: var(--color-accent-soft); color: var(--color-accent-ink); }
+  .bui-seg-item[data-pressed] { color: var(--color-accent-ink); }
   .bui-seg-count { font-size: 13px; opacity: 0.7; font-variant-numeric: tabular-nums; }
 
   .bui-switch { position: relative; display: inline-flex; align-items: center; width: 34px; height: 20px; padding: 2px; border: none; border-radius: 999px; background: oklch(0.86 0.01 290); cursor: pointer; transition: background 0.15s; flex: none; outline: none; }

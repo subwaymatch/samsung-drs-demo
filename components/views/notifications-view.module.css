@@ -57,7 +57,7 @@
   color: var(--color-ink-4);
 }
 .itemId {
-  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
   font-size: 14px;
   line-height: 20px;
 }

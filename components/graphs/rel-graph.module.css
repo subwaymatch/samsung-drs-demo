@@ -27,7 +27,7 @@
   white-space: nowrap;
 }
 .cardId {
-  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
   font-size: 14px;
   line-height: 20px;
   color: var(--color-ink-5);
