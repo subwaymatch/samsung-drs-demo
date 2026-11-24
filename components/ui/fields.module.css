@@ -11,7 +11,8 @@
   translate: 0 -50%;
   color: var(--color-faint);
 }
-/* Search fields have no side borders, so the icon sits on the content edge */
+/* Search fields have no side borders, so the icon sits on the content edge.
+   The magnifier is drawn at 12px so it is no taller than the placeholder text. */
 .iconFlush {
   composes: icon;
   left: 0;

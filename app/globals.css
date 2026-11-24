@@ -143,7 +143,7 @@
   .bui-navActive { background: var(--color-accent-tint); color: var(--color-accent-ink); }
   .bui-navActive:hover { color: var(--color-accent-ink); }
   .bui-page,
-  .bui-pageActive { min-width: 30px; padding: 0 8px; color: var(--color-ink-4); font-variant-numeric: tabular-nums; }
+  .bui-pageActive { min-width: 30px; padding: 0 8px; color: var(--color-ink-4); }
   .bui-page:hover { color: var(--color-accent-ink); }
   .bui-pageActive { background: var(--color-accent-soft); color: var(--color-accent-ink); }
 
@@ -171,8 +171,9 @@
   /* Search fields: an underline only, with the icon flush to the content edge */
   .bui-input.bui-search,
   .bui-cb.bui-search { border-width: 0 0 1px; border-radius: 0; background: transparent; }
-  .bui-input.bui-search { padding-left: 24px; }
+  .bui-input.bui-search { padding-left: 21px; }
   .bui-cb.bui-search { padding-inline: 0; }
+  .bui-cb.bui-search .bui-cb-lead { color: var(--color-faint); }
   .bui-input.bui-search:focus,
   .bui-cb.bui-search:focus-within { box-shadow: 0 1px 0 oklch(0.6 0.15 293); }
 
@@ -290,7 +291,7 @@
   .bui-seg-neutral .bui-seg-item { color: var(--color-ink); opacity: 0.6; transition: opacity 0.12s; }
   .bui-seg-neutral .bui-seg-item:hover { opacity: 0.85; }
   .bui-seg-neutral .bui-seg-item[data-pressed] { color: var(--color-ink); opacity: 1; }
-  .bui-seg-count { font-size: 13px; opacity: 0.7; font-variant-numeric: tabular-nums; }
+  .bui-seg-count { font-size: 13px; opacity: 0.7; }
 
   .bui-switch { position: relative; display: inline-flex; align-items: center; width: 34px; height: 20px; padding: 2px; border: none; border-radius: 999px; background: oklch(0.86 0.01 290); cursor: pointer; transition: background 0.15s; flex: none; outline: none; }
   .bui-switch:focus-visible,

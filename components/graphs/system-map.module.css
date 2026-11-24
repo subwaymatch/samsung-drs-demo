@@ -54,9 +54,6 @@
 .role {
   color: var(--color-muted);
 }
-.meta {
-  font-variant-numeric: tabular-nums;
-}
 .sync {
   display: flex;
   align-items: center;

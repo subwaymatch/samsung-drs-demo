@@ -39,7 +39,7 @@ function SystemList({ graph }: { graph: Graph }) {
         {d.name}
       </span>
       <span className={s.role}>{d.role}</span>
-      {d.meta ? <span className={s.meta}>{d.meta}</span> : null}
+      {d.meta ? <span>{d.meta}</span> : null}
       {d.sync ? <span className={s.sync}><span className={s.syncDot} />{d.sync}</span> : null}
     </div>
   );

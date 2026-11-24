@@ -40,7 +40,7 @@ export function Input({ value, onChange, placeholder, icon, mono, id, autoFocus,
   return (
     <div className={s.iconField}>
       <span className={icon === 'search' ? s.iconFlush : s.icon}>
-        <Icon name={icon} size={15} />
+        <Icon name={icon} size={icon === 'search' ? 12 : 15} />
       </span>
       {el}
     </div>

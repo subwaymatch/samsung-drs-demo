@@ -8,7 +8,6 @@
   font-size: 14px;
   line-height: 20px;
   color: var(--color-muted);
-  font-variant-numeric: tabular-nums;
 }
 .label {
   font-weight: 550;
@@ -80,7 +79,6 @@
   text-align: right;
   font-size: 14px;
   line-height: 20px;
-  font-variant-numeric: tabular-nums;
 }
 
 /* Page and header */
@@ -101,7 +99,6 @@
   font-size: 14px;
   line-height: 20px;
   color: var(--color-muted);
-  font-variant-numeric: tabular-nums;
 }
 
 /* Two sections side by side, stacking when narrow */
@@ -342,7 +339,6 @@
   line-height: 1.1;
   font-weight: 600;
   letter-spacing: -0.02em;
-  font-variant-numeric: tabular-nums;
 }
 /* The unit takes the figure's color */
 .kpiUnit {
@@ -460,7 +456,6 @@
   font-size: 14px;
   line-height: 20px;
   color: var(--color-faint);
-  font-variant-numeric: tabular-nums;
 }
 .flowTick {
   position: absolute;
@@ -471,7 +466,6 @@
   font-size: 14px;
   line-height: 20px;
   color: var(--color-muted);
-  font-variant-numeric: tabular-nums;
 }
 .bars {
   position: absolute;
@@ -589,7 +583,6 @@
   width: 56px;
   text-align: right;
   font-weight: 600;
-  font-variant-numeric: tabular-nums;
 }
 
 /* Open defects by product line: a heat map */
@@ -664,7 +657,6 @@
   justify-content: center;
   border-radius: 4px;
   font-weight: 600;
-  font-variant-numeric: tabular-nums;
 }
 .heatCell:hover {
   box-shadow: inset 0 0 0 2px oklch(0.4 0.19 293);
@@ -677,7 +669,6 @@
 .heatFootCell {
   text-align: center;
   font-weight: 600;
-  font-variant-numeric: tabular-nums;
 }
 
 /* Turnaround by change type */
@@ -777,7 +768,6 @@
 }
 .activeNum {
   font-weight: 600;
-  font-variant-numeric: tabular-nums;
 }
 .activeUnit {
   color: var(--color-muted);
