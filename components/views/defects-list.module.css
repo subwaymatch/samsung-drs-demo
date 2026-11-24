@@ -20,6 +20,10 @@
 }
 .filterLabel {
   color: var(--color-muted);
+  /* Desktop: the label, status select and search sit together on the right */
+  @media (width >= 640px) {
+    margin-left: auto;
+  }
 }
 .statusFilter {
   width: 260px;
@@ -31,7 +35,7 @@
 .search {
   width: 100%;
   @media (width >= 640px) {
-    margin-left: auto;
+    margin-left: 12px;
     width: 260px;
   }
 }
@@ -88,7 +92,6 @@
   font-size: 14px;
   line-height: 20px;
   color: var(--color-muted);
-  font-variant-numeric: tabular-nums;
 }
 
 /* Bulk edit controls */

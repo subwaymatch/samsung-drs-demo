@@ -79,7 +79,6 @@
   font-size: 24px;
   line-height: 32px;
   font-weight: 600;
-  font-variant-numeric: tabular-nums;
 }
 
 /* Open defects and active reviews */
@@ -112,7 +111,6 @@
   border-bottom-width: 0;
 }
 .rowId {
-  font-family: var(--font-mono);
   font-size: 14px;
   line-height: 20px;
   color: var(--color-muted);

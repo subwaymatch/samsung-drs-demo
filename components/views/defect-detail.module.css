@@ -95,6 +95,15 @@
   align-items: center;
   gap: 10px;
 }
+/* The actions are borderless, so the last one is pulled out by its own padding
+   to put its icon on the content edge: the Edit menu arrow (10px), or
+   Subscribe when it stands alone (14px) */
+.actions > :global(.bui-group):last-child {
+  margin-right: -10px;
+}
+.actions > :global(.bui-btn):last-child {
+  margin-right: -14px;
+}
 .overview {
   display: grid;
   align-items: flex-start;
@@ -198,7 +207,6 @@
   border-bottom-width: 0;
 }
 .reviewId {
-  font-family: var(--font-mono);
   font-size: 14px;
   line-height: 20px;
   color: var(--color-muted);

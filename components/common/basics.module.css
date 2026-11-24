@@ -181,7 +181,6 @@
 }
 .pagerRange {
   color: var(--color-muted);
-  font-variant-numeric: tabular-nums;
 }
 .pagerNav {
   display: flex;
@@ -201,7 +200,6 @@
   gap: 28px;
   overflow-x: auto;
   overflow-y: hidden;
-  border-bottom: 1px solid var(--color-line);
   scrollbar-width: none;
   @media (width < 640px) {
     padding-right: 24px;
@@ -209,7 +207,6 @@
   }
 }
 .scope {
-  margin-bottom: -1px;
   display: flex;
   height: 44px;
   cursor: pointer;
@@ -233,7 +230,6 @@
   font-size: 12px;
   line-height: 1;
   font-weight: 600;
-  font-variant-numeric: tabular-nums;
 }
 
 /* QuickFilters */

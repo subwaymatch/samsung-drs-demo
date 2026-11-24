@@ -231,9 +231,6 @@ export function AppShell({ children }: { children: ReactNode }) {
               <div className={s.accountPlaceholder} />
             )}
           </div>
-          <Link to="/about" className={s.disclaimer}>
-            Portfolio demo with mock data. Not affiliated with Samsung Electronics.
-          </Link>
         </aside>
 
         <main ref={mainRef} className={s.main}>

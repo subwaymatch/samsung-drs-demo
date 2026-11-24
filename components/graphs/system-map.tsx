@@ -8,7 +8,7 @@ import { RelGraph } from './rel-graph';
 import s from './system-map.module.css';
 
 type Graph = ReturnType<typeof systemGraph>;
-type SysData = { name: string; role: string; logo?: string; sync?: string; meta?: string; href?: string; label?: string; note?: string };
+type SysData = { name: string; role: string; logo?: string; sync?: string; meta?: string; href?: string };
 
 /**
  * The seven systems DRS links: the legacy ones on the left, the new ones on the right, DRS between them.
@@ -30,7 +30,6 @@ export function SystemMap() {
 /** The seven-system diagram as a list, for phones: legacy systems, DRS, then the new systems. */
 function SystemList({ graph }: { graph: Graph }) {
   const sys = graph.nodes.filter(n => n.type === 'sys' && n.id !== 'hub');
-  const labels = graph.nodes.filter(n => n.type === 'label').map(n => n.data as unknown as SysData);
   const hub = graph.nodes.find(n => n.id === 'hub')!.data as unknown as SysData;
   const card = (d: SysData, hubCard = false) => (
     <div className={cx(s.card, hubCard && s.cardHub)}>
@@ -39,24 +38,23 @@ function SystemList({ graph }: { graph: Graph }) {
         {d.name}
       </span>
       <span className={s.role}>{d.role}</span>
-      {d.meta ? <span className={s.meta}>{d.meta}</span> : null}
+      {d.meta ? <span>{d.meta}</span> : null}
       {d.sync ? <span className={s.sync}><span className={s.syncDot} />{d.sync}</span> : null}
     </div>
   );
-  const group = (i: number, items: typeof sys) => (
+  const group = (items: typeof sys) => (
     <div className={s.group}>
-      <div className={s.groupHead}><span className={s.groupTitle}>{labels[i]?.label}</span><span className={s.role}>{labels[i]?.note}</span></div>
       {items.map(n => <div key={n.id}>{card(n.data as unknown as SysData)}</div>)}
     </div>
   );
   const arrow = <div aria-hidden className={s.arrow}><Icon name="arrow-down" size={18} /></div>;
   return (
     <div className={s.list}>
-      {group(0, sys.filter(n => n.position.x < 0))}
+      {group(sys.filter(n => n.position.x < 0))}
       {arrow}
       {card(hub, true)}
       {arrow}
-      {group(1, sys.filter(n => n.position.x > 0))}
+      {group(sys.filter(n => n.position.x > 0))}
     </div>
   );
 }

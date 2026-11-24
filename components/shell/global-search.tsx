@@ -97,8 +97,8 @@ export function GlobalSearch({ data, onPick, shortcut }: { data: Data | undefine
       itemToStringLabel={(h: Hit | null) => (h ? h.label : '')}
       isItemEqualToValue={(a: Hit, b: Hit) => !!a && !!b && a.value === b.value}
     >
-      <BaseCombobox.InputGroup className="bui-cb" style={{ flexWrap: 'nowrap', paddingRight: 8 }}>
-        <span className="bui-cb-lead"><Icon name="search" size={15} /></span>
+      <BaseCombobox.InputGroup className="bui-cb bui-search" style={{ flexWrap: 'nowrap' }}>
+        <span className="bui-cb-lead"><Icon name="search" size={12} /></span>
         <BaseCombobox.Input className="bui-cb-input" placeholder="Search" id="gsearch" aria-label="Search defects, code reviews and people" style={{ minWidth: 0 }} />
         <span aria-hidden className="bui-cb-keys">
           {shortcut.map(s => <kbd key={s} className="kbd">{s}</kbd>)}

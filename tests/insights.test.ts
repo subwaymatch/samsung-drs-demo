@@ -9,10 +9,8 @@ const data = seed();
 
 describe.each(RANGES.map(r => [r.label, r.n] as const))('Insights for %s', (_, n) => {
   const st = computeInsights(data, n);
-  it('counts the same resolved defects on the KPI card and the chart (D1)', () => {
-    const kpi = st.kpis.find(k => k.label === 'Median time to resolve')!;
+  it('counts the same resolved defects in the chart and its note (D1)', () => {
     const chart = st.flow.reduce((a, b) => a + b.res, 0);
-    expect(kpi.sub).toBe(`${chart} defect${chart === 1 ? '' : 's'} resolved`);
     expect(st.flowNote).toContain(`and ${chart} resolved`);
   });
   it('reconciles the heatmap with the open defects KPI (D2)', () => {

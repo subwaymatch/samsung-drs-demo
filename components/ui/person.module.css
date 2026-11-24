@@ -74,6 +74,5 @@
   line-height: 16px;
   font-weight: 600;
   color: var(--color-ink-4);
-  font-variant-numeric: tabular-nums;
   box-shadow: 0 0 0 2px #fff;
 }

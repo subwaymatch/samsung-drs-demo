@@ -7,11 +7,15 @@ import { Icon } from './icon';
 import { cx } from '@/lib/cx';
 import s from './toggles.module.css';
 
-/** A single-choice segmented control. */
+/**
+ * A single-choice segmented control. When the options bring their own icon
+ * colors (severity, status), the labels stay neutral so the accent doesn't
+ * compete with them; the chosen option is marked by full opacity instead.
+ */
 export function Segmented({ value, onValueChange, items, ariaLabel }: { value: string; onValueChange: (v: string) => void; items: Option[]; ariaLabel?: string }) {
   return (
     <ToggleGroup
-      className="bui-seg"
+      className={cx('bui-seg', items.some(it => it.color) && 'bui-seg-neutral')}
       aria-label={ariaLabel}
       value={[value]}
       onValueChange={v => { if (v && v.length) onValueChange(String(v[v.length - 1])); }}

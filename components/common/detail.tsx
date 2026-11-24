@@ -1,5 +1,5 @@
 import { Link } from 'react-router';
-import { useState, type ReactNode } from 'react';
+import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { DEC, RST } from '@/lib/constants';
 import { fAt } from '@/lib/dates';
 import { av } from '@/lib/people';
@@ -76,8 +76,7 @@ export function AffectedProducts({ chips, addItems, sub, onAdd, onRemove }: { ch
           <span
             key={c.key}
             title={c.tip}
-            className={s.chip}
-            style={{ borderColor: c.primary ? 'oklch(0.86 0.06 293)' : 'oklch(0.9 0.012 290)', background: c.primary ? 'oklch(0.96 0.03 293)' : '#fff' }}
+            className={cx(s.chip, c.primary && s.chipPrimary)}
           >
             <Icon name={c.icon} size={15} color="oklch(0.5 0.12 293)" />
             <span className={s.chipLabel}>{c.label}</span>
@@ -164,10 +163,9 @@ export function ConfirmDelete({ id, noun, onCancel, onConfirm }: { id: string; n
   );
 }
 
-function RecordColumn({ title, items, onOpen }: { title: string; items: SysRecord[]; onOpen: (x: SysRecord) => void }) {
+function RecordColumn({ items, onOpen }: { items: SysRecord[]; onOpen: (x: SysRecord) => void }) {
   return (
     <div className={s.recordColumn}>
-      <span className={s.recordColumnTitle}>{title}</span>
       {items.map(x => (
         <div key={x.sys} className={s.record}>
           <div className={s.labelRow}>
@@ -177,7 +175,7 @@ function RecordColumn({ title, items, onOpen }: { title: string; items: SysRecor
               {x.master ? <span className={s.masterBadge}>Source of truth</span> : null}
             </span>
             {x.id ? (
-              <button type="button" onClick={() => onOpen(x)} className="bui-btn bui-link bui-sm">
+              <button type="button" onClick={() => onOpen(x)} className={cx('bui-btn bui-link bui-sm', s.recordLink)}>
                 {x.id}
                 <Icon name="external-link" size={14} />
               </button>
@@ -191,7 +189,18 @@ function RecordColumn({ title, items, onOpen }: { title: string; items: SysRecor
   );
 }
 
-export function RecordsAcrossSystems({ sub, legacyTitle, legacy, next, synced, onSync, onOpen }: { sub: string; legacyTitle: string; legacy: SysRecord[]; next: SysRecord[]; synced: string; onSync: () => void; onOpen: (x: SysRecord) => void }) {
+/** How long "Sync now" shows its in-progress state before reporting the result. */
+const SYNC_MS = 1200;
+
+export function RecordsAcrossSystems({ sub, legacy, next, synced, onSync, onOpen }: { sub: string; legacy: SysRecord[]; next: SysRecord[]; synced: string; onSync: () => void; onOpen: (x: SysRecord) => void }) {
+  const [syncing, setSyncing] = useState(false);
+  const timer = useRef<ReturnType<typeof setTimeout>>(undefined);
+  useEffect(() => () => clearTimeout(timer.current), []);
+  const sync = () => {
+    if (syncing) return;
+    setSyncing(true);
+    timer.current = setTimeout(() => { setSyncing(false); onSync(); }, SYNC_MS);
+  };
   return (
     <section className={s.records}>
       <div className={s.headerRow}>
@@ -199,13 +208,17 @@ export function RecordsAcrossSystems({ sub, legacyTitle, legacy, next, synced, o
           <h2 className={s.title}>Records across systems</h2>
           <span className={s.sub}>{sub}</span>
         </div>
-        <Button variant="ghost" size="sm" icon="refresh-cw" onClick={onSync}>Sync now</Button>
+        {/* Not disabled while syncing: the faded disabled style would hide the spinner */}
+        <Button variant="ghost" size="sm" onClick={sync} ariaBusy={syncing}>
+          <Icon name="refresh-cw" size={14} className={cx(syncing && s.spin)} />
+          {syncing ? 'Syncing…' : 'Sync now'}
+        </Button>
       </div>
       <div className={s.recordGrid}>
-        <RecordColumn title={legacyTitle} items={legacy} onOpen={onOpen} />
-        <RecordColumn title="New, Perforce and Atlassian" items={next} onOpen={onOpen} />
+        <RecordColumn items={legacy} onOpen={onOpen} />
+        <RecordColumn items={next} onOpen={onOpen} />
       </div>
-      <span className={s.meta}>{synced}</span>
+      <span className={s.meta} role="status">{syncing ? 'Syncing with every system…' : synced}</span>
     </section>
   );
 }

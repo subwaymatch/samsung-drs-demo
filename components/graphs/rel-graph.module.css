@@ -27,7 +27,6 @@
   white-space: nowrap;
 }
 .cardId {
-  font-family: var(--font-mono);
   font-size: 14px;
   line-height: 20px;
   color: var(--color-ink-5);
@@ -41,7 +40,7 @@
   line-height: 1.4;
 }
 
-/* System node: a connected system as plain text, or the outlined hub */
+/* System node: a connected system as plain text, or the hub on a white panel */
 .sys {
   display: flex;
   flex-direction: column;
@@ -52,9 +51,8 @@
 }
 .sysHub {
   border-radius: 12px;
-  border: 1px solid var(--color-accent);
   background-color: #fff;
-  padding: 16px 20px;
+  padding: 12px 16px;
 }
 .sysLink {
   cursor: pointer;
@@ -63,9 +61,6 @@
 .toEnd {
   align-items: flex-end;
   text-align: right;
-}
-.toEnd .sysLogo {
-  object-position: right;
 }
 .sysName {
   display: flex;
@@ -76,22 +71,22 @@
 .sysLink:hover .sysName {
   color: var(--color-accent-text);
 }
+/* Each mark at its own width (a square icon is 16px, a wordmark up to 24px),
+   so the gap to the name is the same 8px on both sides of the diagram */
 .sysLogo {
   display: block;
   height: 16px;
-  width: 24px;
+  width: auto;
+  max-width: 24px;
   flex: none;
   object-fit: contain;
-  object-position: left;
 }
 .sysRole {
   text-wrap: pretty;
   color: var(--color-muted);
 }
-.sysMeta {
-  font-variant-numeric: tabular-nums;
-}
 .sysSync {
+  margin-top: 4px;
   display: flex;
   align-items: center;
   gap: 8px;
@@ -106,23 +101,6 @@
 }
 
 /* Label node: a column heading */
-.label {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-.labelTitle {
-  font-size: 14px;
-  line-height: 20px;
-  font-weight: 600;
-  color: var(--color-ink);
-}
-.labelNote {
-  font-size: 14px;
-  line-height: 20px;
-  color: var(--color-muted);
-}
-
 .loading {
   display: flex;
   height: 100%;

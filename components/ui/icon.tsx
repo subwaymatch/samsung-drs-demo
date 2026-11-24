@@ -35,8 +35,16 @@ export interface IconProps {
   style?: CSSProperties;
 }
 
+/**
+ * Icons that fill their whole box (e.g. send runs corner to corner) read larger
+ * than the rest at the same size. Draw them smaller, with the stroke scaled up
+ * to match, so they sit level with neighbouring text.
+ */
+const OPTICAL: Record<string, number> = { send: 0.8 };
+
 export function Icon({ name, size = 16, color, strokeWidth = 1.75, className, style }: IconProps) {
   const C = name ? ICONS[name] : undefined;
   if (!C) return null;
-  return <C size={size} color={color || 'currentColor'} strokeWidth={strokeWidth} aria-hidden className={className} style={{ flex: 'none', display: 'block', ...style }} />;
+  const k = (name && OPTICAL[name]) || 1, px = Math.round(size * k);
+  return <C size={px} color={color || 'currentColor'} strokeWidth={(strokeWidth * size) / px} aria-hidden className={className} style={{ flex: 'none', display: 'block', ...style }} />;
 }

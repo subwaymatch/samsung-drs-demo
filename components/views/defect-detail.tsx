@@ -94,7 +94,7 @@ export function DefectDetail({ id }: { id: string }) {
         </div>
         <div className={s.actions}>
           <Button
-            variant={sub ? 'subOn' : 'secondary'}
+            variant={sub ? 'subOn' : 'ghost'}
             icon={sub ? 'bell-ring' : 'bell'}
             title={sub ? 'Click to stop notifications for this defect' : 'Get notified about comments, status changes and decisions'}
             onClick={() => { setSubscribed(d.id, meId, !sub); flash(sub ? 'Unsubscribed from ' + d.id : `Subscribed to ${d.id}, updates go to Notifications and your summary email`); }}
@@ -153,7 +153,6 @@ export function DefectDetail({ id }: { id: string }) {
 
           <RecordsAcrossSystems
             sub={rec.sub}
-            legacyTitle="Legacy, IBM Rational"
             legacy={rec.legacy}
             next={rec.next}
             synced={rec.synced}

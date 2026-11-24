@@ -184,10 +184,9 @@ export const LOGO: Record<string, string> = {
   'Review Board': '/logos/reviewboard-mark.png'
 };
 
+/** The systems DRS links: the legacy group (IBM Rational, Review Board), then the new one (Perforce, Atlassian). */
 export const SYSG = [
   {
-    label: 'Legacy',
-    note: 'IBM Rational and Review Board, retiring team by team',
     items: [
       { name: 'Rational ClearQuest', role: 'Defect and change-request records', ago: '5 min' },
       { name: 'Rational ClearCase', role: 'UCM activities and pre-migration source history', ago: '1 hr' },
@@ -195,8 +194,6 @@ export const SYSG = [
     ]
   },
   {
-    label: 'New',
-    note: 'Perforce and Atlassian, rolling out in waves',
     items: [
       { name: 'Jira', role: 'Issues for teams that have moved', ago: '3 min' },
       { name: 'Perforce P4', role: 'Source, jobs and changelists', ago: '1 min' },

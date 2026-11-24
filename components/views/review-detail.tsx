@@ -108,7 +108,7 @@ export function ReviewDetail({ id }: { id: string }) {
         </div>
         <div className={s.actions}>
           <Button
-            variant={sub ? 'subOn' : 'secondary'}
+            variant={sub ? 'subOn' : 'ghost'}
             icon={sub ? 'bell-ring' : 'bell'}
             title={sub ? 'Click to stop notifications for this review' : 'Get notified about comments, status changes and decisions'}
             onClick={() => { setSubscribed(r.id, meId, !sub); flash(sub ? 'Unsubscribed from ' + r.id : `Subscribed to ${r.id}, updates go to Notifications and your summary email`); }}
@@ -239,7 +239,6 @@ export function ReviewDetail({ id }: { id: string }) {
           ) : null}
           <RecordsAcrossSystems
             sub={rec.sub}
-            legacyTitle="Legacy, IBM Rational and Review Board"
             legacy={rec.legacy}
             next={rec.next}
             synced={rec.synced}

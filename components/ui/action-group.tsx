@@ -10,12 +10,12 @@ export type MenuAction =
 export function ActionGroup({ onPrimary, items, primaryLabel = 'Edit', primaryIcon = 'pencil' }: { onPrimary: () => void; items: MenuAction[]; primaryLabel?: string; primaryIcon?: string }) {
   return (
     <div className="bui-group">
-      <BaseButton className="bui-btn bui-secondary bui-g-l" onClick={onPrimary}>
+      <BaseButton className="bui-btn bui-ghost bui-g-l" onClick={onPrimary}>
         <Icon name={primaryIcon} size={16} />
         {primaryLabel}
       </BaseButton>
       <Menu.Root>
-        <Menu.Trigger className="bui-btn bui-secondary bui-g-r" aria-label="More actions">
+        <Menu.Trigger className="bui-btn bui-ghost bui-g-r" aria-label="More actions">
           <Icon name="chevron-down" size={16} />
         </Menu.Trigger>
         <Menu.Portal>
