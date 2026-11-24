@@ -120,7 +120,7 @@ export function systemGraph(data: Data) {
   // at each system's name line (NAME_Y from its top). HUB_H is the hub's rough
   // rendered height, used only to center it on that middle line. `meta` shows
   // only in the stacked list on narrow screens, not in the diagram.
-  const W = 256, STEP = 116, NAME_Y = 10, HUB_H = 122, N: GraphNode[] = [], E: GraphEdge[] = [];
+  const W = 256, STEP = 116, NAME_Y = 10, HUB_H = 116, N: GraphNode[] = [], E: GraphEdge[] = [];
   const rows = Math.max(...SYSG.map(g => g.items.length)), span = (rows - 1) * STEP;
   SYSG.forEach((g, gi) => {
     const x = gi === 0 ? -350 : 340, side = gi === 0 ? 'start' : 'end', step = g.items.length > 1 ? span / (g.items.length - 1) : 0;
@@ -134,10 +134,10 @@ export function systemGraph(data: Data) {
   });
   N.push({
     id: 'hub', type: 'sys', position: { x: -5, y: span / 2 + NAME_Y - HUB_H / 2 },
-    data: { hub: true, w: W, name: 'DRS', logo: '/drs-logo.svg', role: 'Links each defect and code review across all seven systems', meta: `${D.length} defects, ${R.length} code reviews`, sync: 'All systems connected' }
+    data: { hub: true, w: W, name: 'Defects and Reviews System', role: 'Links each defect and code review across all seven systems', meta: `${D.length} defects, ${R.length} code reviews`, sync: 'All systems connected' }
   });
-  // The last row is at most 88px tall (a role on two lines).
-  return { nodes: N, edges: E, height: span + 88 };
+  // The last row is at most 92px tall (a role on two lines).
+  return { nodes: N, edges: E, height: span + 92 };
 }
 
 /** Relationship map for one defect: related defects, code reviews and product lines. */

@@ -56,9 +56,9 @@ function CardNode({ data }: NodeProps<Node<D>>) {
 
 /**
  * A connected system, as plain text: no box, so the lines carry the structure.
- * Only the hub (DRS) gets an outline. Every line is 14px; weight and color set
- * the hierarchy. `side: 'start'` right-aligns a left-hand column, so text on
- * both sides faces the hub and each edge meets the text it belongs to.
+ * The hub (DRS) sits on a padded white panel. Every line is 14px; weight and
+ * color set the hierarchy. `side: 'start'` right-aligns a left-hand column, so
+ * text on both sides faces the hub and each edge meets the text it belongs to.
  */
 function SysNode({ data }: NodeProps<Node<D>>) {
   const hub = !!data.hub;
