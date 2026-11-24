@@ -147,18 +147,6 @@
   height: 32px;
 }
 
-.disclaimer {
-  margin-top: -8px;
-  padding: 0 4px;
-  font-size: 12px;
-  line-height: 1.5;
-  color: var(--color-muted);
-  text-decoration-line: none;
-}
-.disclaimer:hover {
-  color: var(--color-accent-ink);
-}
-
 /* Main column */
 .main {
   min-width: 0;

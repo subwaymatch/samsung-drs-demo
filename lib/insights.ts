@@ -46,7 +46,6 @@ export function computeInsights(data: Data, range: number) {
   const medC = median(cur.map(x => x.hours)), medP = median(prev.map(x => x.hours));
   const fp = (a: typeof cur) => (a.length ? (a.filter(x => x.outcome === 'approved').length / a.length) * 100 : 0);
   const fpC = fp(cur), fpP = fp(prev);
-  const within = cur.length ? (cur.filter(x => x.hours <= 48).length / cur.length) * 100 : 0;
 
   const dv = D.map(d => ({ d, w: dayIdx(d.created), res: firstRes(d) }));
   // Every defect first resolved in the period, whenever it was reported: the
@@ -62,10 +61,10 @@ export function computeInsights(data: Data, range: number) {
   });
   const kpis = [
     // art: the illustration above each figure (public/illustrations)
-    { label: 'Median review turnaround', art: 'hourglass', value: medC.toFixed(1), unit: 'h', ...delta(medC - medP, 'h', true, 1), sub: `${Math.round(within)}% decided within the 48h target`, href: '/reviews?' + qs({ from: fromK, to: END }) },
-    { label: 'First-pass approval', art: 'clipboard', value: fpC.toFixed(0), unit: '%', ...delta(fpC - fpP, ' pts', false, 1), sub: plural(cur.length, 'review decision'), href: '/reviews?' + qs({ outcome: 'approved', from: fromK, to: END }) },
-    { label: 'Median time to resolve', art: 'toolbox', value: median(rC).toFixed(1), unit: 'days', ...delta(median(rC) - median(rP), ' days', true, 1), sub: `${plural(rC.length, 'defect')} resolved`, href: '/defects?' + qs({ by: 'resolved', from: fromK, to: END }) },
-    { label: 'Open defects', art: 'jam', value: String(openNow.length), unit: '', ...delta(openNow.length - openThen, '', true, 0, `since ${shortY(fromK)}`), sub: `${openNow.filter(d => d.sev === 'critical').length} critical`, href: '/defects?open=1' }
+    { label: 'Median review turnaround', art: 'hourglass', value: medC.toFixed(1), unit: 'h', ...delta(medC - medP, 'h', true, 1), href: '/reviews?' + qs({ from: fromK, to: END }) },
+    { label: 'First-pass approval', art: 'clipboard', value: fpC.toFixed(0), unit: '%', ...delta(fpC - fpP, ' pts', false, 1), href: '/reviews?' + qs({ outcome: 'approved', from: fromK, to: END }) },
+    { label: 'Median time to resolve', art: 'toolbox', value: median(rC).toFixed(1), unit: 'days', ...delta(median(rC) - median(rP), ' days', true, 1), href: '/defects?' + qs({ by: 'resolved', from: fromK, to: END }) },
+    { label: 'Open defects', art: 'jam', value: String(openNow.length), unit: '', ...delta(openNow.length - openThen, '', true, 0, `since ${shortY(fromK)}`), href: '/defects?open=1' }
   ];
 
   // Turnaround chart

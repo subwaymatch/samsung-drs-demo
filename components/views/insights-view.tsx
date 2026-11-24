@@ -112,14 +112,13 @@ export function InsightsView() {
       <div className={s.kpis} style={KPI_GRID}>
         {st.kpis.map(k => (
           <Clickable key={k.label} href={k.href} className={s.kpi}>
-            <Illustration name={k.art} height={72} className={s.kpiArt} />
+            <Illustration name={k.art} height={56} className={s.kpiArt} />
             <span className={s.kpiLabel}>{k.label}</span>
             <div className={s.kpiValueRow}>
               <span className={s.kpiValue}>{k.value}</span>
               <span className={s.kpiUnit}>{k.unit}</span>
             </div>
             <span className={s.kpiDelta} style={{ color: k.dc }}>{k.delta}</span>
-            <span className={s.sub}>{k.sub}</span>
           </Clickable>
         ))}
       </div>

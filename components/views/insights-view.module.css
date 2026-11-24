@@ -263,7 +263,6 @@
   justify-content: space-between;
   column-gap: 24px;
   row-gap: 8px;
-  border-bottom: 1px solid var(--color-line);
   background-color: #fff;
 }
 .periodShowing {
@@ -280,7 +279,6 @@
   color: var(--color-ink);
 }
 .periodTabs {
-  margin-bottom: -1px;
   display: flex;
   align-items: stretch;
   gap: 24px;
@@ -324,7 +322,9 @@
 }
 /* An object for what each figure measures: time, approvals, fixes, open defects */
 .kpiArt {
-  margin-bottom: 8px;
+  margin-bottom: 4px;
+  /* Lift the mid grays toward white for a lighter, cleaner object */
+  filter: brightness(1.12) contrast(0.88);
 }
 .kpiLabel {
   font-size: 14px;
@@ -353,10 +353,6 @@
   font-size: 14px;
   line-height: 20px;
   font-weight: 400;
-}
-/* The change and its context read as one pair */
-.kpiDelta + .sub {
-  margin-top: -6px;
 }
 
 /* Tables: severity targets and the code review team */
