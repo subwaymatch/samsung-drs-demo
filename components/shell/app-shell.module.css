@@ -195,3 +195,7 @@
   color: #fff;
   box-shadow: 0 8px 24px oklch(0.2 0.05 290 / 0.25);
 }
+/* The brand is a logo with no text: keyboard focus draws the line under it */
+.brandLink:focus-visible {
+  box-shadow: var(--focus-line);
+}

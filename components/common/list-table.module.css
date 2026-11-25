@@ -100,3 +100,10 @@
 .rowLink:hover {
   text-decoration-line: none;
 }
+/* Keyboard focus on a row: its ID is underlined */
+.rowLink:focus-visible {
+  text-decoration-line: underline;
+  text-decoration-thickness: 1.5px;
+  text-decoration-color: var(--focus-ink);
+  text-underline-offset: 4px;
+}
