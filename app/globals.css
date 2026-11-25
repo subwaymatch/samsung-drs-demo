@@ -24,8 +24,10 @@
   --color-line-input: oklch(0.9 0.01 290);
   --color-surface: oklch(0.99 0.004 290);
   --color-accent: oklch(0.5 0.19 293);
-  /* One quiet focus ring for every control: a thin violet line, kept off the edge */
-  --focus-ring: 1.5px solid oklch(0.62 0.15 293);
+  /* Keyboard focus is a thin neutral underline: under the label, or under the
+     control when it has no text (--focus-line, a box-shadow) */
+  --focus-ink: oklch(0.45 0.02 290);
+  --focus-line: 0 4px 0 -2.5px var(--focus-ink);
   --color-accent-hover: oklch(0.44 0.19 293);
   --color-accent-ink: oklch(0.42 0.17 293);
   --color-accent-text: oklch(0.45 0.17 293);
@@ -60,13 +62,16 @@
     /* Pretendard ligates "0x21" into "0×21"; hex codes and part numbers must stay literal. */
     font-variant-ligatures: none;
   }
-  /* Every focusable control shows the app's focus ring for keyboard focus,
+  /* Keyboard focus on any control underlines its label in a neutral gray,
      never the browser's default black outline. :where keeps this at the lowest
-     specificity, so a component's own focus style still wins. */
-  :where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
-    outline: var(--focus-ring);
-    outline-offset: 2px;
-    border-radius: 4px;
+     specificity, so a component's own focus style still wins. Text fields keep
+     their own focus style. */
+  :where(a, button, summary, [tabindex]:not(input, textarea, select)):focus-visible {
+    outline: none;
+    text-decoration-line: underline;
+    text-decoration-thickness: 1.5px;
+    text-decoration-color: var(--focus-ink);
+    text-underline-offset: 4px;
   }
   a {
     color: var(--color-accent);
@@ -120,9 +125,25 @@
   .bui-seg-item:focus-visible,
   .bui-trigger:focus-visible,
   .focus-ring:focus-visible {
-    outline: var(--focus-ring);
-    outline-offset: 2px;
+    outline: none;
+    text-decoration-line: underline;
+    text-decoration-thickness: 1.5px;
+    text-decoration-color: var(--focus-ink);
+    text-underline-offset: 4px;
   }
+  /* On a filled button the underline takes the label's color */
+  .bui-primary:focus-visible,
+  .bui-dangerSolid:focus-visible { text-decoration-color: currentColor; }
+  /* Controls without a text label: a short line just under the control */
+  .bui-icon-only:focus-visible,
+  .bui-group .bui-g-r:focus-visible,
+  .bui-cb-btn:focus-visible,
+  .bui-switch:focus-visible,
+  .bui-check:focus-visible { outline: none; box-shadow: var(--focus-line); }
+  /* The diagram's zoom buttons are stacked, so the line goes just inside the bottom edge */
+  .react-flow__controls-button:focus-visible { outline: none; box-shadow: inset 0 -1.5px 0 var(--focus-ink); }
+  /* Diagram nodes: their name is underlined (rel-graph.module.css), not every line */
+  .react-flow__node:focus-visible { outline: none; text-decoration-line: none; }
   .bui-btn[data-disabled],
   .bui-btn:disabled {
     opacity: 0.4;
@@ -304,8 +325,6 @@
   .bui-seg-count { font-size: 13px; opacity: 0.7; }
 
   .bui-switch { position: relative; display: inline-flex; align-items: center; width: 34px; height: 20px; padding: 2px; border: none; border-radius: 999px; background: oklch(0.86 0.01 290); cursor: pointer; transition: background 0.15s; flex: none; outline: none; }
-  .bui-switch:focus-visible,
-  .bui-check:focus-visible { outline: var(--focus-ring); outline-offset: 2px; }
   .bui-switch[data-checked] { background: var(--color-accent); }
   .bui-switch-thumb { display: block; width: 16px; height: 16px; border-radius: 50%; background: #fff; box-shadow: 0 1px 2px oklch(0.2 0.02 290 / 0.3); transition: transform 0.15s; }
   .bui-switch[data-checked] .bui-switch-thumb { transform: translateX(14px); }
@@ -316,7 +335,8 @@
 
   .bui-person { display: inline-flex; align-items: center; gap: 10px; min-width: 0; color: inherit; text-decoration: none; border-radius: 50%; outline: none; }
   .bui-person:hover { color: inherit; text-decoration: none; }
-  .bui-person:focus-visible { outline: var(--focus-ring); outline-offset: 2px; }
+  /* Often just the avatar: the line goes under it, straight rather than following the circle */
+  .bui-person:focus-visible { outline: none; border-radius: 0; box-shadow: var(--focus-line); }
   .bui-pcard { width: 300px; min-width: 0; padding: 20px; display: flex; flex-direction: column; gap: 14px; }
   .bui-av { display: inline-grid; place-items: center; border-radius: 50%; font-weight: 600; flex: none; overflow: hidden; user-select: none; line-height: 1; }
 
@@ -333,7 +353,8 @@
   /* In list rows the item's own link (in its ID cell) is stretched over the row. */
   .row-stretch::after { content: ""; position: absolute; inset: 0; z-index: 0; }
   .row-stretch:focus-visible { outline: none; }
-  .clk:has(.row-stretch:focus-visible) { outline: var(--focus-ring); outline-offset: 2px; border-radius: 4px; }
+  /* A stretched link with no text of its own: the line goes under the whole element */
+  .clk:has(.clk-link:focus-visible) { box-shadow: var(--focus-line); }
 
   /* Tooltips for chart marks and cells: data-tip on the element. */
   [data-tip] { position: relative; }

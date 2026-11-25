@@ -321,12 +321,6 @@
   line-height: 20px;
   white-space: nowrap;
 }
-/* The tab row scrolls sideways and clips anything drawn outside a tab, so the
-   focus ring is drawn just inside it */
-.periodTab:focus-visible {
-  outline-offset: -2px;
-  border-radius: 4px;
-}
 
 /* KPIs */
 .kpis {

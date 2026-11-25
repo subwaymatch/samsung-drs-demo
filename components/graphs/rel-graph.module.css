@@ -68,6 +68,14 @@
   gap: 8px;
   font-weight: 600;
 }
+/* Keyboard focus on a node underlines its name or ID */
+:global(.react-flow__node:focus-visible) .sysName,
+:global(.react-flow__node:focus-visible) .cardId {
+  text-decoration-line: underline;
+  text-decoration-thickness: 1.5px;
+  text-decoration-color: var(--focus-ink);
+  text-underline-offset: 4px;
+}
 .sysLink:hover .sysName {
   color: var(--color-accent-text);
 }
@@ -117,4 +125,20 @@
 }
 .plain :global(.react-flow__edge) {
   pointer-events: none;
+}
+/* React Flow's own stylesheet turns underlines off on its credit link */
+:global(.react-flow__attribution a:focus-visible) {
+  text-decoration-line: underline;
+  text-decoration-thickness: 1.5px;
+  text-decoration-color: var(--focus-ink);
+  text-underline-offset: 4px;
+}
+/* A focused edge: its line turns the same neutral gray. The edge color is set
+   inline from rel-graph.tsx, so only !important can override it. */
+:global(.react-flow__edge:focus-visible .react-flow__edge-path) {
+  stroke: var(--focus-ink) !important;
+  stroke-width: 1.5px !important;
+}
+:global(.react-flow__edge:focus-visible) {
+  outline: none;
 }

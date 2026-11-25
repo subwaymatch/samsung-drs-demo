@@ -533,3 +533,8 @@
   line-height: 1.5;
   color: var(--color-muted);
 }
+/* An icon-only button: keyboard focus draws the line under it */
+.chipRemove:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-line);
+}
